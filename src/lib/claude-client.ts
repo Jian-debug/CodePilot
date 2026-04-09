@@ -405,7 +405,97 @@ export async function generateTextViaSdk(params: {
   return resultText;
 }
 
+/**
+ * Main entry point for streaming chat. Dispatches to the resolved AgentRuntime.
+ *
+ * All callers (chat route, bridge, onboarding) call this function.
+ * It converts ClaudeStreamOptions → RuntimeStreamOptions, resolves
+ * the appropriate runtime, and delegates.
+ */
 export function streamClaude(options: ClaudeStreamOptions): ReadableStream<string> {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { resolveRuntime, getRuntime } = require('./runtime') as typeof import('./runtime');
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { detectTransport, isNativeCompatible } = require('./provider-transport') as typeof import('./provider-transport');
+
+  // ── Capability-aware routing ────────────────────────────────
+  // Route to the right runtime based on provider + user setting.
+  const cliDisabled = getSetting('cli_enabled') === 'false';
+  const effectiveProvider = options.providerId || options.sessionProviderId || '';
+  let runtime;
+
+  // Non-Anthropic providers (OpenAI OAuth, etc.) MUST use Native Runtime
+  // because Claude Code SDK only supports Anthropic models.
+  const isNonAnthropicProvider = effectiveProvider === 'openai-oauth';
+
+  if (isNonAnthropicProvider) {
+    runtime = getRuntime('native');
+  } else if (!cliDisabled) {
+    // Only attempt transport-based SDK forcing when CLI is enabled
+    try {
+      const { transport } = detectTransport({
+        providerId: options.providerId,
+        sessionProviderId: options.sessionProviderId,
+      });
+
+      if (!isNativeCompatible(transport)) {
+        const sdkRt = getRuntime('claude-code-sdk');
+        if (sdkRt?.isAvailable()) {
+          runtime = sdkRt;
+        }
+      }
+    } catch { /* ignore detection errors — fall through to normal routing */ }
+  }
+
+  if (!runtime) {
+    runtime = resolveRuntime(getSetting('agent_runtime') || undefined);
+  }
+
+  console.log(`[streamClaude] Using runtime: ${runtime.id} (setting: ${getSetting('agent_runtime') || 'auto'})`);
+
+  return runtime.stream({
+    // Universal fields
+    prompt: options.prompt,
+    sessionId: options.sessionId,
+    model: options.model,
+    systemPrompt: options.systemPrompt,
+    workingDirectory: options.workingDirectory,
+    abortController: options.abortController,
+    autoTrigger: options.autoTrigger,
+    providerId: options.providerId,
+    sessionProviderId: options.sessionProviderId,
+    thinking: options.thinking,
+    effort: options.effort,
+    context1m: options.context1m,
+    mcpServers: options.mcpServers,
+    permissionMode: options.permissionMode,
+    bypassPermissions: options.bypassPermissions,
+    onRuntimeStatusChange: options.onRuntimeStatusChange,
+
+    // Runtime-specific fields (SDK Runtime reads these from runtimeOptions)
+    runtimeOptions: {
+      sdkSessionId: options.sdkSessionId,
+      files: options.files,
+      conversationHistory: options.conversationHistory,
+      sessionSummary: options.sessionSummary,
+      fallbackTokenBudget: options.fallbackTokenBudget,
+      imageAgentMode: options.imageAgentMode,
+      toolTimeoutSeconds: options.toolTimeoutSeconds,
+      outputFormat: options.outputFormat,
+      agents: options.agents,
+      agent: options.agent,
+      enableFileCheckpointing: options.enableFileCheckpointing,
+      generativeUI: options.generativeUI,
+      provider: options.provider,
+    },
+  });
+}
+
+/**
+ * SDK path — used by SdkRuntime. Contains the original Claude Code SDK query() logic.
+ * Exported so sdk-runtime.ts can call it without circular dependency issues.
+ */
+export function streamClaudeSdk(options: ClaudeStreamOptions): ReadableStream<string> {
   const {
     prompt,
     sessionId,
@@ -828,7 +918,8 @@ export function streamClaude(options: ClaudeStreamOptions): ReadableStream<strin
           // Restore runtime status after permission resolved
           onRuntimeStatusChange?.('running');
 
-          return result;
+          // Cast to SDK PermissionResult (NativePermissionResult is a compatible subset)
+          return result as unknown as import('@anthropic-ai/claude-agent-sdk').PermissionResult;
         };
 
         // Telegram notification context for hooks

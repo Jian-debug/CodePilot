@@ -120,6 +120,7 @@ export function createBinding(
     workingDirectory: defaultCwd,
     model: defaultModel,
     mode: 'code',
+    providerId: defaultProviderId || undefined,
   });
 }
 
@@ -159,7 +160,7 @@ export function bindToSession(
  */
 export function updateBinding(
   id: string,
-  updates: Partial<Pick<ChannelBinding, 'sdkSessionId' | 'workingDirectory' | 'model' | 'mode' | 'active'>>,
+  updates: Partial<Pick<ChannelBinding, 'sdkSessionId' | 'workingDirectory' | 'model' | 'mode' | 'providerId' | 'active'>>,
 ): void {
   updateChannelBinding(id, updates);
 }

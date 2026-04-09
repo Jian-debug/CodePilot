@@ -800,6 +800,32 @@ async function handleMessage(
         }
       } catch { /* best effort */ }
     }
+  } catch (err) {
+    // processMessage() threw an exception (e.g. provider mismatch, missing
+    // credentials, unexpected runtime error). Deliver error to user instead
+    // of silently swallowing it.
+    const errMsg = err instanceof Error ? err.message : String(err);
+    console.error(`[bridge-manager] handleMessage threw:`, err);
+    try {
+      if (cardController && cardMessageId) {
+        await cardController.finalize(cardMessageId, `❌ Error: ${escapeHtml(errMsg)}`, 'error');
+        cardFinalized = true;
+      } else {
+        const errorResponse: OutboundMessage = {
+          address: msg.address,
+          text: `<b>Error:</b> ${escapeHtml(errMsg)}`,
+          parseMode: 'HTML',
+          replyToMessageId: msg.messageId,
+        };
+        await deliver(adapter, errorResponse);
+      }
+    } catch (deliverErr) {
+      console.error(`[bridge-manager] Failed to deliver error to user:`, deliverErr);
+    }
+    // Clear SDK session ID on crash to prevent stale resume
+    if (binding.id) {
+      try { updateChannelBinding(binding.id, { sdkSessionId: '' }); } catch { /* best effort */ }
+    }
   } finally {
     // Clean up preview state
     if (previewState) {

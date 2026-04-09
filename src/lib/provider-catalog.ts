@@ -99,7 +99,7 @@ export interface VendorPreset {
   /** Default role models mapping */
   defaultRoleModels?: RoleModels;
   /** Which fields the quick-connect form shows */
-  fields: ('name' | 'api_key' | 'base_url' | 'env_overrides' | 'model_names')[];
+  fields: ('name' | 'api_key' | 'base_url' | 'env_overrides' | 'model_names' | 'model_mapping')[];
   /** Category: chat (default) or media */
   category?: 'chat' | 'media';
   /** Icon key for UI */
@@ -226,7 +226,7 @@ export const VENDOR_PRESETS: VendorPreset[] = [
     baseUrl: '',
     defaultEnvOverrides: { ANTHROPIC_API_KEY: '' },
     defaultModels: ANTHROPIC_DEFAULT_MODELS,
-    fields: ['name', 'api_key', 'base_url', 'env_overrides', 'model_names'],
+    fields: ['name', 'api_key', 'base_url', 'model_mapping', 'env_overrides'],
     iconKey: 'anthropic',
   },
 

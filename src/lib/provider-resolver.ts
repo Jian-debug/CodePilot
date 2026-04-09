@@ -25,6 +25,8 @@ import {
   getModelsForProvider,
   getProviderOptions,
 } from './db';
+import { ensureTokenFresh } from './openai-oauth-manager';
+import { CODEX_API_ENDPOINT } from './openai-oauth';
 
 // ── Resolution result ───────────────────────────────────────────
 
@@ -53,6 +55,8 @@ export interface ResolvedProvider {
   availableModels: CatalogModel[];
   /** Settings sources for Claude Code SDK */
   settingSources: string[];
+  /** Internal: true when resolved as OpenAI OAuth (Codex API) virtual provider */
+  _openaiOAuth?: boolean;
 }
 
 // ── Public API ──────────────────────────────────────────────────
@@ -86,22 +90,55 @@ export function resolveProvider(opts: ResolveOptions = {}): ResolvedProvider {
 
   let provider: ApiProvider | undefined;
 
+  // Determine if the ID came from an explicit request (providerId) or
+  // from the session — only explicit requests should skip the inactive check.
+  const isExplicitRequest = !!opts.providerId;
+
+  // Special virtual provider: OpenAI OAuth (Codex API)
+  if (effectiveProviderId === 'openai-oauth') {
+    return buildOpenAIOAuthResolution(opts);
+  }
+
   if (effectiveProviderId && effectiveProviderId !== 'env') {
-    // Explicit provider — look it up
+    // Look up the requested provider
     provider = getProvider(effectiveProviderId);
+
+    // For non-explicit sources (session provider, fallback chain), skip
+    // inactive providers — a stale session may point to a deactivated
+    // provider (e.g. Google Gemini Image that was turned off).
+    if (provider && !provider.is_active && !isExplicitRequest) {
+      console.warn(`[provider-resolver] Provider "${provider.name}" (${effectiveProviderId}) is inactive, falling back`);
+      provider = undefined;
+    }
+
     if (!provider) {
-      // Requested provider not found, fall back to default
+      // Requested provider not found (or inactive session provider),
+      // fall back to default → any active
       const defaultId = getDefaultProviderId();
-      if (defaultId) provider = getProvider(defaultId);
+      if (defaultId && defaultId !== effectiveProviderId) {
+        const defaultProvider = getProvider(defaultId);
+        if (defaultProvider?.is_active) provider = defaultProvider;
+      }
+      if (!provider) {
+        provider = getActiveProvider();
+      }
     }
   } else if (!effectiveProviderId) {
     // No provider specified — use global default
     const defaultId = getDefaultProviderId();
-    if (defaultId) provider = getProvider(defaultId);
-    // Note: stale default (provider deleted but setting remains) is NOT
-    // auto-healed here — resolver is a read path that may run during
-    // diagnostics. Auto-heal happens in: DELETE /api/providers/[id],
-    // POST /api/doctor/repair, and startup migration in chat/page.tsx.
+    if (defaultId) {
+      const defaultProvider = getProvider(defaultId);
+      // Only use default if it's active
+      if (defaultProvider?.is_active) {
+        provider = defaultProvider;
+      } else if (defaultProvider) {
+        console.warn(`[provider-resolver] Default provider "${defaultProvider.name}" (${defaultId}) is inactive, falling back`);
+      }
+    }
+    // If no active default, try any active provider
+    if (!provider) {
+      provider = getActiveProvider();
+    }
   }
   // effectiveProviderId === 'env' → provider stays undefined
 
@@ -119,8 +156,11 @@ export function resolveForClaudeCode(
   explicitProvider?: ApiProvider,
   opts: ResolveOptions = {},
 ): ResolvedProvider {
-  if (explicitProvider) {
+  if (explicitProvider && explicitProvider.is_active) {
     return buildResolution(explicitProvider, opts);
+  }
+  if (explicitProvider && !explicitProvider.is_active) {
+    console.warn(`[provider-resolver] Explicit provider "${explicitProvider.name}" is inactive, re-resolving`);
   }
   const resolved = resolveProvider(opts);
   // Only fall back to getActiveProvider() when NO provider resolution was attempted
@@ -268,7 +308,7 @@ export function toClaudeCodeEnv(
 
 export interface AiSdkConfig {
   /** Which AI SDK factory to use */
-  sdkType: 'anthropic' | 'openai' | 'google' | 'bedrock' | 'vertex';
+  sdkType: 'anthropic' | 'openai' | 'google' | 'bedrock' | 'vertex' | 'claude-code-compat';
   /** API key to pass to the SDK (mutually exclusive with authToken for Anthropic) */
   apiKey: string | undefined;
   /** Auth token (Bearer) for Anthropic auth_token providers (mutually exclusive with apiKey) */
@@ -281,6 +321,8 @@ export interface AiSdkConfig {
   headers: Record<string, string>;
   /** Extra env vars to inject into process.env before SDK call */
   processEnvInjections: Record<string, string>;
+  /** Use OpenAI Responses API instead of Chat Completions (for Codex API) */
+  useResponsesApi?: boolean;
 }
 
 /**
@@ -297,10 +339,25 @@ export function toAiSdkConfig(
   // the internal/UI model ID when the upstream API expects a different name.
   let modelId: string;
   if (modelOverride) {
+    // 1. Try availableModels catalog (upstreamModelId)
     const catalogEntry = resolved.availableModels.find(m => m.modelId === modelOverride);
     modelId = catalogEntry?.upstreamModelId || modelOverride;
+
+    // 2. If still a short alias, try roleModels (user-configured model mapping)
+    const SHORT_ALIASES = new Set(['sonnet', 'opus', 'haiku']);
+    if (SHORT_ALIASES.has(modelId)) {
+      const roleMap: Record<string, string | undefined> = {
+        sonnet: resolved.roleModels.sonnet,
+        opus: resolved.roleModels.opus,
+        haiku: resolved.roleModels.haiku,
+      };
+      const mapped = roleMap[modelId];
+      if (mapped && !SHORT_ALIASES.has(mapped)) {
+        modelId = mapped;
+      }
+    }
   } else {
-    modelId = resolved.upstreamModel || resolved.model || 'claude-sonnet-4-20250514';
+    modelId = resolved.upstreamModel || resolved.model || 'claude-sonnet-4-5-20250929';
   }
   const provider = resolved.provider;
   const protocol = resolved.protocol;
@@ -316,6 +373,25 @@ export function toAiSdkConfig(
   }
 
   const headers = resolved.headers;
+
+  // OpenAI OAuth (Codex API) — special path using OAuth Bearer token.
+  // The actual OAuth token is resolved in ai-provider.ts at model creation time
+  // (via getOAuthCredentialsSync) because token refresh is async.
+  if (resolved._openaiOAuth) {
+    // Derive base URL: CODEX_API_ENDPOINT is the full /responses URL,
+    // but @ai-sdk/openai appends /responses itself, so strip it.
+    const codexBase = CODEX_API_ENDPOINT.replace(/\/responses\/?$/, '');
+    return {
+      sdkType: 'openai',
+      apiKey: undefined,  // resolved at call time in ai-provider.ts
+      authToken: undefined,
+      baseUrl: codexBase,
+      modelId,
+      headers,
+      processEnvInjections,
+      useResponsesApi: true,
+    };
+  }
 
   // Resolve Anthropic auth credentials.
   // @ai-sdk/anthropic supports apiKey (x-api-key header) and authToken (Bearer header),
@@ -355,8 +431,29 @@ export function toAiSdkConfig(
     case 'anthropic': {
       const auth = resolveAnthropicAuth();
       const rawBaseUrl = provider?.base_url || process.env.ANTHROPIC_BASE_URL || getSetting('anthropic_base_url') || undefined;
+
+      // Route third-party Anthropic proxies through ClaudeCodeCompatAdapter.
+      // Only official api.anthropic.com uses @ai-sdk/anthropic directly.
+      // All others go through the adapter because:
+      // 1. sdkProxyOnly proxies (Zhipu, Kimi, etc.) require Claude Code wire format
+      // 2. Unknown proxies are safer with the adapter (it's a superset of standard Messages API)
+      // 3. @ai-sdk/anthropic has subtle incompatibilities with many proxies (URL handling, beta headers)
+      let sdkType: AiSdkConfig['sdkType'] = 'anthropic';
+      const effectiveBaseUrl = provider?.base_url || process.env.ANTHROPIC_BASE_URL;
+      if (effectiveBaseUrl) {
+        try {
+          const hostname = new URL(effectiveBaseUrl).hostname;
+          const isOfficial = hostname === 'api.anthropic.com' || hostname.endsWith('.anthropic.com');
+          if (!isOfficial) {
+            sdkType = 'claude-code-compat';
+          }
+        } catch {
+          sdkType = 'claude-code-compat'; // malformed URL → safer with adapter
+        }
+      }
+
       return {
-        sdkType: 'anthropic',
+        sdkType,
         ...auth,
         baseUrl: normaliseAnthropicBaseUrl(rawBaseUrl),
         modelId,
@@ -460,6 +557,40 @@ export function toAiSdkConfig(
 }
 
 // ── Internal helpers ────────────────────────────────────────────
+
+// OpenAI Codex API models available through ChatGPT Plus/Pro OAuth
+const OPENAI_CODEX_MODELS: CatalogModel[] = [
+  { modelId: 'gpt-5.4', displayName: 'GPT-5.4' },
+  { modelId: 'gpt-5.4-mini', displayName: 'GPT-5.4-Mini' },
+  { modelId: 'gpt-5.3-codex', displayName: 'GPT-5.3-Codex' },
+  { modelId: 'gpt-5.3-codex-spark', displayName: 'GPT-5.3-Codex-Spark' },
+];
+
+/**
+ * Build resolution for the virtual OpenAI OAuth provider.
+ * Uses OAuth Bearer token + Codex API endpoint.
+ */
+function buildOpenAIOAuthResolution(opts: ResolveOptions): ResolvedProvider {
+  const model = opts.model || opts.sessionModel || 'gpt-5.4';
+
+  const catalogEntry = OPENAI_CODEX_MODELS.find(m => m.modelId === model);
+
+  return {
+    provider: undefined,
+    protocol: 'openai-compatible',
+    authStyle: 'api_key',
+    model,
+    upstreamModel: model,
+    modelDisplayName: catalogEntry?.displayName || model,
+    headers: {},
+    envOverrides: {},
+    roleModels: { default: model },
+    hasCredentials: true, // OAuth token checked at call time
+    availableModels: OPENAI_CODEX_MODELS,
+    settingSources: [],
+    _openaiOAuth: true, // marker for toAiSdkConfig
+  } as ResolvedProvider;
+}
 
 function buildResolution(
   provider: ApiProvider | undefined,

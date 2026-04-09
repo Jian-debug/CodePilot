@@ -108,7 +108,7 @@ function WidgetRendererInner({ widgetCode, isStreaming, title, showOverlay, extr
 
         case 'widget:resize':
           if (typeof e.data.height === 'number' && e.data.height > 0) {
-            const newH = Math.min(e.data.height + 2, MAX_IFRAME_HEIGHT);
+            const newH = Math.min(e.data.height, MAX_IFRAME_HEIGHT);
             const cacheKey = getHeightCacheKey(widgetCode);
             // During finalization, only allow height to grow (innerHTML swap
             // briefly empties DOM causing a near-zero resize report)

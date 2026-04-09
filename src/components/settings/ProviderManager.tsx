@@ -13,7 +13,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { SpinnerGap, PencilSimple, Stethoscope } from "@/components/ui/icon";
+import { SpinnerGap, PencilSimple, Stethoscope, CheckCircle } from "@/components/ui/icon";
 import { ProviderForm } from "./ProviderForm";
 import { ProviderDoctorDialog } from "./ProviderDoctorDialog";
 import type { ProviderFormData } from "./ProviderForm";
@@ -66,6 +66,11 @@ export function ProviderManager() {
   const [deleteTarget, setDeleteTarget] = useState<ApiProvider | null>(null);
   const [deleting, setDeleting] = useState(false);
 
+  // OpenAI OAuth state
+  const [openaiAuth, setOpenaiAuth] = useState<{ authenticated: boolean; email?: string; plan?: string } | null>(null);
+  const [openaiLoggingIn, setOpenaiLoggingIn] = useState(false);
+  const [openaiError, setOpenaiError] = useState<string | null>(null);
+
   // Doctor dialog state
   const [doctorOpen, setDoctorOpen] = useState(false);
 
@@ -90,6 +95,14 @@ export function ProviderManager() {
   }, []);
 
   useEffect(() => { fetchProviders(); }, [fetchProviders]);
+
+  // Fetch OpenAI OAuth status
+  useEffect(() => {
+    fetch('/api/openai-oauth/status')
+      .then(r => r.ok ? r.json() : null)
+      .then(data => { if (data) setOpenaiAuth(data); })
+      .catch(() => {});
+  }, []);
 
   // Fetch all provider models for the global default model selector
   const fetchModels = useCallback(() => {
@@ -215,6 +228,56 @@ export function ProviderManager() {
     } catch { /* ignore */ }
   }, []);
 
+  const handleOpenAILogin = async () => {
+    setOpenaiLoggingIn(true);
+    setOpenaiError(null);
+    try {
+      const res = await fetch("/api/openai-oauth/start");
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.error || 'Failed to start OAuth');
+      }
+      const { authUrl } = await res.json();
+      window.open(authUrl, '_blank');
+
+      // Poll for completion with timeout
+      let pollCount = 0;
+      const maxPolls = 150; // 5 minutes at 2s intervals
+      const poll = setInterval(async () => {
+        pollCount++;
+        if (pollCount >= maxPolls) {
+          clearInterval(poll);
+          setOpenaiLoggingIn(false);
+          setOpenaiError(isZh ? '登录超时，请重试' : 'Login timed out, please try again');
+          return;
+        }
+        try {
+          const statusRes = await fetch("/api/openai-oauth/status");
+          if (statusRes.ok) {
+            const status = await statusRes.json();
+            if (status.authenticated) {
+              clearInterval(poll);
+              setOpenaiAuth(status);
+              setOpenaiLoggingIn(false);
+              fetchModels(); // refresh model list to include OpenAI models
+            }
+          }
+        } catch { /* keep polling */ }
+      }, 2000);
+    } catch (err) {
+      setOpenaiLoggingIn(false);
+      setOpenaiError(err instanceof Error ? err.message : 'Login failed');
+    }
+  };
+
+  const handleOpenAILogout = async () => {
+    try {
+      await fetch("/api/openai-oauth/status", { method: "DELETE" });
+      setOpenaiAuth({ authenticated: false });
+      fetchModels(); // refresh model list
+    } catch { /* ignore */ }
+  };
+
   const sorted = [...providers].sort((a, b) => a.sort_order - b.sort_order);
 
   // Save global default model — also syncs default_provider_id for backend consumers
@@ -339,7 +402,7 @@ export function ProviderManager() {
         <div className="rounded-lg border border-border/50 p-4 space-y-2">
           <h3 className="text-sm font-medium mb-1">{t('provider.connectedProviders')}</h3>
 
-          {/* Claude Code default config */}
+          {/* Claude Code — settings link */}
           <div className="border-b border-border/30 pb-2">
             <div className="flex items-center gap-3 py-2.5 px-1">
               <div className="shrink-0 w-[22px] flex justify-center">
@@ -355,11 +418,62 @@ export function ProviderManager() {
                   )}
                 </div>
               </div>
+              <a
+                href="/settings#cli"
+                className="text-xs text-primary hover:underline flex-shrink-0"
+              >
+                {t('provider.goToClaudeCodeSettings')}
+              </a>
             </div>
             <p className="text-[11px] text-muted-foreground ml-[34px] leading-relaxed">
               {t('provider.ccSwitchHint')}
             </p>
-            <ProviderOptionsSection providerId="env" showThinkingOptions />
+          </div>
+
+          {/* OpenAI OAuth login */}
+          <div className="border-b border-border/30 pb-2">
+            <div className="flex items-center gap-3 py-2.5 px-1">
+              <div className="shrink-0 w-[22px] flex justify-center">
+                <span className="text-sm font-bold">AI</span>
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-medium">OpenAI</span>
+                  {openaiAuth?.authenticated && (
+                    <Badge variant="outline" className="text-[10px] px-1.5 py-0 text-status-success-foreground border-status-success-border">
+                      {openaiAuth.plan || 'OAuth'}
+                    </Badge>
+                  )}
+                </div>
+                {openaiAuth?.authenticated && openaiAuth.email && (
+                  <p className="text-[10px] text-muted-foreground">{openaiAuth.email}</p>
+                )}
+              </div>
+              {openaiAuth?.authenticated ? (
+                <Button variant="ghost" size="sm" className="h-7 text-xs text-muted-foreground" onClick={handleOpenAILogout}>
+                  {t('cli.openaiLogout')}
+                </Button>
+              ) : (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="h-7 text-xs gap-1"
+                  onClick={handleOpenAILogin}
+                  disabled={openaiLoggingIn}
+                >
+                  {openaiLoggingIn && <SpinnerGap size={12} className="animate-spin" />}
+                  {t('cli.openaiLogin')}
+                </Button>
+              )}
+            </div>
+            <p className="text-[11px] text-muted-foreground ml-[34px] leading-relaxed">
+              {t('provider.openaiOAuthHint')}
+            </p>
+            {openaiError && (
+              <p className="text-[11px] text-destructive ml-[34px] mt-1">
+                {openaiError}
+              </p>
+            )}
           </div>
 
           {/* Connected provider list */}

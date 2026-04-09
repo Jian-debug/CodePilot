@@ -34,7 +34,7 @@ import { useTranslation } from "@/hooks/useTranslation";
 import type { TranslationKey } from "@/i18n";
 import { useNativeFolderPicker } from "@/hooks/useNativeFolderPicker";
 import { showToast } from '@/hooks/useToast';
-import { ConnectionStatus } from "./ConnectionStatus";
+// ConnectionStatus removed from header — CLI status now lives in Settings > Claude CLI
 // ImportSessionDialog moved to Settings page
 import { SessionListItem, SplitGroupSection } from "./SessionListItem";
 import { ProjectGroupHeader } from "./ProjectGroupHeader";
@@ -452,10 +452,8 @@ export function ChatListPanel({ open, width, hasUpdate, readyToInstall }: ChatLi
       className="hidden h-full shrink-0 flex-col overflow-hidden bg-sidebar/80 backdrop-blur-xl lg:flex"
       style={{ width: width ?? 240 }}
     >
-      {/* Header - extra top padding for macOS traffic lights */}
-      <div className="flex h-12 shrink-0 items-center justify-between px-3 mt-5">
-        <ConnectionStatus />
-      </div>
+      {/* macOS traffic lights spacing */}
+      <div className="h-5 shrink-0 mt-3" />
 
       {/* Top action bar: New Chat + Search */}
       <div className="flex items-center gap-2 px-3 pb-2">

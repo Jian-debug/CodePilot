@@ -18,6 +18,18 @@ const PRIORITY_TO_TOAST: Record<string, ToastType> = {
 export function useNotificationPoll() {
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
+  // Request notification permission on mount (web/dev mode only)
+  useEffect(() => {
+    if (
+      typeof window !== 'undefined' &&
+      !window.electronAPI?.notification &&
+      'Notification' in window &&
+      Notification.permission === 'default'
+    ) {
+      Notification.requestPermission().catch(() => {});
+    }
+  }, []);
+
   useEffect(() => {
     async function poll() {
       try {

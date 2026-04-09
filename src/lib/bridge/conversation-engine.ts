@@ -24,9 +24,10 @@ import {
   syncSdkTasks,
   getSession,
   getSetting,
+  getDefaultProviderId,
 } from '../db';
 import { resolveProvider as resolveProviderUnified } from '../provider-resolver';
-import { loadCodePilotMcpServers } from '../mcp-loader';
+import { loadCodePilotMcpServers, loadAllMcpServers } from '../mcp-loader';
 import { assembleContext } from '../context-assembler';
 import crypto from 'crypto';
 
@@ -153,9 +154,16 @@ export async function processMessage(
     }
     addMessage(sessionId, 'user', savedContent);
 
-    // Resolve provider via unified resolver (same logic as desktop chat route)
+    // Resolve provider via unified resolver.
+    // Priority chain:
+    // 1. Binding's provider_id (per-binding override)
+    // 2. Session's provider_id (if the DB column exists)
+    // 3. Global default provider (getDefaultProviderId)
+    // 4. 'env' mode fallback
+    const effectiveProviderId = binding.providerId || session?.provider_id || getDefaultProviderId() || undefined;
+
     const resolved = resolveProviderUnified({
-      sessionProviderId: session?.provider_id || undefined,
+      providerId: effectiveProviderId,
       model: binding.model || undefined,
       sessionModel: session?.model || undefined,
     });
@@ -163,6 +171,19 @@ export async function processMessage(
 
     // Use upstream model from unified resolver (same chain as chat route)
     const effectiveModel = resolved.upstreamModel || resolved.model || binding.model || session?.model || getSetting('default_model') || undefined;
+
+    // Guard: protocol/model mismatch — e.g. google protocol with model 'sonnet'
+    // would silently send a wrong request. Fail fast with a clear error.
+    if (resolvedProvider && resolved.protocol) {
+      const modelLower = (effectiveModel || '').toLowerCase();
+      const isAnthropicModel = modelLower.includes('claude') || ['sonnet', 'opus', 'haiku'].includes(modelLower);
+      const isNonAnthropicProtocol = !['anthropic', 'openai-compatible', 'openrouter'].includes(resolved.protocol);
+      if (isAnthropicModel && isNonAnthropicProtocol) {
+        const errMsg = `Provider "${resolvedProvider.name}" uses ${resolved.protocol} protocol but model "${effectiveModel}" is an Anthropic model. Please configure the correct provider for this bridge channel.`;
+        console.error(`[conversation-engine] ${errMsg}`);
+        throw new Error(errMsg);
+      }
+    }
 
     // Permission mode from binding mode
     let permissionMode: string;
@@ -191,9 +212,12 @@ export async function processMessage(
       }
     }
 
-    // Load only MCP servers needing CodePilot-specific processing (${...} env placeholders).
-    // All other MCP servers are auto-loaded by the SDK via settingSources.
-    const mcpServers = loadCodePilotMcpServers();
+    // Load MCP servers using shared runtime prediction (same logic as chat route)
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const { predictNativeRuntime } = require('../runtime') as typeof import('../runtime');
+    const mcpServers = predictNativeRuntime(effectiveProviderId)
+      ? loadAllMcpServers()
+      : loadCodePilotMcpServers();
 
     // Unified context assembly — adds CLI tools context (and workspace prompt if applicable)
     const assembled = await assembleContext({
@@ -230,6 +254,7 @@ export async function processMessage(
       abortController,
       permissionMode,
       provider: resolvedProvider,
+      providerId: effectiveProviderId,
       sessionProviderId: session?.provider_id || undefined,
       mcpServers,
       conversationHistory: historyMsgs,

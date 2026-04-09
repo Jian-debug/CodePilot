@@ -74,10 +74,10 @@ const en = {
 
   // ── Settings: General ───────────────────────────────────────
   'settings.title': 'Settings',
-  'settings.description': 'Manage CodePilot and Claude CLI settings',
+  'settings.description': 'Manage CodePilot and Claude Code settings',
   'settings.general': 'General',
   'settings.providers': 'Providers',
-  'settings.claudeCli': 'Claude CLI',
+  'settings.claudeCli': 'Claude Code',
   'settings.codepilot': 'CodePilot',
   'settings.version': 'Version {version}',
   'settings.checkForUpdates': 'Check for Updates',
@@ -137,7 +137,7 @@ const en = {
 
   // ── Settings: CLI ───────────────────────────────────────────
   'cli.permissions': 'Permissions',
-  'cli.permissionsDesc': 'Configure permission settings for Claude CLI',
+  'cli.permissionsDesc': 'Configure permission settings for Claude Code',
   'cli.envVars': 'Environment Variables',
   'cli.envVarsDesc': 'Environment variables passed to Claude',
   'cli.form': 'Form',
@@ -148,6 +148,40 @@ const en = {
   'cli.settingsSaved': 'Settings saved successfully',
   'cli.confirmSaveTitle': 'Confirm Save',
   'cli.confirmSaveDesc': 'This will overwrite your current ~/.claude/settings.json file. Are you sure you want to continue?',
+  'cli.cliCardTitle': 'Claude Code',
+  'cli.cliCardDesc': '',
+  'cli.enableClaude': 'Enable Claude Code',
+  'cli.enableClaudeDesc': 'OFF: Native AI SDK as backend. ON: Claude Code as backend.',
+  'cli.agentRuntime': 'Agent Runtime',
+  'cli.agentRuntimeDesc': 'Choose how CodePilot executes agent tasks',
+  'cli.runtimeAuto': 'Auto (CLI → SDK, otherwise Native)',
+  'cli.runtimeNative': 'Native Runtime (AI SDK)',
+  'cli.runtimeSdk': 'Claude Code SDK',
+  'cli.cliStatus': 'Status',
+  'cli.update': 'Update',
+  'cli.notInstalled': 'Not installed',
+  'cli.modelOptions': 'Model Options',
+  'cli.modelOptionsDesc': 'Configure default behavior for Claude models',
+  'cli.thinkingMode': 'Adaptive Reasoning',
+  'cli.thinkingModeDesc': 'Controls how much the model reasons before responding',
+  'cli.context1m': '1M Context Window',
+  'cli.context1mDesc': 'Enable extended context for longer conversations',
+  'cli.cliConfig': 'Claude Code Configuration',
+  'cli.cliConfigDesc': 'Edit ~/.claude/settings.json',
+  'cli.install': 'Install',
+  'cli.importTitle': 'Import Chat History',
+  'cli.importDesc': 'Import conversation history from Claude Code CLI sessions',
+  'cli.importButton': 'Import from Claude Code',
+  'cli.openaiCardTitle': 'OpenAI Account',
+  'cli.openaiCardDesc': 'Sign in with your ChatGPT Plus/Pro subscription to access OpenAI models',
+  'cli.openaiAccount': 'Account',
+  'cli.openaiNotLoggedIn': 'Not signed in',
+  'cli.openaiLogin': 'Sign in with ChatGPT',
+  'cli.openaiLogout': 'Sign out',
+  'cli.installTitle': 'Install Claude Code',
+  'cli.installDesc': 'Claude Code CLI is not installed. Run the following command to install:',
+  'cli.installAfter': 'After installation, run "claude login" to authenticate.',
+  'cli.installDone': 'Done',
 
   // ── Settings: Providers ─────────────────────────────────────
   'provider.addProvider': 'Add Provider',
@@ -188,7 +222,9 @@ const en = {
   'provider.disconnecting': 'Disconnecting...',
   'provider.disconnectProvider': 'Disconnect Provider',
   'provider.disconnectConfirm': 'Are you sure you want to disconnect "{name}"? This action cannot be undone.',
-  'provider.ccSwitchHint': 'Claude Code configurations added via tools like cc switch may not be readable by CodePilot. We recommend re-adding your provider here.',
+  'provider.ccSwitchHint': 'Claude Code settings have been moved to the Claude Code settings page.',
+  'provider.goToClaudeCodeSettings': 'Go to Settings',
+  'provider.openaiOAuthHint': 'Sign in with ChatGPT Plus/Pro to access OpenAI models without an API key.',
   'provider.addProviderSection': 'Add Provider',
   'provider.addProviderDesc': 'Select a provider to connect. Most presets only require an API key.',
 
@@ -1230,11 +1266,11 @@ const en = {
 
   // ── Setup Center ──────────────────────────────────────────────
   'setup.title': 'Welcome to CodePilot',
-  'setup.subtitle': 'Let\'s get you set up in a few quick steps.',
+  'setup.subtitle': 'Configure your Agent engine, providers, and workspace.',
   'setup.skipAndEnter': 'Skip and Enter',
   'setup.progress': '{completed}/3 completed',
   'setup.openSetupCenter': 'Initial Setup Guide',
-  'setup.openSetupCenterDesc': 'Check or reconfigure Claude Code connection, API provider, and default project directory',
+  'setup.openSetupCenterDesc': 'Configure Agent engine (AI SDK / Claude Code), API providers, and default project directory',
   'setup.open': 'Open',
 
   // Setup: Welcome card
@@ -1242,8 +1278,8 @@ const en = {
   'setup.welcome.description': 'CodePilot is a multi-model AI agent desktop client. Connect any AI provider, extend with MCP & skills, and let your assistant learn your workflow.',
 
   // Setup: Claude Code card
-  'setup.claude.title': 'Claude Code CLI',
-  'setup.claude.description': 'CodePilot requires the Claude Code CLI to function.',
+  'setup.claude.title': 'Claude Code CLI (Optional)',
+  'setup.claude.description': 'Install Claude Code CLI for full command-line capabilities. CodePilot works without it via the AI SDK engine.',
   'setup.claude.detected': 'Claude Code detected',
   'setup.claude.notFound': 'Claude Code not found',
   'setup.claude.conflict': 'Multiple installations detected — this may cause version conflicts',

@@ -11,6 +11,8 @@ const SENTRY_REPORTABLE: Set<string> = new Set([
   // PROCESS_CRASH removed — too noisy (136+ events/day), mostly user config issues
   'UNKNOWN', 'CLI_NOT_FOUND', 'CLI_INSTALL_CONFLICT',
   'MISSING_GIT_BASH', 'PROVIDER_NOT_APPLIED', 'SESSION_STATE_ERROR',
+  // Native Runtime errors
+  'NATIVE_STREAM_ERROR', 'OPENAI_AUTH_FAILED', 'MCP_CONNECTION_ERROR',
 ]);
 
 function reportToSentry(category: string, error: unknown, extra?: Record<string, unknown>) {
@@ -24,9 +26,10 @@ function reportToSentry(category: string, error: unknown, extra?: Record<string,
     Sentry.withScope((scope) => {
       scope.setTag('error.category', category);
       scope.setTag('error.provider', (extra?.providerName as string) || 'unknown');
+      scope.setTag('error.runtime', (extra?.runtime as string) || 'unknown');
       if (extra?.baseUrl) scope.setTag('provider.baseUrl', extra.baseUrl as string);
+      if (extra?.modelId) scope.setTag('model.id', extra.modelId as string);
       if (extra) scope.setExtras(extra);
-      // Add the raw error message as fingerprint component for better grouping
       scope.setFingerprint([category, msg.slice(0, 100)]);
       if (error instanceof Error) {
         Sentry.captureException(error);
@@ -35,6 +38,18 @@ function reportToSentry(category: string, error: unknown, extra?: Record<string,
       }
     });
   }).catch(() => { /* Sentry not available */ });
+}
+
+/**
+ * Report a native runtime error to Sentry.
+ * Called from agent-loop.ts and MCP manager for errors that bypass the main classifier.
+ */
+export function reportNativeError(
+  category: ClaudeErrorCategory,
+  error: unknown,
+  context?: { providerName?: string; modelId?: string; sessionId?: string; baseUrl?: string },
+) {
+  reportToSentry(category, error, { ...context, runtime: 'native' });
 }
 
 // ── Error categories ────────────────────────────────────────────
@@ -58,6 +73,11 @@ export type ClaudeErrorCategory =
   | 'SESSION_STATE_ERROR'
   | 'PROVIDER_NOT_APPLIED'
   | 'PROCESS_CRASH'
+  // Native Runtime categories
+  | 'NATIVE_STREAM_ERROR'    // Agent loop streamText() failure
+  | 'OPENAI_AUTH_FAILED'     // OpenAI OAuth token expired/invalid
+  | 'MCP_CONNECTION_ERROR'   // MCP server connect/sync failure
+  | 'EMPTY_RESPONSE'         // Model returned nothing (proxy rejection, unsupported model)
   | 'UNKNOWN';
 
 /** A concrete action the user can take to recover from an error */

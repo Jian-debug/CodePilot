@@ -7,6 +7,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { ChatListPanel } from "./ChatListPanel";
 import { ResizeHandle } from "./ResizeHandle";
 import { UpdateDialog } from "./UpdateDialog";
+import { FeatureAnnouncementDialog } from "./FeatureAnnouncementDialog";
 import { UpdateBanner } from "./UpdateBanner";
 import { UnifiedTopBar } from "./UnifiedTopBar";
 import { PanelZone } from "./PanelZone";
@@ -460,6 +461,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             </div>
           </div>
           <UpdateDialog />
+          <FeatureAnnouncementDialog />
           <Toaster />
           {setupOpen && (
             <SetupCenter

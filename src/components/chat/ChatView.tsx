@@ -9,6 +9,7 @@ import { ChatComposerActionBar } from './ChatComposerActionBar';
 import { ModeIndicator } from './ModeIndicator';
 import { ChatPermissionSelector } from './ChatPermissionSelector';
 import { ContextUsageIndicator } from './ContextUsageIndicator';
+import { RuntimeBadge } from './RuntimeBadge';
 import { ImageGenToggle } from './ImageGenToggle';
 import { Button } from '@/components/ui/button';
 import { usePanel } from '@/hooks/usePanel';
@@ -616,12 +617,15 @@ export function ChatView({ sessionId, initialMessages = [], initialHasMore = fal
           />
         }
         right={
-          <ContextUsageIndicator
-            messages={messages}
-            modelName={currentModel}
-            context1m={context1m}
-            hasSummary={hasSummary}
-          />
+          <div className="flex items-center gap-1">
+            <RuntimeBadge providerId={currentProviderId} />
+            <ContextUsageIndicator
+              messages={messages}
+              modelName={currentModel}
+              context1m={context1m}
+              hasSummary={hasSummary}
+            />
+          </div>
         }
       />
     </div>

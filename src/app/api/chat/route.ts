@@ -4,7 +4,7 @@ import { addMessage, getMessages, getSession, getSessionSummary, updateSessionTi
 import { resolveProvider as resolveProviderUnified } from '@/lib/provider-resolver';
 import { notifySessionStart, notifySessionComplete, notifySessionError } from '@/lib/telegram-bot';
 import { extractCompletion } from '@/lib/onboarding-completion';
-import { loadCodePilotMcpServers } from '@/lib/mcp-loader';
+import { loadCodePilotMcpServers, loadAllMcpServers } from '@/lib/mcp-loader';
 import { assembleContext } from '@/lib/context-assembler';
 import type { SendMessageRequest, SSEEvent, TokenUsage, MessageContentBlock, FileAttachment, ClaudeStreamOptions, MediaBlock } from '@/types';
 import { saveMediaToLibrary } from '@/lib/media-saver';
@@ -144,7 +144,20 @@ export async function POST(request: NextRequest) {
     }
 
     // Determine model: request override > session model > default setting
-    const effectiveModel = model || session.model || getSetting('default_model') || undefined;
+    let effectiveModel = model || session.model || getSetting('default_model') || undefined;
+
+    // When Claude Code is disabled, sessions with env-provider models (sonnet/opus/haiku)
+    // can't use them anymore. Fall back to default model from first available provider.
+    const cliDisabled = getSetting('cli_enabled') === 'false';
+    const ENV_MODELS = new Set(['sonnet', 'opus', 'haiku']);
+    const effectiveProviderId_pre = provider_id || session.provider_id || '';
+    if (cliDisabled && effectiveModel && ENV_MODELS.has(effectiveModel) && (!effectiveProviderId_pre || effectiveProviderId_pre === 'env')) {
+      effectiveModel = getSetting('default_model') || undefined;
+      // If default model is also env-only, clear it
+      if (effectiveModel && ENV_MODELS.has(effectiveModel)) {
+        effectiveModel = undefined;
+      }
+    }
 
     // Persist model and provider to session so usage stats can group by model+provider.
     // This runs on every message but the DB writes are cheap (single UPDATE by PK).
@@ -239,9 +252,14 @@ export async function POST(request: NextRequest) {
     const assistantProjectInstructions = assembled.assistantProjectInstructions;
     const isAssistantProject = assembled.isAssistantProject;
 
-    // Load only MCP servers needing CodePilot-specific processing (${...} env placeholders).
-    // All other MCP servers are auto-loaded by the SDK via settingSources.
-    const mcpServers = loadCodePilotMcpServers();
+    // Load MCP servers for the predicted runtime:
+    // - SDK Runtime: only needs servers with ${...} env placeholders (SDK loads the rest via settingSources)
+    // - Native Runtime: needs ALL servers (it manages MCP connections independently)
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const { predictNativeRuntime } = require('@/lib/runtime') as typeof import('@/lib/runtime');
+    const mcpServers = predictNativeRuntime(effectiveProviderId)
+      ? loadAllMcpServers()
+      : loadCodePilotMcpServers();
 
     // ── Context compression check ───────────────────────────────────
     // Estimate next-turn context size and compress if over threshold.

@@ -1,10 +1,5 @@
 import { streamText } from 'ai';
-import { createGoogleGenerativeAI } from '@ai-sdk/google';
-import { createAnthropic } from '@ai-sdk/anthropic';
-import { createOpenAI } from '@ai-sdk/openai';
-import { createAmazonBedrock } from '@ai-sdk/amazon-bedrock';
-import { createVertexAnthropic } from '@ai-sdk/google-vertex/anthropic';
-import { resolveProvider as resolveProviderUnified, toAiSdkConfig } from './provider-resolver';
+import { createModel } from './ai-provider';
 
 export interface StreamTextParams {
   providerId: string;
@@ -19,9 +14,9 @@ export interface StreamTextParams {
  * Stream text from the user's current provider.
  * Returns an async iterable of text chunks.
  *
- * Provider resolution is fully delegated to the unified resolver.
+ * Provider resolution is fully delegated to ai-provider.ts → provider-resolver.ts.
  * No fallback logic here — the resolver's chain (explicit → session → global default → env)
- * is the single source of truth, matching the Claude Code SDK path.
+ * is the single source of truth.
  *
  * NOTE: Do NOT expand model aliases (sonnet/opus/haiku) here.
  * toAiSdkConfig() resolves model IDs through the provider's availableModels catalog,
@@ -29,74 +24,13 @@ export interface StreamTextParams {
  * for SDK proxy providers (Kimi, GLM, MiniMax, etc.) that expect short aliases.
  */
 export async function* streamTextFromProvider(params: StreamTextParams): AsyncIterable<string> {
-  const resolved = resolveProviderUnified({ providerId: params.providerId });
-
-  if (!resolved.hasCredentials && !resolved.provider) {
-    throw new Error('No text generation provider available. Please configure a provider in Settings.');
-  }
-
-  const config = toAiSdkConfig(resolved, params.model);
-
-  // Inject process env if needed (bedrock/vertex)
-  for (const [k, v] of Object.entries(config.processEnvInjections)) {
-    process.env[k] = v;
-  }
-
-  // Build headers object for SDK clients (only if non-empty)
-  const hasHeaders = config.headers && Object.keys(config.headers).length > 0;
-
-  let model;
-  switch (config.sdkType) {
-    case 'anthropic': {
-      const anthropic = createAnthropic({
-        // apiKey and authToken are mutually exclusive in @ai-sdk/anthropic
-        ...(config.authToken
-          ? { authToken: config.authToken }
-          : { apiKey: config.apiKey }),
-        baseURL: config.baseUrl,
-        ...(hasHeaders ? { headers: config.headers } : {}),
-      });
-      model = anthropic(config.modelId);
-      break;
-    }
-    case 'openai': {
-      const openai = createOpenAI({
-        apiKey: config.apiKey,
-        baseURL: config.baseUrl,
-        ...(hasHeaders ? { headers: config.headers } : {}),
-      });
-      model = openai(config.modelId);
-      break;
-    }
-    case 'google': {
-      const google = createGoogleGenerativeAI({
-        apiKey: config.apiKey,
-        baseURL: config.baseUrl,
-        ...(hasHeaders ? { headers: config.headers } : {}),
-      });
-      model = google(config.modelId);
-      break;
-    }
-    case 'bedrock': {
-      // Auth via process.env (AWS_REGION, AWS_ACCESS_KEY_ID, etc.) — already injected above
-      const bedrock = createAmazonBedrock({
-        ...(hasHeaders ? { headers: config.headers } : {}),
-      });
-      model = bedrock(config.modelId);
-      break;
-    }
-    case 'vertex': {
-      // Anthropic-on-Vertex: auth via process.env (CLOUD_ML_REGION, GOOGLE_APPLICATION_CREDENTIALS, etc.)
-      const vertex = createVertexAnthropic({
-        ...(hasHeaders ? { headers: config.headers } : {}),
-      });
-      model = vertex(config.modelId);
-      break;
-    }
-  }
+  const { languageModel } = createModel({
+    providerId: params.providerId,
+    model: params.model,
+  });
 
   const result = streamText({
-    model: model!,
+    model: languageModel,
     system: params.system,
     prompt: params.prompt,
     maxOutputTokens: params.maxTokens || 4096,

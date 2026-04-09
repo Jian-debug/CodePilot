@@ -1,5 +1,8 @@
-import type { PermissionResult } from '@anthropic-ai/claude-agent-sdk';
+import type { NativePermissionResult } from './types/agent-types';
 import { resolvePermissionRequest as dbResolvePermission } from './db';
+
+// Use our own type. SDK path casts to this at the boundary.
+type PermissionResult = NativePermissionResult;
 
 interface PendingPermission {
   resolve: (result: PermissionResult) => void;

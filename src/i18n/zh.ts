@@ -71,10 +71,10 @@ const zh: Record<TranslationKey, string> = {
 
   // ── Settings: General ───────────────────────────────────────
   'settings.title': '设置',
-  'settings.description': '管理 CodePilot 和 Claude CLI 设置',
+  'settings.description': '管理 CodePilot 和 Claude Code 设置',
   'settings.general': '通用',
   'settings.providers': '服务商',
-  'settings.claudeCli': 'Claude CLI',
+  'settings.claudeCli': 'Claude Code',
   'settings.codepilot': 'CodePilot',
   'settings.version': '版本 {version}',
   'settings.checkForUpdates': '检查更新',
@@ -134,7 +134,7 @@ const zh: Record<TranslationKey, string> = {
 
   // ── Settings: CLI ───────────────────────────────────────────
   'cli.permissions': '权限',
-  'cli.permissionsDesc': '配置 Claude CLI 的权限设置',
+  'cli.permissionsDesc': '配置 Claude Code 的权限设置',
   'cli.envVars': '环境变量',
   'cli.envVarsDesc': '传递给 Claude 的环境变量',
   'cli.form': '表单',
@@ -145,6 +145,40 @@ const zh: Record<TranslationKey, string> = {
   'cli.settingsSaved': '设置已保存',
   'cli.confirmSaveTitle': '确认保存',
   'cli.confirmSaveDesc': '这将覆盖您当前的 ~/.claude/settings.json 文件。确定要继续吗？',
+  'cli.cliCardTitle': 'Claude Code',
+  'cli.cliCardDesc': '',
+  'cli.enableClaude': '启用 Claude Code',
+  'cli.enableClaudeDesc': '关闭时使用原生 AI SDK 作为后端，开启后使用 Claude Code 作为后端。',
+  'cli.agentRuntime': 'Agent 运行时',
+  'cli.agentRuntimeDesc': '选择 CodePilot 执行 Agent 任务的方式',
+  'cli.runtimeAuto': '自动（有 CLI 用 SDK，否则用原生）',
+  'cli.runtimeNative': '原生 Runtime (AI SDK)',
+  'cli.runtimeSdk': 'Claude Code SDK',
+  'cli.cliStatus': '状态',
+  'cli.update': '更新',
+  'cli.notInstalled': '未安装',
+  'cli.install': '安装',
+  'cli.modelOptions': '模型选项',
+  'cli.modelOptionsDesc': '配置 Claude 模型的默认行为',
+  'cli.thinkingMode': '自适应推理',
+  'cli.thinkingModeDesc': '控制模型回复前的推理深度',
+  'cli.context1m': '1M 上下文窗口',
+  'cli.context1mDesc': '启用扩展上下文以支持更长的对话',
+  'cli.cliConfig': 'Claude Code 配置',
+  'cli.cliConfigDesc': '编辑 ~/.claude/settings.json',
+  'cli.importTitle': '导入聊天记录',
+  'cli.importDesc': '从 Claude Code 会话中导入对话历史',
+  'cli.importButton': '从 Claude Code 导入',
+  'cli.openaiCardTitle': 'OpenAI 账户',
+  'cli.openaiCardDesc': '使用 ChatGPT Plus/Pro 订阅登录以访问 OpenAI 模型',
+  'cli.openaiAccount': '账户',
+  'cli.openaiNotLoggedIn': '未登录',
+  'cli.openaiLogin': '使用 ChatGPT 登录',
+  'cli.openaiLogout': '退出登录',
+  'cli.installTitle': '安装 Claude Code',
+  'cli.installDesc': 'Claude Code 未安装。运行以下命令安装：',
+  'cli.installAfter': '安装后运行 "claude login" 进行身份验证。',
+  'cli.installDone': '完成',
 
   // ── Settings: Providers ─────────────────────────────────────
   'provider.addProvider': '添加服务商',
@@ -185,7 +219,9 @@ const zh: Record<TranslationKey, string> = {
   'provider.disconnecting': '断开中...',
   'provider.disconnectProvider': '断开提供商',
   'provider.disconnectConfirm': '确定要断开"{name}"吗？此操作无法撤销。',
-  'provider.ccSwitchHint': '通过类似 cc switch 等工具添加的 Claude Code 配置可能无法被 CodePilot 读取，建议在此处重新添加。',
+  'provider.ccSwitchHint': 'Claude Code 相关设置已迁移到 Claude Code 设置页面。',
+  'provider.goToClaudeCodeSettings': '前往设置',
+  'provider.openaiOAuthHint': '使用 ChatGPT Plus/Pro 订阅登录，无需 API Key 即可使用 OpenAI 模型。',
   'provider.addProviderSection': '添加提供商',
   'provider.addProviderDesc': '选择要连接的提供商。大多数预设只需填写 API 密钥。',
 
@@ -1227,11 +1263,11 @@ const zh: Record<TranslationKey, string> = {
 
   // ── Setup Center ──────────────────────────────────────────────
   'setup.title': '欢迎使用 CodePilot',
-  'setup.subtitle': '让我们快速完成几个设置步骤。',
+  'setup.subtitle': '配置 Agent 引擎、服务商和工作目录。',
   'setup.skipAndEnter': '跳过并进入',
   'setup.progress': '{completed}/3 已完成',
   'setup.openSetupCenter': '首次设置引导',
-  'setup.openSetupCenterDesc': '检查或重新配置 Claude Code 连接、API 提供商和默认项目目录',
+  'setup.openSetupCenterDesc': '配置 Agent 引擎（AI SDK / Claude Code）、API 服务商和默认项目目录',
   'setup.open': '打开',
 
   // Setup: Welcome card
@@ -1239,8 +1275,8 @@ const zh: Record<TranslationKey, string> = {
   'setup.welcome.description': 'CodePilot 是多模型 AI Agent 桌面客户端。连接任意 AI 服务商，通过 MCP 和 Skills 扩展能力，让你的助理学会你的工作方式。',
 
   // Setup: Claude Code card
-  'setup.claude.title': 'Claude Code CLI',
-  'setup.claude.description': 'CodePilot 需要 Claude Code CLI 才能正常工作。',
+  'setup.claude.title': 'Claude Code CLI（可选）',
+  'setup.claude.description': '安装 Claude Code CLI 可获得完整命令行能力。不安装也能通过 AI SDK 引擎正常使用。',
   'setup.claude.detected': '已检测到 Claude Code',
   'setup.claude.notFound': '未找到 Claude Code',
   'setup.claude.conflict': '检测到多个安装版本，可能导致版本冲突',

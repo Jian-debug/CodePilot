@@ -126,17 +126,29 @@ describe('Stale default_provider_id cleanup', () => {
   });
 
   describe('resolveProvider does NOT auto-heal', () => {
-    it('returns undefined provider when default points to deleted record', () => {
-      const id = createTestProvider('__test_stale');
-      setDefaultProviderId(id);
-      deleteProvider(id);
-      // Now default_provider_id points to a non-existent provider
+    it('returns undefined provider when default points to deleted record and no other providers exist', () => {
+      // Deactivate all existing providers so fallback chain doesn't find one
+      const existing = getAllProviders();
+      const deactivated: string[] = [];
+      for (const p of existing) {
+        if (p.is_active && !p.name.startsWith('__test_')) {
+          getDb().prepare('UPDATE api_providers SET is_active = 0 WHERE id = ?').run(p.id);
+          deactivated.push(p.id);
+        }
+      }
+      try {
+        const id = createTestProvider('__test_stale');
+        setDefaultProviderId(id);
+        deleteProvider(id);
 
-      const resolved = resolveProvider({});
-
-      // Resolver should NOT have auto-fixed the stale default
-      // (that would cause side effects during Doctor diagnostics)
-      assert.equal(resolved.provider, undefined, 'should return undefined, not auto-heal');
+        const resolved = resolveProvider({});
+        assert.equal(resolved.provider, undefined, 'should return undefined when no active providers exist');
+      } finally {
+        // Restore deactivated providers
+        for (const pid of deactivated) {
+          getDb().prepare('UPDATE api_providers SET is_active = 1 WHERE id = ?').run(pid);
+        }
+      }
     });
 
     it('does not modify default_provider_id setting on read', () => {
