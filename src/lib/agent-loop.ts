@@ -347,17 +347,18 @@ export function runAgentLoop(options: AgentLoopOptions): ReadableStream<string> 
 
           // Consume the fullStream
           let hasToolCalls = false;
+          let hasContent = false; // tracks whether any actual content was produced
           const stepToolNames: string[] = [];
-          let eventCount = 0;
 
           for await (const event of result.fullStream) {
-            eventCount++;
             switch (event.type) {
               case 'text-delta':
+                hasContent = true;
                 controller.enqueue(formatSSE({ type: 'text', data: event.text }));
                 break;
 
               case 'reasoning-delta':
+                hasContent = true;
                 controller.enqueue(formatSSE({ type: 'thinking', data: event.text }));
                 break;
 
@@ -402,10 +403,10 @@ export function runAgentLoop(options: AgentLoopOptions): ReadableStream<string> 
 
           // If no tool calls, the model is done
           if (!hasToolCalls) {
-            // Detect empty response (proxy rejected or model returned nothing)
-            if (eventCount <= 3) {
+            // Detect truly empty response (no text, no thinking, no tools)
+            if (!hasContent) {
               const finishReason = await result.finishReason;
-              console.error(`[agent-loop] Empty response: ${eventCount} events, finishReason=${finishReason}, model=${modelId}`);
+              console.error(`[agent-loop] Empty response: finishReason=${finishReason}, model=${modelId}`);
               reportNativeError('EMPTY_RESPONSE', new Error(`Empty response: finishReason=${finishReason}`), { modelId, sessionId });
               controller.enqueue(formatSSE({
                 type: 'error',

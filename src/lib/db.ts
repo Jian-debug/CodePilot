@@ -998,8 +998,14 @@ export function getLatestSessionByWorkingDirectory(workingDirectory: string): Ch
 
 export function deleteSession(id: string): boolean {
   const db = getDb();
-  const result = db.prepare('DELETE FROM chat_sessions WHERE id = ?').run(id);
-  return result.changes > 0;
+  // Wrap in transaction: clean up tables without CASCADE before deleting session.
+  // channel_outbound_refs has codepilot_session_id but no FK CASCADE constraint,
+  // causing FK errors when foreign_keys=ON (#Sentry 40x SqliteError).
+  const txn = db.transaction(() => {
+    db.prepare('DELETE FROM channel_outbound_refs WHERE codepilot_session_id = ?').run(id);
+    return db.prepare('DELETE FROM chat_sessions WHERE id = ?').run(id).changes > 0;
+  });
+  return txn();
 }
 
 export function updateSessionTimestamp(id: string): void {
