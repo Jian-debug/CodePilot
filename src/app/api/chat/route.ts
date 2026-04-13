@@ -266,6 +266,7 @@ export async function POST(request: NextRequest) {
     let activeSessionSummary = sessionSummaryData.summary || undefined;
     let fallbackTokenBudget: number | undefined;
     let compressionOccurred = false;
+    let compressionStats: { messagesCompressed: number; tokensSaved: number } | null = null;
 
     try {
       const { estimateContextTokens } = await import('@/lib/context-estimator');
@@ -333,6 +334,10 @@ export async function POST(request: NextRequest) {
             );
             // Flag so we can notify frontend via a leading SSE event
             compressionOccurred = true;
+            compressionStats = {
+              messagesCompressed: result.messagesCompressed,
+              tokensSaved: result.estimatedTokensSaved,
+            };
             console.log(`[chat API] Compressed ${result.messagesCompressed} messages, saved ~${result.estimatedTokensSaved} tokens`);
           } catch (compErr) {
             console.warn('[chat API] Compression failed, proceeding without:', compErr);
@@ -398,11 +403,26 @@ export async function POST(request: NextRequest) {
       setSessionRuntimeStatus(session_id, 'idle');
     }, { isHeartbeatTurn, suppressNotifications: !!autoTrigger });
 
-    // If auto-compression happened, prepend a notification event to the stream
+    // If auto-compression happened, prepend a notification event to the stream.
+    // The message is human-readable so the browser status bar shows something
+    // meaningful, and includes structured data for future rich UI handling.
     const responseStream = compressionOccurred
       ? new ReadableStream<string>({
           async start(controller) {
-            controller.enqueue(`data: ${JSON.stringify({ type: 'status', data: JSON.stringify({ notification: true, message: 'context_compressed' }) })}\n\n`);
+            const msgCount = compressionStats?.messagesCompressed ?? 0;
+            const tokensSaved = compressionStats?.tokensSaved ?? 0;
+            const displayMessage = tokensSaved > 0
+              ? `Context compressed: ${msgCount} older messages summarized, ~${tokensSaved.toLocaleString()} tokens saved`
+              : `Context compressed: ${msgCount} older messages summarized`;
+            controller.enqueue(`data: ${JSON.stringify({
+              type: 'status',
+              data: JSON.stringify({
+                notification: true,
+                subtype: 'context_compressed',
+                message: displayMessage,
+                stats: compressionStats,
+              }),
+            })}\n\n`);
             const reader = streamForClient.getReader();
             try {
               while (true) {

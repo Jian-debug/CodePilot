@@ -418,6 +418,26 @@ async function consumeStream(
               if (statusData.model) {
                 updateSessionModel(sessionId, statusData.model);
               }
+              // Skill-nudge: agent loop emits this at end-of-run when the
+              // workflow is complex enough to warrant saving as a Skill.
+              // Append as a separated text block so IM users see the
+              // suggestion at the bottom of the assistant reply.
+              if (
+                statusData.subtype === 'skill_nudge' &&
+                typeof statusData.message === 'string' &&
+                statusData.message.trim() !== ''
+              ) {
+                // Flush any pending assistant text first so the nudge
+                // appears AFTER the assistant's own final words.
+                if (currentText.trim()) {
+                  contentBlocks.push({ type: 'text', text: currentText });
+                  currentText = '';
+                }
+                contentBlocks.push({
+                  type: 'text',
+                  text: `\n\n---\nSkill suggestion: ${statusData.message}`,
+                });
+              }
             } catch { /* skip */ }
             break;
           }

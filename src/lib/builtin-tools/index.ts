@@ -118,6 +118,33 @@ function getToolGroups(options: { workspacePath?: string }): BuiltinToolGroup[] 
     } catch { /* module not available */ }
   }
 
+  // Session history search tool — always available (queries SQLite messages table)
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const { createSessionSearchTools, SESSION_SEARCH_SYSTEM_PROMPT } = require('./session-search');
+    groups.push({
+      name: 'codepilot-session-search',
+      systemPrompt: SESSION_SEARCH_SYSTEM_PROMPT,
+      condition: 'always',
+      tools: createSessionSearchTools(),
+    });
+  } catch { /* module not available */ }
+
+  // AskUserQuestion — structured question UI for Native Runtime.
+  // SDK Runtime has this built in; Native Runtime needs it as a builtin tool.
+  // The tool goes through the permission wrapper which emits permission_request SSE,
+  // and the existing AskUserQuestionUI in PermissionPrompt.tsx renders the UI.
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const { createAskUserQuestionTools, ASK_USER_QUESTION_SYSTEM_PROMPT } = require('./ask-user-question');
+    groups.push({
+      name: 'codepilot-ask-user',
+      systemPrompt: ASK_USER_QUESTION_SYSTEM_PROMPT,
+      condition: 'always',
+      tools: createAskUserQuestionTools(),
+    });
+  } catch { /* module not available */ }
+
   // CLI tools — keyword-gated
   try {
     // eslint-disable-next-line @typescript-eslint/no-require-imports

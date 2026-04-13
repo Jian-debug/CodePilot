@@ -66,6 +66,11 @@ const zh: Record<TranslationKey, string> = {
   'streaming.allowed': '已允许',
   'streaming.denied': '已拒绝',
 
+  // ── Skill Nudge ──
+  'skillNudge.message': '本次工作流使用了 {step} 个步骤和 {toolCount} 种工具，可以保存为 Skill 以便一键复用。',
+  'skillNudge.saveButton': '保存为 Skill',
+  'skillNudge.savePrompt': '请帮我把这次对话中的工作流程保存为一个可复用的 Skill。',
+
   // ── Chat view / session page ────────────────────────────────
   'chat.newConversation': '新对话',
 

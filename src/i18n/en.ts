@@ -69,6 +69,11 @@ const en = {
   'streaming.allowed': 'Allowed',
   'streaming.denied': 'Denied',
 
+  // ── Skill Nudge ──
+  'skillNudge.message': 'This workflow involved {step} steps across {toolCount} distinct tools. Save as a Skill for one-click replay.',
+  'skillNudge.saveButton': 'Save as Skill',
+  'skillNudge.savePrompt': 'Please help me save the workflow from this conversation as a reusable Skill.',
+
   // ── Chat view / session page ────────────────────────────────
   'chat.newConversation': 'New Conversation',
 

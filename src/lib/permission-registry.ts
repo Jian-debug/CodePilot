@@ -56,7 +56,10 @@ export function registerPendingPermission(
   const map = getMap();
 
   return new Promise<PermissionResult>((resolve) => {
-    // Per-request independent timer: auto-deny after TIMEOUT_MS
+    // Per-request independent timer: auto-deny after TIMEOUT_MS.
+    // `.unref()` so this timer doesn't prevent Node process from exiting
+    // during graceful shutdown — if the app is closing, we don't need to
+    // fire the timeout handler.
     const timer = setTimeout(() => {
       if (map.has(id)) {
         console.warn(`[permission-registry] Permission request ${id} timed out after ${TIMEOUT_MS / 1000}s`);
@@ -69,6 +72,9 @@ export function registerPendingPermission(
         }
       }
     }, TIMEOUT_MS);
+    if (typeof timer === 'object' && 'unref' in timer) {
+      (timer as NodeJS.Timeout).unref();
+    }
 
     map.set(id, {
       resolve,

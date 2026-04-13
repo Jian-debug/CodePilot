@@ -153,6 +153,37 @@ export function ChatView({ sessionId, initialMessages = [], initialHasMore = fal
   const permissionResolved = streamSnapshot?.permissionResolved ?? null;
   const rewindPoints = getRewindPoints(sessionId);
 
+  // ── Skill nudge banner ──
+  // Listens for 'skill-nudge' window events dispatched by stream-session-manager
+  // when the agent loop completes a complex multi-step workflow.
+  const [skillNudge, setSkillNudge] = useState<{
+    message: string;
+    step: number;
+    distinctToolCount: number;
+    toolNames: string[];
+  } | null>(null);
+
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const detail = (e as CustomEvent).detail;
+      if (detail?.sessionId === sessionId) {
+        setSkillNudge({
+          message: detail.message || '',
+          step: detail.step || 0,
+          distinctToolCount: detail.distinctToolCount || 0,
+          toolNames: detail.toolNames || [],
+        });
+      }
+    };
+    window.addEventListener('skill-nudge', handler);
+    return () => window.removeEventListener('skill-nudge', handler);
+  }, [sessionId]);
+
+  // Clear nudge when starting a new message (new workflow begins)
+  useEffect(() => {
+    if (isStreaming) setSkillNudge(null);
+  }, [isStreaming]);
+
   // Pending image generation notices
   const pendingImageNoticesRef = useRef<string[]>([]);
   const sendMessageRef = useRef<(content: string, files?: FileAttachment[], systemPromptAppend?: string, displayOverride?: string) => Promise<void>>(undefined);
@@ -583,6 +614,39 @@ export function ChatView({ sessionId, initialMessages = [], initialHasMore = fal
         toolUses={toolUses}
         permissionProfile={permissionProfile}
       />
+      {/* Skill nudge banner — shown after complex multi-step workflows */}
+      {skillNudge && !isStreaming && (
+        <div className="mx-auto w-full max-w-3xl border-t border-border bg-background px-4 py-3">
+          <div className="flex items-center justify-between gap-3">
+            <p className="flex-1 text-sm text-muted-foreground">
+              {t('skillNudge.message')
+                .replace('{step}', String(skillNudge.step))
+                .replace('{toolCount}', String(skillNudge.distinctToolCount))}
+            </p>
+            <div className="flex items-center gap-2 shrink-0">
+              <Button
+                variant="outline"
+                size="sm"
+                className="text-xs"
+                onClick={() => {
+                  setSkillNudge(null);
+                  sendMessageRef.current?.(t('skillNudge.savePrompt'));
+                }}
+              >
+                {t('skillNudge.saveButton')}
+              </Button>
+              <button
+                type="button"
+                onClick={() => setSkillNudge(null)}
+                className="rounded p-1 text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
+                aria-label="Dismiss"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       {/* Batch image generation panels */}
       <BatchExecutionDashboard />
       <BatchContextSync />

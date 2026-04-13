@@ -21,6 +21,7 @@ import {
   getProvider,
   getDefaultProviderId,
   getActiveProvider,
+  getAllProviders,
   getSetting,
   getModelsForProvider,
   getProviderOptions,
@@ -803,3 +804,259 @@ function safeParseCapabilities(json: string | undefined | null): CatalogModel['c
 
 // ApiProvider now includes protocol, headers_json, env_overrides_json, role_models_json
 // directly — no type augmentation needed.
+
+// ── Auxiliary model routing ─────────────────────────────────────
+//
+// Auxiliary tasks (context compression, short summaries, vision,
+// web extract, etc.) should use a small/fast model to save cost.
+// This section implements the 5-step resolution chain documented in
+// docs/research/hermes-agent-analysis.md §3.2:
+//
+//   1. Per-task env override (AUXILIARY_<TASK>_PROVIDER + _MODEL)
+//   2. Main provider's roleModels.small (if not sdkProxyOnly)
+//   3. Main provider's roleModels.haiku (if not sdkProxyOnly)
+//   4. First other non-sdkProxyOnly provider with .small or .haiku
+//   5. Main provider + main model (ultimate floor — never returns null)
+//
+// CodePilot background: provider preset's roleModels.small slot is
+// already populated for many providers (see provider-catalog.ts) and
+// already consumed by toClaudeCodeEnv() to set ANTHROPIC_SMALL_FAST_MODEL
+// for the SDK path. This routing extends the same slot to Native Runtime
+// auxiliary tasks without hardcoding provider-specific model names.
+
+export type AuxiliaryTask = 'compact' | 'vision' | 'summarize' | 'web_extract';
+
+export type AuxiliaryResolutionSource =
+  | 'env_override'
+  | 'main_small'
+  | 'main_haiku'
+  | 'fallback_provider_small'
+  | 'fallback_provider_haiku'
+  | 'main_floor';
+
+export interface AuxiliaryModelResolution {
+  /** Provider ID — 'env' when no DB provider is configured (environment mode). */
+  providerId: string;
+  /** Upstream model ID to send to the API. May be empty string if nothing is configured. */
+  modelId: string;
+  /** Which resolution tier produced this result — for telemetry / debugging. */
+  source: AuxiliaryResolutionSource;
+}
+
+/**
+ * Context required by the pure routing function.
+ * Everything is pre-fetched by resolveAuxiliaryModel() so the routing logic
+ * itself performs no IO and is trivial to unit test.
+ */
+export interface AuxiliaryRoutingContext {
+  /** Result of resolveProvider() — may have provider=undefined in env mode. */
+  main: ResolvedProvider;
+  /** Whether main provider is flagged sdkProxyOnly via its preset. */
+  isMainSdkProxyOnly: boolean;
+  /** Other configured providers with their roleModels and sdkProxyOnly flag. */
+  others: ReadonlyArray<{
+    id: string;
+    roleModels: RoleModels;
+    isSdkProxyOnly: boolean;
+  }>;
+  /** Per-task env override — env_override tier only applies when BOTH are set. */
+  envOverride?: { providerId?: string; modelId?: string };
+}
+
+/**
+ * Pure routing function — implements the 5-step resolution chain.
+ *
+ * Separated from the live wrapper so unit tests can feed in fixtures
+ * without mocking DB / env. All dependencies come in via `ctx`.
+ */
+export function routeAuxiliaryModel(
+  task: AuxiliaryTask,
+  ctx: AuxiliaryRoutingContext,
+): AuxiliaryModelResolution {
+  void task; // per-task logic currently limited to env var name (handled in wrapper)
+
+  // Tier 1: Per-task env override — requires both provider and model set.
+  const env = ctx.envOverride;
+  if (env?.providerId && env?.modelId) {
+    return {
+      providerId: env.providerId,
+      modelId: env.modelId,
+      source: 'env_override',
+    };
+  }
+
+  const main = ctx.main;
+  const mainId = main.provider?.id ?? 'env';
+
+  // Tier 2: Main provider's small slot (if not sdkProxyOnly).
+  if (!ctx.isMainSdkProxyOnly && main.roleModels.small) {
+    return {
+      providerId: mainId,
+      modelId: main.roleModels.small,
+      source: 'main_small',
+    };
+  }
+
+  // Tier 3: Main provider's haiku slot (if not sdkProxyOnly).
+  if (!ctx.isMainSdkProxyOnly && main.roleModels.haiku) {
+    return {
+      providerId: mainId,
+      modelId: main.roleModels.haiku,
+      source: 'main_haiku',
+    };
+  }
+
+  // Tier 4: Scan other providers for first non-sdkProxyOnly with small or haiku.
+  for (const other of ctx.others) {
+    if (other.isSdkProxyOnly) continue;
+    if (other.roleModels.small) {
+      return {
+        providerId: other.id,
+        modelId: other.roleModels.small,
+        source: 'fallback_provider_small',
+      };
+    }
+    if (other.roleModels.haiku) {
+      return {
+        providerId: other.id,
+        modelId: other.roleModels.haiku,
+        source: 'fallback_provider_haiku',
+      };
+    }
+  }
+
+  // Tier 5: Ultimate floor — main provider + main model.
+  // This is the "never return null" guarantee: if no cheap model is available,
+  // the auxiliary task simply uses the same model as the main conversation.
+  // Callers treat this as "auxiliary optimization unavailable, run on primary".
+  return {
+    providerId: mainId,
+    modelId: main.upstreamModel || main.model || '',
+    source: 'main_floor',
+  };
+}
+
+/**
+ * Live entry point — fetches the main provider, enumerates other configured
+ * providers, reads per-task env overrides, and delegates to routeAuxiliaryModel.
+ *
+ * **Never returns null.** When no cheap auxiliary model is available, falls
+ * back to the main provider + main model (source: 'main_floor') so callers
+ * can always make a valid model call — even if it doesn't save cost.
+ *
+ * **Session context**: callers MUST pass the session's provider context
+ * (providerId / sessionProviderId / sessionModel) so that "main" means
+ * "the provider backing this chat session", not "the global default".
+ * Without this, an auxiliary task from a session that overrides the
+ * default provider would compress against unrelated credentials/models.
+ * See exec plan decision log 2026-04-12 ~04:00 for the Codex review
+ * that caught this.
+ *
+ * @param task The auxiliary task type (compact, vision, summarize, web_extract)
+ * @param opts Session context forwarded to `resolveProvider()`. Omitting
+ *   this falls back to the global default provider — intentionally kept
+ *   for callers that don't have a session (e.g. background jobs).
+ */
+export function resolveAuxiliaryModel(
+  task: AuxiliaryTask,
+  opts: ResolveOptions = {},
+): AuxiliaryModelResolution {
+  // Resolve the main provider with session context. Passing opts through
+  // is critical — otherwise auxiliary routing targets the global default
+  // instead of the session's active provider.
+  const main = resolveProvider(opts);
+
+  // Determine if main provider is sdkProxyOnly via preset lookup.
+  let isMainSdkProxyOnly = false;
+  if (main.provider) {
+    const preset = findPresetForLegacy(
+      main.provider.base_url,
+      main.provider.provider_type,
+      main.protocol,
+    );
+    isMainSdkProxyOnly = preset?.sdkProxyOnly ?? false;
+  }
+
+  // Enumerate other providers and compute their roleModels + sdkProxyOnly.
+  const others: Array<{ id: string; roleModels: RoleModels; isSdkProxyOnly: boolean }> = [];
+  if (main.provider) {
+    try {
+      const allProviders = getAllProviders();
+      for (const p of allProviders) {
+        if (p.id === main.provider.id) continue;
+        const protocol = (p.protocol as Protocol) || inferProtocolFromLegacy(p.provider_type, p.base_url);
+        const preset = findPresetForLegacy(p.base_url, p.provider_type, protocol);
+        others.push({
+          id: p.id,
+          roleModels: computeEffectiveRoleModels(p, preset, protocol),
+          isSdkProxyOnly: preset?.sdkProxyOnly ?? false,
+        });
+      }
+    } catch (err) {
+      // getAllProviders may fail in test environments or on fresh DBs.
+      // Degrade gracefully — the routing still returns a usable result via
+      // the main_floor tier.
+      console.warn('[resolveAuxiliaryModel] getAllProviders failed:', err);
+    }
+  }
+
+  // Per-task env override — read e.g. AUXILIARY_COMPACT_PROVIDER + _MODEL.
+  const envKey = task.toUpperCase();
+  const envProvider = process.env[`AUXILIARY_${envKey}_PROVIDER`];
+  const envModel = process.env[`AUXILIARY_${envKey}_MODEL`];
+
+  return routeAuxiliaryModel(task, {
+    main,
+    isMainSdkProxyOnly,
+    others,
+    envOverride: {
+      providerId: envProvider,
+      modelId: envModel,
+    },
+  });
+}
+
+/**
+ * Merge a provider's persisted `role_models_json` with its catalog
+ * preset's `defaultRoleModels`, matching the same "fallback when no
+ * default/sonnet is set" rule used by `buildResolution()` (see :664-675).
+ *
+ * Extracting this ensures the tier-4 auxiliary fallback sees the same
+ * effective role models as the main provider resolution — without it,
+ * providers that rely on preset defaults (instead of user-persisted JSON)
+ * would appear to have no small/haiku slot, silently downgrading the
+ * auxiliary fallback chain to `main_floor`.
+ *
+ * **Exported for unit testing.** The merge rule is simple but the logic
+ * is load-bearing — the pre-fix auxiliary path diverged from the main
+ * path by skipping this merge, and a direct unit test is the cheapest
+ * way to lock the contract down. Callers inside this file use this
+ * helper at the tier-4 scan site; external callers should prefer the
+ * higher-level `resolveAuxiliaryModel()` unless they specifically need
+ * to replicate the merge.
+ */
+export function computeEffectiveRoleModels(
+  provider: ApiProvider,
+  preset: ReturnType<typeof findPresetForLegacy>,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _protocol: Protocol,
+): RoleModels {
+  let roleModels = safeParseRoleModels(provider.role_models_json);
+  // Same fallback condition as buildResolution(): only pull preset defaults
+  // when the user hasn't persisted a default or sonnet slot. Avoids
+  // overriding user customizations while still giving preset-backed
+  // providers their documented slots.
+  if (!roleModels.default && !roleModels.sonnet && preset?.defaultRoleModels) {
+    roleModels = { ...preset.defaultRoleModels, ...roleModels };
+  }
+  return roleModels;
+}
+
+function safeParseRoleModels(json: string | undefined | null): RoleModels {
+  if (!json) return {};
+  try {
+    const parsed = JSON.parse(json);
+    if (typeof parsed === 'object' && parsed !== null) return parsed as RoleModels;
+  } catch { /* ignore */ }
+  return {};
+}
