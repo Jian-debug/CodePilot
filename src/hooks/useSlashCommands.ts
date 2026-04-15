@@ -33,6 +33,8 @@ export function useSlashCommands(opts: {
   closePopover: () => void;
   onCommand?: (command: string) => void;
   setBadge: (badge: { command: string; label: string; description: string; kind: SkillKind; installedSource?: "agents" | "claude" } | null) => void;
+  /** When true, block immediate commands and badge selection from popover */
+  isStreaming?: boolean;
 }): UseSlashCommandsReturn {
   const {
     sessionId,
@@ -52,6 +54,7 @@ export function useSlashCommands(opts: {
     closePopover,
     onCommand,
     setBadge,
+    isStreaming,
   } = opts;
 
   // Enrich built-in commands with icons (presentation layer enrichment)
@@ -180,6 +183,8 @@ export function useSlashCommands(opts: {
 
     switch (result.action) {
       case 'immediate_command':
+        // Block during streaming — destructive commands (e.g. /clear) would race
+        if (isStreaming) { closePopover(); return; }
         if (onCommand) {
           setInputValue('');
           closePopover();
@@ -188,6 +193,8 @@ export function useSlashCommands(opts: {
         return;
 
       case 'set_badge':
+        // Block during streaming — badges dispatch as slash/skill prompts, not queueable
+        if (isStreaming) { closePopover(); return; }
         setBadge(result.badge!);
         setInputValue('');
         closePopover();
@@ -200,7 +207,7 @@ export function useSlashCommands(opts: {
         setTimeout(() => textareaRef.current?.focus(), 0);
         return;
     }
-  }, [triggerPos, popoverMode, closePopover, onCommand, inputValue, popoverFilter, textareaRef, setInputValue, setBadge]);
+  }, [triggerPos, popoverMode, closePopover, onCommand, inputValue, popoverFilter, textareaRef, setInputValue, setBadge, isStreaming]);
 
   // Handle input changes to detect @ and /
   const handleInputChange = useCallback(async (val: string) => {

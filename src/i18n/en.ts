@@ -74,6 +74,10 @@ const en = {
   'skillNudge.saveButton': 'Save as Skill',
   'skillNudge.savePrompt': 'Please help me save the workflow from this conversation as a reusable Skill.',
 
+  // ── Message queue ────────────────────────────────────────────
+  'messageQueue.queued': 'Queued',
+  'messageQueue.cancel': 'Cancel queued message',
+
   // ── Chat view / session page ────────────────────────────────
   'chat.newConversation': 'New Conversation',
 
@@ -641,6 +645,21 @@ const en = {
   'telegram.step6': 'Click "Save" to store your credentials',
 
   // ── Feishu (Bridge) ──────────────────────────────────────
+  'feishu.quickCreate': 'Quick Start',
+  'feishu.quickCreateDesc': 'Auto-create a Feishu bot and bind it to CodePilot — no manual permission or event setup needed',
+  'feishu.quickCreateBtn': 'Create & Bind Feishu App',
+  'feishu.waitingAuth': 'Browser opened — please confirm creation in Feishu...',
+  'feishu.createSuccess': 'Bound successfully: {botName}',
+  'feishu.createSuccessGeneric': 'Bound successfully',
+  'feishu.createFailed': 'Failed to create app',
+  'feishu.createExpired': 'Authorization timed out, please retry',
+  'feishu.rebind': 'Rebind',
+  'feishu.manualConfig': 'Already have a Feishu app? Manual configuration ›',
+  'feishu.errorUserDenied': 'User denied the app creation request',
+  'feishu.errorEmptyCredentials': 'Registration returned empty credentials',
+  'feishu.errorLarkEmptyCredentials': 'Lark endpoint returned empty credentials',
+  'feishu.bindingVerifyFailed': 'Credentials saved but verification failed',
+  'feishu.bindingRestartFailed': 'Credentials saved but bridge restart failed',
   'feishu.credentials': 'App Credentials',
   'feishu.credentialsDesc': 'Enter your Feishu App ID and App Secret',
   'feishu.appId': 'App ID',
@@ -675,13 +694,10 @@ const en = {
   'feishu.groupAllowFromHint': 'Comma-separated chat_id values of allowed groups',
   'feishu.requireMention': 'Require @mention',
   'feishu.requireMentionDesc': 'Only respond in groups when the bot is @mentioned',
-  'feishu.setupGuide': 'Setup Guide',
-  'feishu.step1': 'Go to Feishu Open Platform (open.feishu.cn) and create a custom app',
-  'feishu.step2': 'Enable the Bot capability in the app features',
-  'feishu.step3': 'Copy the App ID and App Secret from the Credentials page',
-  'feishu.step4': 'Add event subscription: im.message.receive_v1',
-  'feishu.step5': 'Publish the app version and approve it in the admin console',
-  'feishu.step6': 'Paste the credentials above and click "Test Connection" to verify',
+  'feishu.setupGuide': 'How it works',
+  'feishu.step1': 'Click "Create & Bind Feishu App" above — your browser will open the Feishu authorization page',
+  'feishu.step2': 'Select a workspace and confirm — Bot capabilities, permissions, and event subscriptions are auto-configured',
+  'feishu.step3': 'Come back here, then go to the Bridge overview to start the bridge',
   'feishu.threadSession': 'Thread Sessions',
   'feishu.threadSessionDesc': 'Enable per-thread independent context (parallel conversations in different threads)',
   'feishu.connectionState': 'Connection State',

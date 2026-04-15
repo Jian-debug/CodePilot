@@ -87,9 +87,19 @@ export function MessageInput({
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const cliSearchRef = useRef<HTMLInputElement>(null);
-  // key={initialValue} on the parent would be the canonical React way to reset,
-  // but since this component remounts on navigation, useState(initialValue) is sufficient.
-  const [inputValue, setInputValue] = useState(initialValue || '');
+  // Persist draft per session so switching chats doesn't lose typed text.
+  const draftKey = `codepilot:draft:${sessionId || 'new'}`;
+  const [inputValue, setInputValueRaw] = useState(() => {
+    if (initialValue) return initialValue;
+    try { return sessionStorage.getItem(draftKey) || ''; } catch { return ''; }
+  });
+  const setInputValue = useCallback((v: string | ((prev: string) => string)) => {
+    setInputValueRaw((prev) => {
+      const next = typeof v === 'function' ? v(prev) : v;
+      try { if (next) sessionStorage.setItem(draftKey, next); else sessionStorage.removeItem(draftKey); } catch { /* quota */ }
+      return next;
+    });
+  }, [draftKey]);
 
   // --- Extracted hooks ---
   const popover = usePopoverState(modelName);
@@ -143,6 +153,7 @@ export function MessageInput({
     closePopover: popover.closePopover,
     onCommand,
     setBadge,
+    isStreaming: !!isStreaming,
   });
 
   // Assistant trigger on first focus
@@ -168,7 +179,7 @@ export function MessageInput({
     };
     window.addEventListener('insert-file-mention', handler);
     return () => window.removeEventListener('insert-file-mention', handler);
-  }, []);
+  }, [setInputValue]);
 
   const handleSubmit = useCallback(async (msg: { text: string; files: Array<{ type: string; url: string; filename?: string; mediaType?: string }> }, e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -197,8 +208,11 @@ export function MessageInput({
       return attachments;
     };
 
-    // If Image Agent toggle is on and no badge, send via normal LLM with systemPromptAppend
-    if (imageGen.state.enabled && !badge && !isStreaming) {
+    // If Image Agent toggle is on and no badge, send via normal LLM with systemPromptAppend.
+    // PENDING_KEY is a global singleton — queuing would misattach refs, so block entirely
+    // during streaming rather than letting it fall through to the plain queue path.
+    if (imageGen.state.enabled && !badge) {
+      if (isStreaming) return; // silently block — can't safely queue image-agent prompts
       const files = await convertFiles();
       if (!content && files.length === 0) return;
 
@@ -217,8 +231,10 @@ export function MessageInput({
       return;
     }
 
-    // If badge is active, dispatch by kind
-    if (badge && !isStreaming) {
+    // If badge is active, dispatch by kind.
+    // Block during streaming — badges carry slash/skill semantics, not safe to queue.
+    if (badge) {
+      if (isStreaming) return;
       const files = await convertFiles();
       const { prompt, displayLabel } = dispatchBadge(badge, content);
       setBadge(null);
@@ -230,21 +246,26 @@ export function MessageInput({
     const files = await convertFiles();
     const hasFiles = files.length > 0;
 
-    if ((!content && !hasFiles) || disabled || isStreaming) return;
+    if ((!content && !hasFiles) || disabled) return;
 
-    // Check if it's a direct slash command typed in the input
+    // Check if it's a direct slash command typed in the input.
     if (!hasFiles) {
       const slashResult = resolveDirectSlash(content);
-      if (slashResult.action === 'immediate_command') {
-        if (onCommand) {
+      if (slashResult.action === 'immediate_command' || slashResult.action === 'set_badge' || slashResult.action === 'unknown_slash_badge') {
+        // Slash commands must NOT execute or queue during streaming —
+        // destructive commands (e.g. /clear) would race with the active stream.
+        if (isStreaming) return;
+        if (slashResult.action === 'immediate_command') {
+          if (onCommand) {
+            setInputValue('');
+            onCommand(slashResult.commandValue!);
+            return;
+          }
+        } else {
+          setBadge(slashResult.badge!);
           setInputValue('');
-          onCommand(slashResult.commandValue!);
           return;
         }
-      } else if (slashResult.action === 'set_badge' || slashResult.action === 'unknown_slash_badge') {
-        setBadge(slashResult.badge!);
-        setInputValue('');
-        return;
       }
     }
 
@@ -254,7 +275,7 @@ export function MessageInput({
 
     onSend(content || 'Please review the attached file(s).', hasFiles ? files : undefined, cliAppend);
     setInputValue('');
-  }, [inputValue, onSend, onCommand, disabled, isStreaming, popover, badge, cliBadge, imageGen, setBadge, setCliBadge]);
+  }, [inputValue, onSend, onCommand, disabled, isStreaming, popover, badge, cliBadge, imageGen, setBadge, setCliBadge, setInputValue]);
 
   const handleKeyDown = useCallback(
     (e: KeyboardEvent<HTMLTextAreaElement>) => {
@@ -474,6 +495,7 @@ export function MessageInput({
                 disabled={disabled}
                 inputValue={inputValue}
                 hasBadge={hasBadge}
+                isImageAgentOn={imageGen.state.enabled}
               />
             </PromptInputFooter>
           </PromptInput>

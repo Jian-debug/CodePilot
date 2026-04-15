@@ -71,6 +71,10 @@ const zh: Record<TranslationKey, string> = {
   'skillNudge.saveButton': '保存为 Skill',
   'skillNudge.savePrompt': '请帮我把这次对话中的工作流程保存为一个可复用的 Skill。',
 
+  // ── Message queue ────────────────────────────────────────────
+  'messageQueue.queued': '已排队',
+  'messageQueue.cancel': '取消排队消息',
+
   // ── Chat view / session page ────────────────────────────────
   'chat.newConversation': '新对话',
 
@@ -638,6 +642,21 @@ const zh: Record<TranslationKey, string> = {
   'telegram.step6': '点击「保存」存储凭据',
 
   // ── Feishu (Bridge) ──────────────────────────────────────
+  'feishu.quickCreate': '快速开始',
+  'feishu.quickCreateDesc': '自动创建飞书机器人并绑定到 CodePilot，无需手动配置权限和事件',
+  'feishu.quickCreateBtn': '创建并绑定飞书应用',
+  'feishu.waitingAuth': '浏览器已打开，请在飞书页面中确认创建...',
+  'feishu.createSuccess': '绑定成功：{botName}',
+  'feishu.createSuccessGeneric': '绑定成功',
+  'feishu.createFailed': '创建失败',
+  'feishu.createExpired': '授权超时，请重试',
+  'feishu.rebind': '重新绑定',
+  'feishu.manualConfig': '已有飞书应用？点击手动配置 ›',
+  'feishu.errorUserDenied': '用户拒绝了应用创建请求',
+  'feishu.errorEmptyCredentials': '创建返回的凭据为空',
+  'feishu.errorLarkEmptyCredentials': 'Lark 端点返回的凭据为空',
+  'feishu.bindingVerifyFailed': '凭据已保存但连接验证失败',
+  'feishu.bindingRestartFailed': '凭据已保存但桥接重启失败',
   'feishu.credentials': '应用凭据',
   'feishu.credentialsDesc': '输入您的飞书 App ID 和 App Secret',
   'feishu.appId': 'App ID',
@@ -672,13 +691,10 @@ const zh: Record<TranslationKey, string> = {
   'feishu.groupAllowFromHint': '允许的群组 chat_id，逗号分隔',
   'feishu.requireMention': '需要 @提及',
   'feishu.requireMentionDesc': '群聊中仅在 @机器人时响应',
-  'feishu.setupGuide': '设置指南',
-  'feishu.step1': '前往飞书开放平台 (open.feishu.cn) 创建自建应用',
-  'feishu.step2': '在应用功能中启用「机器人」能力',
-  'feishu.step3': '在凭证页面复制 App ID 和 App Secret',
-  'feishu.step4': '添加事件订阅：im.message.receive_v1',
-  'feishu.step5': '发布应用版本并在管理后台审批通过',
-  'feishu.step6': '将凭据粘贴到上方，点击「测试连接」验证',
+  'feishu.setupGuide': '使用说明',
+  'feishu.step1': '点击上方「创建并绑定飞书应用」按钮，浏览器会自动打开飞书授权页面',
+  'feishu.step2': '在飞书页面中选择工作区并确认创建，Bot 能力、权限和事件订阅会自动配置',
+  'feishu.step3': '创建完成后回到本页面，前往「远程桥接」总览页启动桥接即可开始使用',
   'feishu.threadSession': '话题会话',
   'feishu.threadSessionDesc': '启用每话题独立上下文（不同话题中的并行对话）',
   'feishu.connectionState': '连接状态',

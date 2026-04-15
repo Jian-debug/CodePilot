@@ -38,6 +38,34 @@ interface FileMeta {
 }
 
 /**
+ * Whether a MIME type (or fallback filename extension) is safe to read as
+ * UTF-8 text and inline into a prompt. Used to avoid injecting binary content
+ * (audio/video/PDF/zip) as garbled characters during history replay.
+ */
+function isTextLikeMime(mime: string | undefined, name: string | undefined): boolean {
+  const m = (mime || '').toLowerCase();
+  if (!m && !name) return false;
+  if (m.startsWith('text/')) return true;
+  // Common "application/*" types that are actually text
+  if (['application/json', 'application/xml', 'application/javascript',
+       'application/typescript', 'application/yaml', 'application/x-yaml',
+       'application/x-sh', 'application/toml', 'application/x-toml',
+       'application/graphql', 'application/sql'].includes(m)) return true;
+  if (m.includes('+json') || m.includes('+xml') || m.includes('+yaml')) return true;
+  // Fallback to extension for missing/generic MIME types
+  const ext = (name || '').toLowerCase().split('.').pop() || '';
+  const TEXT_EXTS = new Set([
+    'txt', 'md', 'markdown', 'rst', 'log', 'json', 'jsonc', 'yaml', 'yml',
+    'toml', 'ini', 'cfg', 'conf', 'csv', 'tsv', 'xml', 'html', 'htm', 'css',
+    'scss', 'sass', 'less', 'js', 'mjs', 'cjs', 'ts', 'tsx', 'jsx', 'vue',
+    'py', 'rb', 'go', 'rs', 'java', 'kt', 'swift', 'c', 'h', 'cpp', 'hpp',
+    'cs', 'php', 'pl', 'sh', 'bash', 'zsh', 'fish', 'ps1', 'bat', 'cmd',
+    'sql', 'graphql', 'proto', 'env', 'gitignore', 'dockerfile',
+  ]);
+  return TEXT_EXTS.has(ext);
+}
+
+/**
  * Convert an array of DB messages (chronological order) into
  * Vercel AI SDK ModelMessage[] suitable for streamText({ messages }).
  *
@@ -152,14 +180,23 @@ function buildUserMessage(content: string): ModelMessage {
         // File no longer exists — mention it in text
         parts.push({ type: 'text', text: `[Attached file: ${meta.name} (no longer available)]` });
       }
-    } else {
-      // Non-image files: try to include as text content
+    } else if (isTextLikeMime(meta.type, meta.name)) {
+      // Actual text content — inline it (truncated)
       try {
         const fileContent = fs.readFileSync(meta.filePath, 'utf-8');
         parts.push({ type: 'text', text: `\n--- ${meta.name} ---\n${fileContent.slice(0, 50000)}\n--- end ---` });
       } catch {
         parts.push({ type: 'text', text: `[Attached file: ${meta.name}]` });
       }
+    } else {
+      // Binary content (audio, video, archives, PDFs, etc) — reading as UTF-8
+      // would inject garbled bytes into the prompt and waste tokens. Keep a
+      // reference note so the model knows the attachment existed, and include
+      // the file path so tools like Read can open it on demand.
+      parts.push({
+        type: 'text',
+        text: `[Attached file: ${meta.name} (${meta.type}, binary — content not inlined; path: ${meta.filePath})]`,
+      });
     }
   }
 

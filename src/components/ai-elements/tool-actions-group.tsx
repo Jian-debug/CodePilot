@@ -15,6 +15,7 @@ import {
   CaretRight,
   Brain,
   Image as ImageIcon,
+  Lightning,
 } from "@phosphor-icons/react";
 import { cn } from '@/lib/utils';
 import { Shimmer } from '@/components/ai-elements/shimmer';
@@ -147,6 +148,57 @@ const TOOL_REGISTRY: ToolRendererDef[] = [
       const inp = input as Record<string, unknown> | undefined;
       const pattern = (inp?.pattern || inp?.query || inp?.glob || '') as string;
       return pattern ? `"${pattern.length > 50 ? pattern.slice(0, 47) + '...' : pattern}"` : 'search';
+    },
+  },
+  {
+    match: (n) => n.toLowerCase() === 'agent',
+    icon: Lightning,
+    label: 'Agent',
+    getSummary: (input) => {
+      const inp = input as Record<string, unknown> | undefined;
+      const agentType = (inp?.agent || 'general') as string;
+      const prompt = (inp?.prompt || '') as string;
+      const short = prompt.length > 50 ? prompt.slice(0, 47) + '...' : prompt;
+      return `${agentType}: ${short}`;
+    },
+    renderDetail: (tool, streamingOutput) => {
+      const isRunning = tool.result === undefined;
+      const outputText = isRunning ? streamingOutput : undefined;
+      if (!outputText && isRunning) return null;
+
+      // Parse progress lines into structured items
+      const lines = (outputText || '').split('\n').filter(Boolean);
+      // Only show last 8 lines to avoid clutter
+      const visible = lines.slice(-8);
+
+      return (
+        <div className="mt-1 ml-4 border-l-2 border-border/30 pl-2 space-y-0.5">
+          {visible.map((line, i) => {
+            const isActive = line.startsWith('>');
+            const isDone = line.startsWith('[+]');
+            const isError = line.startsWith('[x]');
+            const isHeader = line.startsWith('[subagent:');
+            return (
+              <div
+                key={i}
+                className={cn(
+                  "text-[11px] font-mono truncate",
+                  isHeader ? "text-muted-foreground/70" :
+                  isActive ? "text-muted-foreground/60" :
+                  isDone ? "text-green-500/60" :
+                  isError ? "text-red-500/60" :
+                  "text-muted-foreground/50"
+                )}
+              >
+                {isActive && <SpinnerGap size={10} className="inline-block mr-1 animate-spin align-text-bottom" />}
+                {isDone && <CheckCircle size={10} className="inline-block mr-1 align-text-bottom" />}
+                {isError && <XCircle size={10} className="inline-block mr-1 align-text-bottom" />}
+                {line.replace(/^\[subagent:\w+\]\s*/, '').replace(/^>\s*/, '').replace(/^\[[+x]\]\s*/, '')}
+              </div>
+            );
+          })}
+        </div>
+      );
     },
   },
   {
@@ -397,8 +449,8 @@ function ToolActionRow({ tool, streamingToolOutput }: { tool: ToolAction; stream
   const summary = renderer.getSummary(tool.input, tool.name);
   const filePath = getFilePath(tool.input);
   const status = getStatus(tool);
-  const isBash = renderer.icon === Terminal;
-  const showDetail = isBash && renderer.renderDetail && (status === 'running' || streamingToolOutput || tool.result);
+  const hasDetail = renderer.icon === Terminal || renderer.icon === Lightning;
+  const showDetail = hasDetail && renderer.renderDetail && (status === 'running' || streamingToolOutput || tool.result);
 
   return (
     <div>
@@ -413,7 +465,7 @@ function ToolActionRow({ tool, streamingToolOutput }: { tool: ToolAction; stream
           {summary}
         </span>
 
-        {filePath && !isBash && (
+        {filePath && !hasDetail && (
           <span className="text-muted-foreground/40 text-[11px] font-mono truncate max-w-[200px] hidden sm:inline">
             {truncatePath(filePath)}
           </span>

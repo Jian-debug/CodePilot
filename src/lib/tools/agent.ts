@@ -88,6 +88,11 @@ export function createAgentTool(ctx: {
         permissionMode: ctx.permissionMode, // inherit from parent
       });
 
+      // Emit subagent start event as tool_output so the parent UI can show progress
+      if (ctx.emitSSE) {
+        ctx.emitSSE({ type: 'tool_output', data: `[subagent:${agentDef.id}] ${prompt.length > 120 ? prompt.slice(0, 117) + '...' : prompt}` });
+      }
+
       // Collect text from the stream
       const reader = stream.getReader();
       const textParts: string[] = [];
@@ -110,6 +115,20 @@ export function createAgentTool(ctx: {
                   // Forward permission requests to parent stream so the
                   // client can show the approval UI for sub-agent tool calls
                   ctx.emitSSE(event);
+                } else if (event.type === 'tool_use' && ctx.emitSSE) {
+                  // Forward subagent tool invocations as tool_output progress
+                  try {
+                    const tool = JSON.parse(event.data);
+                    const toolRenderer = getToolSummary(tool.name, tool.input);
+                    ctx.emitSSE({ type: 'tool_output', data: `> ${toolRenderer}` });
+                  } catch { /* skip malformed */ }
+                } else if (event.type === 'tool_result' && ctx.emitSSE) {
+                  // Show tool completion
+                  try {
+                    const res = JSON.parse(event.data);
+                    const status = res.is_error ? 'x' : '+';
+                    ctx.emitSSE({ type: 'tool_output', data: `[${status}] done` });
+                  } catch { /* skip malformed */ }
                 }
               } catch { /* skip non-JSON lines */ }
             }
@@ -125,6 +144,29 @@ export function createAgentTool(ctx: {
 }
 
 // ── Helpers ─────────────────────────────────────────────────────
+
+/** Build a one-line summary of a tool invocation for subagent progress output. */
+function getToolSummary(name: string, input: unknown): string {
+  const inp = input as Record<string, unknown> | undefined;
+  if (!inp) return name;
+  const lower = name.toLowerCase();
+  if (['bash', 'execute', 'run', 'shell'].includes(lower)) {
+    const cmd = (inp.command || inp.cmd || '') as string;
+    return cmd ? (cmd.length > 60 ? cmd.slice(0, 57) + '...' : cmd) : 'bash';
+  }
+  const filePath = (inp.file_path || inp.path || inp.filePath || '') as string;
+  if (['read', 'readfile', 'read_file'].includes(lower)) {
+    return filePath ? `Read ${filePath}` : 'Read';
+  }
+  if (['write', 'edit', 'writefile', 'write_file', 'create_file'].includes(lower)) {
+    return filePath ? `Edit ${filePath}` : 'Edit';
+  }
+  if (['glob', 'grep', 'search', 'find_files', 'search_files'].includes(lower)) {
+    const pattern = (inp.pattern || inp.query || inp.glob || '') as string;
+    return pattern ? `${name} "${pattern.length > 40 ? pattern.slice(0, 37) + '...' : pattern}"` : name;
+  }
+  return name;
+}
 
 function filterTools(
   allTools: ToolSet,

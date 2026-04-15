@@ -21,16 +21,30 @@ export function FileAwareSubmitButton({
   disabled,
   inputValue,
   hasBadge,
+  isImageAgentOn,
 }: {
   status: ChatStatus;
   onStop?: () => void;
   disabled?: boolean;
   inputValue: string;
   hasBadge: boolean;
+  /** Whether the Image Agent toggle is currently enabled */
+  isImageAgentOn?: boolean;
 }) {
   const attachments = usePromptInputAttachments();
   const hasFiles = attachments.files.length > 0;
   const isStreaming = status === 'streaming' || status === 'submitted';
+
+  // During streaming only plain text can queue. Slash commands, badges, and
+  // Image Agent are all blocked by handleSubmit(), so the button must not
+  // advertise sendability for those paths.
+  const trimmed = inputValue.trim();
+  const canQueue = isStreaming
+    && !!trimmed
+    && !hasBadge
+    && !trimmed.startsWith('/')
+    && !isImageAgentOn;
+
   const enabled = isSubmitEnabled({
     inputValue,
     hasBadge,
@@ -41,12 +55,14 @@ export function FileAwareSubmitButton({
 
   return (
     <PromptInputSubmit
-      status={status}
-      onStop={onStop}
+      status={canQueue ? 'ready' : status}
+      onStop={canQueue ? undefined : onStop}
       disabled={!enabled}
       className="rounded-full"
     >
-      {isStreaming ? (
+      {canQueue ? (
+        <ArrowUp size={16} />
+      ) : isStreaming ? (
         <Stop size={16} />
       ) : (
         <ArrowUp size={16} />
