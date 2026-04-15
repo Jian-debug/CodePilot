@@ -64,3 +64,5 @@ apps/site/node_modules/
 
 # claude code session data
 .claude/
+
+.idea/**
