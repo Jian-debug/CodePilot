@@ -28,6 +28,7 @@ import {
 } from './db';
 import { ensureTokenFresh } from './openai-oauth-manager';
 import { CODEX_API_ENDPOINT } from './openai-oauth';
+import { hasClaudeSettingsCredentials } from './claude-settings';
 
 // ── Resolution result ───────────────────────────────────────────
 
@@ -311,11 +312,17 @@ export function toClaudeCodeEnv(
     if (appBaseUrl) env.ANTHROPIC_BASE_URL = appBaseUrl;
   }
 
-  // Prevent ~/.claude/settings.json from overriding CodePilot's provider configuration.
-  // When set, Claude Code CLI's withoutHostManagedProviderVars() strips all provider-routing
-  // variables from the user's settings file (see upstream managedEnv.ts / managedEnvConstants.ts).
-  // Placed AFTER all env cleanup to ensure it's never accidentally deleted.
-  env.CLAUDE_CODE_PROVIDER_MANAGED_BY_HOST = '1';
+  // NOTE: We previously set CLAUDE_CODE_PROVIDER_MANAGED_BY_HOST=1 here in an attempt
+  // to tell the Agent SDK to strip ~/.claude/settings.json env overrides. That flag
+  // does not exist in the current SDK (@anthropic-ai/claude-agent-sdk 0.2.62) — it
+  // was either aspirational or came from an older SDK spec. Removing it avoids
+  // shipping misleading dead code. The SDK already filters its own env blocklist
+  // (model aliases, AWS/OTEL/Bedrock keys — see rG6 in cli.js), and when CodePilot
+  // has an active provider, toClaudeCodeEnv() already deletes all ANTHROPIC_* keys
+  // from baseEnv above before injecting the provider's values, so settings.json
+  // env cannot override the provider's auth/baseUrl for authenticated users.
+  // For env-mode (no active provider) users, we intentionally let settings.json
+  // provide credentials — that's how cc-switch integration works.
 
   return env;
 }
@@ -370,6 +377,34 @@ export function toAiSdkConfig(
       const mapped = roleMap[modelId];
       if (mapped && !SHORT_ALIASES.has(mapped)) {
         modelId = mapped;
+      }
+    }
+
+    // 3. Last resort for SINGLE-MODEL third-party providers: short alias →
+    //    that single model. Third-party proxies (Kimi, GLM, OpenRouter relays,
+    //    custom enterprise endpoints) usually do NOT accept bare "sonnet" /
+    //    "opus" / "haiku" — they want fully-qualified model IDs. Sending the
+    //    alias produces "model 'sonnet' not found" errors from the upstream
+    //    (Sentry: HTTP 400/404/502 across multiple fingerprints, 310+ events
+    //    over 14d).
+    //
+    //    IMPORTANT: We only fall back when the provider has EXACTLY ONE model
+    //    in its catalog. Multi-model providers (e.g. OpenRouter with dozens
+    //    of models) must NOT silently rewrite the user's chosen alias to
+    //    "first model in list" — that's a hard-to-diagnose behavior change
+    //    affecting both correctness and cost. For multi-model providers
+    //    without a role mapping, we keep the alias and let upstream return
+    //    its real "model not found" error so the user can see the problem
+    //    and configure role_models_json properly.
+    if (
+      resolved.provider &&
+      SHORT_ALIASES.has(modelId) &&
+      resolved.availableModels.length === 1
+    ) {
+      const only = resolved.availableModels[0];
+      const onlyUpstream = only.upstreamModelId || only.modelId;
+      if (onlyUpstream && !SHORT_ALIASES.has(onlyUpstream)) {
+        modelId = onlyUpstream;
       }
     }
   } else {
@@ -613,11 +648,16 @@ function buildResolution(
   opts: ResolveOptions,
 ): ResolvedProvider {
   if (!provider) {
-    // Environment-based provider (no DB record) — credentials come from shell env or legacy DB settings
+    // Environment-based provider (no DB record) — credentials come from shell env,
+    // legacy DB settings, or ~/.claude/settings.json (managed by cc-switch etc.).
+    // When only settings.json has creds, we must still flag hasCredentials=true so
+    // ai-provider.ts's guard doesn't preemptively abort before the SDK runtime has
+    // a chance to load the file via settingSources.
     const envHasCredentials = !!(
       process.env.ANTHROPIC_API_KEY ||
       process.env.ANTHROPIC_AUTH_TOKEN ||
-      getSetting('anthropic_auth_token')
+      getSetting('anthropic_auth_token') ||
+      hasClaudeSettingsCredentials()
     );
     // Read user-configured global default model — only use it if it's an env-provider model
     const globalDefaultModel = getSetting('global_default_model') || undefined;
@@ -742,9 +782,48 @@ function buildResolution(
   // Has credentials?
   const hasCredentials = !!(provider.api_key) || authStyle === 'env_only';
 
-  // Settings sources — always include 'user' so SDK can load skills from
-  // ~/.claude/skills/. Env override conflicts are handled by envOverrides.
-  const settingSources = ['user', 'project', 'local'];
+  // Settings sources for DB-backed providers — KEEP 'user', DROP 'project'+'local'.
+  //
+  // Why 'user' stays: the SDK relies on `settingSources: ['user']` to
+  // automatically discover user-scoped features that CodePilot does NOT
+  // pass explicitly:
+  //   - User-level MCP servers from ~/.claude.json / ~/.claude/settings.json
+  //   - User-level plugins via `enabledPlugins` in settings.json
+  //   - User-level skills from ~/.claude/skills/
+  //   - User-level hooks, permissions, CLAUDE.md
+  // Dropping 'user' silently disables all of the above. The cc-switch-style
+  // env-bleed concern at the user layer is handled by per-request shadow
+  // HOME in `claude-home-shadow.ts` — settings.json is materialized with
+  // ANTHROPIC_* keys stripped while everything else is preserved.
+  //
+  // Why 'project' and 'local' are dropped:
+  // The SDK's `qZq()` settings loader applies env from EVERY settingSource
+  // layer. Shadow HOME only sanitizes user-level files. Project / local
+  // settings (`<cwd>/.claude/settings.json`, `<cwd>/.claude/settings.local.json`)
+  // can theoretically contain `env: { ANTHROPIC_BASE_URL, ... }` which would
+  // override the explicitly selected DB provider's auth. We considered
+  // shadowing cwd too, but file-creation tools (Edit/Write) operate on
+  // relative paths, so a shadow cwd would silently make new files vanish.
+  // Cleaner: stop exposing project/local layers and explicitly preserve
+  // the non-auth project features we actually need:
+  //   - Project CLAUDE.md / AGENTS.md → loaded via context-assembler.ts:89
+  //     (workspacePrompt) AND agent-system-prompt.ts:119 (discoverProject-
+  //     Instructions). Both run without going through SDK settingSources.
+  //   - Project `<cwd>/.mcp.json` → explicitly injected into the SDK's
+  //     `mcpServers` Option in claude-client.ts (~line 647) via
+  //     `loadProjectMcpServers(resolvedWorkingDirectory.path)`. We can't
+  //     rely on SDK auto-loading because that's gated by 'project'
+  //     settingSource, AND mcp-loader.ts:48 reads `process.cwd()` which on
+  //     the desktop app is the Next.js server's working dir (wrong).
+  // Lost (rare): `<cwd>/.claude/settings.json` mcpServers / hooks / plugins
+  // / permissions and `<cwd>/.claude/settings.local.json` overrides. Most
+  // users don't author project-level Claude Code config, and CodePilot has
+  // its own permission system, so this is an acceptable trade-off.
+  //
+  // Env mode (no DB provider) keeps all 3 sources — see buildResolution()
+  // around line 640 — so cc-switch users without a configured DB provider
+  // get the full Claude Code config experience.
+  const settingSources = ['user'];
 
   return {
     provider,

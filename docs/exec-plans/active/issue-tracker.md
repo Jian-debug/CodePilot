@@ -1,7 +1,7 @@
 # Issue Tracker — 统一问题跟踪
 
 > 创建时间：2026-04-13
-> 最后更新：2026-04-13
+> 最后更新：2026-04-15（cc-switch 凭据归属重构 + Electron 端口稳定化 + OAuth retry + Hermes runtime 回归修复 + ignoreErrors / Controller closed / 短别名 fallback / native binary 探测）
 > 合并自：`open-issues-2026-03-12.md` + `v0.48-post-release-issues.md` + GitHub Issues 最新盘点
 
 **AI 须知：**
@@ -17,20 +17,42 @@
 ### P0 — 阻断核心功能
 
 #### B-001 Provider 认证路径仍有边缘失败
-- **Issues:** [#456](https://github.com/op7418/CodePilot/issues/456), [#461](https://github.com/op7418/CodePilot/issues/461), [#474](https://github.com/op7418/CodePilot/issues/474)
-- **状态:** 🟡 部分修复（v0.48.2 修了主路径，边缘路径仍失败）
+- **Issues:** [#456](https://github.com/op7418/CodePilot/issues/456), [#461](https://github.com/op7418/CodePilot/issues/461), [#474](https://github.com/op7418/CodePilot/issues/474), [#478](https://github.com/op7418/CodePilot/issues/478), [#476](https://github.com/op7418/CodePilot/issues/476), [#457](https://github.com/op7418/CodePilot/issues/457), [#470](https://github.com/op7418/CodePilot/issues/470)
+- **状态:** 🟢 主要路径已修（待 v0.50.2 发布验证），#474 独立子问题待跟进
 - **现象:** Provider 诊断 1-5 全 PASS，第 6 项"实际连通测试"报 `PROCESS_CRASH` 或 `No API credentials found`
 - **已修复的部分（v0.48.1-v0.48.2）：**
   - `resolveProvider()` 改为尊重 `default_provider_id`，不再依赖 `is_active`
   - `hasAnyCredentials()` 检查全部 Provider
   - auto 模式增加凭据检查（无 Anthropic 凭据 → native runtime）
   - SDK 认证死循环 3 轮迭代修复（env → DB provider → env_only）
-- **仍未覆盖的场景：**
-  - 通过 cc-switch 配置本地 CLI 的用户（#461 评论 Theo-jobs）
-  - v0.49.0 发布后仍有用户提交诊断 JSON（#474，2026-04-13）
-  - 纯 CLI 用户没有设置任何 GUI Provider 的场景
-- **Sentry 关联:** `No provider credentials available`（54x → 持续）
-- **下一步:** 需要拿 #474 的诊断 JSON 分析具体失败路径；排查 cc-switch 用户的环境变量注入逻辑
+- **本轮修复（2026-04-15，待发版）：cc-switch / 外部托管 settings.json 识别**
+  - 新增 `src/lib/claude-settings.ts`：读 `~/.claude/settings.json` 的 `env` 块
+  - `runtime/registry.ts hasCredentialsForRequest()` 增加 settings.json 作为凭据来源
+  - `provider-resolver.ts buildResolution()` env 模式把 settings.json 计入 `hasCredentials`
+  - 移除 `provider-resolver.ts:318` 的 `CLAUDE_CODE_PROVIDER_MANAGED_BY_HOST=1` 死代码（SDK 0.2.62 不识别该变量，属于早期设计遗留）
+  - 改进 `ai-provider.ts` 错误消息：当 settings.json 有凭据但 native runtime 失败时，明确引导用户切 SDK runtime
+  - 新增 `claude-settings-credentials.test.ts`（10 个单测）+ 重写 `provider-preset.test.ts` 的 MANAGED_BY_HOST 测试
+  - 详细分析见 `cc-switch-credential-bridge.md`
+- **#474 独立子问题（未修）：**
+  - 用户诊断 JSON 显示 `hasCredentials: true`、base URL `http://model.mify.ai.srv/anthropic` 是内部 DNS
+  - runtime logs 仍有 "No provider credentials available" — 说明 agent-loop 调 `createModel({})` 时 providerId 透传丢失
+  - Live probe 超时 15s（上游不可达）是另一层问题
+  - 跟踪：检查 agent-loop → createModel 的 providerId 传递链路
+- **Sentry 关联（14d）：** `No provider credentials available` Top 2 = **1,462 events**；预期本轮修复后 72h 内大幅下降
+- **下一步:** v0.50.2 发版后跟踪 Sentry 指纹变化；发版说明里加 cc-switch 用户的"自动识别"升级亮点
+- **B-001 Follow-up（已修复）：按 provider group 决定凭据归属 + per-request shadow `~/.claude/`**
+  - 第三轮 review 后实施，2026-04-15
+  - 规则：env group 完全尊重 Claude Code 来源（settings.json/cc-switch）；DB provider 显式选中时，auth/baseURL/model 仅以 DB provider 为准
+  - 实现：`src/lib/claude-home-shadow.ts` 在 DB provider 请求里建临时 HOME，`.claude/settings.json` 剥 `ANTHROPIC_*` env keys（保留 mcpServers/hooks/enabledPlugins/permissions/apiKeyHelper），其余 `~/.claude/` 通过 symlink/junction 镜像
+  - `runtime/registry.ts hasCredentialsForRequest()` 同步收紧：DB provider 不再用 settings.json 兜底（避免静默 rescue 配错 key 的 provider）
+  - 用户级 MCP / plugins / hooks / CLAUDE.md 仍然完整可用
+  - 12 个 shadow 单测 + 3 个 group-ownership 端到端测试覆盖：env+settings、DB+settings 共存、DB 配错 key 不救活、shadow 保留所有非认证字段及子目录、cleanup 真实生效
+- **B-001 Follow-up TODO（非阻塞）：DB provider 凭据归属端到端 smoke**
+  - 当前覆盖：所有 loader/helper 的输入边界都有单测（settingSources、shadow HOME、`prepareSdkSubprocessEnv`、`loadProjectMcpServers`、`mcpServerOverrides` 等）
+  - 未覆盖：真实 claude CLI subprocess + SDK 内部 `qZq()` + 实际 API 请求路由的端到端验证。如果上游 SDK 行为变（例如 settings 加载顺序变化），unit test 不一定能感知
+  - 建议方案：搭一个 mock 端点 + 真实 CLI 的 smoke fixture，断言 DB provider 请求实际打到 DB provider 的 base_url / api_key（不是 cc-switch 的）。当前 `package.json` 的 `test:smoke` 是 Playwright UI，不适用此场景，需要单独 harness
+  - 优先级：低。属于"上游 SDK 升级回归"防护，不是当前修复正确性的必要条件
+  - 触发条件：升级 `@anthropic-ai/claude-agent-sdk` 时主动跑一次
 
 #### B-002 Sentry: AI_NoOutputGeneratedError 持续增长
 - **状态:** 🟡 部分修复（v0.48.1 修了 eventCount→hasContent 误报）
@@ -48,40 +70,60 @@
 
 #### B-003 OpenAI OAuth 登录 403
 - **Issues:** [#464](https://github.com/op7418/CodePilot/issues/464)
-- **状态:** 🔴 未修复（有修复但用户仍复现）
-- **现象:** `Token exchange failed: Token exchange failed: 403 - [object Object]`，macOS + Windows 均复现
-- **已做的修复（commit `38fe566`）：** token expiry 检查、callback 成功确认、server 绑定 127.0.0.1
-- **仍然存在的问题：**
-  - 终端 `claude` 命令能正常 OAuth，CodePilot 不行 → 可能是 client ID / redirect URI 差异
-  - `[object Object]` 说明错误序列化时没有 JSON.stringify
-  - 可能和账号类型有关（Free vs Plus）
-- **下一步:** 确认报错用户的账号类型；检查 token exchange 端点的 403 response body；修复 error 序列化
+- **状态:** 🟢 已修（待 v0.50.2 发版验证）
+- **现象:** `Token exchange failed: Token exchange failed: 403 - [object Object]`，macOS + Windows 均复现；项目维护者两台机器都不复现
+- **本轮修复（2026-04-15）：网络鲁棒性 + 错误序列化**
+  - `src/lib/openai-oauth.ts`: `exchangeCodeForTokens` 改为最多 3 次重试，对 403/408/429/5xx 和网络级错误（ECONNRESET / ETIMEDOUT / ENOTFOUND / ECONNREFUSED）做指数退避（1s/2s/4s）
+  - 不重试 400/401/404/422 等真正的 auth/config 错误（避免无谓重试）
+  - 错误消息改用 `JSON.stringify(j)` 替代 toString，根治 `[object Object]` 序列化 bug
+  - 对照参考项目 OpenCode（`资料/opencode-dev/codex.ts:580`）的 polling 容错语义：`if (status !== 403 && status !== 404) return failed`，OpenCode 也把 403 当可重试处理
+  - 新增 `openai-oauth-retry.test.ts`（14 个单测）覆盖 retry 分类逻辑
+- **根因结论：**
+  - 用户在不稳定网络（VPN / 跨境）+ OpenAI auth code 边缘节点 propagation 延迟时，单次请求容易撞 403
+  - 维护者两台机器网络稳定，单次请求总是命中已 propagate 的节点 → 不复现
+  - 与 client ID / redirect URI / 账号类型无关（之前的猜测排除）
 
 #### B-004 打包版 localStorage 随机端口导致设置丢失
-- **Issues:** [#465](https://github.com/op7418/CodePilot/issues/465), [#466](https://github.com/op7418/CodePilot/issues/466) 评论
-- **状态:** 🟡 部分修复（只迁移了 FeatureAnnouncementDialog）
+- **Issues:** [#465](https://github.com/op7418/CodePilot/issues/465), [#466](https://github.com/op7418/CodePilot/issues/466) 评论, [#477](https://github.com/op7418/CodePilot/issues/477)（默认模型不生效）
+- **状态:** 🟢 根因修复（待 v0.50.2 发版验证）
 - **现象：**
-  - 模型选择器总是恢复为"自动（列表中第一个）"/ "Default (recommended)"（截图确认）
+  - 模型选择器总是恢复为"自动（列表中第一个）"/ "Default (recommended)"
   - 每次重启显示"设置助理"提醒（promoDismissed 不持久）
   - 主题设置重启失效
-- **根因（#466 评论 patgdut 明确指出）：** Electron 打包版每次启动用随机端口 → localStorage 按 origin 存储 → 重启清空
-- **已修复:** FeatureAnnouncementDialog 改为 DB + localStorage 双写（commit `9395b7d`）
-- **未迁移的组件：**
-  - 默认模型选择（`codepilot:last-model` / `codepilot:last-provider-id`）
-  - 主题设置（`theme` / `theme_family`）
-  - promoDismissed（ChatListPanel）
-  - 其他 `codepilot:*` localStorage 键
-- **下一步:** 系统性排查所有 localStorage 依赖，迁移为 DB-first + localStorage 缓存
+  - 输入框默认模型徽标"原来有现在没了"（实质是 localStorage 清空导致 last-provider-id 丢失，即使 DB 有 global default 也匹配不到）
+- **根因（已确认）：** `electron/main.ts:515` 的 `getPort()` 用 `server.listen(0, ...)` —— OS 分配随机端口；Electron 渲染进程的 origin 是 `http://127.0.0.1:<random>`；浏览器 localStorage 按 origin 存储 → 每次重启端口不同 → localStorage 整体失效
+- **本轮修复（2026-04-15，待发版）：从根因层修，而非逐个迁移 localStorage**
+  - `electron/main.ts:510-571` 重写 `getPort()`：先尝试稳定端口范围 `47823-47830`（IANA 未分配，常用程度低）；只在 8 个候选端口全部被占时才 fallback 到 OS-assigned
+  - 新增 `isPortFree(port)` helper：用 `server.listen(port, ...)` 探测端口可用性
+  - 单端口稳定后，**所有现有 localStorage 持久化代码自动生效**——不需要逐个迁移到 DB
+  - 详细分析见 `electron-port-stability.md`
+- **影响范围：** 一次性解决以下副作用问题
+  - 主题（theme_mode + theme_family）重启保留
+  - 默认模型 / 默认 provider 选择重启保留
+  - 工作目录记忆（`codepilot:last-working-directory`）
+  - 各类 announcement / banner dismiss 状态（已迁移 DB 的不受影响，未迁移的也不再丢）
+- **不解决的边缘情况：**
+  - 用户同时跑 8+ 个 CodePilot 实例 → 第 9 个会 fallback 到随机端口（极不常见）
+  - 系统上其他程序占用 `47823-47830` 全部 8 个端口（极不常见）
+  - 这两种情况下都会 console.warn 提示用户 settings 可能不持久
 
 #### B-005 Generative UI 第三方 API 渲染失效
 - **Issues:** [#471](https://github.com/op7418/CodePilot/issues/471)
-- **状态:** 🔴 未修复
+- **状态:** ⚪ 暂无代码 bug 可修，建议用户升 v0.50.x 复测
 - **现象：**
   1. show-widget / Generative UI 在第三方 API 上只显示原始 JSON 文本块
   2. OpenRouter 官方预设 + 正确 API Key → Provider 诊断仍无法通过
-- **v0.48.1 的 widget 修复（commit `a120066`）** 修的是 Unicode escape 问题，不涉及第三方 API 格式适配
-- **可能原因：** Generative UI 解析逻辑可能硬编码了 Anthropic content block 格式；OpenRouter Native 协议适配可能在 v0.49.0 有回归
-- **下一步:** 排查 show-widget 解析是否依赖特定 response 格式；测试 OpenRouter 连接路径
+- **2026-04-15 重新核查（无修复行动）：**
+  - Native runtime（处理第三方 API 的路径）实际上**已经**注册了 widget 工具：`src/lib/builtin-tools/widget-guidelines.ts` 提供 `codepilot_load_widget_guidelines` tool，`condition: 'always'`
+  - chat/route.ts → `assembleContext({entryPoint: 'desktop'})` → `WIDGET_SYSTEM_PROMPT`（详细版）注入 `finalSystemPrompt`
+  - native-runtime → `buildSystemPrompt({userPrompt: finalSystemPrompt})` → 包装在 `# User Instructions` 段
+  - agent-loop → `assembleTools()` → 再加 builtin widget 短 prompt + 工具
+  - **结论：第三方 API 路径同时拥有 widget 详细系统提示 + tool**，能力上对等
+- **未修原因：**
+  - 用户 #471 报告时间 2026-04-12，正是 v0.49.0 发布日；可能是 v0.49.0 早期 bug 被 v0.50.x 修了
+  - 维护者两台机器 v0.50.1 复测 Generative UI 都正常，反向佐证不是当前代码 bug
+  - 第三方某些较弱模型（如部分 GLM/Kimi 变体）确实可能对 `show-widget` 格式遵循度低，但这是**模型能力问题**而非 CodePilot 代码 bug
+- **下一步:** 在 issue #471 回复请用户升 v0.50.1+ 重测；如果仍现，索取具体 provider/model 配置
 
 #### B-006 会话切换模型重置
 - **Issues:** [#462](https://github.com/op7418/CodePilot/issues/462)

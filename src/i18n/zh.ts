@@ -160,7 +160,6 @@ const zh: Record<TranslationKey, string> = {
   'cli.enableClaudeDesc': '关闭时使用原生 AI SDK 作为后端，开启后使用 Claude Code 作为后端。',
   'cli.agentRuntime': 'Agent 运行时',
   'cli.agentRuntimeDesc': '选择 CodePilot 执行 Agent 任务的方式',
-  'cli.runtimeAuto': '自动（有 CLI 用 SDK，否则用原生）',
   'cli.runtimeNative': '原生 Runtime (AI SDK)',
   'cli.runtimeSdk': 'Claude Code SDK',
   'cli.cliStatus': '状态',

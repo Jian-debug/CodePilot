@@ -21,14 +21,14 @@ function assistantMsg(text: string): ModelMessage {
   return { role: 'assistant', content: text } as ModelMessage;
 }
 
-function toolMsg(toolCallId: string, resultText: string): ModelMessage {
+function toolMsg(toolCallId: string, resultText: string, toolName = 'Read'): ModelMessage {
   return {
     role: 'tool',
     content: [
       {
         type: 'tool-result',
         toolCallId,
-        toolName: 'Read',
+        toolName,
         output: { type: 'text', value: resultText },
       },
     ],
@@ -39,8 +39,8 @@ function toolMsg(toolCallId: string, resultText: string): ModelMessage {
 // pruneOldToolResults (legacy) — unchanged behavior
 // ────────────────────────────────────────────────────────────────
 
-describe('pruneOldToolResults (legacy 6-turn mode)', () => {
-  it('returns messages as-is when under the 6-turn window', () => {
+describe('pruneOldToolResults (legacy fixed-window mode)', () => {
+  it('returns messages as-is when under the recent window', () => {
     const msgs = [
       userMsg('first'),
       assistantMsg('reply 1'),
@@ -50,40 +50,59 @@ describe('pruneOldToolResults (legacy 6-turn mode)', () => {
     assert.deepEqual(result, msgs);
   });
 
-  it('replaces older tool-result content with the fixed marker', () => {
-    // Build 8 messages so the 7th+8th are the "window"
+  it('replaces older tool-result content with a marker that preserves tool name + excerpt', () => {
+    // Build 20 messages so indices 0..3 fall outside the 16-turn recent window
     const msgs: ModelMessage[] = [];
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 20; i++) {
       msgs.push(toolMsg(`call${i}`, `result ${i} with a lot of body content`));
     }
     const result = pruneOldToolResults(msgs);
     assert.equal(result.length, msgs.length);
 
-    // Messages at index 4+ should be untouched (last 6)
-    // Messages at index 0..3 should have their tool-result output replaced
-    const prunedContent = result[0].content as Array<{ output?: { value: string } }>;
+    // Index 0..3 should be pruned (older than 16-turn window)
+    // Index 4..19 (last 16) should be kept as-is
+    const prunedContent = result[0].content as Array<{ output?: { value: string }; toolName?: string }>;
     const output = prunedContent[0].output;
     assert.ok(output);
-    assert.ok(output.value.includes('truncated'), `expected truncation marker, got ${output.value}`);
+    // New marker keeps tool name and result excerpt so the model can still
+    // reason about the call/result pairing — fixes AI_MissingToolResultsError
+    // regression where generic markers caused the model to lose track.
+    assert.ok(
+      output.value.startsWith('[Pruned'),
+      `expected "[Pruned ..." marker, got: ${output.value}`,
+    );
+    assert.ok(
+      output.value.includes('result 0 with a lot of body content'),
+      `marker should contain a result excerpt for context, got: ${output.value}`,
+    );
 
-    // Last message (index 9) should keep its original body
-    const keptContent = result[9].content as Array<{ output?: { value: string } }>;
-    assert.equal(keptContent[0].output?.value, 'result 9 with a lot of body content');
+    // Last message (index 19) should keep its original body
+    const keptContent = result[19].content as Array<{ output?: { value: string } }>;
+    assert.equal(keptContent[0].output?.value, 'result 19 with a lot of body content');
+  });
+
+  it('keeps tool name in the marker so model can match call→result', () => {
+    // Regression test for AI_MissingToolResultsError: the marker must include
+    // the tool name (or at least a placeholder) so the assistant doesn't
+    // emit a fake tool call to "retry" what it thinks is a missing result.
+    const msgs: ModelMessage[] = [];
+    for (let i = 0; i < 20; i++) {
+      msgs.push(toolMsg(`call${i}`, `body${i}`, `MyToolName${i}`));
+    }
+    const result = pruneOldToolResults(msgs);
+    const prunedContent = result[0].content as Array<{ output?: { value: string } }>;
+    const marker = prunedContent[0].output?.value || '';
+    assert.ok(
+      marker.includes('MyToolName0'),
+      `marker should include tool name; got: ${marker}`,
+    );
   });
 
   it('leaves user messages unchanged even in the pruned window', () => {
-    const msgs: ModelMessage[] = [
-      userMsg('old 1'),
-      userMsg('old 2'),
-      userMsg('old 3'),
-      userMsg('old 4'),
-      userMsg('old 5'),
-      userMsg('old 6'),
-      userMsg('recent 1'),
-      userMsg('recent 2'),
-    ];
+    const msgs: ModelMessage[] = [];
+    for (let i = 0; i < 20; i++) msgs.push(userMsg(`msg ${i}`));
     const result = pruneOldToolResults(msgs);
-    // All user messages preserved
+    // All user messages preserved (only tool-result content gets pruned)
     assert.deepEqual(result, msgs);
   });
 });

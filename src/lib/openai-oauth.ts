@@ -85,6 +85,36 @@ export function prepareOAuthFlow(): PreparedFlow {
 
 // ── Exchange Code for Tokens ───────────────────────────────────
 
+/**
+ * Determine if a token-exchange failure is worth retrying.
+ *
+ * Network errors (TypeError from fetch on connection reset, ETIMEDOUT, DNS
+ * failure) and transient 5xx server errors are retryable. 4xx (auth errors)
+ * are not — retrying won't help if the code is genuinely invalid.
+ *
+ * 403 sits in a grey zone: OpenAI's token endpoint occasionally returns 403
+ * for first-attempt requests when the auth code is fresh and propagation
+ * hasn't completed across their edge. Treating 403 as retryable matches
+ * what the upstream OpenCode client does (codex.ts:580 `if (status !== 403
+ * && status !== 404) return failed`).
+ */
+export function isRetryableTokenExchangeFailure(status: number | null, err?: unknown): boolean {
+  if (status === null) return true; // network-level error (TypeError from fetch)
+  if (status >= 500) return true;   // server-side transient
+  if (status === 403 || status === 408 || status === 429) return true;
+  if (err) {
+    const code = (err as { code?: string }).code;
+    if (code === 'ECONNRESET' || code === 'ETIMEDOUT' || code === 'ECONNREFUSED' || code === 'ENOTFOUND') {
+      return true;
+    }
+  }
+  return false;
+}
+
+async function sleep(ms: number): Promise<void> {
+  return new Promise((r) => setTimeout(r, ms));
+}
+
 export async function exchangeCodeForTokens(
   code: string,
   codeVerifier: string,
@@ -97,38 +127,77 @@ export async function exchangeCodeForTokens(
     code_verifier: codeVerifier,
   });
 
-  const response = await fetch(TOKEN_URL, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-      Accept: 'application/json',
-    },
-    body: params.toString(),
-  });
+  // Retry up to 3 times with exponential backoff (1s, 2s, 4s) for transient
+  // network failures + 403/5xx. Issue #464 reports users on macOS + Windows
+  // hitting "Token exchange failed: 403" while the maintainer's two machines
+  // never reproduce — strong signal of network-stability dependence. The
+  // upstream OpenCode reference implementation handles this with polling
+  // retries on the same status codes.
+  const MAX_ATTEMPTS = 3;
+  let lastStatus: number | null = null;
+  let lastBody = '';
+  let lastErr: unknown;
 
-  if (!response.ok) {
-    const text = await response.text();
-    let msg: string;
+  for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
+    let response: Response;
     try {
-      const j = JSON.parse(text);
-      msg = j.error_description || j.error || text;
-    } catch { msg = text; }
-    throw new Error(`Token exchange failed: ${response.status} - ${msg}`);
+      response = await fetch(TOKEN_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          Accept: 'application/json',
+        },
+        body: params.toString(),
+      });
+    } catch (err) {
+      // Network-level failure (DNS, connection reset, TLS handshake failed)
+      lastStatus = null;
+      lastErr = err;
+      lastBody = err instanceof Error ? err.message : String(err);
+      if (attempt < MAX_ATTEMPTS && isRetryableTokenExchangeFailure(null, err)) {
+        await sleep(1000 * Math.pow(2, attempt - 1));
+        continue;
+      }
+      throw new Error(`Token exchange failed (network): ${lastBody}`);
+    }
+
+    if (response.ok) {
+      const data = await response.json() as {
+        id_token: string;
+        access_token: string;
+        refresh_token?: string;
+        expires_in?: number;
+      };
+      return {
+        idToken: data.id_token,
+        accessToken: data.access_token,
+        refreshToken: data.refresh_token,
+        expiresAt: data.expires_in ? Date.now() + data.expires_in * 1000 : undefined,
+      };
+    }
+
+    // Non-OK response — capture body for the error message and decide whether to retry
+    lastStatus = response.status;
+    lastBody = await response.text();
+
+    if (attempt < MAX_ATTEMPTS && isRetryableTokenExchangeFailure(response.status)) {
+      await sleep(1000 * Math.pow(2, attempt - 1));
+      continue;
+    }
+    break;
   }
 
-  const data = await response.json() as {
-    id_token: string;
-    access_token: string;
-    refresh_token?: string;
-    expires_in?: number;
-  };
-
-  return {
-    idToken: data.id_token,
-    accessToken: data.access_token,
-    refreshToken: data.refresh_token,
-    expiresAt: data.expires_in ? Date.now() + data.expires_in * 1000 : undefined,
-  };
+  // Out of retries — produce a useful error. JSON.stringify the body when
+  // possible so users (and Sentry) see structured fields instead of the
+  // legacy "[object Object]" placeholder that issue #464 complained about.
+  let msg: string;
+  try {
+    const j = JSON.parse(lastBody);
+    msg = j.error_description || j.error || JSON.stringify(j);
+  } catch {
+    msg = lastBody || (lastErr instanceof Error ? lastErr.message : 'unknown');
+  }
+  throw new Error(`Token exchange failed after ${MAX_ATTEMPTS} attempts: ${lastStatus ?? 'network'} - ${msg}`);
 }
 
 // ── Refresh Tokens ─────────────────────────────────────────────

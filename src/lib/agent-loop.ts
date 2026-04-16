@@ -22,6 +22,7 @@ import { createCheckpoint } from './file-checkpoint';
 import type { PermissionMode } from './permission-checker';
 import { buildCoreMessages } from './message-builder';
 import { getMessages } from './db';
+import { wrapController } from './safe-stream';
 
 // ── Types ───────────────────────────────────────────────────────
 
@@ -108,9 +109,15 @@ export function runAgentLoop(options: AgentLoopOptions): ReadableStream<string> 
   } = options;
 
   return new ReadableStream<string>({
-    async start(controller) {
+    async start(controllerRaw) {
+      // Wrap controller so async callbacks (onStepFinish, late tool-result
+      // handlers, keep-alive timer) can call enqueue() without crashing
+      // when the consumer aborts. See src/lib/safe-stream.ts.
+      const controller = wrapController(controllerRaw, (kind) => {
+        console.warn(`[agent-loop] late ${kind} after stream close — silently dropped`);
+      });
       const keepAliveTimer = setInterval(() => {
-        try { controller.enqueue(formatSSE({ type: 'keep_alive', data: '' })); } catch { /* stream closed */ }
+        controller.enqueue(formatSSE({ type: 'keep_alive', data: '' }));
       }, KEEPALIVE_INTERVAL_MS);
 
       try {
@@ -146,7 +153,7 @@ export function runAgentLoop(options: AgentLoopOptions): ReadableStream<string> 
               sessionId,
               permissionMode: (permissionMode || 'normal') as PermissionMode,
               emitSSE: (event) => {
-                try { controller.enqueue(formatSSE(event as SSEEvent)); } catch { /* stream closed */ }
+                controller.enqueue(formatSSE(event as SSEEvent));
               },
               abortSignal: abortController.signal,
             },

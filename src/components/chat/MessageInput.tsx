@@ -18,7 +18,7 @@ import { SlashCommandPopover } from './SlashCommandPopover';
 import { CliToolsPopover } from './CliToolsPopover';
 import { ModelSelectorDropdown } from './ModelSelectorDropdown';
 import { EffortSelectorDropdown } from './EffortSelectorDropdown';
-import { FileAwareSubmitButton, AttachFileButton, FileTreeAttachmentBridge, FileAttachmentsCapsules, CommandBadge, CliBadge } from './MessageInputParts';
+import { FileAwareSubmitButton, AttachFileButton, FileTreeAttachmentBridge, FileAttachmentsCapsules, CommandBadgeList, CliBadge } from './MessageInputParts';
 import {
   Tooltip,
   TooltipContent,
@@ -120,7 +120,7 @@ export function MessageInput({
     }
   }, [modelName, modelOptions, currentProviderIdValue, onModelChange, onProviderModelChange]);
 
-  const { badge, setBadge, cliBadge, setCliBadge, removeBadge, removeCliBadge, hasBadge } = useCommandBadge(textareaRef);
+  const { badges, addBadge, removeBadge, clearBadges, cliBadge, setCliBadge, removeCliBadge, hasBadge } = useCommandBadge(textareaRef);
 
   const cliToolsFetch = useCliToolsFetch({
     popoverMode: popover.popoverMode,
@@ -152,7 +152,7 @@ export function MessageInput({
     setTriggerPos: popover.setTriggerPos,
     closePopover: popover.closePopover,
     onCommand,
-    setBadge,
+    addBadge,
     isStreaming: !!isStreaming,
   });
 
@@ -211,7 +211,7 @@ export function MessageInput({
     // If Image Agent toggle is on and no badge, send via normal LLM with systemPromptAppend.
     // PENDING_KEY is a global singleton — queuing would misattach refs, so block entirely
     // during streaming rather than letting it fall through to the plain queue path.
-    if (imageGen.state.enabled && !badge) {
+    if (imageGen.state.enabled && badges.length === 0) {
       if (isStreaming) return; // silently block — can't safely queue image-agent prompts
       const files = await convertFiles();
       if (!content && files.length === 0) return;
@@ -231,13 +231,13 @@ export function MessageInput({
       return;
     }
 
-    // If badge is active, dispatch by kind.
+    // If one or more badges are active, dispatch by kind (multi-skill combines).
     // Block during streaming — badges carry slash/skill semantics, not safe to queue.
-    if (badge) {
+    if (badges.length > 0) {
       if (isStreaming) return;
       const files = await convertFiles();
-      const { prompt, displayLabel } = dispatchBadge(badge, content);
-      setBadge(null);
+      const { prompt, displayLabel } = dispatchBadge(badges, content);
+      clearBadges();
       setInputValue('');
       onSend(prompt, files.length > 0 ? files : undefined, undefined, displayLabel);
       return;
@@ -262,7 +262,7 @@ export function MessageInput({
             return;
           }
         } else {
-          setBadge(slashResult.badge!);
+          addBadge(slashResult.badge!);
           setInputValue('');
           return;
         }
@@ -275,7 +275,7 @@ export function MessageInput({
 
     onSend(content || 'Please review the attached file(s).', hasFiles ? files : undefined, cliAppend);
     setInputValue('');
-  }, [inputValue, onSend, onCommand, disabled, isStreaming, popover, badge, cliBadge, imageGen, setBadge, setCliBadge, setInputValue]);
+  }, [inputValue, onSend, onCommand, disabled, isStreaming, popover, badges, cliBadge, imageGen, addBadge, clearBadges, setCliBadge, setInputValue]);
 
   const handleKeyDown = useCallback(
     (e: KeyboardEvent<HTMLTextAreaElement>) => {
@@ -283,7 +283,7 @@ export function MessageInput({
         popoverMode: popover.popoverMode,
         popoverHasItems: popover.popoverItems.length > 0,
         inputValue,
-        hasBadge: !!badge,
+        hasBadge: badges.length > 0,
         hasCliBadge: !!cliBadge,
       });
 
@@ -309,7 +309,9 @@ export function MessageInput({
 
         case 'remove_badge':
           e.preventDefault();
-          removeBadge();
+          // Backspace/Escape pops the most recently added badge; matches the
+          // mental model of "undo my last selection".
+          if (badges.length > 0) removeBadge(badges[badges.length - 1].command);
           return;
 
         case 'remove_cli_badge':
@@ -346,7 +348,7 @@ export function MessageInput({
         }
       }
     },
-    [popover, slashCommands, cliToolsFetch, badge, cliBadge, inputValue, removeBadge, removeCliBadge]
+    [popover, slashCommands, cliToolsFetch, badges, cliBadge, inputValue, removeBadge, removeCliBadge]
   );
 
   // Effort selector state — guard against undefined when model not found in current provider's list
@@ -422,14 +424,8 @@ export function MessageInput({
           >
             {/* Bridge: listens for file tree "+" button events */}
             <FileTreeAttachmentBridge />
-            {/* Command badge */}
-            {badge && (
-              <CommandBadge
-                command={badge.command}
-                description={badge.description}
-                onRemove={removeBadge}
-              />
-            )}
+            {/* Command badges (multi-skill stacks; other kinds are singletons) */}
+            <CommandBadgeList badges={badges} onRemove={removeBadge} />
             {/* CLI badge */}
             {cliBadge && (
               <CliBadge name={cliBadge.name} onRemove={removeCliBadge} />
@@ -438,7 +434,7 @@ export function MessageInput({
             <FileAttachmentsCapsules />
             <PromptInputTextarea
               ref={textareaRef}
-              placeholder={badge ? "Add details (optional), then press Enter..." : cliBadge ? "Describe what you want to do..." : "Message Claude..."}
+              placeholder={badges.length > 0 ? "Add details (optional), then press Enter..." : cliBadge ? "Describe what you want to do..." : "Message Claude..."}
               value={inputValue}
               onChange={(e) => slashCommands.handleInputChange(e.currentTarget.value)}
               onKeyDown={handleKeyDown}

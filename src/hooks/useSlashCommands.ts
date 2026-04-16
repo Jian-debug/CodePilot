@@ -32,7 +32,7 @@ export function useSlashCommands(opts: {
   setTriggerPos: (pos: number | null) => void;
   closePopover: () => void;
   onCommand?: (command: string) => void;
-  setBadge: (badge: { command: string; label: string; description: string; kind: SkillKind; installedSource?: "agents" | "claude" } | null) => void;
+  addBadge: (badge: { command: string; label: string; description: string; kind: SkillKind; installedSource?: "agents" | "claude" }) => void;
   /** When true, block immediate commands and badge selection from popover */
   isStreaming?: boolean;
 }): UseSlashCommandsReturn {
@@ -53,7 +53,7 @@ export function useSlashCommands(opts: {
     setTriggerPos,
     closePopover,
     onCommand,
-    setBadge,
+    addBadge,
     isStreaming,
   } = opts;
 
@@ -195,10 +195,16 @@ export function useSlashCommands(opts: {
       case 'set_badge':
         // Block during streaming — badges dispatch as slash/skill prompts, not queueable
         if (isStreaming) { closePopover(); return; }
-        setBadge(result.badge!);
-        setInputValue('');
+        addBadge(result.badge!);
+        setInputValue(result.newInputValue ?? '');
         closePopover();
-        setTimeout(() => textareaRef.current?.focus(), 0);
+        setTimeout(() => {
+          const el = textareaRef.current;
+          if (!el) return;
+          el.focus();
+          const pos = el.value.length;
+          el.setSelectionRange(pos, pos);
+        }, 0);
         return;
 
       case 'insert_file_mention':
@@ -207,7 +213,7 @@ export function useSlashCommands(opts: {
         setTimeout(() => textareaRef.current?.focus(), 0);
         return;
     }
-  }, [triggerPos, popoverMode, closePopover, onCommand, inputValue, popoverFilter, textareaRef, setInputValue, setBadge, isStreaming]);
+  }, [triggerPos, popoverMode, closePopover, onCommand, inputValue, popoverFilter, textareaRef, setInputValue, addBadge, isStreaming]);
 
   // Handle input changes to detect @ and /
   const handleInputChange = useCallback(async (val: string) => {
@@ -241,15 +247,21 @@ export function useSlashCommands(opts: {
     }
   }, [fetchFiles, fetchSkills, popoverMode, closePopover, textareaRef, setInputValue, setPopoverMode, setPopoverFilter, setTriggerPos, setSelectedIndex, setPopoverItems]);
 
-  // Insert `/` into textarea to trigger slash command popover
+  // Insert `/` into textarea to trigger slash command popover. When the
+  // preceding char isn't whitespace, auto-prepend a space so the trigger regex
+  // (which requires `^|\s` before `/`) matches — this is why the user can
+  // click the slash button mid-word and still see the picker, without forcing
+  // the regex to false-positive on path-like text.
   const handleInsertSlash = useCallback(() => {
     const textarea = textareaRef.current;
     if (!textarea) return;
     const cursorPos = textarea.selectionStart;
     const before = inputValue.slice(0, cursorPos);
     const after = inputValue.slice(cursorPos);
-    const newValue = before + '/' + after;
-    const newCursorPos = cursorPos + 1;
+    const needsSpace = before.length > 0 && !/\s$/.test(before);
+    const inserted = needsSpace ? ' /' : '/';
+    const newValue = before + inserted + after;
+    const newCursorPos = cursorPos + inserted.length;
     setInputValue(newValue);
     // Set cursor position first so handleInputChange reads correct selectionStart
     textarea.value = newValue;

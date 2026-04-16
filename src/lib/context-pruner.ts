@@ -18,7 +18,14 @@
 
 import type { ModelMessage } from 'ai';
 
-const RECENT_TURNS_TO_KEEP = 6; // Keep last N messages fully intact
+// Keep last N messages fully intact. Raised from 6 → 16 in 2026-04-15 to fix
+// AI_MissingToolResultsError regression: with 6 turns, a single tool-heavy
+// assistant turn (multiple tool_use blocks) can have its earlier tool_result
+// peers fall off the recent window while the tool_use blocks remain visible
+// — Vercel AI SDK then sees orphan tool_use entries and throws. 16 is enough
+// to cover ~8 full user/assistant exchanges including their tool calls.
+// See docs/exec-plans/active/agent-loop-tool-pairing.md.
+const RECENT_TURNS_TO_KEEP = 16;
 const TRUNCATED_RESULT_MARKER = '[Tool result truncated — see earlier in conversation]';
 
 /**
@@ -26,7 +33,9 @@ const TRUNCATED_RESULT_MARKER = '[Tool result truncated — see earlier in conve
  *
  * Strategy:
  * - Last RECENT_TURNS_TO_KEEP messages: keep in full
- * - Older messages: replace tool-result content with a short fixed marker
+ * - Older messages: replace tool-result content with a short marker that
+ *   includes the tool name + 200-char excerpt so the model can still
+ *   reason about what happened (and stays paired with its tool_use)
  * - Never modify user or system messages
  * - Keep tool-call info (name + args summary) for context
  */
@@ -41,14 +50,26 @@ export function pruneOldToolResults(messages: ModelMessage[]): ModelMessage[] {
     if (index >= cutoff) return msg; // recent — keep as-is
 
     if (msg.role === 'tool' && Array.isArray(msg.content)) {
-      // Truncate tool result content
+      // Truncate tool result content but keep tool name + a short excerpt so
+      // the model can still associate the result with its originating call.
+      // Generic markers ("[truncated]") were causing the model to lose track
+      // and emit fake tool calls — see PR #468 for the original report.
       return {
         ...msg,
         content: (msg.content as Array<{ type: string; [k: string]: unknown }>).map((part) => {
           if (part.type === 'tool-result') {
+            const toolName = typeof part.toolName === 'string' ? part.toolName : 'unknown';
+            const original = (part.output && typeof part.output === 'object' && 'value' in (part.output as Record<string, unknown>))
+              ? String((part.output as Record<string, unknown>).value ?? '')
+              : '';
+            const excerpt = original.slice(0, 200);
+            const suffix = excerpt
+              ? `: ${excerpt}${original.length > 200 ? '...' : ''}`
+              : '';
+            const marker = `[Pruned ${toolName} result${suffix}]`;
             return {
               ...part,
-              output: { type: 'text' as const, value: TRUNCATED_RESULT_MARKER },
+              output: { type: 'text' as const, value: marker },
             };
           }
           return part;

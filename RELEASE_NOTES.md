@@ -1,43 +1,42 @@
-## CodePilot v0.50.1
+## CodePilot v0.50.3
 
-> 飞书一键创建机器人 + SubAgent UI 可视化 + 消息队列模式 + 桥接稳定性大修 — 推荐所有飞书桥接用户升级。v0.50.0 因 CI lint 规则未通过构建未发布，v0.50.1 修复后重新发版。
+> Agent 引擎选择简化 + 入口引导收敛。此版本把 0.50.2 后冒出的 FileTree 崩溃、OpenAI OAuth 用户被错误拦截、阿里云百炼缺 Qwen 3.6 Plus 等问题一次性清掉；同时落地了之前积累已久的改动：Agent 引擎去掉"自动"选项、发消息时没配置服务商直接引导去设置中心。cc-switch 纯用户升级后首次发消息会被引导去添加 CodePilot 服务商，这是本版的**主要行为变化**，见下方说明。
 
 ### 新增功能
 
-- **飞书一键创建机器人**：设置 → 飞书设置 → "创建并绑定飞书应用"，浏览器自动打开飞书授权页面，确认后 Bot 能力、权限、事件订阅和长连接模式全部自动配置，无需再手动进飞书开放平台后台
-- **SubAgent 执行过程可视化**：Agent 调用子代理（explore / general）时，工具面板会显示闪电图标和子代理的嵌套工具调用进度（带 spinner / 完成 / 失败状态指示）
-- **输入框草稿持久化**：在一个聊天中打了字还没发送，切换到别的聊天再切回来，输入内容仍然保留（按会话分别保存）
-- **消息队列模式**：AI 正在响应时继续输入并回车，消息会显示在输入框上方的队列卡片里，AI 回复完成后自动发送。支持取消队列中的消息，参考 Codex 设计
-- **飞书 AskUserQuestion 交互卡片**：Agent 在飞书桥接中使用 AskUserQuestion 时，现在会渲染为带选项按钮的交互卡片（之前直接被拒绝），点击选项即可继续对话
-- **飞书资源消息支持**：飞书桥接现在可以接收图片、文件、音频、视频消息，自动下载并附加到对话上下文（带重试和 20MB 大小限制）
+- **阿里云百炼增加 Qwen 3.6 Plus 模型**（#483）：替换原有 Qwen 3.5 Plus。已经在会话里显式选过旧模型名的用户，下次发消息时模型选择器会自动回到默认，手动重选即可
+- **没配置服务商时自动打开引导**：首次安装或没在 CodePilot 里添加过任何服务商的用户，发消息时不会再出一条莫名其妙的"No provider credentials"错误，而是直接弹出 SetupCenter 的服务商卡片引导添加
+
+### 改进体验
+
+- **Agent 引擎选择从三项变两项**：设置页的"Agent 内核"下拉只剩 **Claude Code** 和 **AI SDK** 两项，删掉了原先含义模糊的"自动"选项。原先选"自动"的用户，首次打开设置页时会按当前环境自动迁移到具体值（装了 Claude Code CLI → Claude Code，没装 → AI SDK），持久化写回，之后不再变动
+- **聊天页引擎标识同步**：右侧聊天页的引擎 badge 不再出现"Agent: Auto"，读到 legacy 'auto' 值会立即按同一规则折算显示具体引擎
+- **错误提示统一引导到"设置 → 服务商"**：Claude Code CLI 的 "Not logged in · Please run /login" 和 CodePilot 自己的"No provider credentials available"两种错误，现在统一归类为"未配置服务商"，文案一致、都带"打开设置"按钮，不再让用户看到 `/login` 这种在 CodePilot 里走不通的引导
+- **OpenAI OAuth 登录 / 登出同步 SetupCenter**：之前 OAuth 登录成功、设置面板的 Provider 卡片不会实时翻绿；登出后也不会回灰。现在两条路径都立即更新
 
 ### 修复问题
 
-- **飞书群聊 @mention 过滤失效**（#384）：设置"需要 @提及"开关后，机器人真的会在群里只响应 @Bot 的消息
-- **飞书话题群串 session**（#321）：未开启"话题会话"时，不同话题消息不再被错误地路由到独立会话
-- **飞书桥接鉴权配置失效**：dmPolicy / groupPolicy / allowFrom / groupAllowFrom 配置现在真的会拦截未授权用户的消息和卡片点击（之前是配置存在但从未生效）
-- **飞书 WebSocket 幽灵连接**：停止桥接或重绑应用时，旧的长连接现在会被正确关闭，不再出现重复消息投递
-- **桥接停止不中断任务**：点击"停止桥接"后，正在运行的 Claude 会话会立刻被打断，不再继续写数据库
-- **历史回放二进制附件乱码**：音频、视频、二进制文件在历史对话重放时不再被当成 UTF-8 文本注入上下文
-- **消息投递可靠性**（#266）：飞书 outbound 消息加了指数退避重试，瞬时网络故障不再导致消息丢失
-- **SubAgent 启动后后续消息排队**：在 AI 执行子代理期间继续发消息不会阻塞，会进入队列等待当前轮次完成
+- **打开聊天页时 FileTree 崩溃**（0.50.2 回归）：Next.js 16 + Turbopack 生产构建在某种编译模式下会对解构默认参数里的 `new Set()` 报 `ReferenceError: defaultExpanded is not defined`。将默认值提到模块顶层常量
+- **OpenAI OAuth 用户发消息被 412 拦截**：本版新加的"入口拦截"最初漏识别 OpenAI OAuth 这个虚拟服务商，导致用 OAuth 登录的用户一律被错误引导去配服务商。现补上 OAuth 存在性判定
+- **Bedrock / Vertex 供应商被误判为"未配置"**：新 UI 把路由 flag 存到 `env_overrides_json`，旧代码只读 `extra_env`。改成和 resolver 一样的 `env_overrides_json || extra_env` 优先级 + JSON 解析
+- **SetupCenter 对只装了 Claude Code CLI 的用户显示"服务商已配置"**：这些用户被新的入口拦截挡住，但 SetupCenter 还告诉他们"provider 已完成"，陷入无可操作的死循环。现在两边判定口径对齐
+- **OAuth 登出后 Provider 卡片不降级**：之前只能升 completed 不能降 not-configured，登出后 SetupCenter 继续显示绿色假态
+- **legacy 'auto' 迁移可能把装了 CLI 的用户错写成 AI SDK**：迁移逻辑之前依赖异步 hook 状态，首次加载时 hook 还是 null 会被误判为 "CLI 未装"。改为迁移分支内直接查一次 `/api/claude-status`，状态查询失败时不持久化，保留旧值待下次重试
 
-### 优化改进
+### 重要行为变化（cc-switch 用户必读）
 
-- 队列中的消息以卡片形式悬浮在输入框上方（参考 Codex），可随时取消，不再混在聊天流里造成"两条用户消息一条没回复"的视觉错觉
-- Streaming 中输入时按钮图标智能切换：空输入 → 终止图标，有内容 → 发送图标（只对纯文本有效；slash 命令 / badge / Image Agent 保持终止图标避免误导）
-- 飞书快速创建支持已有应用场景：点击"已有飞书应用？点击手动配置"可展开原有的 App ID / App Secret 手动录入表单
-- 飞书多 question / multi-select 的 AskUserQuestion 会被明确拒绝并附带清晰原因，不再静默截断成半截答案
-- 飞书 bot identity 启动失败后会每 60s 后台重试，不再永久 fail-open（#384 的边界情况）
+从 0.50.3 起，CodePilot 的"有没有可用服务商"判定**不再**把 `~/.claude/settings.json`（cc-switch / 手动编辑）视作有效服务商。如果你之前纯靠 cc-switch 管理 Claude Code 凭据、**从未在 CodePilot 设置里添加过任何服务商**，升级后首次发消息会被引导去"设置 → 服务商"添加一个 CodePilot 自己的服务商记录。
+
+这是为了让 CodePilot 的每个请求都能精确地知道该走哪个服务商的凭据，避免之前 cc-switch 代理模式下占位符 token 被错当成真凭据而导致的各种诡异失败。你仍可以继续用 cc-switch 管理 Claude Code CLI 本身的凭据——两者是独立的。
 
 ## 下载地址
 
 ### macOS
-- [Apple Silicon (M1/M2/M3/M4)](https://github.com/op7418/CodePilot/releases/download/v0.50.1/CodePilot-0.50.1-arm64.dmg)
-- [Intel](https://github.com/op7418/CodePilot/releases/download/v0.50.1/CodePilot-0.50.1-x64.dmg)
+- [Apple Silicon (M1/M2/M3/M4)](https://github.com/op7418/CodePilot/releases/download/v0.50.3/CodePilot-0.50.3-arm64.dmg)
+- [Intel](https://github.com/op7418/CodePilot/releases/download/v0.50.3/CodePilot-0.50.3-x64.dmg)
 
 ### Windows
-- [Windows 安装包](https://github.com/op7418/CodePilot/releases/download/v0.50.1/CodePilot.Setup.0.50.1.exe)
+- [Windows 安装包](https://github.com/op7418/CodePilot/releases/download/v0.50.3/CodePilot.Setup.0.50.3.exe)
 
 ## 安装说明
 
@@ -48,4 +47,4 @@
 
 - macOS 12.0+ / Windows 10+ / Linux (glibc 2.31+)
 - 需要配置 API 服务商（Anthropic / OpenRouter / OpenAI 等）
-- 可选安装 Claude Code CLI 以获得完整命令行能力
+- 推荐安装 Claude Code CLI 以获得完整功能

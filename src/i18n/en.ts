@@ -163,7 +163,6 @@ const en = {
   'cli.enableClaudeDesc': 'OFF: Native AI SDK as backend. ON: Claude Code as backend.',
   'cli.agentRuntime': 'Agent Runtime',
   'cli.agentRuntimeDesc': 'Choose how CodePilot executes agent tasks',
-  'cli.runtimeAuto': 'Auto (CLI → SDK, otherwise Native)',
   'cli.runtimeNative': 'Native Runtime (AI SDK)',
   'cli.runtimeSdk': 'Claude Code SDK',
   'cli.cliStatus': 'Status',
