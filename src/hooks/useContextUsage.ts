@@ -26,10 +26,20 @@ export interface ContextUsageData {
 export function useContextUsage(
   messages: Message[],
   modelName: string,
-  options?: { context1m?: boolean; hasSummary?: boolean },
+  options?: {
+    context1m?: boolean;
+    hasSummary?: boolean;
+    /** Resolved upstream model ID from the catalog (e.g. 'claude-opus-4-7').
+     *  Required for aliases whose window depends on provider (first-party
+     *  opus = 1M, Bedrock/Vertex opus = 200K). */
+    upstreamModelId?: string;
+  },
 ): ContextUsageData {
   return useMemo(() => {
-    const contextWindow = getContextWindow(modelName, { context1m: options?.context1m });
+    const contextWindow = getContextWindow(modelName, {
+      context1m: options?.context1m,
+      upstream: options?.upstreamModelId,
+    });
     const noData: ContextUsageData = {
       modelName,
       contextWindow,
@@ -92,5 +102,5 @@ export function useContextUsage(
     }
 
     return noData;
-  }, [messages, modelName, options?.context1m, options?.hasSummary]);
+  }, [messages, modelName, options?.context1m, options?.hasSummary, options?.upstreamModelId]);
 }

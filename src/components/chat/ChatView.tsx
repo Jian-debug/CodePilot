@@ -4,6 +4,7 @@ import { useState, useCallback, useEffect, useRef, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import type { Message, MessagesResponse, FileAttachment, SessionStreamSnapshot } from '@/types';
 import { MessageList } from './MessageList';
+import { TerminalReasonChip } from './TerminalReasonChip';
 import { MessageInput } from './MessageInput';
 import { ChatComposerActionBar } from './ChatComposerActionBar';
 import { ModeIndicator } from './ModeIndicator';
@@ -139,6 +140,26 @@ export function ChatView({ sessionId, initialMessages = [], initialHasMore = fal
       .catch(() => {});
     return () => controller.abort();
   }, [currentProviderId]);
+
+  // Resolve upstream model ID for the current model/provider so the context
+  // indicator can disambiguate alias windows (first-party opus = 1M vs
+  // Bedrock/Vertex opus = 200K). /api/providers/models already returns
+  // upstreamModelId per model on the returned groups.
+  const [currentModelUpstream, setCurrentModelUpstream] = useState<string | undefined>(undefined);
+  useEffect(() => {
+    const pid = currentProviderId || 'env';
+    const controller = new AbortController();
+    fetch('/api/providers/models', { signal: controller.signal })
+      .then(r => r.ok ? r.json() : null)
+      .then(data => {
+        if (controller.signal.aborted) return;
+        const group = data?.groups?.find((g: { provider_id: string }) => g.provider_id === pid);
+        const model = group?.models?.find((m: { value: string }) => m.value === currentModel);
+        setCurrentModelUpstream(model?.upstreamModelId);
+      })
+      .catch(() => {});
+    return () => controller.abort();
+  }, [currentProviderId, currentModel]);
   useEffect(() => { if (initialPermissionProfile) setPermissionProfile(initialPermissionProfile); }, [initialPermissionProfile]);
 
   // Restore session-scoped last-generated images from sessionStorage
@@ -443,7 +464,9 @@ export function ChatView({ sessionId, initialMessages = [], initialHasMore = fal
         files,
         systemPromptAppend,
         pendingImageNotices: notices,
-        effort: selectedEffort,
+        // 'auto' sentinel means "no explicit effort" — filter it here so
+        // the CLI applies its per-model default (Opus 4.7 → xhigh, etc.)
+        effort: selectedEffort && selectedEffort !== 'auto' ? selectedEffort : undefined,
         thinking: buildThinkingConfig(),
         context1m,
         displayOverride,
@@ -655,6 +678,8 @@ export function ChatView({ sessionId, initialMessages = [], initialHasMore = fal
         isAssistantProject={isAssistantProject}
         assistantName={assistantName}
       />
+      {/* End-of-turn terminal reason chip (only shown when stream is not active) */}
+      {!isStreaming && <TerminalReasonChip reason={streamSnapshot?.terminalReason} />}
       {/* Permission prompt */}
       <PermissionPrompt
         pendingPermission={pendingPermission}
@@ -761,6 +786,7 @@ export function ChatView({ sessionId, initialMessages = [], initialHasMore = fal
               modelName={currentModel}
               context1m={context1m}
               hasSummary={hasSummary}
+              upstreamModelId={currentModelUpstream}
             />
           </div>
         }

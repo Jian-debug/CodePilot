@@ -124,6 +124,7 @@ function buildSnapshot(stream: ActiveStream): SessionStreamSnapshot {
     completedAt: stream.snapshot.completedAt,
     error: stream.snapshot.error,
     finalMessageContent: stream.snapshot.finalMessageContent,
+    terminalReason: stream.snapshot.terminalReason,
   };
 }
 
@@ -432,9 +433,13 @@ async function runStream(stream: ActiveStream, params: StartStreamParams): Promi
           emit(stream, 'snapshot-updated');
         }
       },
-      onResult: (usage) => {
+      onResult: (usage, meta) => {
         markActive();
-        stream.snapshot = { ...stream.snapshot, tokenUsage: usage };
+        stream.snapshot = {
+          ...stream.snapshot,
+          tokenUsage: usage,
+          ...(meta?.terminalReason ? { terminalReason: meta.terminalReason } : {}),
+        };
       },
       onPermissionRequest: (permData) => {
         markActive();

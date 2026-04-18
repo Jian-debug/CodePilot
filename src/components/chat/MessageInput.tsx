@@ -354,10 +354,19 @@ export function MessageInput({
   // Effort selector state — guard against undefined when model not found in current provider's list
   const currentModelMeta = currentModelOption as (typeof currentModelOption & { supportsEffort?: boolean; supportedEffortLevels?: string[] }) | undefined;
   const showEffortSelector = currentModelMeta?.supportsEffort === true;
-  const [localEffort, setLocalEffort] = useState<string>('high');
+  // Default label is 'auto' — the UI displays "默认 / Auto" and no explicit
+  // effort value is sent to the backend. This lets Claude Code apply its
+  // per-model default (e.g. xhigh on Opus 4.7). If we initialized to 'high'
+  // instead, the button would say "High" while the request actually carried
+  // undefined, which silently sent a different level than shown.
+  const [localEffort, setLocalEffort] = useState<string>('auto');
   const selectedEffort = effortProp ?? localEffort;
   const setSelectedEffort = useCallback((v: string) => {
     setLocalEffort(v);
+    // Passthrough — including the 'auto' sentinel. The send path in
+    // page.tsx / ChatView.tsx filters 'auto' before building the request
+    // so the backend receives no effort field, letting CLI apply its
+    // per-model default.
     onEffortChange?.(v);
   }, [onEffortChange]);
 

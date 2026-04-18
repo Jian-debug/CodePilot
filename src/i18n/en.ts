@@ -1089,10 +1089,27 @@ const en = {
 
   // ── SDK Capabilities: Effort ──────────────────────────────
   'messageInput.effort.label': 'Effort Level',
+  'messageInput.effort.auto': 'Auto',
   'messageInput.effort.low': 'Low',
   'messageInput.effort.medium': 'Medium',
   'messageInput.effort.high': 'High',
+  'messageInput.effort.xhigh': 'XHigh',
   'messageInput.effort.max': 'Max',
+
+  // ── SDK Capabilities: Terminal Reason (Phase 1 of agent-sdk-0-2-111) ──
+  'terminal.completed': 'Completed',
+  'terminal.max_turns': 'Max turns reached',
+  'terminal.prompt_too_long': 'Context window full',
+  'terminal.blocking_limit': 'Quota exhausted',
+  'terminal.rapid_refill_breaker': 'Rate limit protection triggered',
+  'terminal.image_error': 'Image processing failed',
+  'terminal.model_error': 'Model returned error',
+  'terminal.aborted_streaming': 'Cancelled',
+  'terminal.aborted_tools': 'Tool execution cancelled',
+  'terminal.stop_hook_prevented': 'Stop hook prevented',
+  'terminal.hook_stopped': 'Hook stopped this turn',
+  'terminal.tool_deferred': 'Tool awaiting response',
+  'terminal.unknown': 'Turn ended',
 
   // ── SDK Capabilities: Rewind ──────────────────────────────
   'messageList.rewindToHere': 'Rewind to here',

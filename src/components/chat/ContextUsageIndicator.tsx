@@ -15,6 +15,11 @@ interface ContextUsageIndicatorProps {
   modelName: string;
   context1m?: boolean;
   hasSummary?: boolean;
+  /** Resolved upstream model ID from /api/providers/models — needed to
+   *  disambiguate alias windows (first-party opus = 1M vs Bedrock/Vertex
+   *  opus = 200K). Omit for provider setups where the alias already
+   *  matches the catalog context-window table. */
+  upstreamModelId?: string;
 }
 
 function formatTokens(n: number): string {
@@ -22,9 +27,9 @@ function formatTokens(n: number): string {
   return String(n);
 }
 
-export function ContextUsageIndicator({ messages, modelName, context1m, hasSummary }: ContextUsageIndicatorProps) {
+export function ContextUsageIndicator({ messages, modelName, context1m, hasSummary, upstreamModelId }: ContextUsageIndicatorProps) {
   const { t } = useTranslation();
-  const usage = useContextUsage(messages, modelName, { context1m, hasSummary });
+  const usage = useContextUsage(messages, modelName, { context1m, hasSummary, upstreamModelId });
 
   const size = 16;
   const strokeWidth = 2.5;

@@ -28,7 +28,7 @@ export interface SSECallbacks {
   onToolOutput: (data: string) => void;
   onToolProgress: (toolName: string, elapsedSeconds: number) => void;
   onStatus: (text: string | undefined) => void;
-  onResult: (usage: TokenUsage | null) => void;
+  onResult: (usage: TokenUsage | null, meta?: { terminalReason?: string }) => void;
   onPermissionRequest: (data: PermissionRequestEvent) => void;
   onToolTimeout: (toolName: string, elapsedSeconds: number) => void;
   onModeChanged: (mode: string) => void;
@@ -47,6 +47,33 @@ export interface SSECallbacks {
     mcp_servers?: unknown;
     output_style?: string;
   }) => void;
+}
+
+/**
+ * Notification codes that must persist past the next setStatusText() call.
+ * Scoped narrowly — only codes that represent one-shot decisions the user
+ * needs to see regardless of subsequent streaming progress belong here.
+ */
+export const TOAST_STATUS_CODES = new Set<string>([
+  'RUNTIME_EFFORT_IGNORED', // Opus 4.7 on native runtime — explicit effort dropped
+]);
+
+/**
+ * Inspect a parsed status event payload and fire a toast when it carries a
+ * whitelisted code. Exposed so both useSSEStream's helper and inline SSE
+ * parsers in page-level components can share toast routing without
+ * duplicating the whitelist. No-op when the code isn't on the whitelist
+ * or when the browser toast registry hasn't initialized (tests / SSR).
+ */
+export function maybeShowStatusToast(statusData: { code?: string; message?: string; title?: string }): void {
+  if (!statusData?.code || !TOAST_STATUS_CODES.has(statusData.code)) return;
+  void import('./useToast').then(({ showToast }) => {
+    showToast({
+      type: statusData.code === 'RUNTIME_EFFORT_IGNORED' ? 'warning' : 'info',
+      message: statusData.message || statusData.title || 'Status notification',
+      duration: 8000,
+    });
+  }).catch(() => { /* toast system unavailable — caller falls back to status text */ });
 }
 
 /**
@@ -158,6 +185,11 @@ function handleSSEEvent(
             output_style: statusData.output_style,
           });
         } else if (statusData.notification) {
+          // Code-driven toasts (e.g. Opus 4.7 native-runtime
+          // RUNTIME_EFFORT_IGNORED): route through the shared helper so
+          // the inline parser in app/chat/page.tsx can reuse the same
+          // whitelist without duplicating the toast import logic.
+          maybeShowStatusToast(statusData);
           callbacks.onStatus(statusData.message || statusData.title || undefined);
         } else {
           callbacks.onStatus(typeof event.data === 'string' ? event.data : undefined);
@@ -171,7 +203,8 @@ function handleSSEEvent(
     case 'result': {
       try {
         const resultData = JSON.parse(event.data);
-        callbacks.onResult(resultData.usage || null);
+        const meta = resultData.terminal_reason ? { terminalReason: resultData.terminal_reason as string } : undefined;
+        callbacks.onResult(resultData.usage || null, meta);
       } catch {
         callbacks.onResult(null);
       }
@@ -298,9 +331,9 @@ export async function consumeSSEStream(
 
   const wrappedCallbacks: SSECallbacks = {
     ...callbacks,
-    onResult: (usage) => {
+    onResult: (usage, meta) => {
       tokenUsage = usage;
-      callbacks.onResult(usage);
+      callbacks.onResult(usage, meta);
     },
   };
 
@@ -349,7 +382,7 @@ export function useSSEStream() {
         onToolOutput: (d) => callbacksRef.current?.onToolOutput(d),
         onToolProgress: (n, s) => callbacksRef.current?.onToolProgress(n, s),
         onStatus: (t) => callbacksRef.current?.onStatus(t),
-        onResult: (u) => callbacksRef.current?.onResult(u),
+        onResult: (u, meta) => callbacksRef.current?.onResult(u, meta),
         onPermissionRequest: (d) => callbacksRef.current?.onPermissionRequest(d),
         onToolTimeout: (n, s) => callbacksRef.current?.onToolTimeout(n, s),
         onModeChanged: (m) => callbacksRef.current?.onModeChanged(m),

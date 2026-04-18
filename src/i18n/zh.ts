@@ -1086,10 +1086,27 @@ const zh: Record<TranslationKey, string> = {
 
   // ── SDK Capabilities: Effort ──────────────────────────────
   'messageInput.effort.label': '推理力度',
+  'messageInput.effort.auto': '默认',
   'messageInput.effort.low': '低',
   'messageInput.effort.medium': '中',
   'messageInput.effort.high': '高',
+  'messageInput.effort.xhigh': '极高',
   'messageInput.effort.max': '最大',
+
+  // ── SDK Capabilities: Terminal Reason (Phase 1 of agent-sdk-0-2-111) ──
+  'terminal.completed': '已完成',
+  'terminal.max_turns': '已达到轮数上限',
+  'terminal.prompt_too_long': '上下文已满',
+  'terminal.blocking_limit': '额度已用尽',
+  'terminal.rapid_refill_breaker': '触发频率保护',
+  'terminal.image_error': '图片识别失败',
+  'terminal.model_error': '模型返回错误',
+  'terminal.aborted_streaming': '已取消',
+  'terminal.aborted_tools': '工具执行已取消',
+  'terminal.stop_hook_prevented': 'Stop Hook 阻止了结束',
+  'terminal.hook_stopped': 'Hook 中断本轮',
+  'terminal.tool_deferred': '有工具等待响应',
+  'terminal.unknown': '本轮已结束',
 
   // ── SDK Capabilities: Rewind ──────────────────────────────
   'messageList.rewindToHere': '回滚到此处',

@@ -426,6 +426,10 @@ export interface SuccessResponse {
 
 export interface ErrorResponse {
   error: string;
+  /** Machine-readable error code for client-side branching */
+  code?: string;
+  /** Extra recovery hints surfaced in UI */
+  initialCard?: string;
 }
 
 export interface SettingsResponse {
@@ -978,6 +982,13 @@ export interface SessionStreamSnapshot {
   error: string | null;
   /** Final message content built at stream completion for ChatView to consume */
   finalMessageContent: string | null;
+  /**
+   * Optional terminal reason emitted by SDK 0.2.111 on SDKResultMessage.
+   * Used by ChatView to render a contextual end-of-turn chip (Phase 1 of
+   * agent-sdk-0-2-111-adoption). Absent for error paths without a result
+   * message — those continue to flow through error-classifier.ts.
+   */
+  terminalReason?: string;
 }
 
 export interface StreamEvent {
@@ -1017,8 +1028,8 @@ export interface ClaudeStreamOptions {
   bypassPermissions?: boolean;
   /** Thinking configuration for the query */
   thinking?: { type: 'adaptive' } | { type: 'enabled'; budgetTokens?: number } | { type: 'disabled' };
-  /** Effort level for the query */
-  effort?: 'low' | 'medium' | 'high' | 'max';
+  /** Effort level for the query (Opus 4.7 adds 'xhigh') */
+  effort?: 'low' | 'medium' | 'high' | 'xhigh' | 'max';
   /** Output format for structured responses */
   outputFormat?: { type: 'json_schema'; schema: Record<string, unknown> };
   /** Custom agent definitions */

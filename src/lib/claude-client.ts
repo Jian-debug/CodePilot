@@ -22,6 +22,7 @@ import { normalizeMessageContent, microCompactMessage } from './message-normaliz
 import { roughTokenEstimate } from './context-estimator';
 import { getSetting, updateSdkSessionId, createPermissionRequest } from './db';
 import { resolveForClaudeCode } from './provider-resolver';
+import { sanitizeClaudeModelOptions } from './claude-model-options';
 import { findClaudeBinary, invalidateClaudePathCache } from './platform';
 import { notifyPermissionRequest, notifyGeneric } from './telegram-bot';
 import { classifyError, formatClassifiedError } from './error-classifier';
@@ -812,14 +813,35 @@ export function streamClaudeSdk(options: ClaudeStreamOptions): ReadableStream<st
           }
         }
 
-        // Pass through SDK-specific options from ClaudeStreamOptions
-        if (thinking) {
-          queryOptions.thinking = thinking;
+        // Pass through SDK-specific options from ClaudeStreamOptions.
+        // Shared sanitizer runs the same Opus 4.7 migration guards as the
+        // native agent-loop path — manual extended thinking becomes
+        // adaptive, and the context-1m beta header is dropped since 4.7
+        // ships 1M by default.
+        const sanitized = sanitizeClaudeModelOptions({
+          model,
+          thinking,
+          effort,
+          context1m,
+        });
+
+        if (sanitized.thinking) {
+          queryOptions.thinking = sanitized.thinking;
         }
-        // Always set effort explicitly to prevent user-level ~/.claude/settings.json
-        // from injecting 'high' effort via settingSources inheritance.
-        // UI-selected effort takes priority; otherwise default to 'medium'.
-        queryOptions.effort = effort || 'medium';
+        // SDK-runtime effort policy: when the UI doesn't explicitly pick a
+        // level, leave `effort` unset so Claude Code CLI applies its
+        // per-model default (e.g. Opus 4.7 defaults to xhigh, Sonnet to
+        // high). Writing 'medium' unconditionally would override that and
+        // regress the 4.7 out-of-box experience.
+        //
+        // The previous concern about settings.json injecting 'high' is
+        // mitigated by CLI defaults: they're applied with lower precedence
+        // than both queryOptions.effort and settingSources, so an explicit
+        // UI choice still wins and a missing one doesn't silently escalate
+        // to 'high'.
+        if (sanitized.effort) {
+          queryOptions.effort = sanitized.effort as Options['effort'];
+        }
         if (outputFormat) {
           queryOptions.outputFormat = outputFormat;
         }
@@ -832,7 +854,7 @@ export function streamClaudeSdk(options: ClaudeStreamOptions): ReadableStream<st
         if (enableFileCheckpointing) {
           queryOptions.enableFileCheckpointing = true;
         }
-        if (context1m) {
+        if (sanitized.applyContext1mBeta) {
           queryOptions.betas = [
             ...(queryOptions.betas || []),
             'context-1m-2025-08-07',
@@ -1220,8 +1242,8 @@ export function streamClaudeSdk(options: ClaudeStreamOptions): ReadableStream<st
                       ? block.content
                       : Array.isArray(block.content)
                         ? block.content
-                            .filter((c: { type: string }) => c.type === 'text')
-                            .map((c: { text?: string }) => c.text)
+                            .filter((c): c is { type: 'text'; text: string } => c.type === 'text')
+                            .map((c) => c.text)
                             .join('\n')
                         : String(block.content ?? '');
 
@@ -1420,6 +1442,10 @@ export function streamClaudeSdk(options: ClaudeStreamOptions): ReadableStream<st
             case 'result': {
               const resultMsg = message as SDKResultMessage;
               tokenUsage = extractTokenUsage(resultMsg);
+              // terminal_reason is an optional field added in SDK 0.2.111.
+              // When present, it enriches the end-of-turn UI chip (Phase 1 of
+              // agent-sdk-0-2-111-adoption) without replacing error-classifier.
+              const terminalReason = (resultMsg as SDKResultMessage & { terminal_reason?: string }).terminal_reason;
               controller.enqueue(formatSSE({
                 type: 'result',
                 data: JSON.stringify({
@@ -1429,6 +1455,7 @@ export function streamClaudeSdk(options: ClaudeStreamOptions): ReadableStream<st
                   duration_ms: resultMsg.duration_ms,
                   usage: tokenUsage,
                   session_id: resultMsg.session_id,
+                  ...(terminalReason ? { terminal_reason: terminalReason } : {}),
                 }),
               }));
               // Notify on conversation-level errors (e.g. rate limit, auth failure)
@@ -1754,7 +1781,27 @@ export async function testProviderConnection(config: {
     };
   }
 
-  // Build the API URL — Anthropic-compatible endpoint
+  // Reject third-party / custom Anthropic providers without a base URL.
+  // Otherwise the fallback to https://api.anthropic.com would test the
+  // official endpoint, giving a misleading green signal before saving a
+  // provider that in production would also resolve to api.anthropic.com
+  // via the same fallback and silently inherit first-party catalog.
+  // Users who genuinely want official Anthropic must pass the URL
+  // explicitly (or choose the anthropic-official preset).
+  if (config.protocol === 'anthropic' && !config.baseUrl?.trim()) {
+    return {
+      success: false,
+      error: {
+        code: 'MISSING_BASE_URL',
+        message: 'Base URL is required for Anthropic-protocol providers',
+        suggestion: 'Use https://api.anthropic.com for the official API or your third-party endpoint',
+      },
+    };
+  }
+
+  // Build the API URL — Anthropic-compatible endpoint.
+  // baseUrl is guaranteed non-empty above for protocol='anthropic';
+  // other protocols retain the historical fallback behavior.
   let apiUrl = config.baseUrl || 'https://api.anthropic.com';
   // Ensure URL ends with /v1/messages for Anthropic-compatible providers
   if (!apiUrl.endsWith('/v1/messages')) {
