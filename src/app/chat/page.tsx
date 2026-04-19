@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useRef, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
-import type { Message, SSEEvent, SessionResponse, TokenUsage, PermissionRequestEvent } from '@/types';
+import type { Message, SSEEvent, SessionResponse, TokenUsage, PermissionRequestEvent, FileAttachment, MentionRef } from '@/types';
 import { MessageList } from '@/components/chat/MessageList';
 import { MessageInput } from '@/components/chat/MessageInput';
 import { ChatComposerActionBar } from '@/components/chat/ChatComposerActionBar';
@@ -18,6 +18,7 @@ import { useNativeFolderPicker } from '@/hooks/useNativeFolderPicker';
 import { useTranslation } from '@/hooks/useTranslation';
 import { usePanel } from '@/hooks/usePanel';
 import { maybeShowStatusToast } from '@/hooks/useSSEStream';
+import { seedSnapshotPatch } from '@/lib/stream-session-manager';
 
 interface ToolUseInfo {
   id: string;
@@ -44,6 +45,7 @@ export default function NewChatPage() {
   const { isElectron, openNativePicker } = useNativeFolderPicker();
   const [messages, setMessages] = useState<Message[]>([]);
   const [streamingContent, setStreamingContent] = useState('');
+  const [streamingThinkingContent, setStreamingThinkingContent] = useState('');
   const [isStreaming, setIsStreaming] = useState(false);
   const [toolUses, setToolUses] = useState<ToolUseInfo[]>([]);
   const [toolResults, setToolResults] = useState<ToolResultInfo[]>([]);
@@ -428,7 +430,7 @@ export default function NewChatPage() {
   }, [pendingPermission, setPendingApprovalSessionId]);
 
   const sendFirstMessage = useCallback(
-    async (content: string, _files?: unknown, systemPromptAppend?: string, displayOverride?: string) => {
+    async (content: string, files?: FileAttachment[], systemPromptAppend?: string, displayOverride?: string, mentions?: MentionRef[]) => {
       if (isStreaming) return;
 
       // Wait for model/provider to be resolved from the global default before allowing send
@@ -490,11 +492,15 @@ export default function NewChatPage() {
         window.dispatchEvent(new CustomEvent('session-created'));
 
         // Add user message to UI — use displayOverride for chat bubble if provided
+        const displayUserContent = displayOverride || content;
+        const contentWithFileMeta = files && files.length > 0
+          ? `<!--files:${JSON.stringify(files.map(f => ({ id: f.id, name: f.name, type: f.type, size: f.size })))}-->${displayUserContent}`
+          : displayUserContent;
         const userMessage: Message = {
           id: 'temp-' + Date.now(),
           session_id: session.id,
           role: 'user',
-          content: displayOverride || content,
+          content: contentWithFileMeta,
           created_at: new Date().toISOString(),
           token_usage: null,
         };
@@ -515,6 +521,8 @@ export default function NewChatPage() {
             mode,
             model: currentModel,
             provider_id: currentProviderId,
+            ...(files && files.length > 0 ? { files } : {}),
+            ...(mentions && mentions.length > 0 ? { mentions } : {}),
             ...(systemPromptAppend ? { systemPromptAppend } : {}),
             // 'auto' sentinel means "no explicit effort" — omit so Claude
             // Code CLI applies its per-model default (Opus 4.7 → xhigh).
@@ -625,8 +633,53 @@ export default function NewChatPage() {
                   try {
                     const resultData = JSON.parse(event.data);
                     if (resultData.usage) tokenUsage = resultData.usage;
+                    // Phase 1: seed terminal_reason into the snapshot the
+                    // redirected ChatView will read so first-turn
+                    // prompt_too_long / blocking_limit / max_turns /
+                    // hook_stopped can still surface the chip + action
+                    // buttons in the post-redirect view.
+                    if (resultData.terminal_reason && session?.id) {
+                      seedSnapshotPatch(session.id, {
+                        terminalReason: resultData.terminal_reason as string,
+                      });
+                    }
                   } catch { /* skip */ }
                   setStatusText(undefined);
+                  break;
+                }
+                case 'rate_limit': {
+                  // Phase 2: subscription rate-limit telemetry. Seed the
+                  // snapshot so RateLimitBanner renders after redirect.
+                  try {
+                    const info = JSON.parse(event.data);
+                    if (session?.id) {
+                      seedSnapshotPatch(session.id, { rateLimitInfo: info });
+                    }
+                  } catch { /* skip */ }
+                  break;
+                }
+                case 'context_usage': {
+                  // Phase 5 extension-point; no producer currently (see
+                  // b65c6ac). Seed the snapshot for forward compatibility.
+                  try {
+                    const snap = JSON.parse(event.data);
+                    if (session?.id) {
+                      seedSnapshotPatch(session.id, { contextUsageSnapshot: snap });
+                    }
+                  } catch { /* skip */ }
+                  break;
+                }
+                case 'thinking': {
+                  // Opus 4.7 with display: 'summarized' streams reasoning
+                  // as thinking deltas. Accumulate them into the same
+                  // streamingThinkingContent surface that ChatView's
+                  // MessageList already renders, so the first-turn UI
+                  // shows the reasoning block as it streams in. Backend
+                  // /api/chat/route.ts separately persists thinking as a
+                  // content-block JSON on the assistant message, so the
+                  // redirected ChatView gets a fully-formed message from
+                  // DB — this branch is for the pre-redirect live view.
+                  setStreamingThinkingContent((prev) => prev + event.data);
                   break;
                 }
                 case 'permission_request': {
@@ -706,6 +759,7 @@ export default function NewChatPage() {
       } finally {
         setIsStreaming(false);
         setStreamingContent('');
+        setStreamingThinkingContent('');
         setToolUses([]);
         setToolResults([]);
         setStreamingToolOutput('');
@@ -785,6 +839,7 @@ export default function NewChatPage() {
         <MessageList
           messages={messages}
           streamingContent={streamingContent}
+          streamingThinkingContent={streamingThinkingContent}
           isStreaming={isStreaming}
           sessionId={createdSessionId}
           toolUses={toolUses}

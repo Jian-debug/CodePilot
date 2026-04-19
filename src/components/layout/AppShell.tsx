@@ -25,6 +25,8 @@ import { useGitStatus } from "@/hooks/useGitStatus";
 import { SetupCenter } from '@/components/setup/SetupCenter';
 import { Toaster } from '@/components/ui/toast';
 import { useNotificationPoll } from '@/hooks/useNotificationPoll';
+import { useGlobalSearchShortcut } from '@/hooks/useGlobalSearchShortcut';
+import { GlobalSearchDialog } from './GlobalSearchDialog';
 
 const SPLIT_SESSIONS_KEY = "codepilot:split-sessions";
 const SPLIT_ACTIVE_COLUMN_KEY = "codepilot:split-active-column";
@@ -76,6 +78,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const [chatListOpenRaw, setChatListOpenRaw] = useState(false);
   const [setupOpen, setSetupOpen] = useState(false);
   const [setupInitialCard, setSetupInitialCard] = useState<'claude' | 'provider' | 'project' | undefined>();
+  const [searchOpen, setSearchOpen] = useState(false);
+
+  useGlobalSearchShortcut(() => setSearchOpen(true));
 
   // Poll server-side notification queue and display as toasts
   useNotificationPoll();
@@ -121,6 +126,13 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     maybeOpenFromHash();
     window.addEventListener('hashchange', maybeOpenFromHash);
     return () => window.removeEventListener('hashchange', maybeOpenFromHash);
+  }, []);
+
+  // Listen for open-global-search events from ChatListPanel
+  useEffect(() => {
+    const handler = () => setSearchOpen(true);
+    window.addEventListener('open-global-search', handler);
+    return () => window.removeEventListener('open-global-search', handler);
   }, []);
 
   // Sync with viewport after hydration to avoid SSR mismatch
@@ -483,6 +495,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           <UpdateDialog />
           <FeatureAnnouncementDialog />
           <Toaster />
+          <GlobalSearchDialog open={searchOpen} onOpenChange={setSearchOpen} />
           {setupOpen && (
             <SetupCenter
               onClose={() => setSetupOpen(false)}

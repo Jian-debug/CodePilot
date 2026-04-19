@@ -18,6 +18,8 @@ interface FileTreeProps {
   workingDirectory: string;
   onFileSelect: (path: string) => void;
   onFileAdd?: (path: string) => void;
+  highlightPath?: string;
+  highlightSeek?: string;
 }
 
 function getFileIcon(extension?: string): ReactNode {
@@ -77,27 +79,37 @@ function filterTree(nodes: FileTreeNode[], query: string): FileTreeNode[] {
     }));
 }
 
-function RenderTreeNodes({ nodes, searchQuery }: { nodes: FileTreeNode[]; searchQuery: string }) {
+function RenderTreeNodes({ nodes, searchQuery, highlightPath }: { nodes: FileTreeNode[]; searchQuery: string; highlightPath?: string }) {
   const filtered = searchQuery ? filterTree(nodes, searchQuery) : nodes;
 
   return (
     <>
       {filtered.map((node) => {
         if (node.type === "directory") {
+          const isHighlighted = node.path === highlightPath;
           return (
-            <FileTreeFolder key={node.path} path={node.path} name={node.name}>
+            <FileTreeFolder
+              key={node.path}
+              path={node.path}
+              name={node.name}
+              className={cn(isHighlighted && "file-tree-flash")}
+              id={isHighlighted ? `file-tree-highlight` : undefined}
+            >
               {node.children && (
-                <RenderTreeNodes nodes={node.children} searchQuery={searchQuery} />
+                <RenderTreeNodes nodes={node.children} searchQuery={searchQuery} highlightPath={highlightPath} />
               )}
             </FileTreeFolder>
           );
         }
+        const isHighlighted = node.path === highlightPath;
         return (
           <FileTreeFile
             key={node.path}
             path={node.path}
             name={node.name}
             icon={getFileIcon(node.extension)}
+            className={cn(isHighlighted && "file-tree-flash")}
+            id={isHighlighted ? `file-tree-highlight` : undefined}
           />
         );
       })}
@@ -105,13 +117,33 @@ function RenderTreeNodes({ nodes, searchQuery }: { nodes: FileTreeNode[]; search
   );
 }
 
-export function FileTree({ workingDirectory, onFileSelect, onFileAdd }: FileTreeProps) {
+function getParentPaths(filePath: string): string[] {
+  const parents: string[] = [];
+  let current = filePath;
+  while (true) {
+    const parent = current.substring(0, current.lastIndexOf('/'));
+    if (!parent || parent === current) break;
+    parents.push(parent);
+    current = parent;
+  }
+  return parents;
+}
+
+export function FileTree({ workingDirectory, onFileSelect, onFileAdd, highlightPath, highlightSeek }: FileTreeProps) {
   const [tree, setTree] = useState<FileTreeNode[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const abortRef = useRef<AbortController | null>(null);
   const { t } = useTranslation();
+  const seekKeyRef = useRef<string | null>(null);
+
+  // Clear stale tree data when switching projects to avoid cross-session seek races.
+  useEffect(() => {
+    setTree([]);
+    setError(null);
+    seekKeyRef.current = null;
+  }, [workingDirectory]);
 
   const fetchTree = useCallback(async () => {
     // Always cancel in-flight request first — even when clearing directory,
@@ -179,8 +211,45 @@ export function FileTree({ workingDirectory, onFileSelect, onFileAdd }: FileTree
     return () => window.removeEventListener('refresh-file-tree', handler);
   }, [fetchTree]);
 
-  // Default to all directories collapsed
-  const defaultExpanded = new Set<string>();
+  // Controlled expansion state for search-driven highlighting
+  const [expandedPaths, setExpandedPaths] = useState<Set<string>>(new Set());
+
+  // Sync expanded paths when highlightPath changes
+  useEffect(() => {
+    if (highlightPath) {
+      const next = new Set<string>();
+      for (const parent of getParentPaths(highlightPath)) {
+        next.add(parent);
+      }
+      next.add(highlightPath);
+      setExpandedPaths(next);
+    } else {
+      setExpandedPaths(new Set());
+    }
+  }, [highlightPath, highlightSeek]);
+
+  // Scroll to and flash highlighted file from search results.
+  // Guarded by seekKeyRef so tree auto-refreshes don't re-trigger the scroll.
+  useEffect(() => {
+    if (!workingDirectory || !highlightPath || tree.length === 0) return;
+    const seekTargetKey = `${workingDirectory}::${highlightPath}::${highlightSeek || ''}`;
+    if (seekKeyRef.current === seekTargetKey) return;
+
+    let attempts = 0;
+    const maxAttempts = 15;
+    const interval = setInterval(() => {
+      attempts++;
+      const el = document.getElementById('file-tree-highlight');
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        seekKeyRef.current = seekTargetKey;
+        clearInterval(interval);
+      } else if (attempts >= maxAttempts) {
+        clearInterval(interval);
+      }
+    }, 100);
+    return () => clearInterval(interval);
+  }, [workingDirectory, highlightPath, highlightSeek, tree]);
 
   return (
     <div className="flex flex-col h-full min-h-0">
@@ -219,13 +288,14 @@ export function FileTree({ workingDirectory, onFileSelect, onFileAdd }: FileTree
           </p>
         ) : (
           <AIFileTree
-            defaultExpanded={defaultExpanded}
+            expanded={expandedPaths}
+            onExpandedChange={setExpandedPaths}
             // eslint-disable-next-line @typescript-eslint/no-explicit-any -- AI Elements FileTree onSelect type conflicts with HTMLAttributes.onSelect
             onSelect={onFileSelect as any}
             onAdd={onFileAdd}
             className="border-0 rounded-none"
           >
-            <RenderTreeNodes nodes={tree} searchQuery={searchQuery} />
+            <RenderTreeNodes nodes={tree} searchQuery={searchQuery} highlightPath={highlightPath} />
           </AIFileTree>
         )}
       </div>

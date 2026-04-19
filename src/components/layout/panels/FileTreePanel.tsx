@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
+import { useSearchParams } from "next/navigation";
 import { X } from "@/components/ui/icon";
 import { Button } from "@/components/ui/button";
 import { usePanel } from "@/hooks/usePanel";
@@ -16,7 +17,11 @@ const TREE_DEFAULT_WIDTH = 280;
 export function FileTreePanel() {
   const { workingDirectory, sessionId, previewFile, setPreviewFile, setPreviewOpen, setFileTreeOpen } = usePanel();
   const { t } = useTranslation();
+  const searchParams = useSearchParams();
   const [width, setWidth] = useState(TREE_DEFAULT_WIDTH);
+
+  const highlightPath = searchParams.get('file') || undefined;
+  const highlightSeek = searchParams.get('seek') || undefined;
 
   const handleResize = useCallback((delta: number) => {
     setWidth((w) => Math.min(TREE_MAX_WIDTH, Math.max(TREE_MIN_WIDTH, w - delta)));
@@ -84,6 +89,8 @@ export function FileTreePanel() {
               workingDirectory={workingDirectory}
               onFileSelect={handleFileSelect}
               onFileAdd={handleFileAdd}
+              highlightPath={highlightPath}
+              highlightSeek={highlightSeek}
             />
           </div>
         </div>
