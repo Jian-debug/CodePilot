@@ -1,0 +1,31 @@
+{
+  "projectRoot": "D:/project/common/AI/CodePilot",
+  "batchFiles": [
+    {
+      "path": "src/lib/workspace-indexer.ts",
+      "sizeLines": 427,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/workspace-organizer.ts",
+      "sizeLines": 294,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/workspace-retrieval.ts",
+      "sizeLines": 292,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/workspace-taxonomy.ts",
+      "sizeLines": 159,
+      "fileCategory": "code"
+    }
+  ],
+  "batchImportData": {
+    "src/lib/workspace-indexer.ts": [],
+    "src/lib/workspace-organizer.ts": [],
+    "src/lib/workspace-retrieval.ts": [],
+    "src/lib/workspace-taxonomy.ts": []
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "projectRoot": "D:/project/common/AI/CodePilot",
+  "batchFiles": [
+    {
+      "path": "src/types/dashboard.ts",
+      "sizeLines": 35,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/types/electron.d.ts",
+      "sizeLines": 104,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/types/index.ts",
+      "sizeLines": 1314,
+      "fileCategory": "code"
+    }
+  ],
+  "batchImportData": {
+    "src/types/dashboard.ts": [],
+    "src/types/electron.d.ts": [],
+    "src/types/index.ts": []
+  }
+}

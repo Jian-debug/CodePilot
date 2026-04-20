@@ -1,0 +1,20 @@
+{
+  "nodes": [
+    {
+      "id": "pipeline:.github/workflows/e2e.yml",
+      "type": "pipeline",
+      "name": "e2e.yml",
+      "filePath": ".github/workflows/e2e.yml",
+      "summary": "GitHub Actions E2E (end-to-end) test pipeline configuration. File content could not be extracted because the file does not exist on disk or in git history.",
+      "tags": ["ci-cd", "e2e-testing", "deployment"],
+      "complexity": "moderate"
+    }
+  ],
+  "edges": [],
+  "skippedFiles": [
+    {
+      "path": ".github/workflows/e2e.yml",
+      "reason": "File does not exist on disk and is not present in git HEAD. Only build.yml exists in .github/workflows/."
+    }
+  ]
+}

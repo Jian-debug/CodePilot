@@ -1,0 +1,371 @@
+{
+  "nodes": [
+    {
+      "id": "config:.mcp.json",
+      "type": "config",
+      "name": ".mcp.json",
+      "filePath": ".mcp.json",
+      "summary": "MCP server configuration registering the chrome-devtools MCP server in headless mode for browser automation.",
+      "tags": ["configuration", "mcp", "browser-automation"],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:apps/site/components.json",
+      "type": "config",
+      "name": "components.json",
+      "filePath": "apps/site/components.json",
+      "summary": "shadcn/ui configuration for the documentation site using new-york style with Phosphor icons and CSS variable-based theming.",
+      "tags": ["configuration", "ui", "shadcn"],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:apps/site/content/docs/en/bridge/meta.json",
+      "type": "config",
+      "name": "meta.json",
+      "filePath": "apps/site/content/docs/en/bridge/meta.json",
+      "summary": "Navigation metadata for the Bridge subsection of the English documentation, listing Telegram, Discord, Feishu, and QQ integration pages.",
+      "tags": ["configuration", "documentation", "navigation"],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:apps/site/content/docs/en/meta.json",
+      "type": "config",
+      "name": "meta.json",
+      "filePath": "apps/site/content/docs/en/meta.json",
+      "summary": "Top-level navigation metadata for the English documentation site, organizing pages into Documentation, Guides, and Help sections with 17 content entries.",
+      "tags": ["configuration", "documentation", "navigation"],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:apps/site/content/docs/zh/bridge/meta.json",
+      "type": "config",
+      "name": "meta.json",
+      "filePath": "apps/site/content/docs/zh/bridge/meta.json",
+      "summary": "Navigation metadata for the Bridge subsection of the Chinese documentation (message bridging), listing Telegram, Discord, Feishu, and QQ integration pages.",
+      "tags": ["configuration", "documentation", "navigation"],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:apps/site/content/docs/zh/meta.json",
+      "type": "config",
+      "name": "meta.json",
+      "filePath": "apps/site/content/docs/zh/meta.json",
+      "summary": "Top-level navigation metadata for the Chinese documentation site, mirroring the English structure with localized section titles.",
+      "tags": ["configuration", "documentation", "navigation"],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:apps/site/next.config.mjs",
+      "type": "config",
+      "name": "next.config.mjs",
+      "filePath": "apps/site/next.config.mjs",
+      "summary": "Next.js configuration for the documentation site enabling React strict mode, MDX support via FumaDocs, and setting the output tracing root to the monorepo root.",
+      "tags": ["configuration", "build-system", "nextjs"],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:apps/site/package.json",
+      "type": "config",
+      "name": "package.json",
+      "filePath": "apps/site/package.json",
+      "summary": "Package manifest for the documentation site sub-app defining dev, build, and typecheck scripts with Next.js 15, FumaDocs, Tailwind CSS v4, and React 19 dependencies.",
+      "tags": ["configuration", "package-manifest", "build-system"],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:apps/site/postcss.config.mjs",
+      "type": "config",
+      "name": "postcss.config.mjs",
+      "filePath": "apps/site/postcss.config.mjs",
+      "summary": "PostCSS configuration for the documentation site enabling the Tailwind CSS v4 PostCSS plugin.",
+      "tags": ["configuration", "build-system", "postcss"],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:apps/site/tsconfig.check.json",
+      "type": "config",
+      "name": "tsconfig.check.json",
+      "filePath": "apps/site/tsconfig.check.json",
+      "summary": "TypeScript type-checking configuration extending the base tsconfig while excluding the .next build output directory for CI typecheck runs.",
+      "tags": ["configuration", "typescript", "build-system"],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:apps/site/tsconfig.json",
+      "type": "config",
+      "name": "tsconfig.json",
+      "filePath": "apps/site/tsconfig.json",
+      "summary": "TypeScript compiler configuration for the documentation site with strict mode, path aliases for source and generated files, and Next.js plugin integration.",
+      "tags": ["configuration", "typescript", "build-system"],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:apps/site/tailwind.config.ts",
+      "type": "config",
+      "name": "tailwind.config.ts",
+      "filePath": "apps/site/tailwind.config.ts",
+      "summary": "Tailwind CSS configuration for the documentation site defining content file patterns, theme colors, and FumaDocs UI plugin integration.",
+      "tags": ["configuration", "styling", "tailwindcss"],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:components.json",
+      "type": "config",
+      "name": "components.json",
+      "filePath": "components.json",
+      "summary": "Root-level shadcn/ui configuration for the main Electron application using base-nova style with Lucide icons and CSS variable-based theming.",
+      "tags": ["configuration", "ui", "shadcn"],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:electron-builder.yml",
+      "type": "config",
+      "name": "electron-builder.yml",
+      "filePath": "electron-builder.yml",
+      "summary": "Electron Builder configuration defining the app packaging for macOS, Windows, and Linux with GitHub Releases publishing, native module unpacking, and resource bundling for the standalone Next.js build.",
+      "tags": ["configuration", "build-system", "deployment"],
+      "complexity": "complex"
+    },
+    {
+      "id": "config:electron/tsconfig.json",
+      "type": "config",
+      "name": "tsconfig.json",
+      "filePath": "electron/tsconfig.json",
+      "summary": "TypeScript compiler configuration for the Electron main process targeting ES2020 with CommonJS modules, outputting to the dist-electron directory.",
+      "tags": ["configuration", "typescript", "electron"],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:eslint.config.mjs",
+      "type": "config",
+      "name": "eslint.config.mjs",
+      "filePath": "eslint.config.mjs",
+      "summary": "ESLint flat configuration extending Next.js core-web-vitals and TypeScript rules with custom governance enforcing UI component usage, icon library restrictions, component file size limits, and pattern component purity.",
+      "tags": ["configuration", "linting", "code-quality"],
+      "complexity": "complex"
+    },
+    {
+      "id": "config:next.config.ts",
+      "type": "config",
+      "name": "next.config.ts",
+      "filePath": "next.config.ts",
+      "summary": "Next.js configuration for the main Electron renderer process defining standalone output mode, external packages for native modules and the Claude SDK, app version injection, Sentry DSN, and file tracing exclusions to reduce build artifacts.",
+      "tags": ["configuration", "build-system", "nextjs"],
+      "complexity": "complex"
+    },
+    {
+      "id": "config:playwright.config.ts",
+      "type": "config",
+      "name": "playwright.config.ts",
+      "filePath": "playwright.config.ts",
+      "summary": "Playwright end-to-end test configuration with CI-aware retry and worker settings, screenshot diffing tolerance, and auto-starting the dev server for test runs.",
+      "tags": ["configuration", "testing", "e2e"],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:postcss.config.mjs",
+      "type": "config",
+      "name": "postcss.config.mjs",
+      "filePath": "postcss.config.mjs",
+      "summary": "Root-level PostCSS configuration enabling the Tailwind CSS v4 PostCSS plugin for the main application build.",
+      "tags": ["configuration", "build-system", "postcss"],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:themes/default.json",
+      "type": "config",
+      "name": "default.json",
+      "filePath": "themes/default.json",
+      "summary": "Default CodePilot theme defining light and dark color palettes using oklch values, sidebar styles, chart colors, and mapping to oneDark/oneLight code themes and GitHub Shiki themes.",
+      "tags": ["configuration", "theming", "color-palette"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "config:themes/everforest.json",
+      "type": "config",
+      "name": "everforest.json",
+      "filePath": "themes/everforest.json",
+      "summary": "Everforest theme with green-toned natural landscape palette defining light and dark modes with Gruvbox/Duotone Forest code themes and Everforest Shiki themes.",
+      "tags": ["configuration", "theming", "color-palette"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "config:themes/github.json",
+      "type": "config",
+      "name": "github.json",
+      "filePath": "themes/github.json",
+      "summary": "GitHub-inspired theme based on Primer design system with clean blue tones, defining light and dark modes with ghcolors/vscDarkPlus code themes and GitHub Shiki themes.",
+      "tags": ["configuration", "theming", "color-palette"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "config:themes/horizon.json",
+      "type": "config",
+      "name": "horizon.json",
+      "filePath": "themes/horizon.json",
+      "summary": "Horizon theme with warm sunset palette and rosy pink accents defining light and dark modes with Duotone Light/Material Dark code themes and Horizon Shiki theme.",
+      "tags": ["configuration", "theming", "color-palette"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "config:themes/kanagawa.json",
+      "type": "config",
+      "name": "kanagawa.json",
+      "filePath": "themes/kanagawa.json",
+      "summary": "Kanagawa theme with ink-wash palette and warm parchment tones defining light and dark modes with VS/Duotone Earth code themes and Kanagawa Shiki themes.",
+      "tags": ["configuration", "theming", "color-palette"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "config:themes/night-owl.json",
+      "type": "config",
+      "name": "night-owl.json",
+      "filePath": "themes/night-owl.json",
+      "summary": "Night Owl theme with deep navy palette for night-time coding defining light and dark modes with Coy/Night Owl code themes and Night Owl Shiki themes.",
+      "tags": ["configuration", "theming", "color-palette"],
+      "complexity": "moderate"
+    }
+  ],
+  "edges": [
+    {
+      "source": "config:apps/site/next.config.mjs",
+      "target": "config:apps/site/package.json",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:apps/site/tsconfig.check.json",
+      "target": "config:apps/site/tsconfig.json",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:apps/site/postcss.config.mjs",
+      "target": "config:apps/site/package.json",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:apps/site/tailwind.config.ts",
+      "target": "config:apps/site/components.json",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "config:apps/site/next.config.mjs",
+      "target": "config:apps/site/tsconfig.json",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "config:next.config.ts",
+      "target": "config:postcss.config.mjs",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:electron-builder.yml",
+      "target": "config:next.config.ts",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:electron-builder.yml",
+      "target": "config:electron/tsconfig.json",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:electron-builder.yml",
+      "target": "config:themes/default.json",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:electron-builder.yml",
+      "target": "config:themes/everforest.json",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:electron-builder.yml",
+      "target": "config:themes/github.json",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:electron-builder.yml",
+      "target": "config:themes/horizon.json",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:electron-builder.yml",
+      "target": "config:themes/kanagawa.json",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:electron-builder.yml",
+      "target": "config:themes/night-owl.json",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:playwright.config.ts",
+      "target": "config:next.config.ts",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:eslint.config.mjs",
+      "target": "config:next.config.ts",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "config:apps/site/content/docs/en/meta.json",
+      "target": "config:apps/site/content/docs/en/bridge/meta.json",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "config:apps/site/content/docs/zh/meta.json",
+      "target": "config:apps/site/content/docs/zh/bridge/meta.json",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "config:apps/site/components.json",
+      "target": "config:components.json",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "config:.mcp.json",
+      "target": "config:electron-builder.yml",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    }
+  ]
+}

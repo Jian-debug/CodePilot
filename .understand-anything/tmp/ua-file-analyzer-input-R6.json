@@ -1,0 +1,637 @@
+{
+  "projectRoot": "D:/project/common/AI/CodePilot",
+  "batchFiles": [
+    {
+      "path": "src/lib/agent-loop.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/agent-registry.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/agent-sdk-agents.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/agent-sdk-capabilities.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/agent-system-prompt.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/agent-tools.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/ai-provider.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/assistant-workspace.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/bash-validator.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/bg-notify-parser.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/bridge/CLAUDE.md",
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/lib/bridge/adapters/discord-adapter.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/bridge/adapters/feishu-adapter.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/bridge/adapters/index.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/bridge/adapters/qq-adapter.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/bridge/adapters/qq-api.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/bridge/adapters/telegram-adapter.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/bridge/adapters/telegram-media.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/bridge/adapters/telegram-utils.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/bridge/adapters/weixin-adapter.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/bridge/adapters/weixin/weixin-api.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/bridge/adapters/weixin/weixin-auth.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/bridge/adapters/weixin/weixin-ids.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/bridge/adapters/weixin/weixin-media.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/bridge/adapters/weixin/weixin-session-guard.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/bridge/adapters/weixin/weixin-types.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/bridge/bridge-manager.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/bridge/channel-adapter.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/bridge/channel-router.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/bridge/conversation-engine.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/bridge/delivery-layer.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/bridge/feishu-app-registration.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/bridge/markdown/discord.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/bridge/markdown/feishu.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/bridge/markdown/ir.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/bridge/markdown/render.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/bridge/markdown/telegram.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/bridge/permission-broker.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/bridge/security/rate-limiter.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/bridge/security/validators.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/bridge/types.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/buddy.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/builtin-mcp-bridge.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/builtin-tools/ask-user-question.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/builtin-tools/cli-tools.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/builtin-tools/dashboard.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/builtin-tools/index.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/builtin-tools/media.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/builtin-tools/memory-search.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/builtin-tools/notification.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/builtin-tools/session-search.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/builtin-tools/widget-guidelines.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/channels/channel-plugin-adapter.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/channels/feishu/card-controller.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/channels/feishu/config.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/channels/feishu/gateway.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/channels/feishu/identity.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/channels/feishu/inbound.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/channels/feishu/index.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/channels/feishu/message-actions.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/channels/feishu/outbound.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/channels/feishu/policy.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/channels/feishu/resource-downloader.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/channels/feishu/types.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/channels/types.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/checkin-processor.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/claude-client.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/claude-code-compat/claude-code-compat-model.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/claude-code-compat/index.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/claude-code-compat/request-builder.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/claude-code-compat/sse-parser.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/claude-code-compat/types.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/claude-home-shadow.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/claude-model-options.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/claude-session-parser.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/claude-settings.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/cli-tools-catalog.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/cli-tools-context.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/cli-tools-detect.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/cli-tools-mcp.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/constants/command-icons.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/constants/commands.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/constants/image-agent-prompt.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/context-assembler.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/context-compressor.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/context-estimator.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/context-pruner.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/conversation-registry.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/dashboard-cli-reader.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/dashboard-export.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/dashboard-file-reader.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/dashboard-mcp.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/dashboard-store.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/db.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/error-classifier.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/file-checkpoint.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/file-utils.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/files.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/git/service.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/heartbeat.ts",
+      "fileCategory": "code"
+    }
+  ],
+  "batchImportData": {
+    "src/lib/agent-loop.ts": [
+      "src/lib/ai-provider.ts",
+      "src/lib/agent-tools.ts",
+      "src/lib/error-classifier.ts",
+      "src/lib/context-pruner.ts",
+      "src/lib/file-checkpoint.ts",
+      "src/lib/claude-model-options.ts",
+      "src/lib/db.ts"
+    ],
+    "src/lib/agent-sdk-capabilities.ts": [
+      "src/lib/conversation-registry.ts"
+    ],
+    "src/lib/agent-tools.ts": [
+      "src/lib/builtin-tools/index.ts",
+      "src/lib/db.ts"
+    ],
+    "src/lib/ai-provider.ts": [
+      "src/lib/claude-settings.ts",
+      "src/lib/claude-code-compat/index.ts"
+    ],
+    "src/lib/assistant-workspace.ts": [
+      "src/lib/heartbeat.ts"
+    ],
+    "src/lib/bridge/adapters/discord-adapter.ts": [
+      "src/lib/bridge/types.ts",
+      "src/lib/bridge/channel-adapter.ts",
+      "src/lib/db.ts"
+    ],
+    "src/lib/bridge/adapters/feishu-adapter.ts": [
+      "src/lib/bridge/channel-adapter.ts",
+      "src/lib/channels/channel-plugin-adapter.ts",
+      "src/lib/channels/feishu/index.ts"
+    ],
+    "src/lib/bridge/adapters/index.ts": [
+      "src/lib/bridge/adapters/telegram-adapter.ts",
+      "src/lib/bridge/adapters/feishu-adapter.ts",
+      "src/lib/bridge/adapters/discord-adapter.ts",
+      "src/lib/bridge/adapters/qq-adapter.ts",
+      "src/lib/bridge/adapters/weixin-adapter.ts"
+    ],
+    "src/lib/bridge/adapters/qq-adapter.ts": [
+      "src/lib/bridge/types.ts",
+      "src/lib/bridge/channel-adapter.ts",
+      "src/lib/db.ts",
+      "src/lib/bridge/adapters/qq-api.ts"
+    ],
+    "src/lib/bridge/adapters/telegram-adapter.ts": [
+      "src/lib/bridge/types.ts",
+      "src/lib/bridge/channel-adapter.ts",
+      "src/lib/bridge/adapters/telegram-utils.ts",
+      "src/lib/bridge/adapters/telegram-media.ts",
+      "src/lib/db.ts"
+    ],
+    "src/lib/bridge/adapters/telegram-media.ts": [
+      "src/lib/db.ts"
+    ],
+    "src/lib/bridge/adapters/weixin-adapter.ts": [
+      "src/lib/bridge/types.ts",
+      "src/lib/bridge/channel-adapter.ts",
+      "src/lib/db.ts",
+      "src/lib/bridge/adapters/weixin/weixin-api.ts",
+      "src/lib/bridge/adapters/weixin/weixin-types.ts",
+      "src/lib/bridge/adapters/weixin/weixin-ids.ts",
+      "src/lib/bridge/adapters/weixin/weixin-media.ts",
+      "src/lib/bridge/adapters/weixin/weixin-session-guard.ts"
+    ],
+    "src/lib/bridge/adapters/weixin/weixin-api.ts": [
+      "src/lib/bridge/adapters/weixin/weixin-types.ts"
+    ],
+    "src/lib/bridge/adapters/weixin/weixin-auth.ts": [
+      "src/lib/bridge/adapters/weixin/weixin-api.ts",
+      "src/lib/db.ts",
+      "src/lib/bridge/adapters/weixin/weixin-types.ts"
+    ],
+    "src/lib/bridge/adapters/weixin/weixin-media.ts": [
+      "src/lib/bridge/adapters/weixin/weixin-types.ts",
+      "src/lib/bridge/adapters/weixin/weixin-api.ts"
+    ],
+    "src/lib/bridge/bridge-manager.ts": [
+      "src/lib/bridge/types.ts",
+      "src/lib/bridge/channel-adapter.ts",
+      "src/lib/bridge/channel-router.ts",
+      "src/lib/bridge/conversation-engine.ts",
+      "src/lib/bridge/permission-broker.ts",
+      "src/lib/bridge/delivery-layer.ts",
+      "src/lib/bridge/markdown/telegram.ts",
+      "src/lib/bridge/markdown/discord.ts",
+      "src/lib/db.ts",
+      "src/lib/bridge/adapters/telegram-utils.ts",
+      "src/lib/bridge/security/validators.ts",
+      "src/lib/channels/channel-plugin-adapter.ts",
+      "src/lib/channels/feishu/index.ts",
+      "src/lib/channels/types.ts",
+      "src/lib/channels/feishu/message-actions.ts"
+    ],
+    "src/lib/bridge/channel-adapter.ts": [
+      "src/lib/bridge/types.ts",
+      "src/lib/channels/types.ts"
+    ],
+    "src/lib/bridge/channel-router.ts": [
+      "src/lib/bridge/types.ts",
+      "src/lib/db.ts"
+    ],
+    "src/lib/bridge/conversation-engine.ts": [
+      "src/lib/bridge/types.ts",
+      "src/lib/claude-client.ts",
+      "src/lib/db.ts",
+      "src/lib/context-assembler.ts"
+    ],
+    "src/lib/bridge/delivery-layer.ts": [
+      "src/lib/bridge/types.ts",
+      "src/lib/bridge/markdown/telegram.ts",
+      "src/lib/bridge/channel-adapter.ts",
+      "src/lib/db.ts",
+      "src/lib/bridge/security/rate-limiter.ts"
+    ],
+    "src/lib/bridge/markdown/render.ts": [
+      "src/lib/bridge/markdown/ir.ts"
+    ],
+    "src/lib/bridge/markdown/telegram.ts": [
+      "src/lib/bridge/markdown/ir.ts",
+      "src/lib/bridge/markdown/render.ts"
+    ],
+    "src/lib/bridge/permission-broker.ts": [
+      "src/lib/bridge/types.ts",
+      "src/lib/bridge/channel-adapter.ts",
+      "src/lib/bridge/delivery-layer.ts",
+      "src/lib/db.ts",
+      "src/lib/bridge/adapters/telegram-utils.ts"
+    ],
+    "src/lib/builtin-tools/index.ts": [
+      "src/lib/builtin-tools/notification.ts",
+      "src/lib/builtin-tools/widget-guidelines.ts",
+      "src/lib/builtin-tools/dashboard.ts",
+      "src/lib/builtin-tools/media.ts",
+      "src/lib/builtin-tools/memory-search.ts",
+      "src/lib/builtin-tools/session-search.ts",
+      "src/lib/builtin-tools/ask-user-question.ts",
+      "src/lib/builtin-tools/cli-tools.ts"
+    ],
+    "src/lib/channels/channel-plugin-adapter.ts": [
+      "src/lib/bridge/channel-adapter.ts",
+      "src/lib/bridge/types.ts",
+      "src/lib/channels/types.ts"
+    ],
+    "src/lib/channels/feishu/card-controller.ts": [
+      "src/lib/channels/types.ts",
+      "src/lib/channels/feishu/types.ts",
+      "src/lib/channels/feishu/outbound.ts"
+    ],
+    "src/lib/channels/feishu/config.ts": [
+      "src/lib/db.ts",
+      "src/lib/channels/feishu/types.ts"
+    ],
+    "src/lib/channels/feishu/gateway.ts": [
+      "src/lib/channels/feishu/types.ts"
+    ],
+    "src/lib/channels/feishu/identity.ts": [
+      "src/lib/channels/feishu/types.ts"
+    ],
+    "src/lib/channels/feishu/inbound.ts": [
+      "src/lib/bridge/types.ts",
+      "src/lib/channels/feishu/types.ts",
+      "src/lib/channels/feishu/resource-downloader.ts"
+    ],
+    "src/lib/channels/feishu/index.ts": [
+      "src/lib/bridge/types.ts",
+      "src/lib/channels/types.ts",
+      "src/lib/channels/feishu/types.ts",
+      "src/lib/channels/feishu/config.ts",
+      "src/lib/channels/feishu/gateway.ts",
+      "src/lib/channels/feishu/inbound.ts",
+      "src/lib/channels/feishu/identity.ts",
+      "src/lib/channels/feishu/outbound.ts",
+      "src/lib/channels/feishu/policy.ts",
+      "src/lib/channels/feishu/card-controller.ts",
+      "src/lib/channels/feishu/resource-downloader.ts"
+    ],
+    "src/lib/channels/feishu/message-actions.ts": [
+      "src/lib/channels/feishu/types.ts"
+    ],
+    "src/lib/channels/feishu/outbound.ts": [
+      "src/lib/bridge/types.ts"
+    ],
+    "src/lib/channels/feishu/policy.ts": [
+      "src/lib/channels/feishu/types.ts"
+    ],
+    "src/lib/channels/types.ts": [
+      "src/lib/bridge/types.ts"
+    ],
+    "src/lib/claude-client.ts": [
+      "src/lib/conversation-registry.ts",
+      "src/lib/agent-sdk-capabilities.ts",
+      "src/lib/context-estimator.ts",
+      "src/lib/db.ts",
+      "src/lib/claude-model-options.ts",
+      "src/lib/error-classifier.ts",
+      "src/lib/claude-home-shadow.ts",
+      "src/lib/context-compressor.ts"
+    ],
+    "src/lib/claude-code-compat/claude-code-compat-model.ts": [
+      "src/lib/claude-code-compat/types.ts",
+      "src/lib/claude-code-compat/request-builder.ts",
+      "src/lib/claude-code-compat/sse-parser.ts"
+    ],
+    "src/lib/claude-code-compat/index.ts": [
+      "src/lib/claude-code-compat/types.ts",
+      "src/lib/claude-code-compat/claude-code-compat-model.ts"
+    ],
+    "src/lib/claude-code-compat/request-builder.ts": [
+      "src/lib/claude-code-compat/types.ts"
+    ],
+    "src/lib/claude-code-compat/sse-parser.ts": [
+      "src/lib/claude-code-compat/types.ts"
+    ],
+    "src/lib/cli-tools-context.ts": [
+      "src/lib/cli-tools-detect.ts",
+      "src/lib/cli-tools-catalog.ts",
+      "src/lib/db.ts"
+    ],
+    "src/lib/cli-tools-detect.ts": [
+      "src/lib/cli-tools-catalog.ts"
+    ],
+    "src/lib/context-compressor.ts": [
+      "src/lib/context-estimator.ts",
+      "src/lib/claude-client.ts"
+    ],
+    "src/lib/db.ts": [
+      "src/lib/bridge/types.ts"
+    ]
+  }
+}

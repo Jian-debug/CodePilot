@@ -1,0 +1,193 @@
+{
+  "projectRoot": "D:/project/common/AI/CodePilot",
+  "batchFiles": [
+    {
+      "path": "src/lib/platform.ts",
+      "sizeLines": 493,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/plugin-discovery.ts",
+      "sizeLines": 466,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/provider-catalog.ts",
+      "sizeLines": 978,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/provider-doctor.ts",
+      "sizeLines": 1077,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/provider-presence.ts",
+      "sizeLines": 104,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/provider-resolver.ts",
+      "sizeLines": 1174,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/provider-transport.ts",
+      "sizeLines": 72,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/resolve-session-model.ts",
+      "sizeLines": 113,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/runtime-log.ts",
+      "sizeLines": 114,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/runtime/event-bus.ts",
+      "sizeLines": 75,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/runtime/index.ts",
+      "sizeLines": 17,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/runtime/legacy.ts",
+      "sizeLines": 47,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/runtime/native-runtime.ts",
+      "sizeLines": 119,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/runtime/registry.ts",
+      "sizeLines": 115,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/runtime/sdk-runtime.ts",
+      "sizeLines": 95,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/runtime/types.ts",
+      "sizeLines": 87,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/safe-stream.ts",
+      "sizeLines": 101,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/sdk-subprocess-env.ts",
+      "sizeLines": 81,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/skill-discovery.ts",
+      "sizeLines": 124,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/skill-executor.ts",
+      "sizeLines": 51,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/skill-nudge.ts",
+      "sizeLines": 111,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/skill-parser.ts",
+      "sizeLines": 126,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/skills-lock.ts",
+      "sizeLines": 22,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/stream-session-manager.ts",
+      "sizeLines": 917,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/subdirectory-hint-tracker.ts",
+      "sizeLines": 321,
+      "fileCategory": "code"
+    }
+  ],
+  "batchImportData": {
+    "src/lib/platform.ts": [],
+    "src/lib/plugin-discovery.ts": [],
+    "src/lib/provider-catalog.ts": [],
+    "src/lib/provider-doctor.ts": [],
+    "src/lib/provider-presence.ts": [],
+    "src/lib/provider-resolver.ts": [
+      "src/lib/provider-catalog.ts",
+      "src/lib/db.ts",
+      "src/lib/openai-oauth-manager.ts",
+      "src/lib/openai-oauth.ts",
+      "src/lib/claude-settings.ts"
+    ],
+    "src/lib/provider-transport.ts": [
+      "src/lib/provider-resolver.ts"
+    ],
+    "src/lib/resolve-session-model.ts": [],
+    "src/lib/runtime-log.ts": [],
+    "src/lib/runtime/event-bus.ts": [],
+    "src/lib/runtime/index.ts": [
+      "src/lib/runtime/registry.ts",
+      "src/lib/runtime/native-runtime.ts",
+      "src/lib/runtime/sdk-runtime.ts"
+    ],
+    "src/lib/runtime/legacy.ts": [],
+    "src/lib/runtime/native-runtime.ts": [
+      "src/lib/runtime/types.ts",
+      "src/lib/agent-loop.ts",
+      "src/lib/agent-system-prompt.ts",
+      "src/lib/provider-resolver.ts",
+      "src/lib/mcp-connection-manager.ts",
+      "src/lib/openai-oauth-manager.ts",
+      "src/lib/safe-stream.ts"
+    ],
+    "src/lib/runtime/registry.ts": [
+      "src/lib/runtime/types.ts"
+    ],
+    "src/lib/runtime/sdk-runtime.ts": [
+      "src/lib/runtime/types.ts",
+      "src/lib/platform.ts",
+      "src/lib/conversation-registry.ts",
+      "src/lib/db.ts",
+      "src/lib/claude-client.ts"
+    ],
+    "src/lib/runtime/types.ts": [],
+    "src/lib/safe-stream.ts": [],
+    "src/lib/sdk-subprocess-env.ts": [
+      "src/lib/platform.ts",
+      "src/lib/provider-resolver.ts",
+      "src/lib/claude-home-shadow.ts"
+    ],
+    "src/lib/skill-discovery.ts": [
+      "src/lib/skill-parser.ts"
+    ],
+    "src/lib/skill-executor.ts": [
+      "src/lib/skill-parser.ts"
+    ],
+    "src/lib/skill-nudge.ts": [],
+    "src/lib/skill-parser.ts": [],
+    "src/lib/skills-lock.ts": [],
+    "src/lib/stream-session-manager.ts": [],
+    "src/lib/subdirectory-hint-tracker.ts": []
+  }
+}

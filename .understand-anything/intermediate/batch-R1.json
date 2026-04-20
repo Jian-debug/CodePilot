@@ -1,0 +1,78 @@
+{
+  "nodes": [
+    {
+      "id": "file:src/i18n/index.ts",
+      "type": "file",
+      "name": "index.ts",
+      "filePath": "src/i18n/index.ts",
+      "summary": "Barrel entry point for the i18n module that re-exports the TranslationKey type, defines supported locales, and provides the core translate() function with fallback chain and parameter interpolation.",
+      "tags": ["entry-point", "barrel", "i18n", "utility"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/i18n/index.ts:translate",
+      "type": "function",
+      "name": "translate",
+      "filePath": "src/i18n/index.ts",
+      "lineRange": [22, 37],
+      "summary": "Translates a key by looking up the string in the target locale dictionary, falling back to English and then the raw key, with support for parameter interpolation via {param} placeholders.",
+      "tags": ["utility", "i18n", "interpolation"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/i18n/en.ts",
+      "type": "file",
+      "name": "en.ts",
+      "filePath": "src/i18n/en.ts",
+      "summary": "English translation dictionary serving as the source of truth for all translation keys. Defines 1500+ keys across navigation, chat, settings, extensions, MCP, buddy, and other UI sections. Exports the TranslationKey type derived from its keys.",
+      "tags": ["i18n", "locale-data", "type-definition", "source-of-truth"],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:src/i18n/zh.ts",
+      "type": "file",
+      "name": "zh.ts",
+      "filePath": "src/i18n/zh.ts",
+      "summary": "Chinese (Simplified) translation dictionary implementing Record<TranslationKey, string> with localized strings for all keys defined in the English source file.",
+      "tags": ["i18n", "locale-data", "translation"],
+      "complexity": "complex"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:src/i18n/index.ts",
+      "target": "function:src/i18n/index.ts:translate",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/i18n/index.ts",
+      "target": "file:src/i18n/en.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/i18n/index.ts",
+      "target": "file:src/i18n/zh.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/i18n/index.ts",
+      "target": "function:src/i18n/index.ts:translate",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/i18n/zh.ts",
+      "target": "file:src/i18n/en.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    }
+  ]
+}

@@ -1,0 +1,61 @@
+{
+  "projectRoot": "D:/project/common/AI/CodePilot",
+  "batchFiles": [
+    {
+      "path": "src/app/extensions/page.tsx",
+      "sizeLines": 28,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/gallery/page.tsx",
+      "sizeLines": 257,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/layout.tsx",
+      "sizeLines": 74,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/mcp/page.tsx",
+      "sizeLines": 11,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/page.tsx",
+      "sizeLines": 5,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/plugins/mcp/page.tsx",
+      "sizeLines": 12,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/plugins/page.tsx",
+      "sizeLines": 12,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/settings/page.tsx",
+      "sizeLines": 19,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/skills/page.tsx",
+      "sizeLines": 11,
+      "fileCategory": "code"
+    }
+  ],
+  "batchImportData": {
+    "src/app/extensions/page.tsx": [],
+    "src/app/gallery/page.tsx": [],
+    "src/app/layout.tsx": [],
+    "src/app/mcp/page.tsx": [],
+    "src/app/page.tsx": [],
+    "src/app/plugins/mcp/page.tsx": [],
+    "src/app/plugins/page.tsx": [],
+    "src/app/settings/page.tsx": [],
+    "src/app/skills/page.tsx": []
+  }
+}

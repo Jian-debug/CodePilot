@@ -1,0 +1,31 @@
+{
+  "projectRoot": "D:/project/common/AI/CodePilot",
+  "batchFiles": [
+    {"path": "src/__tests__/unit/openai-oauth-retry.test.ts", "language": "typescript", "fileCategory": "code"},
+    {"path": "src/__tests__/unit/parallel-safety.test.ts", "language": "typescript", "fileCategory": "code"},
+    {"path": "src/__tests__/unit/permission-broker-bridge.manual-test.ts", "language": "typescript", "fileCategory": "code"},
+    {"path": "src/__tests__/unit/project-mcp-injection.test.ts", "language": "typescript", "fileCategory": "code"},
+    {"path": "src/__tests__/unit/prompt-dialog-replacement.test.ts", "language": "typescript", "fileCategory": "code"},
+    {"path": "src/__tests__/unit/provider-key-lifecycle.test.ts", "language": "typescript", "fileCategory": "code"},
+    {"path": "src/__tests__/unit/provider-presence.test.ts", "language": "typescript", "fileCategory": "code"},
+    {"path": "src/__tests__/unit/provider-preset.test.ts", "language": "typescript", "fileCategory": "code"},
+    {"path": "src/__tests__/unit/provider-resolver-fixes.test.ts", "language": "typescript", "fileCategory": "code"},
+    {"path": "src/__tests__/unit/provider-resolver.test.ts", "language": "typescript", "fileCategory": "code"},
+    {"path": "src/__tests__/unit/resolve-session-model.test.ts", "language": "typescript", "fileCategory": "code"},
+    {"path": "src/__tests__/unit/runtime-legacy.test.ts", "language": "typescript", "fileCategory": "code"},
+    {"path": "src/__tests__/unit/runtime-selection.test.ts", "language": "typescript", "fileCategory": "code"},
+    {"path": "src/__tests__/unit/sdk-availability.test.ts", "language": "typescript", "fileCategory": "code"},
+    {"path": "src/__tests__/unit/sdk-subprocess-env.test.ts", "language": "typescript", "fileCategory": "code"},
+    {"path": "src/__tests__/unit/session-search.test.ts", "language": "typescript", "fileCategory": "code"},
+    {"path": "src/__tests__/unit/skill-kind.test.ts", "language": "typescript", "fileCategory": "code"},
+    {"path": "src/__tests__/unit/skill-nudge.test.ts", "language": "typescript", "fileCategory": "code"},
+    {"path": "src/__tests__/unit/sse-stream.test.ts", "language": "typescript", "fileCategory": "code"},
+    {"path": "src/__tests__/unit/stale-default-provider.test.ts", "language": "typescript", "fileCategory": "code"},
+    {"path": "src/__tests__/unit/structured-output.test.ts", "language": "typescript", "fileCategory": "code"},
+    {"path": "src/__tests__/unit/subdirectory-hint-tracker.test.ts", "language": "typescript", "fileCategory": "code"},
+    {"path": "src/__tests__/unit/task-scheduler.test.ts", "language": "typescript", "fileCategory": "code"},
+    {"path": "src/__tests__/unit/theme-loader.test.ts", "language": "typescript", "fileCategory": "code"},
+    {"path": "src/__tests__/unit/theme-render-css.test.ts", "language": "typescript", "fileCategory": "code"}
+  ],
+  "batchImportData": {}
+}

@@ -1,0 +1,145 @@
+{
+  "nodes": [
+    {
+      "id": "file:src/types/index.ts",
+      "type": "file",
+      "name": "index.ts",
+      "filePath": "src/types/index.ts",
+      "summary": "Central type definitions barrel file exporting all TypeScript interfaces, types, and helper functions for the CodePilot desktop client -- covering database models, API request/response types, SSE streaming events, permission systems, plugin/MCP configuration, settings, workspace management, batch image generation, stream session management, CLI tools, Git integration, WeChat bridge, and scheduled tasks.",
+      "tags": ["type-definition", "barrel", "entry-point"],
+      "complexity": "complex",
+      "languageNotes": "TypeScript barrel file using both inline exports and re-exports (export type { ... } from '@/lib/error-classifier'). Contains 60+ exported interfaces/types/constants across 20+ semantic sections."
+    },
+    {
+      "id": "file:src/types/dashboard.ts",
+      "type": "file",
+      "name": "dashboard.ts",
+      "filePath": "src/types/dashboard.ts",
+      "summary": "Type definitions for the persisted generative UI dashboard feature -- defines widget data contracts, data source types (file, MCP tool, CLI), and dashboard configuration stored as JSON in the project directory.",
+      "tags": ["type-definition", "dashboard", "ui"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/types/index.ts:parseMessageContent",
+      "type": "function",
+      "name": "parseMessageContent",
+      "filePath": "src/types/index.ts",
+      "lineRange": [172, 180],
+      "summary": "Parses structured message content from JSON string into an array of MessageContentBlock objects, falling back to wrapping plain text as a single text block.",
+      "tags": ["utility", "serialization", "message"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/types/index.ts:isImageFile",
+      "type": "function",
+      "name": "isImageFile",
+      "filePath": "src/types/index.ts",
+      "lineRange": [803, 805],
+      "summary": "Checks if a MIME type string represents an image.",
+      "tags": ["utility", "validation"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/types/index.ts:isVideoFile",
+      "type": "function",
+      "name": "isVideoFile",
+      "filePath": "src/types/index.ts",
+      "lineRange": [808, 810],
+      "summary": "Checks if a MIME type string represents a video.",
+      "tags": ["utility", "validation"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/types/index.ts:isMediaFile",
+      "type": "function",
+      "name": "isMediaFile",
+      "filePath": "src/types/index.ts",
+      "lineRange": [813, 815],
+      "summary": "Checks if a MIME type string represents any visual media (image, video, or audio).",
+      "tags": ["utility", "validation"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/types/index.ts:formatFileSize",
+      "type": "function",
+      "name": "formatFileSize",
+      "filePath": "src/types/index.ts",
+      "lineRange": [818, 822],
+      "summary": "Formats a byte count into a human-readable file size string (B, KB, or MB).",
+      "tags": ["utility", "formatting"],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:src/types/index.ts",
+      "target": "function:src/types/index.ts:parseMessageContent",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/types/index.ts",
+      "target": "function:src/types/index.ts:isImageFile",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/types/index.ts",
+      "target": "function:src/types/index.ts:isVideoFile",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/types/index.ts",
+      "target": "function:src/types/index.ts:isMediaFile",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/types/index.ts",
+      "target": "function:src/types/index.ts:formatFileSize",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/types/index.ts",
+      "target": "function:src/types/index.ts:parseMessageContent",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/types/index.ts",
+      "target": "function:src/types/index.ts:isImageFile",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/types/index.ts",
+      "target": "function:src/types/index.ts:isVideoFile",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/types/index.ts",
+      "target": "function:src/types/index.ts:isMediaFile",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/types/index.ts",
+      "target": "function:src/types/index.ts:formatFileSize",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    }
+  ]
+}

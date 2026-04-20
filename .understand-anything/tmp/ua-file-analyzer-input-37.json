@@ -1,0 +1,174 @@
+{
+  "projectRoot": "D:/project/common/AI/CodePilot",
+  "batchFiles": [
+    {
+      "path": "src/lib/image-gen-mcp.ts",
+      "sizeLines": 80,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/image-generator.ts",
+      "sizeLines": 196,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/image-ref-store.ts",
+      "sizeLines": 150,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/job-executor.ts",
+      "sizeLines": 362,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/lru-map.ts",
+      "sizeLines": 52,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/mcp-connection-manager.ts",
+      "sizeLines": 220,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/mcp-loader.ts",
+      "sizeLines": 211,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/mcp-tool-adapter.ts",
+      "sizeLines": 69,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/media-import-mcp.ts",
+      "sizeLines": 122,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/media-saver.ts",
+      "sizeLines": 161,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/memory-extractor.ts",
+      "sizeLines": 161,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/memory-search-mcp.ts",
+      "sizeLines": 348,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/message-builder.ts",
+      "sizeLines": 327,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/message-input-logic.ts",
+      "sizeLines": 360,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/message-normalizer.ts",
+      "sizeLines": 106,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/model-context.ts",
+      "sizeLines": 60,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/notification-manager.ts",
+      "sizeLines": 92,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/notification-mcp.ts",
+      "sizeLines": 266,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/onboarding-completion.ts",
+      "sizeLines": 136,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/onboarding-processor.ts",
+      "sizeLines": 269,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/openai-oauth-manager.ts",
+      "sizeLines": 339,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/openai-oauth.ts",
+      "sizeLines": 274,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/parallel-safety.ts",
+      "sizeLines": 269,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/permission-checker.ts",
+      "sizeLines": 246,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/permission-registry.ts",
+      "sizeLines": 127,
+      "fileCategory": "code"
+    }
+  ],
+  "batchImportData": {
+    "src/lib/image-gen-mcp.ts": [],
+    "src/lib/image-generator.ts": [],
+    "src/lib/image-ref-store.ts": [],
+    "src/lib/job-executor.ts": [],
+    "src/lib/lru-map.ts": [],
+    "src/lib/mcp-connection-manager.ts": [],
+    "src/lib/mcp-loader.ts": [],
+    "src/lib/mcp-tool-adapter.ts": [
+      "src/lib/mcp-connection-manager.ts"
+    ],
+    "src/lib/media-import-mcp.ts": [],
+    "src/lib/media-saver.ts": [],
+    "src/lib/memory-extractor.ts": [
+      "src/lib/text-generator.ts",
+      "src/lib/provider-resolver.ts",
+      "src/lib/assistant-workspace.ts"
+    ],
+    "src/lib/memory-search-mcp.ts": [
+      "src/lib/workspace-retrieval.ts",
+      "src/lib/workspace-indexer.ts",
+      "src/lib/text-generator.ts",
+      "src/lib/provider-resolver.ts"
+    ],
+    "src/lib/message-builder.ts": [],
+    "src/lib/message-input-logic.ts": [],
+    "src/lib/message-normalizer.ts": [],
+    "src/lib/model-context.ts": [],
+    "src/lib/notification-manager.ts": [],
+    "src/lib/notification-mcp.ts": [],
+    "src/lib/onboarding-completion.ts": [],
+    "src/lib/onboarding-processor.ts": [],
+    "src/lib/openai-oauth-manager.ts": [
+      "src/lib/db.ts",
+      "src/lib/openai-oauth.ts"
+    ],
+    "src/lib/openai-oauth.ts": [],
+    "src/lib/parallel-safety.ts": [],
+    "src/lib/permission-checker.ts": [],
+    "src/lib/permission-registry.ts": [
+      "src/lib/types/agent-types.ts",
+      "src/lib/db.ts"
+    ]
+  }
+}

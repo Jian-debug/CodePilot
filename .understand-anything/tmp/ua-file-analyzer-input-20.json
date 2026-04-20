@@ -1,0 +1,207 @@
+{
+  "projectRoot": "D:/project/common/AI/CodePilot",
+  "batchFiles": [
+    {
+      "path": "src/lib/task-scheduler.ts",
+      "sizeLines": 525,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/telegram-bot.ts",
+      "sizeLines": 577,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/text-generator.ts",
+      "sizeLines": 55,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/theme/code-themes.ts",
+      "sizeLines": 191,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/theme/context.ts",
+      "sizeLines": 18,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/theme/loader.ts",
+      "sizeLines": 214,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/theme/render-css.ts",
+      "sizeLines": 46,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/theme/types.ts",
+      "sizeLines": 78,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/tools/agent.ts",
+      "sizeLines": 196,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/tools/bash.ts",
+      "sizeLines": 86,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/tools/edit.ts",
+      "sizeLines": 239,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/tools/glob.ts",
+      "sizeLines": 49,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/tools/grep.ts",
+      "sizeLines": 88,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/tools/index.ts",
+      "sizeLines": 60,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/tools/read.ts",
+      "sizeLines": 55,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/tools/skill.ts",
+      "sizeLines": 61,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/tools/write.ts",
+      "sizeLines": 37,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/types/agent-types.ts",
+      "sizeLines": 14,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/update-release.ts",
+      "sizeLines": 76,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/utils.ts",
+      "sizeLines": 66,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/widget-css-bridge.ts",
+      "sizeLines": 551,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/widget-guidelines.ts",
+      "sizeLines": 266,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/widget-sanitizer.ts",
+      "sizeLines": 270,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/working-directory.ts",
+      "sizeLines": 73,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/workspace-config.ts",
+      "sizeLines": 118,
+      "fileCategory": "code"
+    }
+  ],
+  "batchImportData": {
+    "src/lib/task-scheduler.ts": [
+      "src/lib/text-generator.ts",
+      "src/lib/provider-resolver.ts"
+    ],
+    "src/lib/telegram-bot.ts": [
+      "src/lib/db.ts",
+      "src/lib/bridge/adapters/telegram-utils.ts"
+    ],
+    "src/lib/text-generator.ts": [
+      "src/lib/ai-provider.ts"
+    ],
+    "src/lib/theme/code-themes.ts": [
+      "src/lib/theme/types.ts"
+    ],
+    "src/lib/theme/context.ts": [
+      "src/lib/theme/types.ts"
+    ],
+    "src/lib/theme/loader.ts": [
+      "src/lib/theme/types.ts"
+    ],
+    "src/lib/theme/render-css.ts": [
+      "src/lib/theme/types.ts"
+    ],
+    "src/lib/theme/types.ts": [],
+    "src/lib/tools/agent.ts": [
+      "src/lib/agent-registry.ts",
+      "src/lib/agent-loop.ts",
+      "src/lib/ai-provider.ts",
+      "src/lib/agent-tools.ts",
+      "src/lib/permission-checker.ts"
+    ],
+    "src/lib/tools/bash.ts": [
+      "src/lib/tools/index.ts"
+    ],
+    "src/lib/tools/edit.ts": [
+      "src/lib/file-checkpoint.ts",
+      "src/lib/tools/index.ts"
+    ],
+    "src/lib/tools/glob.ts": [
+      "src/lib/tools/index.ts"
+    ],
+    "src/lib/tools/grep.ts": [
+      "src/lib/tools/index.ts"
+    ],
+    "src/lib/tools/index.ts": [
+      "src/lib/tools/read.ts",
+      "src/lib/tools/write.ts",
+      "src/lib/tools/glob.ts",
+      "src/lib/tools/grep.ts",
+      "src/lib/tools/bash.ts",
+      "src/lib/tools/edit.ts",
+      "src/lib/tools/skill.ts",
+      "src/lib/tools/agent.ts"
+    ],
+    "src/lib/tools/read.ts": [
+      "src/lib/tools/index.ts"
+    ],
+    "src/lib/tools/skill.ts": [
+      "src/lib/skill-discovery.ts",
+      "src/lib/skill-executor.ts"
+    ],
+    "src/lib/tools/write.ts": [
+      "src/lib/file-checkpoint.ts",
+      "src/lib/tools/index.ts"
+    ],
+    "src/lib/types/agent-types.ts": [],
+    "src/lib/update-release.ts": [
+      "src/lib/platform.ts"
+    ],
+    "src/lib/utils.ts": [],
+    "src/lib/widget-css-bridge.ts": [],
+    "src/lib/widget-guidelines.ts": [],
+    "src/lib/widget-sanitizer.ts": [],
+    "src/lib/working-directory.ts": [],
+    "src/lib/workspace-config.ts": []
+  }
+}

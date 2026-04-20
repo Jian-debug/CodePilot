@@ -1,0 +1,8 @@
+{
+  "projectRoot": "D:\\project\\common\\AI\\CodePilot",
+  "batchFiles": [
+    {"path": "src/types/index.ts", "fileCategory": "code"},
+    {"path": "src/types/dashboard.ts", "fileCategory": "code"}
+  ],
+  "batchImportData": {"src/types/index.ts": [], "src/types/dashboard.ts": []}
+}

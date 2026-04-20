@@ -1,0 +1,19 @@
+{
+  "fixedSectionOk": true,
+  "nodesRecovered": 31,
+  "edgesRestored": 36,
+  "crossBatchEdgesAdded": 0,
+  "typesRemapped": 0,
+  "complexityRemapped": 0,
+  "notes": [
+    "Fixed section was reasonable: 5 nodes had complexity 'low' mapped to 'simple', 2 had 'high' mapped to 'complex', 56 duplicate IDs removed. All systemic patterns consistent with LLM output conventions.",
+    "37 dropped edges were all from test files in src/__tests__/unit/ to source files that were not included in any batch analysis.",
+    "31 source files existed on disk and were recovered as stub nodes with placeholder summaries.",
+    "36 edges were restored (31 stub nodes, some referenced by multiple test files).",
+    "1 edge was permanently dropped: structured-output.test.ts -> structured-output.ts (target file does not exist on disk).",
+    "No cross-batch edges were added because no explicit IMPORT_MAP was provided in the dispatch prompt.",
+    "1 node has an unknown type 'pipeline' (GitHub Actions workflow file). This is a legitimate semantic type for CI/CD files and was left as-is.",
+    "All complexity values are now valid (simple/moderate/complex). Zero broken edge references remain.",
+    "Graph integrity: 1328 nodes, 1790 edges, 0 broken refs."
+  ]
+}

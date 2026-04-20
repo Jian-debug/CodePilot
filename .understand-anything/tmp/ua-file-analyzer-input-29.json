@@ -1,0 +1,97 @@
+{
+  "projectRoot": "D:/project/common/AI/CodePilot",
+  "batchFiles": [
+    {
+      "path": "src/components/ui/icon.tsx",
+      "sizeLines": 100,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ui/input-group.tsx",
+      "sizeLines": 170,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ui/input.tsx",
+      "sizeLines": 22,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ui/label.tsx",
+      "sizeLines": 24,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ui/prompt-dialog.tsx",
+      "sizeLines": 209,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ui/scroll-area.tsx",
+      "sizeLines": 58,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ui/select.tsx",
+      "sizeLines": 185,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ui/separator.tsx",
+      "sizeLines": 28,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ui/sheet.tsx",
+      "sizeLines": 143,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ui/spinner.tsx",
+      "sizeLines": 16,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ui/switch.tsx",
+      "sizeLines": 35,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ui/tabs.tsx",
+      "sizeLines": 91,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ui/textarea.tsx",
+      "sizeLines": 18,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ui/toast.tsx",
+      "sizeLines": 68,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ui/tooltip.tsx",
+      "sizeLines": 57,
+      "fileCategory": "code"
+    }
+  ],
+  "batchImportData": {
+    "src/components/ui/icon.tsx": [],
+    "src/components/ui/input-group.tsx": [],
+    "src/components/ui/input.tsx": [],
+    "src/components/ui/label.tsx": [],
+    "src/components/ui/prompt-dialog.tsx": [],
+    "src/components/ui/scroll-area.tsx": [],
+    "src/components/ui/select.tsx": [],
+    "src/components/ui/separator.tsx": [],
+    "src/components/ui/sheet.tsx": [],
+    "src/components/ui/spinner.tsx": [],
+    "src/components/ui/switch.tsx": [],
+    "src/components/ui/tabs.tsx": [],
+    "src/components/ui/textarea.tsx": [],
+    "src/components/ui/toast.tsx": [],
+    "src/components/ui/tooltip.tsx": []
+  }
+}

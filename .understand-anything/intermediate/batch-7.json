@@ -1,0 +1,622 @@
+{
+  "nodes": [
+    {
+      "id": "file:apps/site/src/app/layout.tsx",
+      "type": "file",
+      "name": "layout.tsx",
+      "filePath": "apps/site/src/app/layout.tsx",
+      "summary": "Root Next.js layout that sets global metadata (SEO, Open Graph, Twitter cards) for the CodePilot marketing site. Acts as a passthrough layout returning children directly, with language-specific layouts nested beneath.",
+      "tags": ["entry-point", "seo", "metadata"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:apps/site/src/app/page.tsx",
+      "type": "file",
+      "name": "page.tsx",
+      "filePath": "apps/site/src/app/[lang]/(marketing)/page.tsx",
+      "summary": "Marketing homepage route that assembles all section components (ScrollNav, HeroSection, FeaturesSection, IntegrationsSection, FAQSection, ReleasesSection, FinalCTA, SiteFooter) using locale-aware content from the marketing content module.",
+      "tags": ["entry-point", "page", "marketing"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:apps/site/src/app/providers.tsx",
+      "type": "file",
+      "name": "providers.tsx",
+      "filePath": "apps/site/src/app/[lang]/layout.tsx",
+      "summary": "Language-scoped layout that wraps children with Fumadocs RootProvider configured for i18n (English/Chinese), and applies Inter and Geist font variables to the HTML element.",
+      "tags": ["layout", "i18n", "provider"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:apps/site/src/app/docs/[...slug]/page.tsx",
+      "type": "file",
+      "name": "page.tsx",
+      "filePath": "apps/site/src/app/[lang]/docs/[[...slug]]/page.tsx",
+      "summary": "Dynamic documentation page route that loads MDX content via Fumadocs source loader, renders it with DocsPage layout components, and injects a custom DownloadButton MDX component. Generates static params and metadata for each doc slug.",
+      "tags": ["entry-point", "docs", "mdx"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:apps/site/src/components/layout/Header.tsx",
+      "type": "file",
+      "name": "Header.tsx",
+      "filePath": "apps/site/src/components/marketing/ScrollNav.tsx",
+      "summary": "Sticky scroll-aware navigation bar that appears on scroll with logo, docs link, language toggle, GitHub star count, and download button. Fetches GitHub stars at runtime via client-side effect.",
+      "tags": ["navigation", "component", "client"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:apps/site/src/components/home/Hero.tsx",
+      "type": "file",
+      "name": "Hero.tsx",
+      "filePath": "apps/site/src/components/marketing/HeroSection.tsx",
+      "summary": "Hero section with logo, animated typewriter tagline, gradient background, FlickeringGrid canvas animation, and embedded ChatDemo component. Links to GitHub releases for download CTA.",
+      "tags": ["component", "hero", "animation"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:apps/site/src/components/home/Features.tsx",
+      "type": "file",
+      "name": "Features.tsx",
+      "filePath": "apps/site/src/components/marketing/FeaturesSection.tsx",
+      "summary": "Features grid section rendering feature cards with CapabilityIcon, title, optional badge, and description from marketing content. Uses two-column responsive layout.",
+      "tags": ["component", "features", "grid"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:apps/site/src/components/home/Footer.tsx",
+      "type": "file",
+      "name": "Footer.tsx",
+      "filePath": "apps/site/src/components/marketing/SiteFooter.tsx",
+      "summary": "Site footer rendering copyright text and external links (GitHub, Discord, etc.) from marketing content with responsive flex layout.",
+      "tags": ["component", "footer", "links"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:apps/site/src/components/docs/DocLayout.tsx",
+      "type": "file",
+      "name": "DocLayout.tsx",
+      "filePath": "apps/site/src/app/[lang]/docs/layout.tsx",
+      "summary": "Documentation layout wrapper combining DocsTopNav header with Fumadocs DocsLayout, providing sidebar navigation from the source page tree and disabling collapsible sidebar for consistency.",
+      "tags": ["layout", "docs", "navigation"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:apps/site/src/components/docs/DocContent.tsx",
+      "type": "file",
+      "name": "DocContent.tsx",
+      "filePath": "apps/site/src/components/docs/DownloadButton.tsx",
+      "summary": "Download button MDX component that renders a styled link to the latest GitHub release, used as a custom component within documentation MDX pages.",
+      "tags": ["component", "docs", "download"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:apps/site/src/components/docs/Sidebar.tsx",
+      "type": "file",
+      "name": "Sidebar.tsx",
+      "filePath": "apps/site/src/components/docs/DocsTopNav.tsx",
+      "summary": "Documentation top navigation bar with logo, search trigger, GitHub link, and language switcher. Uses sticky header with backdrop blur and Select component for locale switching.",
+      "tags": ["component", "docs", "navigation"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:apps/site/src/components/docs/MDXComponents.tsx",
+      "type": "file",
+      "name": "MDXComponents.tsx",
+      "filePath": "apps/site/src/components/docs/NavTitle.tsx",
+      "summary": "NavTitle component displaying the CodePilot logo and brand name, used within the documentation header area.",
+      "tags": ["component", "docs", "branding"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:apps/site/src/components/docs/Search.tsx",
+      "type": "file",
+      "name": "Search.tsx",
+      "filePath": "apps/site/src/components/docs/LanguageSwitcher.tsx",
+      "summary": "Language switcher component using Select UI with Globe icon, allowing users to toggle between English and Chinese by manipulating the URL path via Next.js router.",
+      "tags": ["component", "i18n", "navigation"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:apps/site/src/components/ui/Button.tsx",
+      "type": "file",
+      "name": "Button.tsx",
+      "filePath": "apps/site/src/components/ui/button.tsx",
+      "summary": "Button component wrapping Base UI ButtonPrimitive with Tailwind CSS variants defined via class-variance-authority. Exports both the component and the variants for external use.",
+      "tags": ["component", "ui", "button"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:apps/site/src/components/ui/Card.tsx",
+      "type": "file",
+      "name": "Card.tsx",
+      "filePath": "apps/site/src/components/ui/input.tsx",
+      "summary": "Input component wrapping Base UI InputPrimitive with Tailwind CSS styling for form fields, including focus states, disabled states, and file input support.",
+      "tags": ["component", "ui", "form"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:apps/site/src/components/home/ProviderGrid.tsx",
+      "type": "file",
+      "name": "ProviderGrid.tsx",
+      "filePath": "apps/site/src/components/marketing/IntegrationsSection.tsx",
+      "summary": "Integrations section with GitHub Star count (fetched at build time), capability highlight cards with icons, and two-tone section title. Uses CapabilityIcon map for icon rendering.",
+      "tags": ["component", "integrations", "github"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:apps/site/src/components/home/QuickStart.tsx",
+      "type": "file",
+      "name": "QuickStart.tsx",
+      "filePath": "apps/site/src/components/marketing/QuickstartSection.tsx",
+      "summary": "Quickstart section rendering numbered steps in a responsive grid layout with step number badges, titles, and descriptions from marketing content.",
+      "tags": ["component", "quickstart", "steps"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:apps/site/src/components/layout/Footer.tsx",
+      "type": "file",
+      "name": "Footer.tsx",
+      "filePath": "apps/site/src/components/marketing/FinalCTA.tsx",
+      "summary": "Final call-to-action section with two-tone heading, RainbowButton download link to GitHub releases, and secondary link to documentation. Used at the bottom of the marketing homepage.",
+      "tags": ["component", "cta", "marketing"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:apps/site/src/components/providers/ProviderIcon.tsx",
+      "type": "file",
+      "name": "ProviderIcon.tsx",
+      "filePath": "apps/site/src/components/marketing/IconMap.tsx",
+      "summary": "Icon map component that maps string names to Lucide React icons, providing a unified CapabilityIcon interface for feature cards and marketing sections.",
+      "tags": ["component", "icon", "mapping"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:apps/site/src/lib/mdx.ts",
+      "type": "file",
+      "name": "mdx.ts",
+      "filePath": "apps/site/src/lib/source.ts",
+      "summary": "Fumadocs source configuration that loads MDX documents from content/docs directory, bridges version mismatch between fumadocs-mdx v11 and fumadocs-core v15 by unwrapping files function, and exports a configured source loader with i18n support.",
+      "tags": ["mdx", "content", "configuration"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:apps/site/src/lib/content.ts",
+      "type": "file",
+      "name": "content.ts",
+      "filePath": "apps/site/content/marketing/index.ts",
+      "summary": "Marketing content registry that imports English and Chinese content modules and exports a locale-aware getter function with fallback to English.",
+      "tags": ["content", "i18n", "registry"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:apps/site/src/lib/navigation.ts",
+      "type": "file",
+      "name": "navigation.ts",
+      "filePath": "apps/site/src/lib/layout.shared.tsx",
+      "summary": "Shared layout options for Fumadocs layouts, providing nav configuration, link definitions (Docs, Download), and GitHub URL. Exports both base options (for docs) and home options (for marketing page with nav disabled).",
+      "tags": ["navigation", "layout", "configuration"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:apps/site/src/middleware.ts",
+      "type": "file",
+      "name": "middleware.ts",
+      "filePath": "apps/site/src/middleware.ts",
+      "summary": "Next.js i18n middleware that routes requests based on locale using Fumadocs createI18nMiddleware, with matcher excluding API routes, static assets, and file extensions from locale handling.",
+      "tags": ["middleware", "i18n", "routing"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:apps/site/src/components/home/Hero.tsx:HeroSection",
+      "type": "function",
+      "name": "HeroSection",
+      "filePath": "apps/site/src/components/marketing/HeroSection.tsx",
+      "lineRange": [8, 74],
+      "summary": "Renders the hero section with logo, typewriter tagline, FlickeringGrid background animation, and ChatDemo preview. Accepts locale-aware content and locale string.",
+      "tags": ["component", "hero", "animation"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:apps/site/src/components/docs/Search.tsx:LanguageSwitcher",
+      "type": "function",
+      "name": "LanguageSwitcher",
+      "filePath": "apps/site/src/components/docs/LanguageSwitcher.tsx",
+      "lineRange": [13, 44],
+      "summary": "Client-side language switcher using Select UI. Manipulates Next.js router to change locale prefix in URL, handling English-to-Chinese and Chinese-to-English path transformations.",
+      "tags": ["component", "i18n", "client"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:apps/site/src/components/ui/Button.tsx:Button",
+      "type": "function",
+      "name": "Button",
+      "filePath": "apps/site/src/components/ui/button.tsx",
+      "lineRange": [9, 22],
+      "summary": "Renders a styled button using Base UI ButtonPrimitive with class-variance-authority variants for size and style. Supports all standard button props.",
+      "tags": ["component", "ui", "button"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:apps/site/src/components/providers/ProviderIcon.tsx:CapabilityIcon",
+      "type": "function",
+      "name": "CapabilityIcon",
+      "filePath": "apps/site/src/components/marketing/IconMap.tsx",
+      "lineRange": [36, 46],
+      "summary": "Renders a Lucide icon by name lookup from a predefined iconMap dictionary. Returns null for unknown icon names.",
+      "tags": ["component", "icon", "mapping"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:apps/site/src/components/layout/Header.tsx:ScrollNav",
+      "type": "function",
+      "name": "ScrollNav",
+      "filePath": "apps/site/src/components/marketing/ScrollNav.tsx",
+      "lineRange": [8, 100],
+      "summary": "Client-side sticky navigation that slides in from top on scroll. Displays logo, docs link, language toggle, GitHub star count, and download button. Fetches GitHub stars via client-side effect.",
+      "tags": ["component", "navigation", "client"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:apps/site/src/components/home/ProviderGrid.tsx:IntegrationsSection",
+      "type": "function",
+      "name": "IntegrationsSection",
+      "filePath": "apps/site/src/components/marketing/IntegrationsSection.tsx",
+      "lineRange": [20, 74],
+      "summary": "Server component that fetches GitHub star count and renders integration highlights with CapabilityIcon cards. Includes a GitHub Star button with live count.",
+      "tags": ["component", "integrations", "server"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:apps/site/src/components/docs/Sidebar.tsx:DocsTopNav",
+      "type": "function",
+      "name": "DocsTopNav",
+      "filePath": "apps/site/src/components/docs/DocsTopNav.tsx",
+      "lineRange": [17, 85],
+      "summary": "Documentation top navigation bar with logo, search trigger (opens Fumadocs search modal), GitHub link, and language switcher. Uses sticky header with backdrop blur.",
+      "tags": ["component", "docs", "navigation"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:apps/site/src/app/docs/[...slug]/page.tsx:Page",
+      "type": "function",
+      "name": "Page",
+      "filePath": "apps/site/src/app/[lang]/docs/[[...slug]]/page.tsx",
+      "lineRange": [21, 43],
+      "summary": "Server component that loads MDX page content via Fumadocs source loader, renders it within DocsPage with table of contents, and injects DownloadButton as a custom MDX component.",
+      "tags": ["page", "docs", "mdx"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:apps/site/src/lib/navigation.ts:baseOptions",
+      "type": "function",
+      "name": "baseOptions",
+      "filePath": "apps/site/src/lib/layout.shared.tsx",
+      "lineRange": [7, 27],
+      "summary": "Returns shared Fumadocs BaseLayoutProps including nav URL, Docs and Download links, and GitHub URL, with locale-aware path prefixes.",
+      "tags": ["configuration", "layout", "utility"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:apps/site/src/lib/navigation.ts:homeOptions",
+      "type": "function",
+      "name": "homeOptions",
+      "filePath": "apps/site/src/lib/layout.shared.tsx",
+      "lineRange": [32, 40],
+      "summary": "Returns homepage-specific layout options that disable nav and search toggle, since the marketing page uses custom ScrollNav instead.",
+      "tags": ["configuration", "layout", "utility"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:apps/site/src/lib/content.ts:getMarketingContent",
+      "type": "function",
+      "name": "getMarketingContent",
+      "filePath": "apps/site/content/marketing/index.ts",
+      "lineRange": [7, 9],
+      "summary": "Returns locale-specific marketing content (English or Chinese) with fallback to English if the requested locale is not found.",
+      "tags": ["content", "i18n", "utility"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:apps/site/src/components/docs/DocLayout.tsx:DocsLayoutWrapper",
+      "type": "function",
+      "name": "DocsLayoutWrapper",
+      "filePath": "apps/site/src/app/[lang]/docs/layout.tsx",
+      "lineRange": [7, 31],
+      "summary": "Server component wrapping Fumadocs DocsLayout with DocsTopNav header, providing page tree from source loader and disabling collapsible sidebar.",
+      "tags": ["layout", "docs", "server"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:apps/site/src/app/page.tsx:HomePage",
+      "type": "function",
+      "name": "HomePage",
+      "filePath": "apps/site/src/app/[lang]/(marketing)/page.tsx",
+      "lineRange": [37, 57],
+      "summary": "Server component that assembles the full marketing homepage by composing ScrollNav, HeroSection, FeaturesSection, IntegrationsSection, FAQSection, ReleasesSection, FinalCTA, and SiteFooter with locale-aware content.",
+      "tags": ["page", "marketing", "server"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:apps/site/src/app/providers.tsx:LangLayout",
+      "type": "function",
+      "name": "LangLayout",
+      "filePath": "apps/site/src/app/[lang]/layout.tsx",
+      "lineRange": [6, 30],
+      "summary": "Server component that sets up the HTML lang attribute, font variables, and wraps children with Fumadocs RootProvider configured for bilingual i18n support.",
+      "tags": ["layout", "i18n", "server"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:apps/site/src/app/layout.tsx:RootLayout",
+      "type": "function",
+      "name": "RootLayout",
+      "filePath": "apps/site/src/app/layout.tsx",
+      "lineRange": [64, 66],
+      "summary": "Root layout that returns children unchanged while providing global metadata export for SEO, Open Graph, and Twitter card tags.",
+      "tags": ["layout", "seo", "passthrough"],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:apps/site/src/app/layout.tsx",
+      "target": "function:apps/site/src/app/layout.tsx:RootLayout",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:apps/site/src/app/page.tsx",
+      "target": "function:apps/site/src/app/page.tsx:HomePage",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:apps/site/src/app/providers.tsx",
+      "target": "function:apps/site/src/app/providers.tsx:LangLayout",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:apps/site/src/app/docs/[...slug]/page.tsx",
+      "target": "function:apps/site/src/app/docs/[...slug]/page.tsx:Page",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:apps/site/src/components/layout/Header.tsx",
+      "target": "function:apps/site/src/components/layout/Header.tsx:ScrollNav",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:apps/site/src/components/home/Hero.tsx",
+      "target": "function:apps/site/src/components/home/Hero.tsx:HeroSection",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:apps/site/src/components/docs/Sidebar.tsx",
+      "target": "function:apps/site/src/components/docs/Sidebar.tsx:DocsTopNav",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:apps/site/src/components/docs/Search.tsx",
+      "target": "function:apps/site/src/components/docs/Search.tsx:LanguageSwitcher",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:apps/site/src/components/ui/Button.tsx",
+      "target": "function:apps/site/src/components/ui/Button.tsx:Button",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:apps/site/src/components/providers/ProviderIcon.tsx",
+      "target": "function:apps/site/src/components/providers/ProviderIcon.tsx:CapabilityIcon",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:apps/site/src/components/home/ProviderGrid.tsx",
+      "target": "function:apps/site/src/components/home/ProviderGrid.tsx:IntegrationsSection",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:apps/site/src/components/docs/DocLayout.tsx",
+      "target": "function:apps/site/src/components/docs/DocLayout.tsx:DocsLayoutWrapper",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:apps/site/src/lib/navigation.ts",
+      "target": "function:apps/site/src/lib/navigation.ts:baseOptions",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:apps/site/src/lib/navigation.ts",
+      "target": "function:apps/site/src/lib/navigation.ts:homeOptions",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:apps/site/src/lib/content.ts",
+      "target": "function:apps/site/src/lib/content.ts:getMarketingContent",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:apps/site/src/components/home/Features.tsx",
+      "target": "file:apps/site/src/components/providers/ProviderIcon.tsx",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:apps/site/src/components/home/ProviderGrid.tsx",
+      "target": "file:apps/site/src/components/providers/ProviderIcon.tsx",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:apps/site/src/components/home/Hero.tsx",
+      "target": "file:apps/site/src/components/providers/ProviderIcon.tsx",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:apps/site/src/components/docs/DocLayout.tsx",
+      "target": "file:apps/site/src/lib/mdx.ts",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:apps/site/src/app/page.tsx",
+      "target": "file:apps/site/src/lib/content.ts",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:apps/site/src/app/page.tsx",
+      "target": "file:apps/site/src/components/layout/Header.tsx",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:apps/site/src/app/page.tsx",
+      "target": "file:apps/site/src/components/home/Hero.tsx",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:apps/site/src/app/page.tsx",
+      "target": "file:apps/site/src/components/home/Features.tsx",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:apps/site/src/app/page.tsx",
+      "target": "file:apps/site/src/components/home/ProviderGrid.tsx",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:apps/site/src/app/page.tsx",
+      "target": "file:apps/site/src/components/home/Footer.tsx",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:apps/site/src/app/page.tsx",
+      "target": "file:apps/site/src/components/layout/Footer.tsx",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:apps/site/src/app/page.tsx",
+      "target": "file:apps/site/src/components/home/QuickStart.tsx",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:apps/site/src/app/providers.tsx",
+      "target": "file:apps/site/src/lib/navigation.ts",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:apps/site/src/app/docs/[...slug]/page.tsx",
+      "target": "file:apps/site/src/components/docs/DocContent.tsx",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:apps/site/src/app/docs/[...slug]/page.tsx",
+      "target": "file:apps/site/src/components/docs/MDXComponents.tsx",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:apps/site/src/components/docs/DocLayout.tsx",
+      "target": "file:apps/site/src/components/docs/Sidebar.tsx",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:apps/site/src/components/docs/Sidebar.tsx",
+      "target": "file:apps/site/src/components/docs/Search.tsx",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:apps/site/src/components/docs/Sidebar.tsx",
+      "target": "file:apps/site/src/lib/navigation.ts",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:apps/site/src/components/layout/Footer.tsx",
+      "target": "file:apps/site/src/components/ui/Button.tsx",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:apps/site/src/components/layout/Header.tsx",
+      "target": "file:apps/site/src/components/ui/Card.tsx",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:apps/site/src/components/docs/Sidebar.tsx",
+      "target": "file:apps/site/src/components/ui/Card.tsx",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:apps/site/src/lib/mdx.ts",
+      "target": "file:apps/site/src/lib/content.ts",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    }
+  ]
+}

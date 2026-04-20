@@ -1,0 +1,178 @@
+{
+  "nodes": [
+    {
+      "id": "document:README.md",
+      "type": "document",
+      "name": "README.md",
+      "filePath": "README.md",
+      "summary": "English-language project overview and getting-started guide covering download options, 17+ AI provider support, core capabilities (MCP, Bridge, Media Studio, task scheduling), installation notes for macOS/Windows/Linux, and contribution guidelines.",
+      "tags": ["documentation", "entry-point", "overview", "multilingual"],
+      "complexity": "complex"
+    },
+    {
+      "id": "document:README_CN.md",
+      "type": "document",
+      "name": "README_CN.md",
+      "filePath": "README_CN.md",
+      "summary": "Chinese-language translation of the main README, providing the same project overview, feature descriptions, quick-start guide, and installation instructions for Chinese-speaking users.",
+      "tags": ["documentation", "entry-point", "overview", "i18n"],
+      "complexity": "complex"
+    },
+    {
+      "id": "document:README_JA.md",
+      "type": "document",
+      "name": "README_JA.md",
+      "filePath": "README_JA.md",
+      "summary": "Japanese-language translation of the main README, mirroring the English version's structure with localized descriptions of features, downloads, and setup instructions.",
+      "tags": ["documentation", "entry-point", "overview", "i18n"],
+      "complexity": "complex"
+    },
+    {
+      "id": "document:CHANGELOG.md",
+      "type": "document",
+      "name": "CHANGELOG.md",
+      "filePath": "CHANGELOG.md",
+      "summary": "Version changelog documenting bug fixes, new features, and improvements for release 0.38.4, including Claude Code CLI provider detection, session crash fixes on provider/model switching, and global default model setting.",
+      "tags": ["documentation", "changelog", "version-history"],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:CLAUDE.md",
+      "type": "document",
+      "name": "CLAUDE.md",
+      "filePath": "CLAUDE.md",
+      "summary": "AI agent development rules and workflow configuration for Claude Code, defining testing requirements, UI verification via Chrome DevTools MCP, worktree isolation rules, commit message conventions, release process, and mandatory dual-document output (handover + insights) for new features.",
+      "tags": ["documentation", "agent-config", "development-rules", "workflow"],
+      "complexity": "complex"
+    },
+    {
+      "id": "document:AGENTS.md",
+      "type": "document",
+      "name": "AGENTS.md",
+      "filePath": "AGENTS.md",
+      "summary": "Legacy agent development rules file (predecessor to CLAUDE.md), originally configured for Codex CLI integration with similar testing, worktree, and release guidelines. Now superseded by CLAUDE.md with updated Claude Code SDK references.",
+      "tags": ["documentation", "agent-config", "legacy", "development-rules"],
+      "complexity": "complex"
+    },
+    {
+      "id": "document:ARCHITECTURE.md",
+      "type": "document",
+      "name": "ARCHITECTURE.md",
+      "filePath": "ARCHITECTURE.md",
+      "summary": "Comprehensive architecture documentation covering the Electron 40 + Next.js 16 + SQLite tech stack, complete directory structure (src/app, components, lib, hooks, types, i18n, electron), data flow diagrams for chat and Bridge subsystems, 12-table SQLite schema, Bridge adapter layer details, Channel Plugin architecture for Feishu, Remote Core layer contracts, and a feature addition touchpoint reference.",
+      "tags": ["documentation", "architecture", "tech-stack", "data-flow", "schema"],
+      "complexity": "complex"
+    },
+    {
+      "id": "document:RELEASE_NOTES.md",
+      "type": "document",
+      "name": "RELEASE_NOTES.md",
+      "filePath": "RELEASE_NOTES.md",
+      "summary": "Release notes for CodePilot v0.51.1 documenting critical fixes for context compression behavior with Claude Code engine, including model tool-call corruption after compaction, repeated auto-compaction loops, system prompt persistence bugs, reactive compression state sync, and rowid-based coverage boundary improvements.",
+      "tags": ["documentation", "release-notes", "compression-fix", "version-0.51.1"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:docs/CLAUDE.md",
+      "type": "document",
+      "name": "CLAUDE.md",
+      "filePath": "docs/CLAUDE.md",
+      "summary": "Directory README for the docs/ folder, describing the organizational structure of handover/, research/, and exec-plans/ subdirectories with navigation rules for documentation retrieval and maintenance.",
+      "tags": ["documentation", "directory-index", "navigation"],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {
+      "source": "document:README.md",
+      "target": "document:ARCHITECTURE.md",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:README.md",
+      "target": "document:docs/CLAUDE.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:README_CN.md",
+      "target": "document:README.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:README_CN.md",
+      "target": "document:ARCHITECTURE.md",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:README_JA.md",
+      "target": "document:README.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:README_JA.md",
+      "target": "document:ARCHITECTURE.md",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:CLAUDE.md",
+      "target": "document:ARCHITECTURE.md",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:CLAUDE.md",
+      "target": "document:AGENTS.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:AGENTS.md",
+      "target": "document:ARCHITECTURE.md",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:AGENTS.md",
+      "target": "document:CLAUDE.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:ARCHITECTURE.md",
+      "target": "document:docs/CLAUDE.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:RELEASE_NOTES.md",
+      "target": "document:CLAUDE.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:CHANGELOG.md",
+      "target": "document:RELEASE_NOTES.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    }
+  ]
+}

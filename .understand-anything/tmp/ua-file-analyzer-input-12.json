@@ -1,0 +1,157 @@
+{
+  "projectRoot": "D:/project/common/AI/CodePilot",
+  "batchFiles": [
+    {
+      "path": "src/app/api/tasks/route.ts",
+      "sizeLines": 69,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/tasks/schedule/route.ts",
+      "sizeLines": 51,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/uploads/route.ts",
+      "sizeLines": 65,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/usage/stats/route.ts",
+      "sizeLines": 19,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/workspace/checkin/route.ts",
+      "sizeLines": 45,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/workspace/docs/route.ts",
+      "sizeLines": 25,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/workspace/evolve-buddy/route.ts",
+      "sizeLines": 84,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/workspace/hatch-buddy/route.ts",
+      "sizeLines": 119,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/workspace/hook-triggered/route.ts",
+      "sizeLines": 38,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/workspace/index/route.ts",
+      "sizeLines": 36,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/workspace/inspect/route.ts",
+      "sizeLines": 144,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/workspace/latest-session/route.ts",
+      "sizeLines": 11,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/workspace/onboarding/route.ts",
+      "sizeLines": 65,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/workspace/organize/route.ts",
+      "sizeLines": 98,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/workspace/quick-actions/route.ts",
+      "sizeLines": 113,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/workspace/search/route.ts",
+      "sizeLines": 27,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/workspace/session/route.ts",
+      "sizeLines": 45,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/workspace/summary/route.ts",
+      "sizeLines": 125,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/workspace/wizard/route.ts",
+      "sizeLines": 143,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/bridge/page.tsx",
+      "sizeLines": 19,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/chat/[id]/page.tsx",
+      "sizeLines": 192,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/chat/page.tsx",
+      "sizeLines": 914,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/cli-tools/page.tsx",
+      "sizeLines": 11,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/design-system/layout.tsx",
+      "sizeLines": 17,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/design-system/page.tsx",
+      "sizeLines": 173,
+      "fileCategory": "code"
+    }
+  ],
+  "batchImportData": {
+    "src/app/api/tasks/route.ts": [],
+    "src/app/api/tasks/schedule/route.ts": [],
+    "src/app/api/uploads/route.ts": [],
+    "src/app/api/usage/stats/route.ts": [],
+    "src/app/api/workspace/checkin/route.ts": [],
+    "src/app/api/workspace/docs/route.ts": [],
+    "src/app/api/workspace/evolve-buddy/route.ts": [],
+    "src/app/api/workspace/hatch-buddy/route.ts": [],
+    "src/app/api/workspace/hook-triggered/route.ts": [],
+    "src/app/api/workspace/index/route.ts": [],
+    "src/app/api/workspace/inspect/route.ts": [],
+    "src/app/api/workspace/latest-session/route.ts": [],
+    "src/app/api/workspace/onboarding/route.ts": [],
+    "src/app/api/workspace/organize/route.ts": [],
+    "src/app/api/workspace/quick-actions/route.ts": [],
+    "src/app/api/workspace/search/route.ts": [],
+    "src/app/api/workspace/session/route.ts": [],
+    "src/app/api/workspace/summary/route.ts": [],
+    "src/app/api/workspace/wizard/route.ts": [],
+    "src/app/bridge/page.tsx": [],
+    "src/app/chat/[id]/page.tsx": [],
+    "src/app/chat/page.tsx": [],
+    "src/app/cli-tools/page.tsx": [],
+    "src/app/design-system/layout.tsx": [],
+    "src/app/design-system/page.tsx": []
+  }
+}

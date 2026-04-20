@@ -1,0 +1,531 @@
+{
+  "nodes": [
+    {
+      "id": "file:electron/main.ts",
+      "type": "file",
+      "name": "main.ts",
+      "filePath": "electron/main.ts",
+      "summary": "Electron main process entry point that bootstraps the application, manages the embedded Next.js server lifecycle (Sentry init, port allocation, subprocess fork), registers IPC handlers for installation wizard, terminal, notifications, widget export, and proxy resolution, and provides background bridge mode with system tray and notification polling.",
+      "tags": ["entry-point", "ipc-handler", "lifecycle", "service", "event-handler"],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:electron/preload.ts",
+      "type": "file",
+      "name": "preload.ts",
+      "filePath": "electron/preload.ts",
+      "summary": "Preload script that exposes a secure contextBridge API for the renderer process, including filesystem path resolution, Electron versions, and IPC channels for install, dialog, terminal, notification, proxy, widget export, shell, and bridge operations.",
+      "tags": ["preload", "security", "ipc-bridge", "context-isolation"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:electron/updater.ts",
+      "type": "file",
+      "name": "updater.ts",
+      "filePath": "electron/updater.ts",
+      "summary": "Stub module for the native electron-updater auto-updater, currently disabled; users update by downloading from GitHub Releases instead, with the frontend handling version checks.",
+      "tags": ["updater", "disabled", "stub"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:electron/terminal-manager.ts",
+      "type": "file",
+      "name": "terminal-manager.ts",
+      "filePath": "electron/terminal-manager.ts",
+      "summary": "Manages terminal instances using child_process.spawn with stdio pipes, providing create, write, resize, kill lifecycle methods and cross-platform shell detection including Git Bash auto-discovery on Windows.",
+      "tags": ["terminal", "process-manager", "cross-platform", "service"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:electron/main.ts:sanitizedProcessEnv",
+      "type": "function",
+      "name": "sanitizedProcessEnv",
+      "filePath": "electron/main.ts",
+      "lineRange": [38, 46],
+      "summary": "Returns a copy of process.env with __NEXT_PRIVATE_* variables stripped to prevent them from leaking into child processes and breaking other Next.js projects.",
+      "tags": ["utility", "environment", "nextjs"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:electron/main.ts:killServer",
+      "type": "function",
+      "name": "killServer",
+      "filePath": "electron/main.ts",
+      "lineRange": [93, 130],
+      "summary": "Gracefully shuts down the embedded server subprocess using SIGTERM (or taskkill on Windows) with a 3-second timeout before falling back to SIGKILL.",
+      "tags": ["lifecycle", "process", "cleanup"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:electron/main.ts:isBridgeActive",
+      "type": "function",
+      "name": "isBridgeActive",
+      "filePath": "electron/main.ts",
+      "lineRange": [135, 159],
+      "summary": "Checks if the remote bridge is currently active by querying the local API health endpoint.",
+      "tags": ["bridge", "health-check", "network"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:electron/main.ts:stopBridge",
+      "type": "function",
+      "name": "stopBridge",
+      "filePath": "electron/main.ts",
+      "lineRange": [164, 189],
+      "summary": "Stops the remote bridge by sending a POST request with action:stop to the local API endpoint.",
+      "tags": ["bridge", "lifecycle", "network"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:electron/main.ts:createTray",
+      "type": "function",
+      "name": "createTray",
+      "filePath": "electron/main.ts",
+      "lineRange": [195, 241],
+      "summary": "Creates a system tray icon with context menu for background bridge mode, supporting double-click to reopen the main window.",
+      "tags": ["tray", "ui", "bridge"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:electron/main.ts:startBgNotifyPoll",
+      "type": "function",
+      "name": "startBgNotifyPoll",
+      "filePath": "electron/main.ts",
+      "lineRange": [269, 314],
+      "summary": "Polls the server-side notification queue every 5 seconds in tray-only mode (no renderer window) and displays native desktop notifications.",
+      "tags": ["notification", "polling", "background"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:electron/main.ts:checkNativeModuleABI",
+      "type": "function",
+      "name": "checkNativeModuleABI",
+      "filePath": "electron/main.ts",
+      "lineRange": [329, 377],
+      "summary": "Verifies that the bundled better_sqlite3.node native module ABI matches the Electron runtime's NODE_MODULE_VERSION, showing a clear error dialog on mismatch instead of a cryptic crash.",
+      "tags": ["diagnostics", "native-module", "abi-check"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:electron/main.ts:loadUserShellEnv",
+      "type": "function",
+      "name": "loadUserShellEnv",
+      "filePath": "electron/main.ts",
+      "lineRange": [385, 412],
+      "summary": "Reads the user's full shell environment by running a login shell, capturing API keys and PATH entries that GUI-launched Electron processes normally lack on macOS/Linux.",
+      "tags": ["environment", "cross-platform", "shell"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:electron/main.ts:resolveSystemProxy",
+      "type": "function",
+      "name": "resolveSystemProxy",
+      "filePath": "electron/main.ts",
+      "lineRange": [420, 452],
+      "summary": "Detects system proxy settings via Chromium's proxy resolution service, converting proxy entries to HTTP_PROXY/HTTPS_PROXY environment variables for child processes.",
+      "tags": ["proxy", "network", "environment"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:electron/main.ts:findGitBashSync",
+      "type": "function",
+      "name": "findGitBashSync",
+      "filePath": "electron/main.ts",
+      "lineRange": [458, 479],
+      "summary": "Synchronously checks if Git Bash (bash.exe) is available on Windows by checking environment variables, common paths, and deriving from 'where git'.",
+      "tags": ["windows", "git", "shell-detection"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:electron/main.ts:getExpandedShellPath",
+      "type": "function",
+      "name": "getExpandedShellPath",
+      "filePath": "electron/main.ts",
+      "lineRange": [485, 508],
+      "summary": "Builds an expanded PATH that includes common locations for node, npm globals, claude CLI, nvm, homebrew, and other tools, shared by the server launcher and install orchestrator.",
+      "tags": ["environment", "path", "cross-platform"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:electron/main.ts:isPortFree",
+      "type": "function",
+      "name": "isPortFree",
+      "filePath": "electron/main.ts",
+      "lineRange": [514, 523],
+      "summary": "Attempts to bind a specific port on 127.0.0.1 to check availability, returning true if the port is free and false if occupied.",
+      "tags": ["network", "port", "utility"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:electron/main.ts:getDynamicPort",
+      "type": "function",
+      "name": "getDynamicPort",
+      "filePath": "electron/main.ts",
+      "lineRange": [542, 557],
+      "summary": "Allocates an OS-assigned dynamic port as a last-resort fallback when all stable ports are occupied.",
+      "tags": ["network", "port", "fallback"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:electron/main.ts:startServerOnStablePort",
+      "type": "function",
+      "name": "startServerOnStablePort",
+      "filePath": "electron/main.ts",
+      "lineRange": [572, 617],
+      "summary": "Starts the embedded Next.js server on a stable port (47823) to preserve localStorage origin across restarts, with TOCTOU-safe port binding and fallback to OS-assigned dynamic port.",
+      "tags": ["server", "port-management", "nextjs", "lifecycle"],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:electron/main.ts:waitForServer",
+      "type": "function",
+      "name": "waitForServer",
+      "filePath": "electron/main.ts",
+      "lineRange": [619, 660],
+      "summary": "Polls the server health endpoint (GET /api/health) until a 200 response is received or timeout expires, with fast-fail on subprocess exit.",
+      "tags": ["health-check", "polling", "lifecycle"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:electron/main.ts:startServer",
+      "type": "function",
+      "name": "startServer",
+      "filePath": "electron/main.ts",
+      "lineRange": [662, 720],
+      "summary": "Forks the embedded Next.js standalone server as an Electron utilityProcess with sanitized environment variables, proxy injection, and stdout/stderr capture.",
+      "tags": ["server", "subprocess", "nextjs", "lifecycle"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:electron/main.ts:getIconPath",
+      "type": "function",
+      "name": "getIconPath",
+      "filePath": "electron/main.ts",
+      "lineRange": [722, 733],
+      "summary": "Returns the platform-appropriate app icon path (PNG for dev/Linux, ICO for Windows, ICNS for macOS).",
+      "tags": ["platform", "ui", "resource"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:electron/main.ts:createWindow",
+      "type": "function",
+      "name": "createWindow",
+      "filePath": "electron/main.ts",
+      "lineRange": [768, 822],
+      "summary": "Creates the main BrowserWindow with platform-specific title bar styles (hiddenInset on macOS, custom overlay on Windows), context isolation, and external link handling.",
+      "tags": ["window", "ui", "cross-platform"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:electron/updater.ts:initAutoUpdater",
+      "type": "function",
+      "name": "initAutoUpdater",
+      "filePath": "electron/updater.ts",
+      "lineRange": [12, 14],
+      "summary": "No-op stub for native auto-updater initialization; logs that users should download updates from GitHub Releases.",
+      "tags": ["updater", "disabled", "stub"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:electron/updater.ts:setUpdaterWindow",
+      "type": "function",
+      "name": "setUpdaterWindow",
+      "filePath": "electron/updater.ts",
+      "lineRange": [17, 19],
+      "summary": "No-op stub for the updater window setter, disabled alongside the native auto-updater.",
+      "tags": ["updater", "disabled", "stub"],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:electron/terminal-manager.ts:TerminalManager",
+      "type": "class",
+      "name": "TerminalManager",
+      "filePath": "electron/terminal-manager.ts",
+      "lineRange": [25, 168],
+      "summary": "Manages multiple terminal instances via child_process.spawn with stdio pipes, providing lifecycle methods (create, write, resize, kill) and cross-platform shell detection with Git Bash auto-discovery on Windows.",
+      "tags": ["terminal", "process-manager", "cross-platform", "service"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:electron/terminal-manager.ts:create",
+      "type": "function",
+      "name": "create",
+      "filePath": "electron/terminal-manager.ts",
+      "lineRange": [38, 83],
+      "summary": "Spawns a new shell process (Git Bash on Windows, login shell on macOS/Linux) with TERM, COLORTERM, COLUMNS, and LINES environment variables, piping stdout/stderr to the onData handler.",
+      "tags": ["terminal", "spawn", "lifecycle"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:electron/terminal-manager.ts:findGitBash",
+      "type": "function",
+      "name": "findGitBash",
+      "filePath": "electron/terminal-manager.ts",
+      "lineRange": [129, 167],
+      "summary": "Discovers Git Bash on Windows by checking CLAUDE_CODE_GIT_BASH_PATH env var, common installation paths, and deriving from 'where git' output.",
+      "tags": ["windows", "git", "shell-detection"],
+      "complexity": "moderate"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:electron/main.ts",
+      "target": "function:electron/main.ts:sanitizedProcessEnv",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:electron/main.ts",
+      "target": "function:electron/main.ts:killServer",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:electron/main.ts",
+      "target": "function:electron/main.ts:isBridgeActive",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:electron/main.ts",
+      "target": "function:electron/main.ts:stopBridge",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:electron/main.ts",
+      "target": "function:electron/main.ts:createTray",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:electron/main.ts",
+      "target": "function:electron/main.ts:startBgNotifyPoll",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:electron/main.ts",
+      "target": "function:electron/main.ts:checkNativeModuleABI",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:electron/main.ts",
+      "target": "function:electron/main.ts:loadUserShellEnv",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:electron/main.ts",
+      "target": "function:electron/main.ts:resolveSystemProxy",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:electron/main.ts",
+      "target": "function:electron/main.ts:findGitBashSync",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:electron/main.ts",
+      "target": "function:electron/main.ts:getExpandedShellPath",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:electron/main.ts",
+      "target": "function:electron/main.ts:isPortFree",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:electron/main.ts",
+      "target": "function:electron/main.ts:getDynamicPort",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:electron/main.ts",
+      "target": "function:electron/main.ts:startServerOnStablePort",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:electron/main.ts",
+      "target": "function:electron/main.ts:waitForServer",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:electron/main.ts",
+      "target": "function:electron/main.ts:startServer",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:electron/main.ts",
+      "target": "function:electron/main.ts:getIconPath",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:electron/main.ts",
+      "target": "function:electron/main.ts:createWindow",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:electron/updater.ts",
+      "target": "function:electron/updater.ts:initAutoUpdater",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:electron/updater.ts",
+      "target": "function:electron/updater.ts:setUpdaterWindow",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:electron/terminal-manager.ts",
+      "target": "class:electron/terminal-manager.ts:TerminalManager",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "class:electron/terminal-manager.ts:TerminalManager",
+      "target": "function:electron/terminal-manager.ts:create",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "class:electron/terminal-manager.ts:TerminalManager",
+      "target": "function:electron/terminal-manager.ts:findGitBash",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:electron/main.ts",
+      "target": "file:electron/preload.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:electron/main.ts",
+      "target": "file:electron/updater.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:electron/main.ts",
+      "target": "file:electron/terminal-manager.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:electron/terminal-manager.ts",
+      "target": "class:electron/terminal-manager.ts:TerminalManager",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:electron/updater.ts",
+      "target": "function:electron/updater.ts:initAutoUpdater",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:electron/updater.ts",
+      "target": "function:electron/updater.ts:setUpdaterWindow",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:electron/main.ts",
+      "target": "file:electron/terminal-manager.ts",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "function:electron/main.ts:startServer",
+      "target": "function:electron/main.ts:sanitizedProcessEnv",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:electron/main.ts:startServerOnStablePort",
+      "target": "function:electron/main.ts:startServer",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:electron/main.ts:startServerOnStablePort",
+      "target": "function:electron/main.ts:waitForServer",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:electron/main.ts:startServerOnStablePort",
+      "target": "function:electron/main.ts:isPortFree",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:electron/main.ts:createTray",
+      "target": "function:electron/main.ts:stopBridge",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:electron/main.ts:createTray",
+      "target": "function:electron/main.ts:killServer",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:electron/main.ts:createTray",
+      "target": "function:electron/main.ts:createWindow",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    }
+  ]
+}

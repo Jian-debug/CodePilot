@@ -1,0 +1,7 @@
+{
+  "projectRoot": "D:\project\common\AI\CodePilot",
+  "batchFiles": [
+    { "path": "src/instrumentation.ts", "fileCategory": "code" }
+  ],
+  "batchImportData": {}
+}

@@ -1,0 +1,231 @@
+{
+  "nodes": [
+    {
+      "id": "layer:project-config",
+      "description": "Root-level project configuration including TypeScript, ESLint, PostCSS, Next.js, Playwright, electron-builder, MCP, and component settings",
+      "nodeCount": 8
+    },
+    {
+      "id": "layer:site-config",
+      "description": "Documentation site configuration including Next.js config, package.json, tsconfig, Tailwind, PostCSS, and shadcn/ui settings",
+      "nodeCount": 7
+    },
+    {
+      "id": "layer:site-docs",
+      "description": "Documentation site content including MDX pages and navigation metadata for both English and Chinese documentation",
+      "nodeCount": 50
+    },
+    {
+      "id": "layer:electron",
+      "description": "Electron desktop shell including main process, preload scripts, auto-updater, terminal manager, and window lifecycle management",
+      "nodeCount": 28
+    },
+    {
+      "id": "layer:themes",
+      "description": "Syntax highlighting and editor theme definitions including default, GitHub, Nord, Tokyo Night, Kanagawa, and other color schemes",
+      "nodeCount": 12
+    },
+    {
+      "id": "layer:core-service",
+      "description": "Core backend services including agent loop, AI provider abstraction, Claude client, session parsing, context management, database layer (SQLite), file operations, store, utilities, assistant workspace, buddy system, heartbeat, and error handling",
+      "nodeCount": 296
+    },
+    {
+      "id": "layer:i18n",
+      "description": "Internationalization resources including locale files and language configuration for multi-language support",
+      "nodeCount": 4
+    },
+    {
+      "id": "layer:types",
+      "description": "TypeScript type definitions and shared interfaces for the application domain model",
+      "nodeCount": 7
+    },
+    {
+      "id": "layer:test",
+      "description": "Unit tests, integration tests, and end-to-end Playwright test suites covering chat, settings, and core functionality",
+      "nodeCount": 178
+    },
+    {
+      "id": "layer:api-routes",
+      "description": "HTTP API route handlers for chat, media, git, settings, skills, plugins, providers, dashboard, doctor, CLI tools, bridge, SDK, and Claude integration endpoints",
+      "nodeCount": 315
+    },
+    {
+      "id": "layer:bridge",
+      "description": "Message bridge system for cross-platform communication adapters (Telegram, Discord, Feishu, QQ, WeChat), markdown rendering, permission brokering, security validation, and conversation engine",
+      "nodeCount": 172
+    },
+    {
+      "id": "layer:builtin-tools",
+      "description": "Built-in tool integrations including CLI tools, dashboard widgets, media generation, memory search, notification, session search, and widget guidelines",
+      "nodeCount": 23
+    },
+    {
+      "id": "layer:channels",
+      "description": "Feishu channel plugin implementation including gateway, card controller, inbound/outbound message handling, identity management, and resource downloading",
+      "nodeCount": 38
+    },
+    {
+      "id": "layer:claude-compat",
+      "description": "Claude Code compatibility layer including SSE parsing, request building, protocol translation, and type definitions for Claude Code protocol emulation",
+      "nodeCount": 16
+    },
+    {
+      "id": "layer:cli-tools",
+      "description": "CLI tools catalog, detection, context analysis, and MCP bridge for registering external command-line tools",
+      "nodeCount": 14
+    },
+    {
+      "id": "layer:constants",
+      "description": "Application constants including command definitions, icon mappings, and system prompts for image generation agents",
+      "nodeCount": 3
+    },
+    {
+      "id": "layer:context",
+      "description": "Context management including context assembler, compressor, estimator, and pruner for optimizing LLM context window usage",
+      "nodeCount": 26
+    },
+    {
+      "id": "layer:dashboard",
+      "description": "Dashboard subsystem including CLI reader, file reader, MCP integration, store, and data export for persistent widget state",
+      "nodeCount": 24
+    },
+    {
+      "id": "layer:git-service",
+      "description": "Git integration service providing branch listing, checkout, commit, push, status, and worktree management",
+      "nodeCount": 15
+    },
+    {
+      "id": "layer:ci-cd",
+      "description": "CI/CD pipeline configuration including the end-to-end test workflow definition",
+      "nodeCount": 1
+    },
+    {
+      "id": "layer:assets",
+      "description": "Static public assets including SVG icon files served by the web frontend",
+      "nodeCount": 2
+    },
+    {
+      "id": "layer:documentation",
+      "description": "Project documentation including READMEs (English, Chinese, Japanese), CHANGELOG, CLAUDE.md, AGENTS.md, ARCHITECTURE.md, and developer guides",
+      "nodeCount": 9
+    },
+    {
+      "id": "layer:site-pages",
+      "description": "Documentation site app routes including the home page, not-found handler, and docs page routing via MDX content rendering",
+      "nodeCount": 13
+    },
+    {
+      "id": "layer:site-ui",
+      "description": "Documentation site UI components including home page components, docs components, layout wrappers, providers, and shadcn/ui primitives",
+      "nodeCount": 42
+    },
+    {
+      "id": "layer:site-lib",
+      "description": "Documentation site library utilities for MDX processing, content loading, and navigation logic",
+      "nodeCount": 9
+    },
+    {
+      "id": "layer:site-middleware",
+      "description": "Documentation site middleware for internationalization routing and locale detection",
+      "nodeCount": 2
+    },
+    {
+      "id": "layer:scripts",
+      "description": "Build and packaging scripts including after-pack hook, after-sign codesigning, and Electron bundling",
+      "nodeCount": 11
+    },
+    {
+      "id": "layer:frontend-pages",
+      "description": "React page components for the chat interface and settings UI within the Next.js app",
+      "nodeCount": 2
+    }
+  ],
+  "edges": [
+    {
+      "source": "layer:project-config",
+      "target": "layer:themes",
+      "count": 6
+    },
+    {
+      "source": "layer:test",
+      "target": "layer:bridge",
+      "count": 6
+    },
+    {
+      "source": "layer:test",
+      "target": "layer:core-service",
+      "count": 30
+    },
+    {
+      "source": "layer:test",
+      "target": "layer:i18n",
+      "count": 2
+    },
+    {
+      "source": "layer:core-service",
+      "target": "layer:context",
+      "count": 3
+    },
+    {
+      "source": "layer:bridge",
+      "target": "layer:core-service",
+      "count": 12
+    },
+    {
+      "source": "layer:bridge",
+      "target": "layer:channels",
+      "count": 7
+    },
+    {
+      "source": "layer:channels",
+      "target": "layer:bridge",
+      "count": 6
+    },
+    {
+      "source": "layer:themes",
+      "target": "layer:project-config",
+      "count": 6
+    },
+    {
+      "source": "layer:site-pages",
+      "target": "layer:site-ui",
+      "count": 10
+    },
+    {
+      "source": "layer:site-ui",
+      "target": "layer:site-lib",
+      "count": 4
+    },
+    {
+      "source": "layer:site-docs",
+      "target": "layer:site-lib",
+      "count": 3
+    },
+    {
+      "source": "layer:site-docs",
+      "target": "layer:site-ui",
+      "count": 4
+    },
+    {
+      "source": "layer:site-ui",
+      "target": "layer:site-pages",
+      "count": 2
+    },
+    {
+      "source": "layer:test",
+      "target": "layer:frontend-pages",
+      "count": 2
+    },
+    {
+      "source": "layer:core-service",
+      "target": "layer:test",
+      "count": 2
+    },
+    {
+      "source": "layer:frontend-pages",
+      "target": "layer:test",
+      "count": 2
+    }
+  ]
+}

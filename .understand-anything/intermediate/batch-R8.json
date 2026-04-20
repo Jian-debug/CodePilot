@@ -1,0 +1,102 @@
+{
+  "nodes": [
+    {
+      "id": "file:src/__tests__/unit/timezone-boundaries.test.ts",
+      "type": "file",
+      "name": "timezone-boundaries.test.ts",
+      "filePath": "src/__tests__/unit/timezone-boundaries.test.ts",
+      "summary": "Comprehensive timezone boundary tests for local-date logic including getLocalDateString, needsDailyCheckIn, v2→v3/v5 migration, getTokenUsageStats local bucketing, and DST transition handling.",
+      "tags": ["test", "timezone", "localization", "dst", "date-handling"],
+      "complexity": "high"
+    },
+    {
+      "id": "file:src/__tests__/unit/update-release.test.ts",
+      "type": "file",
+      "name": "update-release.test.ts",
+      "filePath": "src/__tests__/unit/update-release.test.ts",
+      "summary": "Tests for selectRecommendedReleaseAsset function that picks platform-specific release assets (darwin arm64/x64 dmg, win32 exe).",
+      "tags": ["test", "update", "release", "platform-detection"],
+      "complexity": "low"
+    },
+    {
+      "id": "file:src/__tests__/unit/weixin-adapter-ack.test.ts",
+      "type": "file",
+      "name": "weixin-adapter-ack.test.ts",
+      "filePath": "src/__tests__/unit/weixin-adapter-ack.test.ts",
+      "summary": "Tests for WeixinAdapter deferred cursor acknowledgment — batch updateId attachment, cursor commit on batch seal, and pending cursor management.",
+      "tags": ["test", "weixin", "cursor", "batch-processing"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/__tests__/unit/weixin-api.test.ts",
+      "type": "file",
+      "name": "weixin-api.test.ts",
+      "filePath": "src/__tests__/unit/weixin-api.test.ts",
+      "summary": "Tests for weixin API functions (sendTextMessage, sendTyping) tolerating empty 200 response bodies.",
+      "tags": ["test", "weixin", "api", "fetch-mock"],
+      "complexity": "low"
+    },
+    {
+      "id": "file:src/__tests__/unit/weixin-ids.test.ts",
+      "type": "file",
+      "name": "weixin-ids.test.ts",
+      "filePath": "src/__tests__/unit/weixin-ids.test.ts",
+      "summary": "Tests for WeChat chat ID encoding/decoding: encodeWeixinChatId, decodeWeixinChatId round-trips, and isWeixinChatId validation.",
+      "tags": ["test", "weixin", "encoding", "id-handling"],
+      "complexity": "low"
+    },
+    {
+      "id": "file:src/__tests__/unit/weixin-media.test.ts",
+      "type": "file",
+      "name": "weixin-media.test.ts",
+      "filePath": "src/__tests__/unit/weixin-media.test.ts",
+      "summary": "Tests for AES-128-ECB media encryption/decryption: round-trip, padded size calculation, key generation uniqueness.",
+      "tags": ["test", "weixin", "encryption", "aes", "media"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/__tests__/unit/weixin-session-guard.test.ts",
+      "type": "file",
+      "name": "weixin-session-guard.test.ts",
+      "filePath": "src/__tests__/unit/weixin-session-guard.test.ts",
+      "summary": "Tests for account pause management: isPaused, setPaused, clearPause, clearAllPauses, getPauseRemainingMs for multi-account support.",
+      "tags": ["test", "weixin", "session", "pause-management"],
+      "complexity": "low"
+    },
+    {
+      "id": "file:src/__tests__/unit/widget-system.test.ts",
+      "type": "file",
+      "name": "widget-system.test.ts",
+      "filePath": "src/__tests__/unit/widget-system.test.ts",
+      "summary": "Comprehensive tests for widget system: HTML sanitization (streaming vs iframe modes), show-widget fence parsing, receiver iframe srcdoc/CSP, CSS variable bridge, widget key stability, streaming script truncation, and MCP server config.",
+      "tags": ["test", "widget", "security", "sanitization", "iframe", "streaming"],
+      "complexity": "high"
+    },
+    {
+      "id": "file:src/__tests__/unit/working-directory.test.ts",
+      "type": "file",
+      "name": "working-directory.test.ts",
+      "filePath": "src/__tests__/unit/working-directory.test.ts",
+      "summary": "Tests for working directory resolution: isExistingDirectory, resolveWorkingDirectory with candidate fallback and HOME fallback.",
+      "tags": ["test", "working-directory", "resolution"],
+      "complexity": "low"
+    }
+  ],
+  "edges": [
+    {"source": "file:src/__tests__/unit/timezone-boundaries.test.ts", "target": "file:src/lib/utils.ts", "type": "imports", "detail": "imports getLocalDateString, getLocalTzOffsetMinutes, localDayStartAsUTC"},
+    {"source": "file:src/__tests__/unit/timezone-boundaries.test.ts", "target": "file:src/lib/assistant-workspace.ts", "type": "imports", "detail": "imports needsDailyCheckIn, loadState, saveState, initializeWorkspace, migrateStateV2ToV3"},
+    {"source": "file:src/__tests__/unit/timezone-boundaries.test.ts", "target": "file:src/lib/db.ts", "type": "imports", "detail": "imports getDb, createSession, getTokenUsageStats, closeDb"},
+    {"source": "file:src/__tests__/unit/update-release.test.ts", "target": "file:src/lib/update-release.ts", "type": "imports", "detail": "imports selectRecommendedReleaseAsset, ReleaseAsset type"},
+    {"source": "file:src/__tests__/unit/weixin-adapter-ack.test.ts", "target": "file:src/lib/bridge/adapters/weixin-adapter.ts", "type": "imports", "detail": "imports WeixinAdapter"},
+    {"source": "file:src/__tests__/unit/weixin-adapter-ack.test.ts", "target": "file:src/lib/db.ts", "type": "imports", "detail": "imports getChannelOffset, closeDb"},
+    {"source": "file:src/__tests__/unit/weixin-api.test.ts", "target": "file:src/lib/bridge/adapters/weixin/weixin-api.ts", "type": "imports", "detail": "imports sendTextMessage, sendTyping"},
+    {"source": "file:src/__tests__/unit/weixin-ids.test.ts", "target": "file:src/lib/bridge/adapters/weixin/weixin-ids.ts", "type": "imports", "detail": "imports encodeWeixinChatId, decodeWeixinChatId, isWeixinChatId"},
+    {"source": "file:src/__tests__/unit/weixin-media.test.ts", "target": "file:src/lib/bridge/adapters/weixin/weixin-media.ts", "type": "imports", "detail": "imports encryptMedia, decryptMedia, generateMediaKey, aesEcbPaddedSize"},
+    {"source": "file:src/__tests__/unit/weixin-session-guard.test.ts", "target": "file:src/lib/bridge/adapters/weixin/weixin-session-guard.ts", "type": "imports", "detail": "imports isPaused, setPaused, clearPause, clearAllPauses, getPauseRemainingMs"},
+    {"source": "file:src/__tests__/unit/widget-system.test.ts", "target": "file:src/lib/widget-sanitizer.ts", "type": "imports", "detail": "imports sanitizeForStreaming, sanitizeForIframe, buildReceiverSrcdoc, CDN_WHITELIST"},
+    {"source": "file:src/__tests__/unit/widget-system.test.ts", "target": "file:src/components/chat/MessageItem.tsx", "type": "imports", "detail": "imports parseAllShowWidgets, parseShowWidget, computePartialWidgetKey"},
+    {"source": "file:src/__tests__/unit/widget-system.test.ts", "target": "file:src/lib/widget-css-bridge.ts", "type": "imports", "detail": "imports WIDGET_CSS_BRIDGE"},
+    {"source": "file:src/__tests__/unit/widget-system.test.ts", "target": "file:src/lib/widget-guidelines.ts", "type": "imports", "detail": "imports WIDGET_SYSTEM_PROMPT, getGuidelines, createWidgetMcpServer"},
+    {"source": "file:src/__tests__/unit/working-directory.test.ts", "target": "file:src/lib/working-directory.ts", "type": "imports", "detail": "imports isExistingDirectory, resolveWorkingDirectory"}
+  ]
+}

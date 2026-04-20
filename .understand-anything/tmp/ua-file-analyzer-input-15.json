@@ -1,0 +1,216 @@
+{
+  "projectRoot": "D:/project/common/AI/CodePilot",
+  "batchFiles": [
+    {
+      "path": "src/lib/bridge/bridge-manager.ts",
+      "sizeLines": 1371,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/bridge/channel-adapter.ts",
+      "sizeLines": 122,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/bridge/channel-router.ts",
+      "sizeLines": 173,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/bridge/conversation-engine.ts",
+      "sizeLines": 572,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/bridge/delivery-layer.ts",
+      "sizeLines": 356,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/bridge/feishu-app-registration.ts",
+      "sizeLines": 244,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/bridge/markdown/discord.ts",
+      "sizeLines": 110,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/bridge/markdown/feishu.ts",
+      "sizeLines": 90,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/bridge/markdown/ir.ts",
+      "sizeLines": 829,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/bridge/markdown/render.ts",
+      "sizeLines": 192,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/bridge/markdown/telegram.ts",
+      "sizeLines": 358,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/bridge/permission-broker.ts",
+      "sizeLines": 500,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/bridge/security/rate-limiter.ts",
+      "sizeLines": 85,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/bridge/security/validators.ts",
+      "sizeLines": 127,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/bridge/types.ts",
+      "sizeLines": 179,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/buddy.ts",
+      "sizeLines": 411,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/builtin-mcp-bridge.ts",
+      "sizeLines": 83,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/builtin-tools/ask-user-question.ts",
+      "sizeLines": 93,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/builtin-tools/cli-tools.ts",
+      "sizeLines": 758,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/builtin-tools/dashboard.ts",
+      "sizeLines": 107,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/builtin-tools/index.ts",
+      "sizeLines": 161,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/builtin-tools/media.ts",
+      "sizeLines": 65,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/builtin-tools/memory-search.ts",
+      "sizeLines": 98,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/builtin-tools/notification.ts",
+      "sizeLines": 130,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/builtin-tools/session-search.ts",
+      "sizeLines": 78,
+      "fileCategory": "code"
+    }
+  ],
+  "batchImportData": {
+    "src/lib/bridge/bridge-manager.ts": [
+      "src/lib/bridge/types.ts",
+      "src/lib/bridge/channel-adapter.ts",
+      "src/lib/bridge/channel-router.ts",
+      "src/lib/bridge/conversation-engine.ts",
+      "src/lib/bridge/permission-broker.ts",
+      "src/lib/bridge/delivery-layer.ts",
+      "src/lib/bridge/markdown/telegram.ts",
+      "src/lib/bridge/markdown/discord.ts",
+      "src/lib/db.ts",
+      "src/lib/telegram-bot.ts",
+      "src/lib/bridge/adapters/telegram-utils.ts",
+      "src/lib/bridge/security/validators.ts",
+      "src/lib/channels/channel-plugin-adapter.ts",
+      "src/lib/channels/feishu/index.ts",
+      "src/lib/channels/types.ts",
+      "src/lib/channels/feishu/message-actions.ts"
+    ],
+    "src/lib/bridge/channel-adapter.ts": [
+      "src/lib/bridge/types.ts",
+      "src/lib/channels/types.ts"
+    ],
+    "src/lib/bridge/channel-router.ts": [
+      "src/lib/bridge/types.ts",
+      "src/lib/db.ts",
+      "src/lib/working-directory.ts"
+    ],
+    "src/lib/bridge/conversation-engine.ts": [
+      "src/lib/bridge/types.ts",
+      "src/lib/claude-client.ts",
+      "src/lib/db.ts",
+      "src/lib/provider-resolver.ts",
+      "src/lib/mcp-loader.ts",
+      "src/lib/context-assembler.ts",
+      "src/lib/runtime/index.ts"
+    ],
+    "src/lib/bridge/delivery-layer.ts": [
+      "src/lib/bridge/types.ts",
+      "src/lib/bridge/markdown/telegram.ts",
+      "src/lib/bridge/channel-adapter.ts",
+      "src/lib/db.ts",
+      "src/lib/bridge/security/rate-limiter.ts"
+    ],
+    "src/lib/bridge/feishu-app-registration.ts": [],
+    "src/lib/bridge/markdown/discord.ts": [],
+    "src/lib/bridge/markdown/feishu.ts": [],
+    "src/lib/bridge/markdown/ir.ts": [],
+    "src/lib/bridge/markdown/render.ts": [
+      "src/lib/bridge/markdown/ir.ts"
+    ],
+    "src/lib/bridge/markdown/telegram.ts": [
+      "src/lib/bridge/markdown/ir.ts",
+      "src/lib/bridge/markdown/render.ts"
+    ],
+    "src/lib/bridge/permission-broker.ts": [
+      "src/lib/bridge/types.ts",
+      "src/lib/bridge/channel-adapter.ts",
+      "src/lib/bridge/delivery-layer.ts",
+      "src/lib/db.ts",
+      "src/lib/permission-registry.ts",
+      "src/lib/bridge/adapters/telegram-utils.ts"
+    ],
+    "src/lib/bridge/security/rate-limiter.ts": [],
+    "src/lib/bridge/security/validators.ts": [],
+    "src/lib/bridge/types.ts": [],
+    "src/lib/buddy.ts": [],
+    "src/lib/builtin-mcp-bridge.ts": [],
+    "src/lib/builtin-tools/ask-user-question.ts": [],
+    "src/lib/builtin-tools/cli-tools.ts": [],
+    "src/lib/builtin-tools/dashboard.ts": [],
+    "src/lib/builtin-tools/index.ts": [
+      "src/lib/builtin-tools/notification.ts",
+      "src/lib/builtin-tools/widget-guidelines.ts",
+      "src/lib/builtin-tools/dashboard.ts",
+      "src/lib/builtin-tools/media.ts",
+      "src/lib/builtin-tools/memory-search.ts",
+      "src/lib/builtin-tools/session-search.ts",
+      "src/lib/builtin-tools/ask-user-question.ts",
+      "src/lib/builtin-tools/cli-tools.ts"
+    ],
+    "src/lib/builtin-tools/media.ts": [],
+    "src/lib/builtin-tools/memory-search.ts": [],
+    "src/lib/builtin-tools/notification.ts": [],
+    "src/lib/builtin-tools/session-search.ts": []
+  }
+}

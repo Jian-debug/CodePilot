@@ -1,0 +1,63 @@
+{
+  "projectRoot": "D:/project/common/AI/CodePilot",
+  "batchFiles": [
+    {
+      "path": "src/hooks/useSettings.ts",
+      "sizeLines": 58,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/hooks/useSlashCommands.ts",
+      "sizeLines": 287,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/hooks/useSplit.ts",
+      "sizeLines": 32,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/hooks/useStreamSubscription.ts",
+      "sizeLines": 133,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/hooks/useTerminal.ts",
+      "sizeLines": 106,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/hooks/useToast.ts",
+      "sizeLines": 117,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/hooks/useTranslation.ts",
+      "sizeLines": 8,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/hooks/useUpdate.ts",
+      "sizeLines": 44,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/hooks/useUpdateChecker.ts",
+      "sizeLines": 164,
+      "fileCategory": "code"
+    }
+  ],
+  "batchImportData": {
+    "src/hooks/useSettings.ts": [],
+    "src/hooks/useSlashCommands.ts": [],
+    "src/hooks/useSplit.ts": [],
+    "src/hooks/useStreamSubscription.ts": [],
+    "src/hooks/useTerminal.ts": [
+      "src/hooks/usePanel.ts"
+    ],
+    "src/hooks/useToast.ts": [],
+    "src/hooks/useTranslation.ts": [],
+    "src/hooks/useUpdate.ts": [],
+    "src/hooks/useUpdateChecker.ts": []
+  }
+}

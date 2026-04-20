@@ -1,0 +1,233 @@
+{
+  "projectRoot": "D:/project/common/AI/CodePilot",
+  "batchFiles": [
+    {
+      "path": "src/lib/agent-loop.ts",
+      "sizeLines": 580,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/agent-registry.ts",
+      "sizeLines": 75,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/agent-sdk-agents.ts",
+      "sizeLines": 58,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/agent-sdk-capabilities.ts",
+      "sizeLines": 202,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/agent-system-prompt.ts",
+      "sizeLines": 296,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/agent-tools.ts",
+      "sizeLines": 201,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/ai-provider.ts",
+      "sizeLines": 369,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/assistant-workspace.ts",
+      "sizeLines": 665,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/bash-validator.ts",
+      "sizeLines": 106,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/bg-notify-parser.ts",
+      "sizeLines": 15,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/bridge/adapters/discord-adapter.ts",
+      "sizeLines": 662,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/bridge/adapters/feishu-adapter.ts",
+      "sizeLines": 16,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/bridge/adapters/index.ts",
+      "sizeLines": 16,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/bridge/adapters/qq-adapter.ts",
+      "sizeLines": 491,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/bridge/adapters/qq-api.ts",
+      "sizeLines": 219,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/bridge/adapters/telegram-adapter.ts",
+      "sizeLines": 866,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/bridge/adapters/telegram-media.ts",
+      "sizeLines": 299,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/bridge/adapters/telegram-utils.ts",
+      "sizeLines": 141,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/bridge/adapters/weixin-adapter.ts",
+      "sizeLines": 525,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/bridge/adapters/weixin/weixin-api.ts",
+      "sizeLines": 268,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/bridge/adapters/weixin/weixin-auth.ts",
+      "sizeLines": 173,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/bridge/adapters/weixin/weixin-ids.ts",
+      "sizeLines": 29,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/bridge/adapters/weixin/weixin-media.ts",
+      "sizeLines": 194,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/bridge/adapters/weixin/weixin-session-guard.ts",
+      "sizeLines": 71,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/bridge/adapters/weixin/weixin-types.ts",
+      "sizeLines": 188,
+      "fileCategory": "code"
+    }
+  ],
+  "batchImportData": {
+    "src/lib/agent-loop.ts": [
+      "src/lib/ai-provider.ts",
+      "src/lib/agent-tools.ts",
+      "src/lib/error-classifier.ts",
+      "src/lib/context-pruner.ts",
+      "src/lib/skill-nudge.ts",
+      "src/lib/runtime/event-bus.ts",
+      "src/lib/file-checkpoint.ts",
+      "src/lib/permission-checker.ts",
+      "src/lib/message-builder.ts",
+      "src/lib/claude-model-options.ts",
+      "src/lib/db.ts",
+      "src/lib/safe-stream.ts",
+      "src/lib/mcp-connection-manager.ts"
+    ],
+    "src/lib/agent-registry.ts": [],
+    "src/lib/agent-sdk-agents.ts": [],
+    "src/lib/agent-sdk-capabilities.ts": [
+      "src/lib/conversation-registry.ts"
+    ],
+    "src/lib/agent-system-prompt.ts": [],
+    "src/lib/agent-tools.ts": [
+      "src/lib/tools/index.ts",
+      "src/lib/mcp-tool-adapter.ts",
+      "src/lib/builtin-tools/index.ts",
+      "src/lib/permission-checker.ts",
+      "src/lib/permission-registry.ts",
+      "src/lib/runtime/event-bus.ts",
+      "src/lib/db.ts"
+    ],
+    "src/lib/ai-provider.ts": [
+      "src/lib/provider-resolver.ts",
+      "src/lib/openai-oauth-manager.ts",
+      "src/lib/claude-settings.ts",
+      "src/lib/claude-code-compat/index.ts"
+    ],
+    "src/lib/assistant-workspace.ts": [
+      "src/lib/heartbeat.ts"
+    ],
+    "src/lib/bash-validator.ts": [],
+    "src/lib/bg-notify-parser.ts": [],
+    "src/lib/bridge/adapters/discord-adapter.ts": [
+      "src/lib/bridge/types.ts",
+      "src/lib/bridge/channel-adapter.ts",
+      "src/lib/db.ts"
+    ],
+    "src/lib/bridge/adapters/feishu-adapter.ts": [
+      "src/lib/bridge/channel-adapter.ts",
+      "src/lib/channels/channel-plugin-adapter.ts",
+      "src/lib/channels/feishu/index.ts"
+    ],
+    "src/lib/bridge/adapters/index.ts": [
+      "src/lib/bridge/adapters/telegram-adapter.ts",
+      "src/lib/bridge/adapters/feishu-adapter.ts",
+      "src/lib/bridge/adapters/discord-adapter.ts",
+      "src/lib/bridge/adapters/qq-adapter.ts",
+      "src/lib/bridge/adapters/weixin-adapter.ts"
+    ],
+    "src/lib/bridge/adapters/qq-adapter.ts": [
+      "src/lib/bridge/types.ts",
+      "src/lib/bridge/channel-adapter.ts",
+      "src/lib/db.ts",
+      "src/lib/bridge/adapters/qq-api.ts"
+    ],
+    "src/lib/bridge/adapters/qq-api.ts": [],
+    "src/lib/bridge/adapters/telegram-adapter.ts": [
+      "src/lib/bridge/types.ts",
+      "src/lib/bridge/channel-adapter.ts",
+      "src/lib/bridge/adapters/telegram-utils.ts",
+      "src/lib/bridge/adapters/telegram-media.ts",
+      "src/lib/db.ts"
+    ],
+    "src/lib/bridge/adapters/telegram-media.ts": [
+      "src/lib/db.ts"
+    ],
+    "src/lib/bridge/adapters/telegram-utils.ts": [],
+    "src/lib/bridge/adapters/weixin-adapter.ts": [
+      "src/lib/bridge/types.ts",
+      "src/lib/bridge/channel-adapter.ts",
+      "src/lib/db.ts",
+      "src/lib/bridge/adapters/weixin/weixin-api.ts",
+      "src/lib/bridge/adapters/weixin/weixin-types.ts",
+      "src/lib/bridge/adapters/weixin/weixin-ids.ts",
+      "src/lib/bridge/adapters/weixin/weixin-media.ts",
+      "src/lib/bridge/adapters/weixin/weixin-session-guard.ts"
+    ],
+    "src/lib/bridge/adapters/weixin/weixin-api.ts": [
+      "src/lib/bridge/adapters/weixin/weixin-types.ts"
+    ],
+    "src/lib/bridge/adapters/weixin/weixin-auth.ts": [
+      "src/lib/bridge/adapters/weixin/weixin-api.ts",
+      "src/lib/db.ts",
+      "src/lib/bridge/adapters/weixin/weixin-types.ts"
+    ],
+    "src/lib/bridge/adapters/weixin/weixin-ids.ts": [],
+    "src/lib/bridge/adapters/weixin/weixin-media.ts": [
+      "src/lib/bridge/adapters/weixin/weixin-types.ts",
+      "src/lib/bridge/adapters/weixin/weixin-api.ts"
+    ],
+    "src/lib/bridge/adapters/weixin/weixin-session-guard.ts": [],
+    "src/lib/bridge/adapters/weixin/weixin-types.ts": []
+  }
+}

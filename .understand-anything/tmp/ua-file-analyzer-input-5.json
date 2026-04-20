@@ -1,0 +1,159 @@
+{
+  "projectRoot": "D:/project/common/AI/CodePilot",
+  "batchFiles": [
+    {
+      "path": "src/hooks/useAccountInfo.ts",
+      "sizeLines": 41,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/hooks/useAppTheme.ts",
+      "sizeLines": 16,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/hooks/useAssistantTrigger.ts",
+      "sizeLines": 260,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/hooks/useAssistantWorkspace.ts",
+      "sizeLines": 97,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/hooks/useBatchImageGen.ts",
+      "sizeLines": 485,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/hooks/useBridgeAdapter.ts",
+      "sizeLines": 106,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/hooks/useBridgeStatus.ts",
+      "sizeLines": 103,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/hooks/useChatCommands.ts",
+      "sizeLines": 85,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/hooks/useClaudeStatus.ts",
+      "sizeLines": 94,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/hooks/useCliToolsFetch.ts",
+      "sizeLines": 170,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/hooks/useClientPlatform.ts",
+      "sizeLines": 42,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/hooks/useCommandBadge.ts",
+      "sizeLines": 74,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/hooks/useContextUsage.ts",
+      "sizeLines": 172,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/hooks/useGitBranches.ts",
+      "sizeLines": 31,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/hooks/useGitLog.ts",
+      "sizeLines": 31,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/hooks/useGitStatus.ts",
+      "sizeLines": 63,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/hooks/useGitWorktrees.ts",
+      "sizeLines": 31,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/hooks/useGlobalSearchShortcut.ts",
+      "sizeLines": 20,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/hooks/useImageGen.ts",
+      "sizeLines": 108,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/hooks/useNativeFolderPicker.ts",
+      "sizeLines": 20,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/hooks/useNotificationPoll.ts",
+      "sizeLines": 76,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/hooks/usePanel.ts",
+      "sizeLines": 61,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/hooks/usePopoverState.ts",
+      "sizeLines": 189,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/hooks/useProviderModels.ts",
+      "sizeLines": 119,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/hooks/useSSEStream.ts",
+      "sizeLines": 463,
+      "fileCategory": "code"
+    }
+  ],
+  "batchImportData": {
+    "src/hooks/useAccountInfo.ts": [],
+    "src/hooks/useAppTheme.ts": [],
+    "src/hooks/useAssistantTrigger.ts": [],
+    "src/hooks/useAssistantWorkspace.ts": [],
+    "src/hooks/useBatchImageGen.ts": [],
+    "src/hooks/useBridgeAdapter.ts": [],
+    "src/hooks/useBridgeStatus.ts": [],
+    "src/hooks/useChatCommands.ts": [],
+    "src/hooks/useClaudeStatus.ts": [],
+    "src/hooks/useCliToolsFetch.ts": [],
+    "src/hooks/useClientPlatform.ts": [],
+    "src/hooks/useCommandBadge.ts": [],
+    "src/hooks/useContextUsage.ts": [],
+    "src/hooks/useGitBranches.ts": [],
+    "src/hooks/useGitLog.ts": [],
+    "src/hooks/useGitStatus.ts": [],
+    "src/hooks/useGitWorktrees.ts": [],
+    "src/hooks/useGlobalSearchShortcut.ts": [],
+    "src/hooks/useImageGen.ts": [],
+    "src/hooks/useNativeFolderPicker.ts": [],
+    "src/hooks/useNotificationPoll.ts": [],
+    "src/hooks/usePanel.ts": [],
+    "src/hooks/usePopoverState.ts": [],
+    "src/hooks/useProviderModels.ts": [],
+    "src/hooks/useSSEStream.ts": [
+      "src/hooks/useToast.ts"
+    ]
+  }
+}

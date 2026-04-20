@@ -1,0 +1,190 @@
+{
+  "projectRoot": "D:/project/common/AI/CodePilot",
+  "batchFiles": [
+    {
+      "path": "src/components/git/DeriveWorktreeDialog.tsx",
+      "sizeLines": 103,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/git/GitBranchSelector.tsx",
+      "sizeLines": 107,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/git/GitCommitDetailDialog.tsx",
+      "sizeLines": 105,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/git/GitCommitSection.tsx",
+      "sizeLines": 73,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/git/GitHistorySection.tsx",
+      "sizeLines": 86,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/git/GitPanel.tsx",
+      "sizeLines": 145,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/git/GitStatusSection.tsx",
+      "sizeLines": 195,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/git/GitWorktreeSection.tsx",
+      "sizeLines": 129,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/layout/AppShell.tsx",
+      "sizeLines": 512,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/layout/ChatListPanel.tsx",
+      "sizeLines": 692,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/layout/ConnectionStatus.tsx",
+      "sizeLines": 496,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/layout/ErrorBoundary.tsx",
+      "sizeLines": 139,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/layout/FeatureAnnouncementDialog.tsx",
+      "sizeLines": 113,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/layout/GlobalSearchDialog.tsx",
+      "sizeLines": 391,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/layout/I18nProvider.tsx",
+      "sizeLines": 78,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/layout/ImportSessionDialog.tsx",
+      "sizeLines": 300,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/layout/InstallWizard.tsx",
+      "sizeLines": 488,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/layout/NavRail.tsx",
+      "sizeLines": 161,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/layout/PanelZone.tsx",
+      "sizeLines": 28,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/layout/ProjectGroupHeader.tsx",
+      "sizeLines": 219,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/layout/ResizeHandle.tsx",
+      "sizeLines": 64,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/layout/SentryInit.tsx",
+      "sizeLines": 72,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/layout/SessionListItem.tsx",
+      "sizeLines": 274,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/layout/SplitChatContainer.tsx",
+      "sizeLines": 26,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/layout/SplitColumn.tsx",
+      "sizeLines": 198,
+      "fileCategory": "code"
+    }
+  ],
+  "batchImportData": {
+    "src/components/git/DeriveWorktreeDialog.tsx": [],
+    "src/components/git/GitBranchSelector.tsx": [],
+    "src/components/git/GitCommitDetailDialog.tsx": [],
+    "src/components/git/GitCommitSection.tsx": [],
+    "src/components/git/GitHistorySection.tsx": [],
+    "src/components/git/GitPanel.tsx": [
+      "src/components/git/GitStatusSection.tsx",
+      "src/components/git/GitBranchSelector.tsx",
+      "src/components/git/GitHistorySection.tsx",
+      "src/components/git/GitWorktreeSection.tsx",
+      "src/components/git/GitCommitDetailDialog.tsx",
+      "src/components/git/DeriveWorktreeDialog.tsx"
+    ],
+    "src/components/git/GitStatusSection.tsx": [
+      "src/components/git/CommitDialog.tsx"
+    ],
+    "src/components/git/GitWorktreeSection.tsx": [],
+    "src/components/layout/AppShell.tsx": [
+      "src/components/layout/ChatListPanel.tsx",
+      "src/components/layout/ResizeHandle.tsx",
+      "src/components/layout/UpdateDialog.tsx",
+      "src/components/layout/FeatureAnnouncementDialog.tsx",
+      "src/components/layout/UpdateBanner.tsx",
+      "src/components/layout/UnifiedTopBar.tsx",
+      "src/components/layout/PanelZone.tsx",
+      "src/components/layout/SplitChatContainer.tsx",
+      "src/components/layout/ErrorBoundary.tsx",
+      "src/components/layout/SentryInit.tsx",
+      "src/components/layout/GlobalSearchDialog.tsx"
+    ],
+    "src/components/layout/ChatListPanel.tsx": [
+      "src/components/layout/SessionListItem.tsx",
+      "src/components/layout/ProjectGroupHeader.tsx",
+      "src/components/layout/chat-list-utils.ts"
+    ],
+    "src/components/layout/ConnectionStatus.tsx": [],
+    "src/components/layout/ErrorBoundary.tsx": [],
+    "src/components/layout/FeatureAnnouncementDialog.tsx": [],
+    "src/components/layout/GlobalSearchDialog.tsx": [],
+    "src/components/layout/I18nProvider.tsx": [],
+    "src/components/layout/ImportSessionDialog.tsx": [],
+    "src/components/layout/InstallWizard.tsx": [],
+    "src/components/layout/NavRail.tsx": [],
+    "src/components/layout/PanelZone.tsx": [
+      "src/components/layout/panels/PreviewPanel.tsx",
+      "src/components/layout/panels/GitPanel.tsx",
+      "src/components/layout/panels/FileTreePanel.tsx",
+      "src/components/layout/panels/DashboardPanel.tsx",
+      "src/components/layout/panels/AssistantPanel.tsx"
+    ],
+    "src/components/layout/ProjectGroupHeader.tsx": [],
+    "src/components/layout/ResizeHandle.tsx": [],
+    "src/components/layout/SentryInit.tsx": [],
+    "src/components/layout/SessionListItem.tsx": [],
+    "src/components/layout/SplitChatContainer.tsx": [
+      "src/components/layout/SplitColumn.tsx"
+    ],
+    "src/components/layout/SplitColumn.tsx": []
+  }
+}

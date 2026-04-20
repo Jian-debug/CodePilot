@@ -1,0 +1,214 @@
+{
+  "nodes": [
+    {
+      "id": "config:themes/nord.json",
+      "type": "config",
+      "name": "nord.json",
+      "filePath": "themes/nord.json",
+      "summary": "Nord theme configuration with arctic, north-bluish color palette using OKLCH color space for both light and dark modes.",
+      "tags": ["configuration", "theme", "ui"],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:themes/poimandres.json",
+      "type": "config",
+      "name": "poimandres.json",
+      "filePath": "themes/poimandres.json",
+      "summary": "Poimandres theme configuration with muted dark palette featuring soft teal and lavender accents using OKLCH color space.",
+      "tags": ["configuration", "theme", "ui"],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:themes/rose-pine.json",
+      "type": "config",
+      "name": "rose-pine.json",
+      "filePath": "themes/rose-pine.json",
+      "summary": "Rose Pine theme configuration with warm pine-inspired palette and soho vibes using OKLCH color space for light and dark modes.",
+      "tags": ["configuration", "theme", "ui"],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:themes/synthwave84.json",
+      "type": "config",
+      "name": "synthwave84.json",
+      "filePath": "themes/synthwave84.json",
+      "summary": "SynthWave '84 theme configuration with retro-futuristic neon palette and purple haze using OKLCH color space.",
+      "tags": ["configuration", "theme", "ui"],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:themes/tokyo-night.json",
+      "type": "config",
+      "name": "tokyo-night.json",
+      "filePath": "themes/tokyo-night.json",
+      "summary": "Tokyo Night theme configuration with neon-lit cityscape aesthetic and deep blue undertones using OKLCH color space.",
+      "tags": ["configuration", "theme", "ui"],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:themes/vesper.json",
+      "type": "config",
+      "name": "vesper.json",
+      "filePath": "themes/vesper.json",
+      "summary": "Vesper theme configuration with warm monochrome palette and amber highlights using OKLCH color space.",
+      "tags": ["configuration", "theme", "ui"],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:tsconfig.json",
+      "type": "config",
+      "name": "tsconfig.json",
+      "filePath": "tsconfig.json",
+      "summary": "TypeScript compiler configuration enabling strict mode, ES2017 target, React JSX, and path aliases (@/*) for the Next.js monorepo.",
+      "tags": ["configuration", "typescript", "build-system"],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:next.config.ts",
+      "type": "config",
+      "name": "next.config.ts",
+      "filePath": "next.config.ts",
+      "summary": "Next.js configuration with standalone output mode, external packages for native modules and Discord/Sentry SDKs, and file tracing exclusions to prevent bloated builds.",
+      "tags": ["configuration", "build-system", "nextjs"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "config:electron-builder.yml",
+      "type": "config",
+      "name": "electron-builder.yml",
+      "filePath": "electron-builder.yml",
+      "summary": "Electron builder configuration for packaging the CodePilot desktop app across macOS, Windows, and Linux with GitHub releases, ASAR packing, and native module support.",
+      "tags": ["configuration", "electron", "deployment"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "config:playwright.config.ts",
+      "type": "config",
+      "name": "playwright.config.ts",
+      "filePath": "playwright.config.ts",
+      "summary": "Playwright E2E test configuration with parallel execution, CI-aware retries, screenshot diff thresholds, and auto-started Next.js dev server.",
+      "tags": ["configuration", "testing", "e2e"],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:postcss.config.mjs",
+      "type": "config",
+      "name": "postcss.config.mjs",
+      "filePath": "postcss.config.mjs",
+      "summary": "PostCSS configuration enabling Tailwind CSS processing via the @tailwindcss/postcss plugin.",
+      "tags": ["configuration", "css", "build-system"],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:eslint.config.mjs",
+      "type": "config",
+      "name": "eslint.config.mjs",
+      "filePath": "eslint.config.mjs",
+      "summary": "ESLint flat config extending Next.js core web vitals rules, enforcing UI component governance (no native HTML controls), Phosphor icon import rules, component file size limits, and patterns layer purity constraints.",
+      "tags": ["configuration", "linting", "code-quality"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "config:components.json",
+      "type": "config",
+      "name": "components.json",
+      "filePath": "components.json",
+      "summary": "shadcn/ui configuration defining the New York style, RSC support, Tailwind setup with stone base color, and Phosphor icon library with path aliases.",
+      "tags": ["configuration", "ui", "component-library"],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {
+      "source": "config:tsconfig.json",
+      "target": "config:next.config.ts",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:components.json",
+      "target": "config:postcss.config.mjs",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "config:electron-builder.yml",
+      "target": "config:next.config.ts",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:playwright.config.ts",
+      "target": "config:next.config.ts",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:eslint.config.mjs",
+      "target": "config:tsconfig.json",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:eslint.config.mjs",
+      "target": "config:next.config.ts",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "config:themes/nord.json",
+      "target": "config:components.json",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "config:themes/poimandres.json",
+      "target": "config:components.json",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "config:themes/rose-pine.json",
+      "target": "config:components.json",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "config:themes/synthwave84.json",
+      "target": "config:components.json",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "config:themes/tokyo-night.json",
+      "target": "config:components.json",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "config:themes/vesper.json",
+      "target": "config:components.json",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "config:postcss.config.mjs",
+      "target": "config:tsconfig.json",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    }
+  ]
+}

@@ -1,0 +1,85 @@
+{
+  "projectRoot": "D:/project/common/AI/CodePilot",
+  "batchFiles": [
+    {
+      "path": "src/__tests__/unit/timezone-boundaries.test.ts",
+      "sizeLines": 486,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/__tests__/unit/update-release.test.ts",
+      "sizeLines": 68,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/__tests__/unit/weixin-adapter-ack.test.ts",
+      "sizeLines": 99,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/__tests__/unit/weixin-api.test.ts",
+      "sizeLines": 53,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/__tests__/unit/weixin-ids.test.ts",
+      "sizeLines": 54,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/__tests__/unit/weixin-media.test.ts",
+      "sizeLines": 77,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/__tests__/unit/weixin-session-guard.test.ts",
+      "sizeLines": 55,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/__tests__/unit/widget-system.test.ts",
+      "sizeLines": 604,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/__tests__/unit/working-directory.test.ts",
+      "sizeLines": 65,
+      "fileCategory": "code"
+    }
+  ],
+  "batchImportData": {
+    "src/__tests__/unit/timezone-boundaries.test.ts": [
+      "src/lib/utils.ts",
+      "src/lib/assistant-workspace.ts",
+      "src/lib/db.ts"
+    ],
+    "src/__tests__/unit/update-release.test.ts": [
+      "src/lib/update-release.ts"
+    ],
+    "src/__tests__/unit/weixin-adapter-ack.test.ts": [
+      "src/lib/bridge/adapters/weixin-adapter.ts",
+      "src/lib/db.ts"
+    ],
+    "src/__tests__/unit/weixin-api.test.ts": [
+      "src/lib/bridge/adapters/weixin/weixin-api.ts"
+    ],
+    "src/__tests__/unit/weixin-ids.test.ts": [
+      "src/lib/bridge/adapters/weixin/weixin-ids.ts"
+    ],
+    "src/__tests__/unit/weixin-media.test.ts": [
+      "src/lib/bridge/adapters/weixin/weixin-media.ts"
+    ],
+    "src/__tests__/unit/weixin-session-guard.test.ts": [
+      "src/lib/bridge/adapters/weixin/weixin-session-guard.ts"
+    ],
+    "src/__tests__/unit/widget-system.test.ts": [
+      "src/lib/widget-sanitizer.ts",
+      "src/components/chat/MessageItem.tsx",
+      "src/lib/widget-css-bridge.ts",
+      "src/lib/widget-guidelines.ts"
+    ],
+    "src/__tests__/unit/working-directory.test.ts": [
+      "src/lib/working-directory.ts"
+    ]
+  }
+}

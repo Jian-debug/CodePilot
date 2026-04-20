@@ -1,0 +1,122 @@
+{
+  "version": "2.3.1",
+  "commitHash": "c47386288a276fe79119be1d79a58ecdd701d3cf",
+  "timestamp": "2026-04-20T01:36:23.761Z",
+  "nodeCount": 1327,
+  "edgeCount": 1770,
+  "layerCount": 28,
+  "layers": [
+    {
+      "name": "layer:api-routes",
+      "count": 315
+    },
+    {
+      "name": "layer:core-service",
+      "count": 296
+    },
+    {
+      "name": "layer:test",
+      "count": 178
+    },
+    {
+      "name": "layer:bridge",
+      "count": 172
+    },
+    {
+      "name": "layer:site-docs",
+      "count": 50
+    },
+    {
+      "name": "layer:site-ui",
+      "count": 42
+    },
+    {
+      "name": "layer:channels",
+      "count": 38
+    },
+    {
+      "name": "layer:electron",
+      "count": 28
+    },
+    {
+      "name": "layer:context",
+      "count": 26
+    },
+    {
+      "name": "layer:dashboard",
+      "count": 24
+    },
+    {
+      "name": "layer:builtin-tools",
+      "count": 23
+    },
+    {
+      "name": "layer:claude-compat",
+      "count": 16
+    },
+    {
+      "name": "layer:git-service",
+      "count": 15
+    },
+    {
+      "name": "layer:cli-tools",
+      "count": 14
+    },
+    {
+      "name": "layer:site-pages",
+      "count": 13
+    },
+    {
+      "name": "layer:themes",
+      "count": 12
+    },
+    {
+      "name": "layer:scripts",
+      "count": 11
+    },
+    {
+      "name": "layer:documentation",
+      "count": 9
+    },
+    {
+      "name": "layer:site-lib",
+      "count": 9
+    },
+    {
+      "name": "layer:project-config",
+      "count": 8
+    },
+    {
+      "name": "layer:site-config",
+      "count": 7
+    },
+    {
+      "name": "layer:types",
+      "count": 7
+    },
+    {
+      "name": "layer:i18n",
+      "count": 4
+    },
+    {
+      "name": "layer:constants",
+      "count": 3
+    },
+    {
+      "name": "layer:assets",
+      "count": 2
+    },
+    {
+      "name": "layer:site-middleware",
+      "count": 2
+    },
+    {
+      "name": "layer:frontend-pages",
+      "count": 2
+    },
+    {
+      "name": "layer:ci-cd",
+      "count": 1
+    }
+  ]
+}

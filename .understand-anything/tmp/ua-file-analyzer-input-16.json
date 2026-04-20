@@ -1,0 +1,229 @@
+{
+  "projectRoot": "D:/project/common/AI/CodePilot",
+  "batchFiles": [
+    {
+      "path": "src/lib/builtin-tools/widget-guidelines.ts",
+      "sizeLines": 45,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/channels/channel-plugin-adapter.ts",
+      "sizeLines": 73,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/channels/feishu/card-controller.ts",
+      "sizeLines": 349,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/channels/feishu/config.ts",
+      "sizeLines": 57,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/channels/feishu/gateway.ts",
+      "sizeLines": 204,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/channels/feishu/identity.ts",
+      "sizeLines": 41,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/channels/feishu/inbound.ts",
+      "sizeLines": 246,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/channels/feishu/index.ts",
+      "sizeLines": 456,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/channels/feishu/message-actions.ts",
+      "sizeLines": 214,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/channels/feishu/outbound.ts",
+      "sizeLines": 425,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/channels/feishu/policy.ts",
+      "sizeLines": 50,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/channels/feishu/resource-downloader.ts",
+      "sizeLines": 137,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/channels/feishu/types.ts",
+      "sizeLines": 64,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/channels/types.ts",
+      "sizeLines": 125,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/checkin-processor.ts",
+      "sizeLines": 168,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/claude-client.ts",
+      "sizeLines": 2019,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/claude-code-compat/claude-code-compat-model.ts",
+      "sizeLines": 294,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/claude-code-compat/index.ts",
+      "sizeLines": 21,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/claude-code-compat/request-builder.ts",
+      "sizeLines": 169,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/claude-code-compat/sse-parser.ts",
+      "sizeLines": 84,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/claude-code-compat/types.ts",
+      "sizeLines": 67,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/claude-home-shadow.ts",
+      "sizeLines": 319,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/claude-model-options.ts",
+      "sizeLines": 90,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/claude-session-parser.ts",
+      "sizeLines": 527,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/claude-settings.ts",
+      "sizeLines": 80,
+      "fileCategory": "code"
+    }
+  ],
+  "batchImportData": {
+    "src/lib/builtin-tools/widget-guidelines.ts": [],
+    "src/lib/channels/channel-plugin-adapter.ts": [
+      "src/lib/bridge/channel-adapter.ts",
+      "src/lib/bridge/types.ts",
+      "src/lib/channels/types.ts"
+    ],
+    "src/lib/channels/feishu/card-controller.ts": [
+      "src/lib/channels/types.ts",
+      "src/lib/channels/feishu/types.ts",
+      "src/lib/channels/feishu/outbound.ts"
+    ],
+    "src/lib/channels/feishu/config.ts": [
+      "src/lib/db.ts",
+      "src/lib/channels/feishu/types.ts"
+    ],
+    "src/lib/channels/feishu/gateway.ts": [
+      "src/lib/channels/feishu/types.ts"
+    ],
+    "src/lib/channels/feishu/identity.ts": [
+      "src/lib/channels/feishu/types.ts"
+    ],
+    "src/lib/channels/feishu/inbound.ts": [
+      "src/lib/bridge/types.ts",
+      "src/lib/channels/feishu/types.ts",
+      "src/lib/channels/feishu/resource-downloader.ts"
+    ],
+    "src/lib/channels/feishu/index.ts": [
+      "src/lib/bridge/types.ts",
+      "src/lib/channels/types.ts",
+      "src/lib/channels/feishu/types.ts",
+      "src/lib/channels/feishu/config.ts",
+      "src/lib/channels/feishu/gateway.ts",
+      "src/lib/channels/feishu/inbound.ts",
+      "src/lib/channels/feishu/identity.ts",
+      "src/lib/channels/feishu/outbound.ts",
+      "src/lib/channels/feishu/policy.ts",
+      "src/lib/channels/feishu/card-controller.ts",
+      "src/lib/channels/feishu/resource-downloader.ts"
+    ],
+    "src/lib/channels/feishu/message-actions.ts": [
+      "src/lib/channels/feishu/types.ts"
+    ],
+    "src/lib/channels/feishu/outbound.ts": [
+      "src/lib/bridge/types.ts"
+    ],
+    "src/lib/channels/feishu/policy.ts": [
+      "src/lib/channels/feishu/types.ts"
+    ],
+    "src/lib/channels/feishu/resource-downloader.ts": [],
+    "src/lib/channels/feishu/types.ts": [],
+    "src/lib/channels/types.ts": [
+      "src/lib/bridge/types.ts"
+    ],
+    "src/lib/checkin-processor.ts": [],
+    "src/lib/claude-client.ts": [
+      "src/lib/permission-registry.ts",
+      "src/lib/conversation-registry.ts",
+      "src/lib/agent-sdk-capabilities.ts",
+      "src/lib/message-normalizer.ts",
+      "src/lib/context-estimator.ts",
+      "src/lib/db.ts",
+      "src/lib/provider-resolver.ts",
+      "src/lib/claude-model-options.ts",
+      "src/lib/platform.ts",
+      "src/lib/telegram-bot.ts",
+      "src/lib/error-classifier.ts",
+      "src/lib/working-directory.ts",
+      "src/lib/safe-stream.ts",
+      "src/lib/claude-home-shadow.ts",
+      "src/lib/sdk-subprocess-env.ts",
+      "src/lib/runtime/registry.ts",
+      "src/lib/provider-transport.ts",
+      "src/lib/runtime/index.ts",
+      "src/lib/provider-catalog.ts",
+      "src/lib/context-compressor.ts",
+      "src/lib/model-context.ts"
+    ],
+    "src/lib/claude-code-compat/claude-code-compat-model.ts": [
+      "src/lib/claude-code-compat/types.ts",
+      "src/lib/claude-code-compat/request-builder.ts",
+      "src/lib/claude-code-compat/sse-parser.ts"
+    ],
+    "src/lib/claude-code-compat/index.ts": [
+      "src/lib/claude-code-compat/types.ts",
+      "src/lib/claude-code-compat/claude-code-compat-model.ts"
+    ],
+    "src/lib/claude-code-compat/request-builder.ts": [
+      "src/lib/claude-code-compat/types.ts"
+    ],
+    "src/lib/claude-code-compat/sse-parser.ts": [
+      "src/lib/claude-code-compat/types.ts"
+    ],
+    "src/lib/claude-code-compat/types.ts": [],
+    "src/lib/claude-home-shadow.ts": [],
+    "src/lib/claude-model-options.ts": [],
+    "src/lib/claude-session-parser.ts": [],
+    "src/lib/claude-settings.ts": []
+  }
+}

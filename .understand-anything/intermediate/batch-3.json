@@ -1,0 +1,25 @@
+{
+  "nodes": [
+    {
+      "id": "file:public/file.svg",
+      "type": "file",
+      "name": "file.svg",
+      "filePath": "public/file.svg",
+      "summary": "Decorative SVG icon depicting a globe/sphere, used as a static asset in the public directory.",
+      "tags": ["markup", "icon", "static-asset"],
+      "complexity": "simple",
+      "languageNotes": "Inline SVG with clip-path and multiple path elements forming a globe-like icon."
+    },
+    {
+      "id": "file:public/globe.svg",
+      "type": "file",
+      "name": "globe.svg",
+      "filePath": "public/globe.svg",
+      "summary": "Decorative SVG icon depicting a document/folder with a folded corner, used as a static asset in the public directory.",
+      "tags": ["markup", "icon", "static-asset"],
+      "complexity": "simple",
+      "languageNotes": "Single-path inline SVG with a document shape including a folded corner detail."
+    }
+  ],
+  "edges": []
+}

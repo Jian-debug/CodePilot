@@ -1,0 +1,159 @@
+{
+  "projectRoot": "D:/project/common/AI/CodePilot",
+  "batchFiles": [
+    {
+      "path": "src/components/layout/ThemeFamilyProvider.tsx",
+      "sizeLines": 60,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/layout/ThemeProvider.tsx",
+      "sizeLines": 17,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/layout/UnifiedTopBar.tsx",
+      "sizeLines": 278,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/layout/UpdateBanner.tsx",
+      "sizeLines": 101,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/layout/UpdateDialog.tsx",
+      "sizeLines": 148,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/layout/chat-list-utils.ts",
+      "sizeLines": 76,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/layout/panels/AssistantPanel.tsx",
+      "sizeLines": 193,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/layout/panels/DashboardPanel.tsx",
+      "sizeLines": 691,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/layout/panels/FileTreePanel.tsx",
+      "sizeLines": 100,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/layout/panels/GitPanel.tsx",
+      "sizeLines": 61,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/layout/panels/PreviewPanel.tsx",
+      "sizeLines": 403,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/patterns/CommandList.tsx",
+      "sizeLines": 184,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/patterns/EmptyState.tsx",
+      "sizeLines": 23,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/patterns/FieldRow.tsx",
+      "sizeLines": 28,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/patterns/IconAction.tsx",
+      "sizeLines": 40,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/patterns/SectionPage.tsx",
+      "sizeLines": 22,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/patterns/SettingsCard.tsx",
+      "sizeLines": 23,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/patterns/StatusBanner.tsx",
+      "sizeLines": 29,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/patterns/index.ts",
+      "sizeLines": 16,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/plugins/ConfigEditor.tsx",
+      "sizeLines": 65,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/plugins/McpManager.tsx",
+      "sizeLines": 368,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/plugins/McpServerEditor.tsx",
+      "sizeLines": 378,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/plugins/McpServerList.tsx",
+      "sizeLines": 257,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/plugins/PluginCard.tsx",
+      "sizeLines": 84,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/plugins/PluginDetail.tsx",
+      "sizeLines": 70,
+      "fileCategory": "code"
+    }
+  ],
+  "batchImportData": {
+    "src/components/layout/ThemeFamilyProvider.tsx": [],
+    "src/components/layout/ThemeProvider.tsx": [],
+    "src/components/layout/UnifiedTopBar.tsx": [],
+    "src/components/layout/UpdateBanner.tsx": [],
+    "src/components/layout/UpdateDialog.tsx": [],
+    "src/components/layout/chat-list-utils.ts": [],
+    "src/components/layout/panels/AssistantPanel.tsx": [],
+    "src/components/layout/panels/DashboardPanel.tsx": [],
+    "src/components/layout/panels/FileTreePanel.tsx": [],
+    "src/components/layout/panels/GitPanel.tsx": [],
+    "src/components/layout/panels/PreviewPanel.tsx": [],
+    "src/components/patterns/CommandList.tsx": [],
+    "src/components/patterns/EmptyState.tsx": [],
+    "src/components/patterns/FieldRow.tsx": [],
+    "src/components/patterns/IconAction.tsx": [],
+    "src/components/patterns/SectionPage.tsx": [],
+    "src/components/patterns/SettingsCard.tsx": [],
+    "src/components/patterns/StatusBanner.tsx": [],
+    "src/components/patterns/index.ts": [],
+    "src/components/plugins/ConfigEditor.tsx": [],
+    "src/components/plugins/McpManager.tsx": [],
+    "src/components/plugins/McpServerEditor.tsx": [],
+    "src/components/plugins/McpServerList.tsx": [],
+    "src/components/plugins/PluginCard.tsx": [],
+    "src/components/plugins/PluginDetail.tsx": [
+      "src/components/plugins/PluginCard.tsx"
+    ]
+  }
+}

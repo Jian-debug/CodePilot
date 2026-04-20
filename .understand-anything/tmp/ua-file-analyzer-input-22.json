@@ -1,0 +1,170 @@
+{
+  "projectRoot": "D:/project/common/AI/CodePilot",
+  "batchFiles": [
+    {
+      "path": "src/components/ai-elements/artifact.tsx",
+      "sizeLines": 149,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ai-elements/chain-of-thought.tsx",
+      "sizeLines": 223,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ai-elements/code-block.tsx",
+      "sizeLines": 892,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ai-elements/confirmation.tsx",
+      "sizeLines": 173,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ai-elements/conversation.tsx",
+      "sizeLines": 167,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ai-elements/file-tree.tsx",
+      "sizeLines": 323,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ai-elements/message.tsx",
+      "sizeLines": 370,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ai-elements/model-selector.tsx",
+      "sizeLines": 214,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ai-elements/prompt-input.tsx",
+      "sizeLines": 1384,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ai-elements/reasoning.tsx",
+      "sizeLines": 229,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ai-elements/shimmer.tsx",
+      "sizeLines": 57,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ai-elements/sources.tsx",
+      "sizeLines": 78,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ai-elements/suggestion.tsx",
+      "sizeLines": 58,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ai-elements/task.tsx",
+      "sizeLines": 88,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ai-elements/terminal.tsx",
+      "sizeLines": 277,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ai-elements/tool-actions-group.tsx",
+      "sizeLines": 628,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ai-elements/tool.tsx",
+      "sizeLines": 198,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/assistant/OnboardingWizard.tsx",
+      "sizeLines": 417,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/bridge/BridgeLayout.tsx",
+      "sizeLines": 109,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/bridge/BridgeSection.tsx",
+      "sizeLines": 509,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/bridge/DiscordBridgeSection.tsx",
+      "sizeLines": 350,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/bridge/FeishuBridgeSection.tsx",
+      "sizeLines": 691,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/bridge/QqBridgeSection.tsx",
+      "sizeLines": 285,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/bridge/TelegramBridgeSection.tsx",
+      "sizeLines": 293,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/bridge/WeixinBridgeSection.tsx",
+      "sizeLines": 406,
+      "fileCategory": "code"
+    }
+  ],
+  "batchImportData": {
+    "src/components/ai-elements/artifact.tsx": [],
+    "src/components/ai-elements/chain-of-thought.tsx": [],
+    "src/components/ai-elements/code-block.tsx": [],
+    "src/components/ai-elements/confirmation.tsx": [],
+    "src/components/ai-elements/conversation.tsx": [],
+    "src/components/ai-elements/file-tree.tsx": [],
+    "src/components/ai-elements/message.tsx": [],
+    "src/components/ai-elements/model-selector.tsx": [],
+    "src/components/ai-elements/prompt-input.tsx": [],
+    "src/components/ai-elements/reasoning.tsx": [
+      "src/components/ai-elements/shimmer.tsx"
+    ],
+    "src/components/ai-elements/shimmer.tsx": [],
+    "src/components/ai-elements/sources.tsx": [],
+    "src/components/ai-elements/suggestion.tsx": [],
+    "src/components/ai-elements/task.tsx": [],
+    "src/components/ai-elements/terminal.tsx": [
+      "src/components/ai-elements/shimmer.tsx"
+    ],
+    "src/components/ai-elements/tool-actions-group.tsx": [],
+    "src/components/ai-elements/tool.tsx": [
+      "src/components/ai-elements/code-block.tsx"
+    ],
+    "src/components/assistant/OnboardingWizard.tsx": [],
+    "src/components/bridge/BridgeLayout.tsx": [
+      "src/components/bridge/BridgeSection.tsx",
+      "src/components/bridge/TelegramBridgeSection.tsx",
+      "src/components/bridge/FeishuBridgeSection.tsx",
+      "src/components/bridge/DiscordBridgeSection.tsx",
+      "src/components/bridge/QqBridgeSection.tsx",
+      "src/components/bridge/WeixinBridgeSection.tsx"
+    ],
+    "src/components/bridge/BridgeSection.tsx": [],
+    "src/components/bridge/DiscordBridgeSection.tsx": [],
+    "src/components/bridge/FeishuBridgeSection.tsx": [],
+    "src/components/bridge/QqBridgeSection.tsx": [],
+    "src/components/bridge/TelegramBridgeSection.tsx": [],
+    "src/components/bridge/WeixinBridgeSection.tsx": []
+  }
+}

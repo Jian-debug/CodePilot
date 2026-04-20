@@ -1,0 +1,157 @@
+{
+  "projectRoot": "D:/project/common/AI/CodePilot",
+  "batchFiles": [
+    {
+      "path": "src/app/api/app/updates/route.ts",
+      "sizeLines": 80,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/bridge/channels/route.ts",
+      "sizeLines": 33,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/bridge/feishu/register/cancel/route.ts",
+      "sizeLines": 27,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/bridge/feishu/register/poll/route.ts",
+      "sizeLines": 96,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/bridge/feishu/register/start/route.ts",
+      "sizeLines": 21,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/bridge/route.ts",
+      "sizeLines": 56,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/bridge/settings/route.ts",
+      "sizeLines": 88,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/chat/interrupt/route.ts",
+      "sizeLines": 44,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/chat/messages/route.ts",
+      "sizeLines": 98,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/chat/mode/route.ts",
+      "sizeLines": 29,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/chat/model/route.ts",
+      "sizeLines": 29,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/chat/permission/route.ts",
+      "sizeLines": 74,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/chat/rewind/route.ts",
+      "sizeLines": 65,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/chat/route.ts",
+      "sizeLines": 1059,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/chat/sessions/[id]/messages/route.ts",
+      "sizeLines": 51,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/chat/sessions/[id]/route.ts",
+      "sizeLines": 117,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/chat/sessions/by-cwd/route.ts",
+      "sizeLines": 15,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/chat/sessions/route.ts",
+      "sizeLines": 56,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/chat/structured/route.ts",
+      "sizeLines": 71,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/claude-auth/route.ts",
+      "sizeLines": 38,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/claude-sessions/import/route.ts",
+      "sizeLines": 92,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/claude-sessions/route.ts",
+      "sizeLines": 12,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/claude-status/invalidate/route.ts",
+      "sizeLines": 15,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/claude-status/route.ts",
+      "sizeLines": 149,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/claude-upgrade/route.ts",
+      "sizeLines": 45,
+      "fileCategory": "code"
+    }
+  ],
+  "batchImportData": {
+    "src/app/api/app/updates/route.ts": [],
+    "src/app/api/bridge/channels/route.ts": [],
+    "src/app/api/bridge/feishu/register/cancel/route.ts": [],
+    "src/app/api/bridge/feishu/register/poll/route.ts": [],
+    "src/app/api/bridge/feishu/register/start/route.ts": [],
+    "src/app/api/bridge/route.ts": [],
+    "src/app/api/bridge/settings/route.ts": [],
+    "src/app/api/chat/interrupt/route.ts": [],
+    "src/app/api/chat/messages/route.ts": [],
+    "src/app/api/chat/mode/route.ts": [],
+    "src/app/api/chat/model/route.ts": [],
+    "src/app/api/chat/permission/route.ts": [],
+    "src/app/api/chat/rewind/route.ts": [],
+    "src/app/api/chat/route.ts": [],
+    "src/app/api/chat/sessions/[id]/messages/route.ts": [],
+    "src/app/api/chat/sessions/[id]/route.ts": [],
+    "src/app/api/chat/sessions/by-cwd/route.ts": [],
+    "src/app/api/chat/sessions/route.ts": [],
+    "src/app/api/chat/structured/route.ts": [],
+    "src/app/api/claude-auth/route.ts": [],
+    "src/app/api/claude-sessions/import/route.ts": [],
+    "src/app/api/claude-sessions/route.ts": [],
+    "src/app/api/claude-status/invalidate/route.ts": [],
+    "src/app/api/claude-status/route.ts": [],
+    "src/app/api/claude-upgrade/route.ts": []
+  }
+}

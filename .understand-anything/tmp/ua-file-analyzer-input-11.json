@@ -1,0 +1,157 @@
+{
+  "projectRoot": "D:/project/common/AI/CodePilot",
+  "batchFiles": [
+    {
+      "path": "src/app/api/settings/qq/verify/route.ts",
+      "sizeLines": 72,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/settings/route.ts",
+      "sizeLines": 60,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/settings/sentry/route.ts",
+      "sizeLines": 34,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/settings/telegram/route.ts",
+      "sizeLines": 87,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/settings/telegram/verify/route.ts",
+      "sizeLines": 77,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/settings/weixin/accounts/[accountId]/route.ts",
+      "sizeLines": 95,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/settings/weixin/accounts/route.ts",
+      "sizeLines": 28,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/settings/weixin/login/start/route.ts",
+      "sizeLines": 19,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/settings/weixin/login/wait/route.ts",
+      "sizeLines": 58,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/settings/weixin/route.ts",
+      "sizeLines": 45,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/settings/workspace/route.ts",
+      "sizeLines": 239,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/setup/recent-projects/route.ts",
+      "sizeLines": 31,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/setup/route.ts",
+      "sizeLines": 108,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/skills/[name]/route.ts",
+      "sizeLines": 411,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/skills/marketplace/install/route.ts",
+      "sizeLines": 76,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/skills/marketplace/readme/route.ts",
+      "sizeLines": 95,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/skills/marketplace/remove/route.ts",
+      "sizeLines": 76,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/skills/marketplace/search/route.ts",
+      "sizeLines": 74,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/skills/route.ts",
+      "sizeLines": 490,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/skills/search/route.ts",
+      "sizeLines": 173,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/tasks/[id]/pause/route.ts",
+      "sizeLines": 16,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/tasks/[id]/route.ts",
+      "sizeLines": 92,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/tasks/[id]/run/route.ts",
+      "sizeLines": 21,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/tasks/list/route.ts",
+      "sizeLines": 12,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/tasks/notify/route.ts",
+      "sizeLines": 38,
+      "fileCategory": "code"
+    }
+  ],
+  "batchImportData": {
+    "src/app/api/settings/qq/verify/route.ts": [],
+    "src/app/api/settings/route.ts": [],
+    "src/app/api/settings/sentry/route.ts": [],
+    "src/app/api/settings/telegram/route.ts": [],
+    "src/app/api/settings/telegram/verify/route.ts": [],
+    "src/app/api/settings/weixin/accounts/[accountId]/route.ts": [],
+    "src/app/api/settings/weixin/accounts/route.ts": [],
+    "src/app/api/settings/weixin/login/start/route.ts": [],
+    "src/app/api/settings/weixin/login/wait/route.ts": [],
+    "src/app/api/settings/weixin/route.ts": [],
+    "src/app/api/settings/workspace/route.ts": [],
+    "src/app/api/setup/recent-projects/route.ts": [],
+    "src/app/api/setup/route.ts": [],
+    "src/app/api/skills/[name]/route.ts": [],
+    "src/app/api/skills/marketplace/install/route.ts": [],
+    "src/app/api/skills/marketplace/readme/route.ts": [],
+    "src/app/api/skills/marketplace/remove/route.ts": [],
+    "src/app/api/skills/marketplace/search/route.ts": [],
+    "src/app/api/skills/route.ts": [],
+    "src/app/api/skills/search/route.ts": [],
+    "src/app/api/tasks/[id]/pause/route.ts": [],
+    "src/app/api/tasks/[id]/route.ts": [],
+    "src/app/api/tasks/[id]/run/route.ts": [],
+    "src/app/api/tasks/list/route.ts": [],
+    "src/app/api/tasks/notify/route.ts": []
+  }
+}

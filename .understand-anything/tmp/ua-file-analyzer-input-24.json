@@ -1,0 +1,182 @@
+{
+  "projectRoot": "D:/project/common/AI/CodePilot",
+  "batchFiles": [
+    {
+      "path": "src/components/chat/RateLimitBanner.tsx",
+      "sizeLines": 125,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/chat/RuntimeBadge.tsx",
+      "sizeLines": 99,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/chat/SlashCommandButton.tsx",
+      "sizeLines": 32,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/chat/SlashCommandPopover.tsx",
+      "sizeLines": 209,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/chat/StreamingMessage.tsx",
+      "sizeLines": 554,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/chat/TerminalReasonChip.tsx",
+      "sizeLines": 157,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/chat/WidgetErrorBoundary.tsx",
+      "sizeLines": 54,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/chat/WidgetRenderer.tsx",
+      "sizeLines": 291,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/chat/batch-image-gen/BatchContextSync.tsx",
+      "sizeLines": 82,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/chat/batch-image-gen/BatchExecutionDashboard.tsx",
+      "sizeLines": 122,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/chat/batch-image-gen/BatchExecutionItem.tsx",
+      "sizeLines": 79,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/chat/batch-image-gen/BatchPlanInlinePreview.tsx",
+      "sizeLines": 129,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/chat/batch-image-gen/BatchPlanRow.tsx",
+      "sizeLines": 96,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/chat/batch-image-gen/index.ts",
+      "sizeLines": 5,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/cli-tools/CliToolAddDialog.tsx",
+      "sizeLines": 178,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/cli-tools/CliToolBatchDescribeDialog.tsx",
+      "sizeLines": 352,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/cli-tools/CliToolCard.tsx",
+      "sizeLines": 152,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/cli-tools/CliToolDetailDialog.tsx",
+      "sizeLines": 269,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/cli-tools/CliToolExtraDetailDialog.tsx",
+      "sizeLines": 210,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/cli-tools/CliToolInstallDialog.tsx",
+      "sizeLines": 175,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/cli-tools/CliToolsManager.tsx",
+      "sizeLines": 428,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/gallery/GalleryDetail.tsx",
+      "sizeLines": 293,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/gallery/GalleryGrid.tsx",
+      "sizeLines": 110,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/gallery/TagManager.tsx",
+      "sizeLines": 213,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/git/CommitDialog.tsx",
+      "sizeLines": 178,
+      "fileCategory": "code"
+    }
+  ],
+  "batchImportData": {
+    "src/components/chat/RateLimitBanner.tsx": [],
+    "src/components/chat/RuntimeBadge.tsx": [],
+    "src/components/chat/SlashCommandButton.tsx": [],
+    "src/components/chat/SlashCommandPopover.tsx": [],
+    "src/components/chat/StreamingMessage.tsx": [
+      "src/components/chat/MediaPreview.tsx",
+      "src/components/chat/ImageGenConfirmation.tsx",
+      "src/components/chat/batch-image-gen/BatchPlanInlinePreview.tsx",
+      "src/components/chat/WidgetRenderer.tsx",
+      "src/components/chat/MessageItem.tsx"
+    ],
+    "src/components/chat/TerminalReasonChip.tsx": [],
+    "src/components/chat/WidgetErrorBoundary.tsx": [],
+    "src/components/chat/WidgetRenderer.tsx": [
+      "src/components/chat/WidgetErrorBoundary.tsx"
+    ],
+    "src/components/chat/batch-image-gen/BatchContextSync.tsx": [],
+    "src/components/chat/batch-image-gen/BatchExecutionDashboard.tsx": [
+      "src/components/chat/batch-image-gen/BatchExecutionItem.tsx"
+    ],
+    "src/components/chat/batch-image-gen/BatchExecutionItem.tsx": [],
+    "src/components/chat/batch-image-gen/BatchPlanInlinePreview.tsx": [
+      "src/components/chat/batch-image-gen/BatchPlanRow.tsx",
+      "src/components/chat/batch-image-gen/BatchExecutionDashboard.tsx",
+      "src/components/chat/batch-image-gen/BatchContextSync.tsx"
+    ],
+    "src/components/chat/batch-image-gen/BatchPlanRow.tsx": [],
+    "src/components/chat/batch-image-gen/index.ts": [],
+    "src/components/cli-tools/CliToolAddDialog.tsx": [],
+    "src/components/cli-tools/CliToolBatchDescribeDialog.tsx": [],
+    "src/components/cli-tools/CliToolCard.tsx": [],
+    "src/components/cli-tools/CliToolDetailDialog.tsx": [
+      "src/components/cli-tools/CliToolCard.tsx"
+    ],
+    "src/components/cli-tools/CliToolExtraDetailDialog.tsx": [
+      "src/components/cli-tools/CliToolCard.tsx"
+    ],
+    "src/components/cli-tools/CliToolInstallDialog.tsx": [],
+    "src/components/cli-tools/CliToolsManager.tsx": [
+      "src/components/cli-tools/CliToolCard.tsx",
+      "src/components/cli-tools/CliToolDetailDialog.tsx",
+      "src/components/cli-tools/CliToolExtraDetailDialog.tsx",
+      "src/components/cli-tools/CliToolBatchDescribeDialog.tsx"
+    ],
+    "src/components/gallery/GalleryDetail.tsx": [
+      "src/components/gallery/GalleryGrid.tsx"
+    ],
+    "src/components/gallery/GalleryGrid.tsx": [],
+    "src/components/gallery/TagManager.tsx": [],
+    "src/components/git/CommitDialog.tsx": []
+  }
+}

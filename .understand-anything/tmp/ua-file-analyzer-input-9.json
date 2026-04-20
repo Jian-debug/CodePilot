@@ -1,0 +1,157 @@
+{
+  "projectRoot": "D:/project/common/AI/CodePilot",
+  "batchFiles": [
+    {
+      "path": "src/app/api/git/log/route.ts",
+      "sizeLines": 21,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/git/push/route.ts",
+      "sizeLines": 19,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/git/status/route.ts",
+      "sizeLines": 19,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/git/worktrees/derive/route.ts",
+      "sizeLines": 62,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/git/worktrees/route.ts",
+      "sizeLines": 19,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/health/route.ts",
+      "sizeLines": 5,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/media/[id]/favorite/route.ts",
+      "sizeLines": 31,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/media/[id]/route.ts",
+      "sizeLines": 73,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/media/[id]/tags/route.ts",
+      "sizeLines": 49,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/media/gallery/route.ts",
+      "sizeLines": 172,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/media/generate/route.ts",
+      "sizeLines": 66,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/media/jobs/[id]/cancel/route.ts",
+      "sizeLines": 38,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/media/jobs/[id]/items/route.ts",
+      "sizeLines": 49,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/media/jobs/[id]/pause/route.ts",
+      "sizeLines": 38,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/media/jobs/[id]/progress/route.ts",
+      "sizeLines": 89,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/media/jobs/[id]/resume/route.ts",
+      "sizeLines": 42,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/media/jobs/[id]/route.ts",
+      "sizeLines": 63,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/media/jobs/[id]/start/route.ts",
+      "sizeLines": 42,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/media/jobs/[id]/sync-context/route.ts",
+      "sizeLines": 99,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/media/jobs/plan/route.ts",
+      "sizeLines": 154,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/media/jobs/route.ts",
+      "sizeLines": 73,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/media/serve/route.ts",
+      "sizeLines": 127,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/media/tags/[id]/route.ts",
+      "sizeLines": 33,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/media/tags/route.ts",
+      "sizeLines": 56,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/openai-oauth/callback/route.ts",
+      "sizeLines": 9,
+      "fileCategory": "code"
+    }
+  ],
+  "batchImportData": {
+    "src/app/api/git/log/route.ts": [],
+    "src/app/api/git/push/route.ts": [],
+    "src/app/api/git/status/route.ts": [],
+    "src/app/api/git/worktrees/derive/route.ts": [],
+    "src/app/api/git/worktrees/route.ts": [],
+    "src/app/api/health/route.ts": [],
+    "src/app/api/media/[id]/favorite/route.ts": [],
+    "src/app/api/media/[id]/route.ts": [],
+    "src/app/api/media/[id]/tags/route.ts": [],
+    "src/app/api/media/gallery/route.ts": [],
+    "src/app/api/media/generate/route.ts": [],
+    "src/app/api/media/jobs/[id]/cancel/route.ts": [],
+    "src/app/api/media/jobs/[id]/items/route.ts": [],
+    "src/app/api/media/jobs/[id]/pause/route.ts": [],
+    "src/app/api/media/jobs/[id]/progress/route.ts": [],
+    "src/app/api/media/jobs/[id]/resume/route.ts": [],
+    "src/app/api/media/jobs/[id]/route.ts": [],
+    "src/app/api/media/jobs/[id]/start/route.ts": [],
+    "src/app/api/media/jobs/[id]/sync-context/route.ts": [],
+    "src/app/api/media/jobs/plan/route.ts": [],
+    "src/app/api/media/jobs/route.ts": [],
+    "src/app/api/media/serve/route.ts": [],
+    "src/app/api/media/tags/[id]/route.ts": [],
+    "src/app/api/media/tags/route.ts": [],
+    "src/app/api/openai-oauth/callback/route.ts": []
+  }
+}

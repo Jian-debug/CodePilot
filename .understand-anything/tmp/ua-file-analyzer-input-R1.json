@@ -1,0 +1,13 @@
+{
+  "projectRoot": "D:/project/common/AI/CodePilot",
+  "batchFiles": [
+    {"path": "src/i18n/index.ts", "fileCategory": "code"},
+    {"path": "src/i18n/en.ts", "fileCategory": "code"},
+    {"path": "src/i18n/zh.ts", "fileCategory": "code"}
+  ],
+  "batchImportData": {
+    "src/i18n/index.ts": ["src/i18n/en.ts", "src/i18n/zh.ts"],
+    "src/i18n/locales.ts": [],
+    "src/i18n/provider.tsx": []
+  }
+}

@@ -1,0 +1,102 @@
+{
+  "reviewDate": "2026-04-20",
+  "nodesMissing": {
+    "recovered": 30,
+    "permanentlyMissing": 1,
+    "details": {
+      "recoveredNodes": [
+        "file:src/lib/openai-oauth.ts",
+        "file:src/lib/parallel-safety.ts",
+        "file:src/lib/mcp-loader.ts",
+        "file:src/lib/provider-resolver.ts",
+        "file:src/lib/provider-catalog.ts",
+        "file:src/lib/provider-presence.ts",
+        "file:src/lib/resolve-session-model.ts",
+        "file:src/lib/runtime/legacy.ts",
+        "file:src/lib/runtime/registry.ts",
+        "file:src/lib/runtime/sdk-runtime.ts",
+        "file:src/lib/sdk-subprocess-env.ts",
+        "file:src/lib/message-input-logic.ts",
+        "file:src/lib/skill-nudge.ts",
+        "file:src/lib/subdirectory-hint-tracker.ts",
+        "file:src/lib/task-scheduler.ts",
+        "file:src/lib/theme/loader.ts",
+        "file:src/lib/theme/render-css.ts",
+        "file:src/lib/theme/types.ts",
+        "file:src/lib/update-release.ts",
+        "file:src/lib/widget-sanitizer.ts",
+        "file:src/lib/widget-css-bridge.ts",
+        "file:src/lib/widget-guidelines.ts",
+        "file:src/lib/working-directory.ts",
+        "file:src/components/ui/prompt-dialog.tsx",
+        "file:src/components/layout/SessionListItem.tsx",
+        "file:src/components/settings/AssistantWorkspaceSection.tsx",
+        "file:src/components/settings/PresetConnectDialog.tsx",
+        "file:src/components/settings/ProviderForm.tsx",
+        "file:src/components/chat/MessageItem.tsx",
+        "file:src/hooks/useSSEStream.ts"
+      ],
+      "permanentlyMissing": [
+        {
+          "file": "src/lib/structured-output.ts",
+          "reason": "File does not exist on disk. Referenced by src/__tests__/unit/structured-output.test.ts edge that was permanently dropped."
+        }
+      ]
+    }
+  },
+  "edgesRecoverable": {
+    "restored": 16,
+    "permanentlyDropped": 21,
+    "restoredEdges": [
+      "file:src/__tests__/unit/openai-oauth-retry.test.ts -> file:src/lib/openai-oauth.ts",
+      "file:src/__tests__/unit/parallel-safety.test.ts -> file:src/lib/parallel-safety.ts",
+      "file:src/__tests__/unit/provider-resolver-fixes.test.ts -> file:src/lib/provider-resolver.ts",
+      "file:src/__tests__/unit/provider-resolver.test.ts -> file:src/lib/provider-resolver.ts",
+      "file:src/__tests__/unit/provider-presence.test.ts -> file:src/lib/provider-presence.ts",
+      "file:src/__tests__/unit/runtime-legacy.test.ts -> file:src/lib/runtime/legacy.ts",
+      "file:src/__tests__/unit/sdk-subprocess-env.test.ts -> file:src/lib/sdk-subprocess-env.ts",
+      "file:src/__tests__/unit/skill-nudge.test.ts -> file:src/lib/skill-nudge.ts",
+      "file:src/__tests__/unit/subdirectory-hint-tracker.test.ts -> file:src/lib/subdirectory-hint-tracker.ts",
+      "file:src/__tests__/unit/task-scheduler.test.ts -> file:src/lib/task-scheduler.ts",
+      "file:src/__tests__/unit/theme-loader.test.ts -> file:src/lib/theme/loader.ts",
+      "file:src/__tests__/unit/update-release.test.ts -> file:src/lib/update-release.ts",
+      "file:src/__tests__/unit/working-directory.test.ts -> file:src/lib/working-directory.ts",
+      "file:src/__tests__/unit/resolve-session-model.test.ts -> file:src/lib/resolve-session-model.ts",
+      "file:src/__tests__/unit/prompt-dialog-replacement.test.ts -> file:src/components/ui/prompt-dialog.tsx",
+      "file:src/__tests__/unit/theme-render-css.test.ts -> file:src/lib/theme/render-css.ts"
+    ],
+    "droppedReasons": {
+      "structuredOutputEdge": "Target file src/lib/structured-output.ts does not exist on disk.",
+      "mcpLoaderEdge": "Test file src/__tests__/unit/mcp-loader.test.ts (78 lines) exists on disk but was not in the original graph analysis. Both test and source were dropped together.",
+      "componentEdges": "Several recovered component nodes (MessageItem.tsx, ProviderForm.tsx, etc.) had dropped edges from test files that were not identifiable from the batch data. No edges were added speculatively for these since the specific test-to-source mappings were not in the original edge set."
+    }
+  },
+  "layerAssignmentGaps": {
+    "preReviewGaps": 0,
+    "postRecoveryGaps": 0,
+    "notes": [
+      "Before recovery: 100% of graph nodes (1297) had matching architecture layer assignments. 0 gaps.",
+      "After recovery: 30 recovered nodes were assigned to layer:core-service. All 1327 graph nodes now have architecture assignments. 0 gaps.",
+      "Note: src/components/* and src/hooks/* files were assigned to layer:core-service since the architecture has no dedicated UI component layer for the main application (layer:site-ui covers the documentation site only). This is a minor architectural inaccuracy."
+    ]
+  },
+  "qualityNotes": [
+    "Graph integrity: 1327 nodes, 1770 edges, 0 broken references, 0 invalid complexity values, 0 nodes without ID prefix.",
+    "Node type distribution: config(32), file(376), function(861), document(46), class(11), pipeline(1). The single pipeline node is a GitHub Actions workflow - legitimate type.",
+    "All complexity values are valid: simple/moderate/complex only.",
+    "Recovered nodes use placeholder summaries (not LLM-analyzed). These should be re-analyzed in a future batch for higher quality summaries.",
+    "src/__tests__/unit/mcp-loader.test.ts exists on disk (78 lines) but is not in the graph or architecture. This is a secondary gap beyond the 31 dropped targets.",
+    "No import map was provided in the dispatch prompt, so no cross-batch import edges were added.",
+    "The 30 recovered nodes were all substantial files (46-1174 lines each), not stubs or trivial files.",
+    "Recovered node tags include 'recovered' marker for easy identification in future processing.",
+    "Previous review (assemble-review-result.json) claimed 31 nodes recovered and 36 edges restored, but those changes were never actually persisted to assembled-graph.json. This review performed the actual recovery."
+  ],
+  "finalCounts": {
+    "totalNodes": 1327,
+    "totalEdges": 1770,
+    "danglingEdges": 0,
+    "invalidComplexity": 0,
+    "nodesInArchitecture": 1327,
+    "architectureLayers": 29
+  }
+}

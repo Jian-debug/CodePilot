@@ -1,0 +1,173 @@
+{
+  "projectRoot": "D:/project/common/AI/CodePilot",
+  "batchFiles": [
+    {
+      "path": "src/lib/cli-tools-catalog.ts",
+      "sizeLines": 451,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/cli-tools-context.ts",
+      "sizeLines": 45,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/cli-tools-detect.ts",
+      "sizeLines": 155,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/cli-tools-mcp.ts",
+      "sizeLines": 865,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/constants/command-icons.ts",
+      "sizeLines": 32,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/constants/commands.ts",
+      "sizeLines": 28,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/constants/image-agent-prompt.ts",
+      "sizeLines": 41,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/context-assembler.ts",
+      "sizeLines": 399,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/context-compressor.ts",
+      "sizeLines": 360,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/context-estimator.ts",
+      "sizeLines": 114,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/context-pruner.ts",
+      "sizeLines": 249,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/conversation-registry.ts",
+      "sizeLines": 22,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/dashboard-cli-reader.ts",
+      "sizeLines": 33,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/dashboard-export.ts",
+      "sizeLines": 113,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/dashboard-file-reader.ts",
+      "sizeLines": 88,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/dashboard-mcp.ts",
+      "sizeLines": 297,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/dashboard-store.ts",
+      "sizeLines": 119,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/db.ts",
+      "sizeLines": 2904,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/error-classifier.ts",
+      "sizeLines": 521,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/file-checkpoint.ts",
+      "sizeLines": 158,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/file-utils.ts",
+      "sizeLines": 25,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/files.ts",
+      "sizeLines": 225,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/git/service.ts",
+      "sizeLines": 385,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/heartbeat.ts",
+      "sizeLines": 139,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/identicon.ts",
+      "sizeLines": 27,
+      "fileCategory": "code"
+    }
+  ],
+  "batchImportData": {
+    "src/lib/cli-tools-catalog.ts": [],
+    "src/lib/cli-tools-context.ts": [
+      "src/lib/cli-tools-detect.ts",
+      "src/lib/cli-tools-catalog.ts",
+      "src/lib/db.ts"
+    ],
+    "src/lib/cli-tools-detect.ts": [
+      "src/lib/platform.ts",
+      "src/lib/cli-tools-catalog.ts"
+    ],
+    "src/lib/cli-tools-mcp.ts": [],
+    "src/lib/constants/command-icons.ts": [],
+    "src/lib/constants/commands.ts": [],
+    "src/lib/constants/image-agent-prompt.ts": [],
+    "src/lib/context-assembler.ts": [],
+    "src/lib/context-compressor.ts": [
+      "src/lib/context-estimator.ts",
+      "src/lib/claude-client.ts",
+      "src/lib/provider-resolver.ts",
+      "src/lib/message-normalizer.ts"
+    ],
+    "src/lib/context-estimator.ts": [],
+    "src/lib/context-pruner.ts": [],
+    "src/lib/conversation-registry.ts": [],
+    "src/lib/dashboard-cli-reader.ts": [],
+    "src/lib/dashboard-export.ts": [],
+    "src/lib/dashboard-file-reader.ts": [],
+    "src/lib/dashboard-mcp.ts": [],
+    "src/lib/dashboard-store.ts": [],
+    "src/lib/db.ts": [
+      "src/lib/bridge/types.ts",
+      "src/lib/utils.ts",
+      "src/lib/provider-catalog.ts"
+    ],
+    "src/lib/error-classifier.ts": [],
+    "src/lib/file-checkpoint.ts": [],
+    "src/lib/file-utils.ts": [],
+    "src/lib/files.ts": [],
+    "src/lib/git/service.ts": [],
+    "src/lib/heartbeat.ts": [],
+    "src/lib/identicon.ts": []
+  }
+}

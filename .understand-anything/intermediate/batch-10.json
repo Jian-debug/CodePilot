@@ -1,0 +1,3417 @@
+{
+  "nodes": [
+    {
+      "id": "file:src/__tests__/unit/utils.test.ts",
+      "type": "file",
+      "name": "utils.test.ts",
+      "filePath": "src/__tests__/unit/utils.test.ts",
+      "summary": "Unit tests for general utility functions in src/lib/utils.ts.",
+      "tags": [
+        "test",
+        "utility",
+        "unit"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "File does not exist on disk; node created from batch metadata only. Extraction script also failed on Windows."
+    },
+    {
+      "id": "file:src/__tests__/unit/store.test.ts",
+      "type": "file",
+      "name": "store.test.ts",
+      "filePath": "src/__tests__/unit/store.test.ts",
+      "summary": "Unit tests for the application state store module.",
+      "tags": [
+        "test",
+        "state-management",
+        "unit"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "File does not exist on disk; node created from batch metadata only. Extraction script also failed on Windows."
+    },
+    {
+      "id": "file:src/__tests__/unit/session.test.ts",
+      "type": "file",
+      "name": "session.test.ts",
+      "filePath": "src/__tests__/unit/session.test.ts",
+      "summary": "Unit tests for session management and lifecycle handling.",
+      "tags": [
+        "test",
+        "session",
+        "unit"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "File does not exist on disk; node created from batch metadata only. Extraction script also failed on Windows."
+    },
+    {
+      "id": "file:src/__tests__/unit/bridge.test.ts",
+      "type": "file",
+      "name": "bridge.test.ts",
+      "filePath": "src/__tests__/unit/bridge.test.ts",
+      "summary": "Unit tests for the IPC bridge between renderer and main process.",
+      "tags": [
+        "test",
+        "ipc",
+        "unit"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "File does not exist on disk; node created from batch metadata only. Extraction script also failed on Windows."
+    },
+    {
+      "id": "file:src/__tests__/unit/mcp.test.ts",
+      "type": "file",
+      "name": "mcp.test.ts",
+      "filePath": "src/__tests__/unit/mcp.test.ts",
+      "summary": "Unit tests for MCP (Model Context Protocol) server integration.",
+      "tags": [
+        "test",
+        "mcp",
+        "unit"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "File does not exist on disk; node created from batch metadata only. Extraction script also failed on Windows."
+    },
+    {
+      "id": "file:src/__tests__/unit/provider.test.ts",
+      "type": "file",
+      "name": "provider.test.ts",
+      "filePath": "src/__tests__/unit/provider.test.ts",
+      "summary": "Unit tests for AI provider configuration and resolution.",
+      "tags": [
+        "test",
+        "provider",
+        "unit"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "File does not exist on disk; node created from batch metadata only. Extraction script also failed on Windows."
+    },
+    {
+      "id": "file:src/__tests__/unit/compact.test.ts",
+      "type": "file",
+      "name": "compact.test.ts",
+      "filePath": "src/__tests__/unit/compact.test.ts",
+      "summary": "Unit tests for context window compaction logic.",
+      "tags": [
+        "test",
+        "compaction",
+        "unit"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "File does not exist on disk; node created from batch metadata only. Extraction script also failed on Windows."
+    },
+    {
+      "id": "file:src/__tests__/unit/skill.test.ts",
+      "type": "file",
+      "name": "skill.test.ts",
+      "filePath": "src/__tests__/unit/skill.test.ts",
+      "summary": "Unit tests for skill detection, loading, and execution.",
+      "tags": [
+        "test",
+        "skill",
+        "unit"
+      ],
+      "complexity": "simple",
+      "languageNotes": "File does not exist on disk; node created from batch metadata only. Extraction script also failed on Windows."
+    },
+    {
+      "id": "file:src/__tests__/unit/tokenizer.test.ts",
+      "type": "file",
+      "name": "tokenizer.test.ts",
+      "filePath": "src/__tests__/unit/tokenizer.test.ts",
+      "summary": "Unit tests for token counting and estimation utilities.",
+      "tags": [
+        "test",
+        "tokenizer",
+        "unit"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "File does not exist on disk; node created from batch metadata only. Extraction script also failed on Windows."
+    },
+    {
+      "id": "file:src/__tests__/unit/git.test.ts",
+      "type": "file",
+      "name": "git.test.ts",
+      "filePath": "src/__tests__/unit/git.test.ts",
+      "summary": "Unit tests for git repository operations and status parsing.",
+      "tags": [
+        "test",
+        "git",
+        "unit"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "File does not exist on disk; node created from batch metadata only. Extraction script also failed on Windows."
+    },
+    {
+      "id": "file:src/__tests__/unit/file-tree.test.ts",
+      "type": "file",
+      "name": "file-tree.test.ts",
+      "filePath": "src/__tests__/unit/file-tree.test.ts",
+      "summary": "Unit tests for file tree data structures and navigation.",
+      "tags": [
+        "test",
+        "file-tree",
+        "unit"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "File does not exist on disk; node created from batch metadata only. Extraction script also failed on Windows."
+    },
+    {
+      "id": "file:src/__tests__/unit/scheduler.test.ts",
+      "type": "file",
+      "name": "scheduler.test.ts",
+      "filePath": "src/__tests__/unit/scheduler.test.ts",
+      "summary": "Unit tests for task scheduling and job queue management.",
+      "tags": [
+        "test",
+        "scheduler",
+        "unit"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "File does not exist on disk; node created from batch metadata only. Extraction script also failed on Windows."
+    },
+    {
+      "id": "file:src/__tests__/unit/image-gen.test.ts",
+      "type": "file",
+      "name": "image-gen.test.ts",
+      "filePath": "src/__tests__/unit/image-gen.test.ts",
+      "summary": "Unit tests for image generation tool integration.",
+      "tags": [
+        "test",
+        "image-generation",
+        "unit"
+      ],
+      "complexity": "simple",
+      "languageNotes": "File does not exist on disk; node created from batch metadata only. Extraction script also failed on Windows."
+    },
+    {
+      "id": "file:src/__tests__/unit/db.test.ts",
+      "type": "file",
+      "name": "db.test.ts",
+      "filePath": "src/__tests__/unit/db.test.ts",
+      "summary": "Unit tests for local SQLite database operations.",
+      "tags": [
+        "test",
+        "database",
+        "unit"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "File does not exist on disk; node created from batch metadata only. Extraction script also failed on Windows."
+    },
+    {
+      "id": "file:src/__tests__/unit/i18n.test.ts",
+      "type": "file",
+      "name": "i18n.test.ts",
+      "filePath": "src/__tests__/unit/i18n.test.ts",
+      "summary": "Unit tests for internationalization and locale switching.",
+      "tags": [
+        "test",
+        "i18n",
+        "unit"
+      ],
+      "complexity": "simple",
+      "languageNotes": "File does not exist on disk; node created from batch metadata only. Extraction script also failed on Windows."
+    },
+    {
+      "id": "file:src/__tests__/unit/theme.test.ts",
+      "type": "file",
+      "name": "theme.test.ts",
+      "filePath": "src/__tests__/unit/theme.test.ts",
+      "summary": "Unit tests for theme loading and CSS variable management.",
+      "tags": [
+        "test",
+        "theme",
+        "unit"
+      ],
+      "complexity": "simple",
+      "languageNotes": "File does not exist on disk; node created from batch metadata only. Extraction script also failed on Windows."
+    },
+    {
+      "id": "file:src/__tests__/unit/markdown.test.ts",
+      "type": "file",
+      "name": "markdown.test.ts",
+      "filePath": "src/__tests__/unit/markdown.test.ts",
+      "summary": "Unit tests for Markdown rendering and syntax highlighting.",
+      "tags": [
+        "test",
+        "markdown",
+        "unit"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "File does not exist on disk; node created from batch metadata only. Extraction script also failed on Windows."
+    },
+    {
+      "id": "file:src/__tests__/unit/terminal.test.ts",
+      "type": "file",
+      "name": "terminal.test.ts",
+      "filePath": "src/__tests__/unit/terminal.test.ts",
+      "summary": "Unit tests for integrated terminal session management.",
+      "tags": [
+        "test",
+        "terminal",
+        "unit"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "File does not exist on disk; node created from batch metadata only. Extraction script also failed on Windows."
+    },
+    {
+      "id": "file:src/__tests__/unit/telemetry.test.ts",
+      "type": "file",
+      "name": "telemetry.test.ts",
+      "filePath": "src/__tests__/unit/telemetry.test.ts",
+      "summary": "Unit tests for anonymous telemetry and usage tracking.",
+      "tags": [
+        "test",
+        "telemetry",
+        "unit"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "File does not exist on disk; node created from batch metadata only. Extraction script also failed on Windows."
+    },
+    {
+      "id": "file:src/__tests__/e2e/chat.spec.ts",
+      "type": "file",
+      "name": "chat.spec.ts",
+      "filePath": "src/__tests__/e2e/chat.spec.ts",
+      "summary": "End-to-end Playwright tests for the chat interface including message sending, streaming responses, abort generation, and sidebar chat history.",
+      "tags": [
+        "test",
+        "e2e",
+        "chat",
+        "playwright"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/__tests__/e2e/settings.spec.ts",
+      "type": "file",
+      "name": "settings.spec.ts",
+      "filePath": "src/__tests__/e2e/settings.spec.ts",
+      "summary": "End-to-end Playwright tests for the settings page covering Visual Editor, JSON mode, save/reset flow, and Skills tab navigation.",
+      "tags": [
+        "test",
+        "e2e",
+        "settings",
+        "playwright"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/__tests__/e2e/mcp.spec.ts",
+      "type": "file",
+      "name": "mcp.spec.ts",
+      "filePath": "src/__tests__/e2e/mcp.spec.ts",
+      "summary": "End-to-end Playwright tests for MCP server management UI.",
+      "tags": [
+        "test",
+        "e2e",
+        "mcp",
+        "playwright"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "File does not exist on disk; node created from batch metadata only. Extraction script also failed on Windows."
+    },
+    {
+      "id": "file:src/__tests__/e2e/providers.spec.ts",
+      "type": "file",
+      "name": "providers.spec.ts",
+      "filePath": "src/__tests__/e2e/providers.spec.ts",
+      "summary": "End-to-end Playwright tests for AI provider selection and configuration UI.",
+      "tags": [
+        "test",
+        "e2e",
+        "providers",
+        "playwright"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "File does not exist on disk; node created from batch metadata only. Extraction script also failed on Windows."
+    },
+    {
+      "id": "file:src/__tests__/e2e/terminal.spec.ts",
+      "type": "file",
+      "name": "terminal.spec.ts",
+      "filePath": "src/__tests__/e2e/terminal.spec.ts",
+      "summary": "End-to-end Playwright tests for the integrated terminal panel.",
+      "tags": [
+        "test",
+        "e2e",
+        "terminal",
+        "playwright"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "File does not exist on disk; node created from batch metadata only. Extraction script also failed on Windows."
+    },
+    {
+      "id": "file:src/__tests__/integration/setup.ts",
+      "type": "file",
+      "name": "setup.ts",
+      "filePath": "src/__tests__/integration/setup.ts",
+      "summary": "Integration test setup and shared fixtures for the test suite.",
+      "tags": [
+        "test",
+        "integration",
+        "setup"
+      ],
+      "complexity": "simple",
+      "languageNotes": "File does not exist on disk; node created from batch metadata only. Extraction script also failed on Windows."
+    },
+    {
+      "id": "file:src/__tests__/helpers.ts",
+      "type": "file",
+      "name": "helpers.ts",
+      "filePath": "src/__tests__/helpers.ts",
+      "summary": "Shared Playwright test helpers for e2e tests, providing navigation functions, common locators, and assertion utilities across chat, settings, plugins, and MCP pages.",
+      "tags": [
+        "test",
+        "e2e",
+        "helpers",
+        "playwright",
+        "utility"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:src/lib/utils.ts",
+      "type": "file",
+      "name": "utils.ts",
+      "filePath": "src/lib/utils.ts",
+      "summary": "General utility functions used across the application.",
+      "tags": [
+        "source"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/lib/store.ts",
+      "type": "file",
+      "name": "store.ts",
+      "filePath": "src/lib/store.ts",
+      "summary": "Application state store module.",
+      "tags": [
+        "source"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/app/chat/page.tsx",
+      "type": "file",
+      "name": "page.tsx",
+      "filePath": "src/app/chat/page.tsx",
+      "summary": "Chat page component -- the main conversation UI.",
+      "tags": [
+        "source"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/app/settings/page.tsx",
+      "type": "file",
+      "name": "page.tsx",
+      "filePath": "src/app/settings/page.tsx",
+      "summary": "Settings page component -- user preferences and configuration UI.",
+      "tags": [
+        "source"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/__tests__/e2e/chat.spec.ts:home_page_redirects_to__chat",
+      "type": "function",
+      "name": "home page redirects to /chat",
+      "filePath": "src/__tests__/e2e/chat.spec.ts",
+      "lineRange": [
+        22,
+        26
+      ],
+      "summary": "Playwright e2e test: home page redirects to /chat.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/e2e/chat.spec.ts:chat_page_loads_within_3_seconds",
+      "type": "function",
+      "name": "chat page loads within 3 seconds",
+      "filePath": "src/__tests__/e2e/chat.spec.ts",
+      "lineRange": [
+        28,
+        30
+      ],
+      "summary": "Playwright e2e test: chat page loads within 3 seconds.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/e2e/chat.spec.ts:chat_page_has_no_console_errors",
+      "type": "function",
+      "name": "chat page has no console errors",
+      "filePath": "src/__tests__/e2e/chat.spec.ts",
+      "lineRange": [
+        32,
+        37
+      ],
+      "summary": "Playwright e2e test: chat page has no console errors.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/e2e/chat.spec.ts:chat_page_shows_empty_state_when_no_messages",
+      "type": "function",
+      "name": "chat page shows empty state when no messages",
+      "filePath": "src/__tests__/e2e/chat.spec.ts",
+      "lineRange": [
+        39,
+        51
+      ],
+      "summary": "Playwright e2e test: chat page shows empty state when no messages.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/e2e/chat.spec.ts:New_Chat_button_is_visible_in_sidebar",
+      "type": "function",
+      "name": "New Chat button is visible in sidebar",
+      "filePath": "src/__tests__/e2e/chat.spec.ts",
+      "lineRange": [
+        55,
+        58
+      ],
+      "summary": "Playwright e2e test: New Chat button is visible in sidebar.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/e2e/chat.spec.ts:chat_textarea_is_visible_with_correct_placeholder",
+      "type": "function",
+      "name": "chat textarea is visible with correct placeholder",
+      "filePath": "src/__tests__/e2e/chat.spec.ts",
+      "lineRange": [
+        60,
+        69
+      ],
+      "summary": "Playwright e2e test: chat textarea is visible with correct placeholder.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/e2e/chat.spec.ts:send_button_is_visible",
+      "type": "function",
+      "name": "send button is visible",
+      "filePath": "src/__tests__/e2e/chat.spec.ts",
+      "lineRange": [
+        71,
+        74
+      ],
+      "summary": "Playwright e2e test: send button is visible.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/e2e/chat.spec.ts:helper_text_is_displayed_below_input",
+      "type": "function",
+      "name": "helper text is displayed below input",
+      "filePath": "src/__tests__/e2e/chat.spec.ts",
+      "lineRange": [
+        76,
+        83
+      ],
+      "summary": "Playwright e2e test: helper text is displayed below input.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/e2e/chat.spec.ts:can_type_in_chat_input",
+      "type": "function",
+      "name": "can type in chat input",
+      "filePath": "src/__tests__/e2e/chat.spec.ts",
+      "lineRange": [
+        87,
+        92
+      ],
+      "summary": "Playwright e2e test: can type in chat input.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/e2e/chat.spec.ts:send_a_message_and_see_it_in_the_conversation",
+      "type": "function",
+      "name": "send a message and see it in the conversation",
+      "filePath": "src/__tests__/e2e/chat.spec.ts",
+      "lineRange": [
+        94,
+        102
+      ],
+      "summary": "Playwright e2e test: send a message and see it in the conversation.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/e2e/chat.spec.ts:stop_button_replaces_send_button_during_streaming",
+      "type": "function",
+      "name": "stop button replaces send button during streaming",
+      "filePath": "src/__tests__/e2e/chat.spec.ts",
+      "lineRange": [
+        104,
+        112
+      ],
+      "summary": "Playwright e2e test: stop button replaces send button during streaming.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/e2e/chat.spec.ts:stop_button_appears_during_streaming",
+      "type": "function",
+      "name": "stop button appears during streaming",
+      "filePath": "src/__tests__/e2e/chat.spec.ts",
+      "lineRange": [
+        116,
+        122
+      ],
+      "summary": "Playwright e2e test: stop button appears during streaming.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/e2e/chat.spec.ts:assistant_avatar_appears_for_assistant_response",
+      "type": "function",
+      "name": "assistant avatar appears for assistant response",
+      "filePath": "src/__tests__/e2e/chat.spec.ts",
+      "lineRange": [
+        124,
+        132
+      ],
+      "summary": "Playwright e2e test: assistant avatar appears for assistant response.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/e2e/chat.spec.ts:URL_updates_to_session_ID_after_response_completes",
+      "type": "function",
+      "name": "URL updates to session ID after response completes",
+      "filePath": "src/__tests__/e2e/chat.spec.ts",
+      "lineRange": [
+        134,
+        141
+      ],
+      "summary": "Playwright e2e test: URL updates to session ID after response completes.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/e2e/chat.spec.ts:conversation_appears_in_sidebar_after_response",
+      "type": "function",
+      "name": "conversation appears in sidebar after response",
+      "filePath": "src/__tests__/e2e/chat.spec.ts",
+      "lineRange": [
+        143,
+        154
+      ],
+      "summary": "Playwright e2e test: conversation appears in sidebar after response.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/e2e/chat.spec.ts:clicking_stop_button_halts_streaming",
+      "type": "function",
+      "name": "clicking stop button halts streaming",
+      "filePath": "src/__tests__/e2e/chat.spec.ts",
+      "lineRange": [
+        158,
+        170
+      ],
+      "summary": "Playwright e2e test: clicking stop button halts streaming.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/e2e/chat.spec.ts:sidebar_has_chat_list_section",
+      "type": "function",
+      "name": "sidebar has chat list section",
+      "filePath": "src/__tests__/e2e/chat.spec.ts",
+      "lineRange": [
+        174,
+        181
+      ],
+      "summary": "Playwright e2e test: sidebar has chat list section.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/e2e/chat.spec.ts:empty_state_or_session_list_is_shown_in_sidebar",
+      "type": "function",
+      "name": "empty state or session list is shown in sidebar",
+      "filePath": "src/__tests__/e2e/chat.spec.ts",
+      "lineRange": [
+        183,
+        191
+      ],
+      "summary": "Playwright e2e test: empty state or session list is shown in sidebar.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/e2e/settings.spec.ts:settings_page_loads_within_3_seconds",
+      "type": "function",
+      "name": "settings page loads within 3 seconds",
+      "filePath": "src/__tests__/e2e/settings.spec.ts",
+      "lineRange": [
+        22,
+        24
+      ],
+      "summary": "Playwright e2e test: settings page loads within 3 seconds.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/e2e/settings.spec.ts:settings_page_has_no_console_errors",
+      "type": "function",
+      "name": "settings page has no console errors",
+      "filePath": "src/__tests__/e2e/settings.spec.ts",
+      "lineRange": [
+        26,
+        31
+      ],
+      "summary": "Playwright e2e test: settings page has no console errors.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/e2e/settings.spec.ts:page_title_and_description_visible",
+      "type": "function",
+      "name": "page title and description visible",
+      "filePath": "src/__tests__/e2e/settings.spec.ts",
+      "lineRange": [
+        33,
+        39
+      ],
+      "summary": "Playwright e2e test: page title and description visible.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/e2e/settings.spec.ts:Visual_Editor_tab_is_selected_by_default",
+      "type": "function",
+      "name": "Visual Editor tab is selected by default",
+      "filePath": "src/__tests__/e2e/settings.spec.ts",
+      "lineRange": [
+        43,
+        46
+      ],
+      "summary": "Playwright e2e test: Visual Editor tab is selected by default.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/e2e/settings.spec.ts:Permissions_section_is_visible",
+      "type": "function",
+      "name": "Permissions section is visible",
+      "filePath": "src/__tests__/e2e/settings.spec.ts",
+      "lineRange": [
+        48,
+        54
+      ],
+      "summary": "Playwright e2e test: Permissions section is visible.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/e2e/settings.spec.ts:Environment_Variables_section_is_visible",
+      "type": "function",
+      "name": "Environment Variables section is visible",
+      "filePath": "src/__tests__/e2e/settings.spec.ts",
+      "lineRange": [
+        56,
+        62
+      ],
+      "summary": "Playwright e2e test: Environment Variables section is visible.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/e2e/settings.spec.ts:Save_Changes_button_is_visible",
+      "type": "function",
+      "name": "Save Changes button is visible",
+      "filePath": "src/__tests__/e2e/settings.spec.ts",
+      "lineRange": [
+        66,
+        69
+      ],
+      "summary": "Playwright e2e test: Save Changes button is visible.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/e2e/settings.spec.ts:Reset_button_is_visible",
+      "type": "function",
+      "name": "Reset button is visible",
+      "filePath": "src/__tests__/e2e/settings.spec.ts",
+      "lineRange": [
+        71,
+        74
+      ],
+      "summary": "Playwright e2e test: Reset button is visible.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/e2e/settings.spec.ts:permissions_textarea_is_editable",
+      "type": "function",
+      "name": "permissions textarea is editable",
+      "filePath": "src/__tests__/e2e/settings.spec.ts",
+      "lineRange": [
+        76,
+        82
+      ],
+      "summary": "Playwright e2e test: permissions textarea is editable.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/e2e/settings.spec.ts:environment_variables_textarea_shows_current_values",
+      "type": "function",
+      "name": "environment variables textarea shows current values",
+      "filePath": "src/__tests__/e2e/settings.spec.ts",
+      "lineRange": [
+        84,
+        91
+      ],
+      "summary": "Playwright e2e test: environment variables textarea shows current values.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/e2e/settings.spec.ts:switch_to_JSON_editor_mode",
+      "type": "function",
+      "name": "switch to JSON editor mode",
+      "filePath": "src/__tests__/e2e/settings.spec.ts",
+      "lineRange": [
+        95,
+        102
+      ],
+      "summary": "Playwright e2e test: switch to JSON editor mode.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/e2e/settings.spec.ts:JSON_editor_contains_valid_JSON",
+      "type": "function",
+      "name": "JSON editor contains valid JSON",
+      "filePath": "src/__tests__/e2e/settings.spec.ts",
+      "lineRange": [
+        104,
+        112
+      ],
+      "summary": "Playwright e2e test: JSON editor contains valid JSON.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/e2e/settings.spec.ts:JSON_contains_env_settings",
+      "type": "function",
+      "name": "JSON contains env settings",
+      "filePath": "src/__tests__/e2e/settings.spec.ts",
+      "lineRange": [
+        114,
+        123
+      ],
+      "summary": "Playwright e2e test: JSON contains env settings.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/e2e/settings.spec.ts:JSON_mode_has_Save_JSON_button",
+      "type": "function",
+      "name": "JSON mode has Save JSON button",
+      "filePath": "src/__tests__/e2e/settings.spec.ts",
+      "lineRange": [
+        125,
+        131
+      ],
+      "summary": "Playwright e2e test: JSON mode has Save JSON button.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/e2e/settings.spec.ts:JSON_mode_has_Format_button",
+      "type": "function",
+      "name": "JSON mode has Format button",
+      "filePath": "src/__tests__/e2e/settings.spec.ts",
+      "lineRange": [
+        133,
+        139
+      ],
+      "summary": "Playwright e2e test: JSON mode has Format button.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/e2e/settings.spec.ts:toggle_between_Visual_and_JSON_modes",
+      "type": "function",
+      "name": "toggle between Visual and JSON modes",
+      "filePath": "src/__tests__/e2e/settings.spec.ts",
+      "lineRange": [
+        143,
+        155
+      ],
+      "summary": "Playwright e2e test: toggle between Visual and JSON modes.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/e2e/settings.spec.ts:Editor_mode_toggle_has_both_options",
+      "type": "function",
+      "name": "Editor mode toggle has both options",
+      "filePath": "src/__tests__/e2e/settings.spec.ts",
+      "lineRange": [
+        157,
+        161
+      ],
+      "summary": "Playwright e2e test: Editor mode toggle has both options.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/e2e/settings.spec.ts:Save_Changes_button_is_visible_and_disabled_when_no_changes",
+      "type": "function",
+      "name": "Save Changes button is visible and disabled when no changes",
+      "filePath": "src/__tests__/e2e/settings.spec.ts",
+      "lineRange": [
+        165,
+        171
+      ],
+      "summary": "Playwright e2e test: Save Changes button is visible and disabled when no changes.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/e2e/settings.spec.ts:Save_Changes_button_enables_after_making_a_change",
+      "type": "function",
+      "name": "Save Changes button enables after making a change",
+      "filePath": "src/__tests__/e2e/settings.spec.ts",
+      "lineRange": [
+        173,
+        183
+      ],
+      "summary": "Playwright e2e test: Save Changes button enables after making a change.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/e2e/settings.spec.ts:Reset_button_is_visible_and_disabled_when_no_changes",
+      "type": "function",
+      "name": "Reset button is visible and disabled when no changes",
+      "filePath": "src/__tests__/e2e/settings.spec.ts",
+      "lineRange": [
+        187,
+        193
+      ],
+      "summary": "Playwright e2e test: Reset button is visible and disabled when no changes.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/e2e/settings.spec.ts:Reset_button_enables_after_making_a_change",
+      "type": "function",
+      "name": "Reset button enables after making a change",
+      "filePath": "src/__tests__/e2e/settings.spec.ts",
+      "lineRange": [
+        195,
+        204
+      ],
+      "summary": "Playwright e2e test: Reset button enables after making a change.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/e2e/settings.spec.ts:settings_page_has_Skills_tab_or_link",
+      "type": "function",
+      "name": "settings page has Skills tab or link",
+      "filePath": "src/__tests__/e2e/settings.spec.ts",
+      "lineRange": [
+        208,
+        213
+      ],
+      "summary": "Playwright e2e test: settings page has Skills tab or link.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/e2e/settings.spec.ts:navigating_to__settings_tab_skills_loads_skills_editor",
+      "type": "function",
+      "name": "navigating to /settings?tab=skills loads skills editor",
+      "filePath": "src/__tests__/e2e/settings.spec.ts",
+      "lineRange": [
+        215,
+        220
+      ],
+      "summary": "Playwright e2e test: navigating to /settings?tab=skills loads skills editor.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/e2e/settings.spec.ts:settings_tab_skills_has_no_console_errors",
+      "type": "function",
+      "name": "settings?tab=skills has no console errors",
+      "filePath": "src/__tests__/e2e/settings.spec.ts",
+      "lineRange": [
+        222,
+        227
+      ],
+      "summary": "Playwright e2e test: settings?tab=skills has no console errors.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/helpers.ts:goToChat",
+      "type": "function",
+      "name": "goToChat",
+      "filePath": "src/__tests__/helpers.ts",
+      "lineRange": [
+        8,
+        11
+      ],
+      "summary": "Navigates the Playwright page to the chat page and waits for readiness.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright",
+        "helper"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/helpers.ts:goToConversation",
+      "type": "function",
+      "name": "goToConversation",
+      "filePath": "src/__tests__/helpers.ts",
+      "lineRange": [
+        14,
+        17
+      ],
+      "summary": "Navigates the Playwright page to the conversation page and waits for readiness.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright",
+        "helper"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/helpers.ts:goToPlugins",
+      "type": "function",
+      "name": "goToPlugins",
+      "filePath": "src/__tests__/helpers.ts",
+      "lineRange": [
+        20,
+        23
+      ],
+      "summary": "Navigates the Playwright page to the plugins page and waits for readiness.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright",
+        "helper"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/helpers.ts:goToMCP",
+      "type": "function",
+      "name": "goToMCP",
+      "filePath": "src/__tests__/helpers.ts",
+      "lineRange": [
+        26,
+        29
+      ],
+      "summary": "Navigates the Playwright page to the m c p page and waits for readiness.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright",
+        "helper"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/helpers.ts:goToSettings",
+      "type": "function",
+      "name": "goToSettings",
+      "filePath": "src/__tests__/helpers.ts",
+      "lineRange": [
+        32,
+        35
+      ],
+      "summary": "Navigates the Playwright page to the settings page and waits for readiness.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright",
+        "helper"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/helpers.ts:goToSettingsTab",
+      "type": "function",
+      "name": "goToSettingsTab",
+      "filePath": "src/__tests__/helpers.ts",
+      "lineRange": [
+        38,
+        41
+      ],
+      "summary": "Returns a Playwright Locator for the go to settings tab element.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright",
+        "locator"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/helpers.ts:waitForPageReady",
+      "type": "function",
+      "name": "waitForPageReady",
+      "filePath": "src/__tests__/helpers.ts",
+      "lineRange": [
+        48,
+        51
+      ],
+      "summary": "Waits for the page ready condition on the page.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright",
+        "helper"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/helpers.ts:waitForStreamingStart",
+      "type": "function",
+      "name": "waitForStreamingStart",
+      "filePath": "src/__tests__/helpers.ts",
+      "lineRange": [
+        54,
+        57
+      ],
+      "summary": "Waits for the streaming start condition on the page.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright",
+        "helper"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/helpers.ts:waitForStreamingEnd",
+      "type": "function",
+      "name": "waitForStreamingEnd",
+      "filePath": "src/__tests__/helpers.ts",
+      "lineRange": [
+        63,
+        65
+      ],
+      "summary": "Waits for the streaming end condition on the page.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright",
+        "helper"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/helpers.ts:sendMessage",
+      "type": "function",
+      "name": "sendMessage",
+      "filePath": "src/__tests__/helpers.ts",
+      "lineRange": [
+        72,
+        76
+      ],
+      "summary": "Returns a Playwright Locator for the send message element.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright",
+        "locator"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/helpers.ts:getMessageRoles",
+      "type": "function",
+      "name": "getMessageRoles",
+      "filePath": "src/__tests__/helpers.ts",
+      "lineRange": [
+        79,
+        82
+      ],
+      "summary": "Playwright test helper function: get message roles.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright",
+        "helper"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/helpers.ts:chatInput",
+      "type": "function",
+      "name": "chatInput",
+      "filePath": "src/__tests__/helpers.ts",
+      "lineRange": [
+        98,
+        100
+      ],
+      "summary": "Returns a Playwright Locator for the chat input element.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright",
+        "locator"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/helpers.ts:sendButton",
+      "type": "function",
+      "name": "sendButton",
+      "filePath": "src/__tests__/helpers.ts",
+      "lineRange": [
+        107,
+        109
+      ],
+      "summary": "Returns a Playwright Locator for the send button element.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright",
+        "locator"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/helpers.ts:stopButton",
+      "type": "function",
+      "name": "stopButton",
+      "filePath": "src/__tests__/helpers.ts",
+      "lineRange": [
+        112,
+        114
+      ],
+      "summary": "Returns a Playwright Locator for the stop button element.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright",
+        "locator"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/helpers.ts:newChatButton",
+      "type": "function",
+      "name": "newChatButton",
+      "filePath": "src/__tests__/helpers.ts",
+      "lineRange": [
+        123,
+        128
+      ],
+      "summary": "Returns a Playwright Locator for the new chat button element.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright",
+        "locator"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/helpers.ts:assistantMessage",
+      "type": "function",
+      "name": "assistantMessage",
+      "filePath": "src/__tests__/helpers.ts",
+      "lineRange": [
+        135,
+        137
+      ],
+      "summary": "Returns a Playwright Locator for the assistant message element.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright",
+        "locator"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/helpers.ts:userMessage",
+      "type": "function",
+      "name": "userMessage",
+      "filePath": "src/__tests__/helpers.ts",
+      "lineRange": [
+        140,
+        142
+      ],
+      "summary": "Returns a Playwright Locator for the user message element.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright",
+        "locator"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/helpers.ts:sidebar",
+      "type": "function",
+      "name": "sidebar",
+      "filePath": "src/__tests__/helpers.ts",
+      "lineRange": [
+        145,
+        147
+      ],
+      "summary": "Playwright test helper function: sidebar.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright",
+        "helper"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/helpers.ts:sidebarToggle",
+      "type": "function",
+      "name": "sidebarToggle",
+      "filePath": "src/__tests__/helpers.ts",
+      "lineRange": [
+        150,
+        152
+      ],
+      "summary": "Returns a Playwright Locator for the sidebar toggle element.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright",
+        "locator"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/helpers.ts:themeToggle",
+      "type": "function",
+      "name": "themeToggle",
+      "filePath": "src/__tests__/helpers.ts",
+      "lineRange": [
+        155,
+        157
+      ],
+      "summary": "Returns a Playwright Locator for the theme toggle element.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright",
+        "locator"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/helpers.ts:navLink",
+      "type": "function",
+      "name": "navLink",
+      "filePath": "src/__tests__/helpers.ts",
+      "lineRange": [
+        160,
+        162
+      ],
+      "summary": "Returns a Playwright Locator for the nav link element.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright",
+        "locator"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/helpers.ts:sessionLinks",
+      "type": "function",
+      "name": "sessionLinks",
+      "filePath": "src/__tests__/helpers.ts",
+      "lineRange": [
+        165,
+        167
+      ],
+      "summary": "Playwright test helper function: session links.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright",
+        "helper"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/helpers.ts:pluginSearchInput",
+      "type": "function",
+      "name": "pluginSearchInput",
+      "filePath": "src/__tests__/helpers.ts",
+      "lineRange": [
+        170,
+        172
+      ],
+      "summary": "Returns a Playwright Locator for the plugin search input element.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright",
+        "locator"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/helpers.ts:addServerButton",
+      "type": "function",
+      "name": "addServerButton",
+      "filePath": "src/__tests__/helpers.ts",
+      "lineRange": [
+        175,
+        177
+      ],
+      "summary": "Returns a Playwright Locator for the add server button element.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright",
+        "locator"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/helpers.ts:settingsSaveButton",
+      "type": "function",
+      "name": "settingsSaveButton",
+      "filePath": "src/__tests__/helpers.ts",
+      "lineRange": [
+        180,
+        182
+      ],
+      "summary": "Returns a Playwright Locator for the settings save button element.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright",
+        "locator"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/helpers.ts:settingsResetButton",
+      "type": "function",
+      "name": "settingsResetButton",
+      "filePath": "src/__tests__/helpers.ts",
+      "lineRange": [
+        185,
+        187
+      ],
+      "summary": "Returns a Playwright Locator for the settings reset button element.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright",
+        "locator"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/helpers.ts:settingsVisualTab",
+      "type": "function",
+      "name": "settingsVisualTab",
+      "filePath": "src/__tests__/helpers.ts",
+      "lineRange": [
+        190,
+        192
+      ],
+      "summary": "Returns a Playwright Locator for the settings visual tab element.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright",
+        "locator"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/helpers.ts:settingsJsonTab",
+      "type": "function",
+      "name": "settingsJsonTab",
+      "filePath": "src/__tests__/helpers.ts",
+      "lineRange": [
+        195,
+        197
+      ],
+      "summary": "Returns a Playwright Locator for the settings json tab element.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright",
+        "locator"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/helpers.ts:panelZone",
+      "type": "function",
+      "name": "panelZone",
+      "filePath": "src/__tests__/helpers.ts",
+      "lineRange": [
+        204,
+        206
+      ],
+      "summary": "Playwright test helper function: panel zone.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright",
+        "helper"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/helpers.ts:fileTreePanel",
+      "type": "function",
+      "name": "fileTreePanel",
+      "filePath": "src/__tests__/helpers.ts",
+      "lineRange": [
+        209,
+        211
+      ],
+      "summary": "Returns a Playwright Locator for the file tree panel element.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright",
+        "locator"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/helpers.ts:gitPanel",
+      "type": "function",
+      "name": "gitPanel",
+      "filePath": "src/__tests__/helpers.ts",
+      "lineRange": [
+        214,
+        216
+      ],
+      "summary": "Returns a Playwright Locator for the git panel element.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright",
+        "locator"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/helpers.ts:previewPanel",
+      "type": "function",
+      "name": "previewPanel",
+      "filePath": "src/__tests__/helpers.ts",
+      "lineRange": [
+        219,
+        221
+      ],
+      "summary": "Returns a Playwright Locator for the preview panel element.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright",
+        "locator"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/helpers.ts:fileTreeToggleButton",
+      "type": "function",
+      "name": "fileTreeToggleButton",
+      "filePath": "src/__tests__/helpers.ts",
+      "lineRange": [
+        224,
+        226
+      ],
+      "summary": "Returns a Playwright Locator for the file tree toggle button element.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright",
+        "locator"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/helpers.ts:gitToggleButton",
+      "type": "function",
+      "name": "gitToggleButton",
+      "filePath": "src/__tests__/helpers.ts",
+      "lineRange": [
+        229,
+        231
+      ],
+      "summary": "Returns a Playwright Locator for the git toggle button element.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright",
+        "locator"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/helpers.ts:terminalToggleButton",
+      "type": "function",
+      "name": "terminalToggleButton",
+      "filePath": "src/__tests__/helpers.ts",
+      "lineRange": [
+        234,
+        236
+      ],
+      "summary": "Returns a Playwright Locator for the terminal toggle button element.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright",
+        "locator"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/helpers.ts:panelCloseButton",
+      "type": "function",
+      "name": "panelCloseButton",
+      "filePath": "src/__tests__/helpers.ts",
+      "lineRange": [
+        239,
+        241
+      ],
+      "summary": "Returns a Playwright Locator for the panel close button element.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright",
+        "locator"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/helpers.ts:rightPanel",
+      "type": "function",
+      "name": "rightPanel",
+      "filePath": "src/__tests__/helpers.ts",
+      "lineRange": [
+        245,
+        247
+      ],
+      "summary": "Returns a Playwright Locator for the right panel element.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright",
+        "locator"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/helpers.ts:panelOpenButton",
+      "type": "function",
+      "name": "panelOpenButton",
+      "filePath": "src/__tests__/helpers.ts",
+      "lineRange": [
+        249,
+        251
+      ],
+      "summary": "Returns a Playwright Locator for the panel open button element.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright",
+        "locator"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/helpers.ts:panelFilesTab",
+      "type": "function",
+      "name": "panelFilesTab",
+      "filePath": "src/__tests__/helpers.ts",
+      "lineRange": [
+        253,
+        255
+      ],
+      "summary": "Returns a Playwright Locator for the panel files tab element.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright",
+        "locator"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/helpers.ts:panelTasksTab",
+      "type": "function",
+      "name": "panelTasksTab",
+      "filePath": "src/__tests__/helpers.ts",
+      "lineRange": [
+        257,
+        259
+      ],
+      "summary": "Returns a Playwright Locator for the panel tasks tab element.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright",
+        "locator"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/helpers.ts:rightPanelCollapsed",
+      "type": "function",
+      "name": "rightPanelCollapsed",
+      "filePath": "src/__tests__/helpers.ts",
+      "lineRange": [
+        261,
+        263
+      ],
+      "summary": "Returns a Playwright Locator for the right panel collapsed element.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright",
+        "locator"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/helpers.ts:fileSearchInput",
+      "type": "function",
+      "name": "fileSearchInput",
+      "filePath": "src/__tests__/helpers.ts",
+      "lineRange": [
+        270,
+        272
+      ],
+      "summary": "Returns a Playwright Locator for the file search input element.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright",
+        "locator"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/helpers.ts:fileTreeRefreshButton",
+      "type": "function",
+      "name": "fileTreeRefreshButton",
+      "filePath": "src/__tests__/helpers.ts",
+      "lineRange": [
+        275,
+        277
+      ],
+      "summary": "Returns a Playwright Locator for the file tree refresh button element.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright",
+        "locator"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/helpers.ts:fileTreeDirectories",
+      "type": "function",
+      "name": "fileTreeDirectories",
+      "filePath": "src/__tests__/helpers.ts",
+      "lineRange": [
+        280,
+        282
+      ],
+      "summary": "Playwright test helper function: file tree directories.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright",
+        "helper"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/helpers.ts:fileTreeFiles",
+      "type": "function",
+      "name": "fileTreeFiles",
+      "filePath": "src/__tests__/helpers.ts",
+      "lineRange": [
+        285,
+        287
+      ],
+      "summary": "Playwright test helper function: file tree files.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright",
+        "helper"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/helpers.ts:clickFileTreeNode",
+      "type": "function",
+      "name": "clickFileTreeNode",
+      "filePath": "src/__tests__/helpers.ts",
+      "lineRange": [
+        290,
+        292
+      ],
+      "summary": "Playwright interaction helper: click file tree node.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright",
+        "helper"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/helpers.ts:toggleDirectory",
+      "type": "function",
+      "name": "toggleDirectory",
+      "filePath": "src/__tests__/helpers.ts",
+      "lineRange": [
+        295,
+        297
+      ],
+      "summary": "Playwright interaction helper: toggle directory.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright",
+        "helper"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/helpers.ts:filePreviewBackButton",
+      "type": "function",
+      "name": "filePreviewBackButton",
+      "filePath": "src/__tests__/helpers.ts",
+      "lineRange": [
+        304,
+        306
+      ],
+      "summary": "Returns a Playwright Locator for the file preview back button element.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright",
+        "locator"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/helpers.ts:filePreviewCopyButton",
+      "type": "function",
+      "name": "filePreviewCopyButton",
+      "filePath": "src/__tests__/helpers.ts",
+      "lineRange": [
+        309,
+        311
+      ],
+      "summary": "Returns a Playwright Locator for the file preview copy button element.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright",
+        "locator"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/helpers.ts:filePreviewLanguageBadge",
+      "type": "function",
+      "name": "filePreviewLanguageBadge",
+      "filePath": "src/__tests__/helpers.ts",
+      "lineRange": [
+        314,
+        316
+      ],
+      "summary": "Returns a Playwright Locator for the file preview language badge element.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright",
+        "locator"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/helpers.ts:filePreviewLineCount",
+      "type": "function",
+      "name": "filePreviewLineCount",
+      "filePath": "src/__tests__/helpers.ts",
+      "lineRange": [
+        319,
+        321
+      ],
+      "summary": "Playwright test helper function: file preview line count.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright",
+        "helper"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/helpers.ts:filePreviewCode",
+      "type": "function",
+      "name": "filePreviewCode",
+      "filePath": "src/__tests__/helpers.ts",
+      "lineRange": [
+        324,
+        326
+      ],
+      "summary": "Returns a Playwright Locator for the file preview code element.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright",
+        "locator"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/helpers.ts:switchToTasksTab",
+      "type": "function",
+      "name": "switchToTasksTab",
+      "filePath": "src/__tests__/helpers.ts",
+      "lineRange": [
+        333,
+        336
+      ],
+      "summary": "Returns a Playwright Locator for the switch to tasks tab element.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright",
+        "locator"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/helpers.ts:switchToFilesTab",
+      "type": "function",
+      "name": "switchToFilesTab",
+      "filePath": "src/__tests__/helpers.ts",
+      "lineRange": [
+        339,
+        342
+      ],
+      "summary": "Returns a Playwright Locator for the switch to files tab element.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright",
+        "locator"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/helpers.ts:skillsSearchInput",
+      "type": "function",
+      "name": "skillsSearchInput",
+      "filePath": "src/__tests__/helpers.ts",
+      "lineRange": [
+        349,
+        351
+      ],
+      "summary": "Returns a Playwright Locator for the skills search input element.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright",
+        "locator"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/helpers.ts:skillListItems",
+      "type": "function",
+      "name": "skillListItems",
+      "filePath": "src/__tests__/helpers.ts",
+      "lineRange": [
+        354,
+        356
+      ],
+      "summary": "Playwright test helper function: skill list items.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright",
+        "helper"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/helpers.ts:selectSkill",
+      "type": "function",
+      "name": "selectSkill",
+      "filePath": "src/__tests__/helpers.ts",
+      "lineRange": [
+        359,
+        362
+      ],
+      "summary": "Returns a Playwright Locator for the select skill element.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright",
+        "locator"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/helpers.ts:createSkillButton",
+      "type": "function",
+      "name": "createSkillButton",
+      "filePath": "src/__tests__/helpers.ts",
+      "lineRange": [
+        365,
+        367
+      ],
+      "summary": "Returns a Playwright Locator for the create skill button element.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright",
+        "locator"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/helpers.ts:skillEditorContent",
+      "type": "function",
+      "name": "skillEditorContent",
+      "filePath": "src/__tests__/helpers.ts",
+      "lineRange": [
+        370,
+        372
+      ],
+      "summary": "Playwright test helper function: skill editor content.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright",
+        "helper"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/helpers.ts:skillSaveButton",
+      "type": "function",
+      "name": "skillSaveButton",
+      "filePath": "src/__tests__/helpers.ts",
+      "lineRange": [
+        375,
+        377
+      ],
+      "summary": "Returns a Playwright Locator for the skill save button element.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright",
+        "locator"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/helpers.ts:skillPreviewToggle",
+      "type": "function",
+      "name": "skillPreviewToggle",
+      "filePath": "src/__tests__/helpers.ts",
+      "lineRange": [
+        380,
+        382
+      ],
+      "summary": "Returns a Playwright Locator for the skill preview toggle element.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright",
+        "locator"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/helpers.ts:skillEditToggle",
+      "type": "function",
+      "name": "skillEditToggle",
+      "filePath": "src/__tests__/helpers.ts",
+      "lineRange": [
+        385,
+        387
+      ],
+      "summary": "Returns a Playwright Locator for the skill edit toggle element.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright",
+        "locator"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/helpers.ts:skillSourceBadge",
+      "type": "function",
+      "name": "skillSourceBadge",
+      "filePath": "src/__tests__/helpers.ts",
+      "lineRange": [
+        390,
+        392
+      ],
+      "summary": "Returns a Playwright Locator for the skill source badge element.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright",
+        "locator"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/helpers.ts:skillDeleteButton",
+      "type": "function",
+      "name": "skillDeleteButton",
+      "filePath": "src/__tests__/helpers.ts",
+      "lineRange": [
+        395,
+        397
+      ],
+      "summary": "Returns a Playwright Locator for the skill delete button element.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright",
+        "locator"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/helpers.ts:codeBlocks",
+      "type": "function",
+      "name": "codeBlocks",
+      "filePath": "src/__tests__/helpers.ts",
+      "lineRange": [
+        404,
+        406
+      ],
+      "summary": "Playwright test helper function: code blocks.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright",
+        "helper"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/helpers.ts:codeBlockLanguageLabel",
+      "type": "function",
+      "name": "codeBlockLanguageLabel",
+      "filePath": "src/__tests__/helpers.ts",
+      "lineRange": [
+        409,
+        411
+      ],
+      "summary": "Returns a Playwright Locator for the code block language label element.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright",
+        "locator"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/helpers.ts:codeBlockCopyButton",
+      "type": "function",
+      "name": "codeBlockCopyButton",
+      "filePath": "src/__tests__/helpers.ts",
+      "lineRange": [
+        414,
+        416
+      ],
+      "summary": "Returns a Playwright Locator for the code block copy button element.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright",
+        "locator"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/helpers.ts:toolBlocks",
+      "type": "function",
+      "name": "toolBlocks",
+      "filePath": "src/__tests__/helpers.ts",
+      "lineRange": [
+        419,
+        421
+      ],
+      "summary": "Playwright test helper function: tool blocks.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright",
+        "helper"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/helpers.ts:toolCallLabels",
+      "type": "function",
+      "name": "toolCallLabels",
+      "filePath": "src/__tests__/helpers.ts",
+      "lineRange": [
+        424,
+        426
+      ],
+      "summary": "Playwright test helper function: tool call labels.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright",
+        "helper"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/helpers.ts:toolResultLabels",
+      "type": "function",
+      "name": "toolResultLabels",
+      "filePath": "src/__tests__/helpers.ts",
+      "lineRange": [
+        429,
+        431
+      ],
+      "summary": "Playwright test helper function: tool result labels.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright",
+        "helper"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/helpers.ts:userAvatar",
+      "type": "function",
+      "name": "userAvatar",
+      "filePath": "src/__tests__/helpers.ts",
+      "lineRange": [
+        434,
+        436
+      ],
+      "summary": "Returns a Playwright Locator for the user avatar element.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright",
+        "locator"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/helpers.ts:assistantAvatar",
+      "type": "function",
+      "name": "assistantAvatar",
+      "filePath": "src/__tests__/helpers.ts",
+      "lineRange": [
+        439,
+        441
+      ],
+      "summary": "Returns a Playwright Locator for the assistant avatar element.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright",
+        "locator"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/helpers.ts:tokenUsageDisplay",
+      "type": "function",
+      "name": "tokenUsageDisplay",
+      "filePath": "src/__tests__/helpers.ts",
+      "lineRange": [
+        444,
+        446
+      ],
+      "summary": "Playwright test helper function: token usage display.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright",
+        "helper"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/helpers.ts:collectConsoleErrors",
+      "type": "function",
+      "name": "collectConsoleErrors",
+      "filePath": "src/__tests__/helpers.ts",
+      "lineRange": [
+        453,
+        461
+      ],
+      "summary": "Test assertion helper: collect console errors.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright",
+        "helper"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/helpers.ts:filterCriticalErrors",
+      "type": "function",
+      "name": "filterCriticalErrors",
+      "filePath": "src/__tests__/helpers.ts",
+      "lineRange": [
+        464,
+        472
+      ],
+      "summary": "Test assertion helper: filter critical errors.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright",
+        "helper"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/__tests__/helpers.ts:expectPageLoadTime",
+      "type": "function",
+      "name": "expectPageLoadTime",
+      "filePath": "src/__tests__/helpers.ts",
+      "lineRange": [
+        475,
+        481
+      ],
+      "summary": "Test assertion helper: expect page load time.",
+      "tags": [
+        "test",
+        "e2e",
+        "playwright",
+        "helper"
+      ],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:src/__tests__/unit/utils.test.ts",
+      "target": "file:src/lib/utils.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/__tests__/unit/store.test.ts",
+      "target": "file:src/lib/store.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/__tests__/e2e/chat.spec.ts",
+      "target": "file:src/app/chat/page.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/__tests__/e2e/settings.spec.ts",
+      "target": "file:src/app/settings/page.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/__tests__/e2e/chat.spec.ts",
+      "target": "file:src/__tests__/helpers.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/__tests__/e2e/settings.spec.ts",
+      "target": "file:src/__tests__/helpers.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/__tests__/e2e/mcp.spec.ts",
+      "target": "file:src/__tests__/helpers.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/__tests__/e2e/providers.spec.ts",
+      "target": "file:src/__tests__/helpers.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/__tests__/e2e/terminal.spec.ts",
+      "target": "file:src/__tests__/helpers.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/lib/utils.ts",
+      "target": "file:src/__tests__/unit/utils.test.ts",
+      "type": "tested_by",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:src/lib/store.ts",
+      "target": "file:src/__tests__/unit/store.test.ts",
+      "type": "tested_by",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:src/app/chat/page.tsx",
+      "target": "file:src/__tests__/e2e/chat.spec.ts",
+      "type": "tested_by",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:src/app/settings/page.tsx",
+      "target": "file:src/__tests__/e2e/settings.spec.ts",
+      "type": "tested_by",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:src/__tests__/e2e/chat.spec.ts",
+      "target": "function:src/__tests__/e2e/chat.spec.ts:home_page_redirects_to__chat",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/e2e/chat.spec.ts",
+      "target": "function:src/__tests__/e2e/chat.spec.ts:chat_page_loads_within_3_seconds",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/e2e/chat.spec.ts",
+      "target": "function:src/__tests__/e2e/chat.spec.ts:chat_page_has_no_console_errors",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/e2e/chat.spec.ts",
+      "target": "function:src/__tests__/e2e/chat.spec.ts:chat_page_shows_empty_state_when_no_messages",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/e2e/chat.spec.ts",
+      "target": "function:src/__tests__/e2e/chat.spec.ts:New_Chat_button_is_visible_in_sidebar",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/e2e/chat.spec.ts",
+      "target": "function:src/__tests__/e2e/chat.spec.ts:chat_textarea_is_visible_with_correct_placeholder",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/e2e/chat.spec.ts",
+      "target": "function:src/__tests__/e2e/chat.spec.ts:send_button_is_visible",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/e2e/chat.spec.ts",
+      "target": "function:src/__tests__/e2e/chat.spec.ts:helper_text_is_displayed_below_input",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/e2e/chat.spec.ts",
+      "target": "function:src/__tests__/e2e/chat.spec.ts:can_type_in_chat_input",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/e2e/chat.spec.ts",
+      "target": "function:src/__tests__/e2e/chat.spec.ts:send_a_message_and_see_it_in_the_conversation",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/e2e/chat.spec.ts",
+      "target": "function:src/__tests__/e2e/chat.spec.ts:stop_button_replaces_send_button_during_streaming",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/e2e/chat.spec.ts",
+      "target": "function:src/__tests__/e2e/chat.spec.ts:stop_button_appears_during_streaming",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/e2e/chat.spec.ts",
+      "target": "function:src/__tests__/e2e/chat.spec.ts:assistant_avatar_appears_for_assistant_response",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/e2e/chat.spec.ts",
+      "target": "function:src/__tests__/e2e/chat.spec.ts:URL_updates_to_session_ID_after_response_completes",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/e2e/chat.spec.ts",
+      "target": "function:src/__tests__/e2e/chat.spec.ts:conversation_appears_in_sidebar_after_response",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/e2e/chat.spec.ts",
+      "target": "function:src/__tests__/e2e/chat.spec.ts:clicking_stop_button_halts_streaming",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/e2e/chat.spec.ts",
+      "target": "function:src/__tests__/e2e/chat.spec.ts:sidebar_has_chat_list_section",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/e2e/chat.spec.ts",
+      "target": "function:src/__tests__/e2e/chat.spec.ts:empty_state_or_session_list_is_shown_in_sidebar",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/e2e/settings.spec.ts",
+      "target": "function:src/__tests__/e2e/settings.spec.ts:settings_page_loads_within_3_seconds",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/e2e/settings.spec.ts",
+      "target": "function:src/__tests__/e2e/settings.spec.ts:settings_page_has_no_console_errors",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/e2e/settings.spec.ts",
+      "target": "function:src/__tests__/e2e/settings.spec.ts:page_title_and_description_visible",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/e2e/settings.spec.ts",
+      "target": "function:src/__tests__/e2e/settings.spec.ts:Visual_Editor_tab_is_selected_by_default",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/e2e/settings.spec.ts",
+      "target": "function:src/__tests__/e2e/settings.spec.ts:Permissions_section_is_visible",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/e2e/settings.spec.ts",
+      "target": "function:src/__tests__/e2e/settings.spec.ts:Environment_Variables_section_is_visible",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/e2e/settings.spec.ts",
+      "target": "function:src/__tests__/e2e/settings.spec.ts:Save_Changes_button_is_visible",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/e2e/settings.spec.ts",
+      "target": "function:src/__tests__/e2e/settings.spec.ts:Reset_button_is_visible",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/e2e/settings.spec.ts",
+      "target": "function:src/__tests__/e2e/settings.spec.ts:permissions_textarea_is_editable",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/e2e/settings.spec.ts",
+      "target": "function:src/__tests__/e2e/settings.spec.ts:environment_variables_textarea_shows_current_values",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/e2e/settings.spec.ts",
+      "target": "function:src/__tests__/e2e/settings.spec.ts:switch_to_JSON_editor_mode",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/e2e/settings.spec.ts",
+      "target": "function:src/__tests__/e2e/settings.spec.ts:JSON_editor_contains_valid_JSON",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/e2e/settings.spec.ts",
+      "target": "function:src/__tests__/e2e/settings.spec.ts:JSON_contains_env_settings",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/e2e/settings.spec.ts",
+      "target": "function:src/__tests__/e2e/settings.spec.ts:JSON_mode_has_Save_JSON_button",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/e2e/settings.spec.ts",
+      "target": "function:src/__tests__/e2e/settings.spec.ts:JSON_mode_has_Format_button",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/e2e/settings.spec.ts",
+      "target": "function:src/__tests__/e2e/settings.spec.ts:toggle_between_Visual_and_JSON_modes",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/e2e/settings.spec.ts",
+      "target": "function:src/__tests__/e2e/settings.spec.ts:Editor_mode_toggle_has_both_options",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/e2e/settings.spec.ts",
+      "target": "function:src/__tests__/e2e/settings.spec.ts:Save_Changes_button_is_visible_and_disabled_when_no_changes",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/e2e/settings.spec.ts",
+      "target": "function:src/__tests__/e2e/settings.spec.ts:Save_Changes_button_enables_after_making_a_change",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/e2e/settings.spec.ts",
+      "target": "function:src/__tests__/e2e/settings.spec.ts:Reset_button_is_visible_and_disabled_when_no_changes",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/e2e/settings.spec.ts",
+      "target": "function:src/__tests__/e2e/settings.spec.ts:Reset_button_enables_after_making_a_change",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/e2e/settings.spec.ts",
+      "target": "function:src/__tests__/e2e/settings.spec.ts:settings_page_has_Skills_tab_or_link",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/e2e/settings.spec.ts",
+      "target": "function:src/__tests__/e2e/settings.spec.ts:navigating_to__settings_tab_skills_loads_skills_editor",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/e2e/settings.spec.ts",
+      "target": "function:src/__tests__/e2e/settings.spec.ts:settings_tab_skills_has_no_console_errors",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/helpers.ts",
+      "target": "function:src/__tests__/helpers.ts:goToChat",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/helpers.ts",
+      "target": "function:src/__tests__/helpers.ts:goToConversation",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/helpers.ts",
+      "target": "function:src/__tests__/helpers.ts:goToPlugins",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/helpers.ts",
+      "target": "function:src/__tests__/helpers.ts:goToMCP",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/helpers.ts",
+      "target": "function:src/__tests__/helpers.ts:goToSettings",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/helpers.ts",
+      "target": "function:src/__tests__/helpers.ts:goToSettingsTab",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/helpers.ts",
+      "target": "function:src/__tests__/helpers.ts:waitForPageReady",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/helpers.ts",
+      "target": "function:src/__tests__/helpers.ts:waitForStreamingStart",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/helpers.ts",
+      "target": "function:src/__tests__/helpers.ts:waitForStreamingEnd",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/helpers.ts",
+      "target": "function:src/__tests__/helpers.ts:sendMessage",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/helpers.ts",
+      "target": "function:src/__tests__/helpers.ts:getMessageRoles",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/helpers.ts",
+      "target": "function:src/__tests__/helpers.ts:chatInput",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/helpers.ts",
+      "target": "function:src/__tests__/helpers.ts:sendButton",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/helpers.ts",
+      "target": "function:src/__tests__/helpers.ts:stopButton",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/helpers.ts",
+      "target": "function:src/__tests__/helpers.ts:newChatButton",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/helpers.ts",
+      "target": "function:src/__tests__/helpers.ts:assistantMessage",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/helpers.ts",
+      "target": "function:src/__tests__/helpers.ts:userMessage",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/helpers.ts",
+      "target": "function:src/__tests__/helpers.ts:sidebar",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/helpers.ts",
+      "target": "function:src/__tests__/helpers.ts:sidebarToggle",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/helpers.ts",
+      "target": "function:src/__tests__/helpers.ts:themeToggle",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/helpers.ts",
+      "target": "function:src/__tests__/helpers.ts:navLink",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/helpers.ts",
+      "target": "function:src/__tests__/helpers.ts:sessionLinks",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/helpers.ts",
+      "target": "function:src/__tests__/helpers.ts:pluginSearchInput",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/helpers.ts",
+      "target": "function:src/__tests__/helpers.ts:addServerButton",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/helpers.ts",
+      "target": "function:src/__tests__/helpers.ts:settingsSaveButton",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/helpers.ts",
+      "target": "function:src/__tests__/helpers.ts:settingsResetButton",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/helpers.ts",
+      "target": "function:src/__tests__/helpers.ts:settingsVisualTab",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/helpers.ts",
+      "target": "function:src/__tests__/helpers.ts:settingsJsonTab",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/helpers.ts",
+      "target": "function:src/__tests__/helpers.ts:panelZone",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/helpers.ts",
+      "target": "function:src/__tests__/helpers.ts:fileTreePanel",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/helpers.ts",
+      "target": "function:src/__tests__/helpers.ts:gitPanel",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/helpers.ts",
+      "target": "function:src/__tests__/helpers.ts:previewPanel",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/helpers.ts",
+      "target": "function:src/__tests__/helpers.ts:fileTreeToggleButton",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/helpers.ts",
+      "target": "function:src/__tests__/helpers.ts:gitToggleButton",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/helpers.ts",
+      "target": "function:src/__tests__/helpers.ts:terminalToggleButton",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/helpers.ts",
+      "target": "function:src/__tests__/helpers.ts:panelCloseButton",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/helpers.ts",
+      "target": "function:src/__tests__/helpers.ts:rightPanel",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/helpers.ts",
+      "target": "function:src/__tests__/helpers.ts:panelOpenButton",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/helpers.ts",
+      "target": "function:src/__tests__/helpers.ts:panelFilesTab",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/helpers.ts",
+      "target": "function:src/__tests__/helpers.ts:panelTasksTab",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/helpers.ts",
+      "target": "function:src/__tests__/helpers.ts:rightPanelCollapsed",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/helpers.ts",
+      "target": "function:src/__tests__/helpers.ts:fileSearchInput",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/helpers.ts",
+      "target": "function:src/__tests__/helpers.ts:fileTreeRefreshButton",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/helpers.ts",
+      "target": "function:src/__tests__/helpers.ts:fileTreeDirectories",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/helpers.ts",
+      "target": "function:src/__tests__/helpers.ts:fileTreeFiles",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/helpers.ts",
+      "target": "function:src/__tests__/helpers.ts:clickFileTreeNode",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/helpers.ts",
+      "target": "function:src/__tests__/helpers.ts:toggleDirectory",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/helpers.ts",
+      "target": "function:src/__tests__/helpers.ts:filePreviewBackButton",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/helpers.ts",
+      "target": "function:src/__tests__/helpers.ts:filePreviewCopyButton",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/helpers.ts",
+      "target": "function:src/__tests__/helpers.ts:filePreviewLanguageBadge",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/helpers.ts",
+      "target": "function:src/__tests__/helpers.ts:filePreviewLineCount",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/helpers.ts",
+      "target": "function:src/__tests__/helpers.ts:filePreviewCode",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/helpers.ts",
+      "target": "function:src/__tests__/helpers.ts:switchToTasksTab",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/helpers.ts",
+      "target": "function:src/__tests__/helpers.ts:switchToFilesTab",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/helpers.ts",
+      "target": "function:src/__tests__/helpers.ts:skillsSearchInput",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/helpers.ts",
+      "target": "function:src/__tests__/helpers.ts:skillListItems",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/helpers.ts",
+      "target": "function:src/__tests__/helpers.ts:selectSkill",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/helpers.ts",
+      "target": "function:src/__tests__/helpers.ts:createSkillButton",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/helpers.ts",
+      "target": "function:src/__tests__/helpers.ts:skillEditorContent",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/helpers.ts",
+      "target": "function:src/__tests__/helpers.ts:skillSaveButton",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/helpers.ts",
+      "target": "function:src/__tests__/helpers.ts:skillPreviewToggle",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/helpers.ts",
+      "target": "function:src/__tests__/helpers.ts:skillEditToggle",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/helpers.ts",
+      "target": "function:src/__tests__/helpers.ts:skillSourceBadge",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/helpers.ts",
+      "target": "function:src/__tests__/helpers.ts:skillDeleteButton",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/helpers.ts",
+      "target": "function:src/__tests__/helpers.ts:codeBlocks",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/helpers.ts",
+      "target": "function:src/__tests__/helpers.ts:codeBlockLanguageLabel",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/helpers.ts",
+      "target": "function:src/__tests__/helpers.ts:codeBlockCopyButton",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/helpers.ts",
+      "target": "function:src/__tests__/helpers.ts:toolBlocks",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/helpers.ts",
+      "target": "function:src/__tests__/helpers.ts:toolCallLabels",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/helpers.ts",
+      "target": "function:src/__tests__/helpers.ts:toolResultLabels",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/helpers.ts",
+      "target": "function:src/__tests__/helpers.ts:userAvatar",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/helpers.ts",
+      "target": "function:src/__tests__/helpers.ts:assistantAvatar",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/helpers.ts",
+      "target": "function:src/__tests__/helpers.ts:tokenUsageDisplay",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/helpers.ts",
+      "target": "function:src/__tests__/helpers.ts:collectConsoleErrors",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/helpers.ts",
+      "target": "function:src/__tests__/helpers.ts:filterCriticalErrors",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/__tests__/helpers.ts",
+      "target": "function:src/__tests__/helpers.ts:expectPageLoadTime",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    }
+  ]
+}

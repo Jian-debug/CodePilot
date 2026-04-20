@@ -1,0 +1,539 @@
+{
+  "nodes": [
+    {
+      "id": "file:src/__tests__/unit/openai-oauth-retry.test.ts",
+      "type": "file",
+      "name": "openai-oauth-retry.test.ts",
+      "filePath": "src/__tests__/unit/openai-oauth-retry.test.ts",
+      "summary": "Tests for OAuth token exchange retry behavior, covering network failures and HTTP status classification to prevent regression of issue #464.",
+      "tags": ["test", "oauth", "retry", "network"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/__tests__/unit/parallel-safety.test.ts",
+      "type": "file",
+      "name": "parallel-safety.test.ts",
+      "filePath": "src/__tests__/unit/parallel-safety.test.ts",
+      "summary": "Comprehensive tests for parallel tool execution safety, including destructive command detection, path overlap analysis, and tool batch parallelization decisions.",
+      "tags": ["test", "parallel-execution", "safety", "tool-calls"],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:src/__tests__/unit/permission-broker-bridge.manual-test.ts",
+      "type": "file",
+      "name": "permission-broker-bridge.manual-test.ts",
+      "filePath": "src/__tests__/unit/permission-broker-bridge.manual-test.ts",
+      "summary": "Unit tests for the bridge permission broker's interactive-tool deny guard, verifying which tools are blocked in bridge mode.",
+      "tags": ["test", "permission", "bridge", "security"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/__tests__/unit/project-mcp-injection.test.ts",
+      "type": "file",
+      "name": "project-mcp-injection.test.ts",
+      "filePath": "src/__tests__/unit/project-mcp-injection.test.ts",
+      "summary": "Regression tests for project .mcp.json MCP server injection into DB-provider SDK requests, including env placeholder resolution and UI override parity.",
+      "tags": ["test", "mcp", "configuration", "regression"],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:src/__tests__/unit/prompt-dialog-replacement.test.ts",
+      "type": "file",
+      "name": "prompt-dialog-replacement.test.ts",
+      "filePath": "src/__tests__/unit/prompt-dialog-replacement.test.ts",
+      "summary": "Regression guard verifying window.prompt() has been replaced with the custom PromptDialog component across all call sites.",
+      "tags": ["test", "regression", "ui-component", "electron"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/__tests__/unit/provider-key-lifecycle.test.ts",
+      "type": "file",
+      "name": "provider-key-lifecycle.test.ts",
+      "filePath": "src/__tests__/unit/provider-key-lifecycle.test.ts",
+      "summary": "Regression tests for provider key handling including auth-style migration, resolver trust boundaries, and stored key clearing mechanisms.",
+      "tags": ["test", "provider", "auth", "regression"],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:src/__tests__/unit/provider-presence.test.ts",
+      "type": "file",
+      "name": "provider-presence.test.ts",
+      "filePath": "src/__tests__/unit/provider-presence.test.ts",
+      "summary": "Tests for hasCodePilotProvider() verifying the precheck used by /api/chat to decide credential presence from DB providers, env vars, and legacy settings.",
+      "tags": ["test", "provider", "credentials", "presence-check"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/__tests__/unit/provider-preset.test.ts",
+      "type": "file",
+      "name": "provider-preset.test.ts",
+      "filePath": "src/__tests__/unit/provider-preset.test.ts",
+      "summary": "Tests for vendor preset schema validation, authStyle consistency, protocol inference, and env shape after CLAUDE_CODE_PROVIDER_MANAGED_BY_HOST removal.",
+      "tags": ["test", "preset", "provider", "validation"],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:src/__tests__/unit/provider-resolver-fixes.test.ts",
+      "type": "file",
+      "name": "provider-resolver-fixes.test.ts",
+      "filePath": "src/__tests__/unit/provider-resolver-fixes.test.ts",
+      "summary": "Regression tests for settingSources isolation in DB providers and short-alias fallback narrowed to single-model providers.",
+      "tags": ["test", "provider-resolver", "regression", "isolation"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/__tests__/unit/provider-resolver.test.ts",
+      "type": "file",
+      "name": "provider-resolver.test.ts",
+      "filePath": "src/__tests__/unit/provider-resolver.test.ts",
+      "summary": "Extensive test suite for provider catalog validation, protocol inference, auth style detection, AI SDK config generation, auxiliary model routing, and global default model resolution.",
+      "tags": ["test", "provider-resolver", "sdk-config", "model-routing"],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:src/__tests__/unit/resolve-session-model.test.ts",
+      "type": "file",
+      "name": "resolve-session-model.test.ts",
+      "filePath": "src/__tests__/unit/resolve-session-model.test.ts",
+      "summary": "Tests for resolveSessionModelPure covering session model selection, global defaults, localStorage fallback, and provider catalog validation.",
+      "tags": ["test", "session", "model-resolution", "fallback"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/__tests__/unit/runtime-legacy.test.ts",
+      "type": "file",
+      "name": "runtime-legacy.test.ts",
+      "filePath": "src/__tests__/unit/runtime-legacy.test.ts",
+      "summary": "Tests for legacy runtime coercion used by SettingsCli migration and RuntimeBadge display, verifying auto-to-concrete runtime mapping.",
+      "tags": ["test", "runtime", "legacy", "migration"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/__tests__/unit/runtime-selection.test.ts",
+      "type": "file",
+      "name": "runtime-selection.test.ts",
+      "filePath": "src/__tests__/unit/runtime-selection.test.ts",
+      "summary": "Tests for runtime selection logic including predictNativeRuntime, resolveRuntime, OpenAI OAuth status derivation, SDK availability, and announcement dismiss persistence.",
+      "tags": ["test", "runtime", "oauth", "sdk-availability"],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:src/__tests__/unit/sdk-availability.test.ts",
+      "type": "file",
+      "name": "sdk-availability.test.ts",
+      "filePath": "src/__tests__/unit/sdk-availability.test.ts",
+      "summary": "Integration tests for SDK availability checking via env vars and DB providers, plus announcement dismiss DB persistence and API route whitelist verification.",
+      "tags": ["test", "sdk", "integration", "availability"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/__tests__/unit/sdk-subprocess-env.test.ts",
+      "type": "file",
+      "name": "sdk-subprocess-env.test.ts",
+      "filePath": "src/__tests__/unit/sdk-subprocess-env.test.ts",
+      "summary": "Tests for prepareSdkSubprocessEnv verifying shadow HOME isolation for explicit DB providers and pass-through for env-mode to prevent credential bleeding.",
+      "tags": ["test", "subprocess", "isolation", "credentials"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/__tests__/unit/session-search.test.ts",
+      "type": "file",
+      "name": "session-search.test.ts",
+      "filePath": "src/__tests__/unit/session-search.test.ts",
+      "summary": "Tests for searchMessages database function covering full-text search across sessions, session title joins, filtering, limits, and LIKE wildcard handling.",
+      "tags": ["test", "search", "database", "session"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/__tests__/unit/skill-kind.test.ts",
+      "type": "file",
+      "name": "skill-kind.test.ts",
+      "filePath": "src/__tests__/unit/skill-kind.test.ts",
+      "summary": "Tests for SkillKind type values, COMMAND_PROMPTS mapping consistency, and badge dispatch logic for agent_skill, slash_command, sdk_command, and codepilot_command kinds.",
+      "tags": ["test", "skill", "commands", "dispatch"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/__tests__/unit/skill-nudge.test.ts",
+      "type": "file",
+      "name": "skill-nudge.test.ts",
+      "filePath": "src/__tests__/unit/skill-nudge.test.ts",
+      "summary": "Tests for skill nudge threshold detection, payload building with sorted tool names, and SSE event shape for web and bridge branches.",
+      "tags": ["test", "skill-nudge", "threshold", "sse"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/__tests__/unit/sse-stream.test.ts",
+      "type": "file",
+      "name": "sse-stream.test.ts",
+      "filePath": "src/__tests__/unit/sse-stream.test.ts",
+      "summary": "Tests for SSE stream consumption covering thinking event dispatch, error propagation, media pass-through, context compressed events, and skill nudge event routing.",
+      "tags": ["test", "sse", "streaming", "events"],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:src/__tests__/unit/stale-default-provider.test.ts",
+      "type": "file",
+      "name": "stale-default-provider.test.ts",
+      "filePath": "src/__tests__/unit/stale-default-provider.test.ts",
+      "summary": "Tests for stale default_provider_id cleanup on deletion, resolver read-only behavior, is_active semantic fixes, and FileTree keyboard accessibility verification.",
+      "tags": ["test", "provider", "cleanup", "accessibility"],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:src/__tests__/unit/structured-output.test.ts",
+      "type": "file",
+      "name": "structured-output.test.ts",
+      "filePath": "src/__tests__/unit/structured-output.test.ts",
+      "summary": "Tests for structured output extraction logic covering AI SDK native output preference, text JSON fallback, and malformed input handling.",
+      "tags": ["test", "structured-output", "parsing", "fallback"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/__tests__/unit/subdirectory-hint-tracker.test.ts",
+      "type": "file",
+      "name": "subdirectory-hint-tracker.test.ts",
+      "filePath": "src/__tests__/unit/subdirectory-hint-tracker.test.ts",
+      "summary": "Tests for SubdirectoryHintTracker covering hint file discovery, deduplication, ancestor walking, argument key handling, and Bash command path extraction.",
+      "tags": ["test", "subdirectory", "hints", "context"],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:src/__tests__/unit/task-scheduler.test.ts",
+      "type": "file",
+      "name": "task-scheduler.test.ts",
+      "filePath": "src/__tests__/unit/task-scheduler.test.ts",
+      "summary": "Tests for cron expression parsing and interval parsing in the task scheduler, including leap year handling and step/range expressions.",
+      "tags": ["test", "cron", "scheduler", "time"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/__tests__/unit/theme-loader.test.ts",
+      "type": "file",
+      "name": "theme-loader.test.ts",
+      "filePath": "src/__tests__/unit/theme-loader.test.ts",
+      "summary": "Tests for theme family loader covering JSON file parsing, order-based sorting, invalid file skipping, default synthesis, caching, and meta generation.",
+      "tags": ["test", "theme", "loader", "caching"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/__tests__/unit/theme-render-css.test.ts",
+      "type": "file",
+      "name": "theme-render-css.test.ts",
+      "filePath": "src/__tests__/unit/theme-render-css.test.ts",
+      "summary": "Tests for theme CSS rendering covering camelCase to kebab-case conversion, light/dark block generation, and multi-family CSS output.",
+      "tags": ["test", "theme", "css", "rendering"],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:src/__tests__/unit/openai-oauth-retry.test.ts",
+      "target": "file:src/lib/openai-oauth.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/__tests__/unit/parallel-safety.test.ts",
+      "target": "file:src/lib/parallel-safety.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/__tests__/unit/permission-broker-bridge.manual-test.ts",
+      "target": "file:src/lib/bridge/permission-broker.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/__tests__/unit/project-mcp-injection.test.ts",
+      "target": "file:src/lib/mcp-loader.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/__tests__/unit/project-mcp-injection.test.ts",
+      "target": "file:src/lib/db.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/__tests__/unit/prompt-dialog-replacement.test.ts",
+      "target": "file:src/components/ui/prompt-dialog.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/__tests__/unit/prompt-dialog-replacement.test.ts",
+      "target": "file:src/components/layout/SessionListItem.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/__tests__/unit/prompt-dialog-replacement.test.ts",
+      "target": "file:src/components/settings/AssistantWorkspaceSection.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/__tests__/unit/prompt-dialog-replacement.test.ts",
+      "target": "file:src/i18n/en.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/__tests__/unit/prompt-dialog-replacement.test.ts",
+      "target": "file:src/i18n/zh.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/__tests__/unit/provider-key-lifecycle.test.ts",
+      "target": "file:src/components/settings/PresetConnectDialog.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/__tests__/unit/provider-key-lifecycle.test.ts",
+      "target": "file:src/components/settings/ProviderForm.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/__tests__/unit/provider-key-lifecycle.test.ts",
+      "target": "file:src/lib/provider-resolver.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/__tests__/unit/provider-presence.test.ts",
+      "target": "file:src/lib/provider-presence.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/__tests__/unit/provider-presence.test.ts",
+      "target": "file:src/lib/db.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/__tests__/unit/provider-preset.test.ts",
+      "target": "file:src/lib/provider-catalog.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/__tests__/unit/provider-preset.test.ts",
+      "target": "file:src/lib/provider-resolver.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/__tests__/unit/provider-resolver-fixes.test.ts",
+      "target": "file:src/lib/db.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/__tests__/unit/provider-resolver-fixes.test.ts",
+      "target": "file:src/lib/provider-resolver.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/__tests__/unit/provider-resolver.test.ts",
+      "target": "file:src/lib/provider-catalog.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/__tests__/unit/provider-resolver.test.ts",
+      "target": "file:src/lib/provider-resolver.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/__tests__/unit/provider-resolver.test.ts",
+      "target": "file:src/lib/db.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/__tests__/unit/resolve-session-model.test.ts",
+      "target": "file:src/lib/resolve-session-model.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/__tests__/unit/runtime-legacy.test.ts",
+      "target": "file:src/lib/runtime/legacy.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/__tests__/unit/runtime-selection.test.ts",
+      "target": "file:src/lib/runtime/registry.ts",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:src/__tests__/unit/sdk-availability.test.ts",
+      "target": "file:src/lib/db.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/__tests__/unit/sdk-availability.test.ts",
+      "target": "file:src/lib/runtime/sdk-runtime.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/__tests__/unit/sdk-subprocess-env.test.ts",
+      "target": "file:src/lib/sdk-subprocess-env.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/__tests__/unit/session-search.test.ts",
+      "target": "file:src/lib/db.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/__tests__/unit/skill-kind.test.ts",
+      "target": "file:src/types/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/__tests__/unit/skill-kind.test.ts",
+      "target": "file:src/lib/message-input-logic.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/__tests__/unit/skill-nudge.test.ts",
+      "target": "file:src/lib/skill-nudge.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/__tests__/unit/sse-stream.test.ts",
+      "target": "file:src/hooks/useSSEStream.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/__tests__/unit/sse-stream.test.ts",
+      "target": "file:src/lib/context-compressor.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/__tests__/unit/stale-default-provider.test.ts",
+      "target": "file:src/lib/db.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/__tests__/unit/stale-default-provider.test.ts",
+      "target": "file:src/lib/provider-resolver.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/__tests__/unit/stale-default-provider.test.ts",
+      "target": "file:src/lib/error-classifier.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/__tests__/unit/stale-default-provider.test.ts",
+      "target": "file:src/components/ai-elements/file-tree.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/__tests__/unit/structured-output.test.ts",
+      "target": "file:src/lib/structured-output.ts",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:src/__tests__/unit/subdirectory-hint-tracker.test.ts",
+      "target": "file:src/lib/subdirectory-hint-tracker.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/__tests__/unit/task-scheduler.test.ts",
+      "target": "file:src/lib/task-scheduler.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/__tests__/unit/theme-loader.test.ts",
+      "target": "file:src/lib/theme/loader.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/__tests__/unit/theme-render-css.test.ts",
+      "target": "file:src/lib/theme/render-css.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/__tests__/unit/theme-render-css.test.ts",
+      "target": "file:src/lib/theme/types.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    }
+  ]
+}

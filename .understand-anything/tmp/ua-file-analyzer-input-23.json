@@ -1,0 +1,199 @@
+{
+  "projectRoot": "D:/project/common/AI/CodePilot",
+  "batchFiles": [
+    {
+      "path": "src/components/chat/ChatComposerActionBar.tsx",
+      "sizeLines": 23,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/chat/ChatEmptyState.tsx",
+      "sizeLines": 179,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/chat/ChatPermissionSelector.tsx",
+      "sizeLines": 132,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/chat/ChatView.tsx",
+      "sizeLines": 1034,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/chat/CliToolsPopover.tsx",
+      "sizeLines": 120,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/chat/CodePilotLogo.tsx",
+      "sizeLines": 75,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/chat/ContextUsageIndicator.tsx",
+      "sizeLines": 176,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/chat/EffortSelectorDropdown.tsx",
+      "sizeLines": 84,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/chat/FileAttachmentDisplay.tsx",
+      "sizeLines": 82,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/chat/FileCard.tsx",
+      "sizeLines": 21,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/chat/FolderPicker.tsx",
+      "sizeLines": 203,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/chat/ImageGenCard.tsx",
+      "sizeLines": 190,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/chat/ImageGenConfirmation.tsx",
+      "sizeLines": 346,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/chat/ImageGenToggle.tsx",
+      "sizeLines": 46,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/chat/ImageLightbox.tsx",
+      "sizeLines": 89,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/chat/ImageThumbnail.tsx",
+      "sizeLines": 26,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/chat/MediaPreview.tsx",
+      "sizeLines": 99,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/chat/MessageInput.tsx",
+      "sizeLines": 875,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/chat/MessageInputParts.tsx",
+      "sizeLines": 358,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/chat/MessageItem.tsx",
+      "sizeLines": 911,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/chat/MessageList.tsx",
+      "sizeLines": 333,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/chat/ModeIndicator.tsx",
+      "sizeLines": 30,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/chat/ModelSelectorDropdown.tsx",
+      "sizeLines": 178,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/chat/PermissionPrompt.tsx",
+      "sizeLines": 537,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/chat/QuickActions.tsx",
+      "sizeLines": 74,
+      "fileCategory": "code"
+    }
+  ],
+  "batchImportData": {
+    "src/components/chat/ChatComposerActionBar.tsx": [],
+    "src/components/chat/ChatEmptyState.tsx": [],
+    "src/components/chat/ChatPermissionSelector.tsx": [],
+    "src/components/chat/ChatView.tsx": [
+      "src/components/chat/MessageList.tsx",
+      "src/components/chat/TerminalReasonChip.tsx",
+      "src/components/chat/RateLimitBanner.tsx",
+      "src/components/chat/MessageInput.tsx",
+      "src/components/chat/ChatComposerActionBar.tsx",
+      "src/components/chat/ModeIndicator.tsx",
+      "src/components/chat/ChatPermissionSelector.tsx",
+      "src/components/chat/ContextUsageIndicator.tsx",
+      "src/components/chat/RuntimeBadge.tsx",
+      "src/components/chat/ImageGenToggle.tsx",
+      "src/components/chat/PermissionPrompt.tsx",
+      "src/components/chat/batch-image-gen/index.ts"
+    ],
+    "src/components/chat/CliToolsPopover.tsx": [],
+    "src/components/chat/CodePilotLogo.tsx": [],
+    "src/components/chat/ContextUsageIndicator.tsx": [],
+    "src/components/chat/EffortSelectorDropdown.tsx": [],
+    "src/components/chat/FileAttachmentDisplay.tsx": [
+      "src/components/chat/ImageThumbnail.tsx",
+      "src/components/chat/FileCard.tsx",
+      "src/components/chat/ImageLightbox.tsx"
+    ],
+    "src/components/chat/FileCard.tsx": [],
+    "src/components/chat/FolderPicker.tsx": [],
+    "src/components/chat/ImageGenCard.tsx": [
+      "src/components/chat/ImageLightbox.tsx"
+    ],
+    "src/components/chat/ImageGenConfirmation.tsx": [
+      "src/components/chat/ImageGenCard.tsx"
+    ],
+    "src/components/chat/ImageGenToggle.tsx": [],
+    "src/components/chat/ImageLightbox.tsx": [],
+    "src/components/chat/ImageThumbnail.tsx": [],
+    "src/components/chat/MediaPreview.tsx": [
+      "src/components/chat/ImageLightbox.tsx"
+    ],
+    "src/components/chat/MessageInput.tsx": [
+      "src/components/chat/SlashCommandButton.tsx",
+      "src/components/chat/SlashCommandPopover.tsx",
+      "src/components/chat/CliToolsPopover.tsx",
+      "src/components/chat/ModelSelectorDropdown.tsx",
+      "src/components/chat/EffortSelectorDropdown.tsx",
+      "src/components/chat/MessageInputParts.tsx",
+      "src/components/chat/QuickActions.tsx"
+    ],
+    "src/components/chat/MessageInputParts.tsx": [],
+    "src/components/chat/MessageItem.tsx": [
+      "src/components/chat/MediaPreview.tsx",
+      "src/components/chat/FileAttachmentDisplay.tsx",
+      "src/components/chat/ImageGenConfirmation.tsx",
+      "src/components/chat/ImageGenCard.tsx",
+      "src/components/chat/batch-image-gen/BatchPlanInlinePreview.tsx",
+      "src/components/chat/WidgetRenderer.tsx"
+    ],
+    "src/components/chat/MessageList.tsx": [
+      "src/components/chat/MessageItem.tsx",
+      "src/components/chat/StreamingMessage.tsx",
+      "src/components/chat/CodePilotLogo.tsx"
+    ],
+    "src/components/chat/ModeIndicator.tsx": [],
+    "src/components/chat/ModelSelectorDropdown.tsx": [],
+    "src/components/chat/PermissionPrompt.tsx": [],
+    "src/components/chat/QuickActions.tsx": []
+  }
+}

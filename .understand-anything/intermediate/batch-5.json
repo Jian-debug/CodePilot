@@ -1,0 +1,582 @@
+{
+  "nodes": [
+    {
+      "id": "document:apps/site/content/docs/en/assistant-workspace.mdx",
+      "type": "document",
+      "name": "assistant-workspace.mdx",
+      "filePath": "apps/site/content/docs/en/assistant-workspace.mdx",
+      "summary": "English documentation for the Assistant Workspace feature, covering project context configuration, onboarding setup, and daily check-in automation for Claude.",
+      "tags": ["documentation", "assistant-workspace", "automation", "configuration"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:apps/site/content/docs/en/bridge/index.mdx",
+      "type": "document",
+      "name": "index.mdx",
+      "filePath": "apps/site/content/docs/en/bridge/index.mdx",
+      "summary": "English overview documentation for the Message Bridge feature, explaining how to bridge Claude conversations to Telegram, Discord, Feishu/Lark, and QQ with slash commands and setup guides.",
+      "tags": ["documentation", "bridge", "messaging", "integration"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:apps/site/content/docs/en/bridge/telegram.mdx",
+      "type": "document",
+      "name": "telegram.mdx",
+      "filePath": "apps/site/content/docs/en/bridge/telegram.mdx",
+      "summary": "English setup guide for the Telegram Bot bridge, covering bot creation via BotFather, CodePilot configuration, streaming preview, message formatting, and troubleshooting.",
+      "tags": ["documentation", "bridge", "telegram", "setup-guide"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:apps/site/content/docs/en/bridge/discord.mdx",
+      "type": "document",
+      "name": "discord.mdx",
+      "filePath": "apps/site/content/docs/en/bridge/discord.mdx",
+      "summary": "English setup guide for the Discord Bot bridge, covering application creation in Discord Developer Portal, privilege intents, access control, streaming preview, and troubleshooting.",
+      "tags": ["documentation", "bridge", "discord", "setup-guide"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:apps/site/content/docs/en/bridge/feishu.mdx",
+      "type": "document",
+      "name": "feishu.mdx",
+      "filePath": "apps/site/content/docs/en/bridge/feishu.mdx",
+      "summary": "English setup guide for the Feishu/Lark bridge, covering app creation on Feishu Open Platform, long connection mode, streaming card output, permission handling, and comprehensive troubleshooting.",
+      "tags": ["documentation", "bridge", "feishu", "lark", "setup-guide"],
+      "complexity": "complex"
+    },
+    {
+      "id": "document:apps/site/content/docs/en/bridge/qq.mdx",
+      "type": "document",
+      "name": "qq.mdx",
+      "filePath": "apps/site/content/docs/en/bridge/qq.mdx",
+      "summary": "English setup guide for the QQ Bot bridge, covering app creation on QQ Open Platform, REST API mode, text-based permission handling, and message truncation limitations.",
+      "tags": ["documentation", "bridge", "qq", "setup-guide"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:apps/site/content/docs/en/chat.mdx",
+      "type": "document",
+      "name": "chat.mdx",
+      "filePath": "apps/site/content/docs/en/chat.mdx",
+      "summary": "English documentation for CodePilot's core chat features, including three conversation modes (Code/Plan/Ask), permission control, context management, conversation rewind, and session import.",
+      "tags": ["documentation", "chat", "core-feature", "modes"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:apps/site/content/docs/en/cli-tools.mdx",
+      "type": "document",
+      "name": "cli-tools.mdx",
+      "filePath": "apps/site/content/docs/en/cli-tools.mdx",
+      "summary": "English documentation for CLI Tools management, covering automatic detection, recommended tool installation (FFmpeg, jq, ripgrep, yt-dlp, pandoc), AI-enhanced descriptions, and conversation integration.",
+      "tags": ["documentation", "cli-tools", "tool-management", "automation"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:apps/site/content/docs/en/design-agent.mdx",
+      "type": "document",
+      "name": "design-agent.mdx",
+      "filePath": "apps/site/content/docs/en/design-agent.mdx",
+      "summary": "English documentation for Design Agent, the built-in AI image generation feature using Claude and Gemini Image API, covering single and batch generation, reference images, and iterative editing.",
+      "tags": ["documentation", "design-agent", "image-generation", "gemini"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:apps/site/content/docs/en/faq.mdx",
+      "type": "document",
+      "name": "faq.mdx",
+      "filePath": "apps/site/content/docs/en/faq.mdx",
+      "summary": "English FAQ covering general questions, installation and configuration issues, usage guidance, and support channels for CodePilot.",
+      "tags": ["documentation", "faq", "troubleshooting", "support"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:apps/site/content/docs/en/gallery.mdx",
+      "type": "document",
+      "name": "gallery.mdx",
+      "filePath": "apps/site/content/docs/en/gallery.mdx",
+      "summary": "English documentation for the Gallery feature, covering browsing, filtering, sorting, image details with metadata, and storage location for AI-generated images.",
+      "tags": ["documentation", "gallery", "image-management", "media"],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:apps/site/content/docs/en/generative-ui.mdx",
+      "type": "document",
+      "name": "generative-ui.mdx",
+      "filePath": "apps/site/content/docs/en/generative-ui.mdx",
+      "summary": "English documentation for Generative UI, covering SVG diagrams, interactive charts with Chart.js, calculators, multi-widget narratives, drill-down interactions, security sandbox, and persistence.",
+      "tags": ["documentation", "generative-ui", "visualization", "interactive"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:apps/site/content/docs/en/git-and-workspace.mdx",
+      "type": "document",
+      "name": "git-and-workspace.mdx",
+      "filePath": "apps/site/content/docs/en/git-and-workspace.mdx",
+      "summary": "English documentation for Git and Workspace features, covering the top bar, file tree, file preview, Git panel with status/branches/history/worktrees, terminal panel, and panel layout.",
+      "tags": ["documentation", "git", "workspace", "file-tree", "terminal"],
+      "complexity": "complex"
+    },
+    {
+      "id": "document:apps/site/content/docs/en/index.mdx",
+      "type": "document",
+      "name": "index.mdx",
+      "filePath": "apps/site/content/docs/en/index.mdx",
+      "summary": "English getting-started overview page for CodePilot, covering prerequisites, installation, interface overview, conversation modes, and links to further documentation.",
+      "tags": ["documentation", "getting-started", "entry-point", "overview"],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:apps/site/content/docs/en/installation.mdx",
+      "type": "document",
+      "name": "installation.mdx",
+      "filePath": "apps/site/content/docs/en/installation.mdx",
+      "summary": "English detailed installation guide covering system requirements, platform-specific installers (macOS DMG, Windows NSIS), setup center workflow, Claude Code conflict resolution, and provider configuration.",
+      "tags": ["documentation", "installation", "setup", "configuration"],
+      "complexity": "complex"
+    },
+    {
+      "id": "document:apps/site/content/docs/en/mcp.mdx",
+      "type": "document",
+      "name": "mcp.mdx",
+      "filePath": "apps/site/content/docs/en/mcp.mdx",
+      "summary": "English documentation for MCP Plugins, covering what MCP is, managing servers with list view and JSON editor, adding servers with stdio/SSE/HTTP transports, and best practices for MCP integration.",
+      "tags": ["documentation", "mcp", "integration", "plugins"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:apps/site/content/docs/en/providers.mdx",
+      "type": "document",
+      "name": "providers.mdx",
+      "filePath": "apps/site/content/docs/en/providers.mdx",
+      "summary": "English documentation for Provider Configuration, covering CLI environment authentication, manual provider setup, priority resolution, and supported providers including Anthropic, OpenRouter, AWS Bedrock, Google Vertex, and custom OpenAI-compatible APIs.",
+      "tags": ["documentation", "providers", "authentication", "configuration"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:apps/site/content/docs/en/skills.mdx",
+      "type": "document",
+      "name": "skills.mdx",
+      "filePath": "apps/site/content/docs/en/skills.mdx",
+      "summary": "English documentation for Skills, covering the three categories (Global, Installed, Plugins), marketplace browsing, local skill management, and usage in conversations.",
+      "tags": ["documentation", "skills", "extensibility", "marketplace"],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:apps/site/content/docs/zh/index.mdx",
+      "type": "document",
+      "name": "index.mdx",
+      "filePath": "apps/site/content/docs/zh/index.mdx",
+      "summary": "Chinese getting-started overview page for CodePilot, covering prerequisites, installation, interface overview, conversation modes, and links to further Chinese documentation.",
+      "tags": ["documentation", "getting-started", "entry-point", "chinese"],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:apps/site/content/docs/zh/assistant-workspace.mdx",
+      "type": "document",
+      "name": "assistant-workspace.mdx",
+      "filePath": "apps/site/content/docs/zh/assistant-workspace.mdx",
+      "summary": "Chinese documentation for Assistant Workspace, covering project context, onboarding setup, daily check-in automation, and use cases for personal and team workflows.",
+      "tags": ["documentation", "assistant-workspace", "chinese", "automation"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:apps/site/content/docs/zh/bridge/index.mdx",
+      "type": "document",
+      "name": "index.mdx",
+      "filePath": "apps/site/content/docs/zh/bridge/index.mdx",
+      "summary": "Chinese overview documentation for Message Bridge, explaining bridge architecture, platform support, global settings, slash commands, and usage tips.",
+      "tags": ["documentation", "bridge", "chinese", "messaging"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:apps/site/content/docs/zh/bridge/telegram.mdx",
+      "type": "document",
+      "name": "telegram.mdx",
+      "filePath": "apps/site/content/docs/zh/bridge/telegram.mdx",
+      "summary": "Chinese setup guide for Telegram Bot bridge, covering bot creation, CodePilot configuration, streaming preview, HTML message conversion, and troubleshooting.",
+      "tags": ["documentation", "bridge", "telegram", "chinese"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:apps/site/content/docs/zh/bridge/discord.mdx",
+      "type": "document",
+      "name": "discord.mdx",
+      "filePath": "apps/site/content/docs/zh/bridge/discord.mdx",
+      "summary": "Chinese setup guide for Discord Bot bridge, covering application creation, gateway intents, access control, streaming preview, and troubleshooting.",
+      "tags": ["documentation", "bridge", "discord", "chinese"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:apps/site/content/docs/zh/bridge/feishu.mdx",
+      "type": "document",
+      "name": "feishu.mdx",
+      "filePath": "apps/site/content/docs/zh/bridge/feishu.mdx",
+      "summary": "Chinese setup guide for Feishu/Lark bridge, covering app creation on Feishu Open Platform, long connection mode, streaming card output, permission tables, and comprehensive troubleshooting.",
+      "tags": ["documentation", "bridge", "feishu", "lark", "chinese"],
+      "complexity": "complex"
+    },
+    {
+      "id": "document:apps/site/content/docs/zh/bridge/qq.mdx",
+      "type": "document",
+      "name": "qq.mdx",
+      "filePath": "apps/site/content/docs/zh/bridge/qq.mdx",
+      "summary": "Chinese setup guide for QQ Bot bridge, covering app creation, REST API mode, text-based permission commands, and message truncation limitations.",
+      "tags": ["documentation", "bridge", "qq", "chinese"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:apps/site/content/docs/zh/chat.mdx",
+      "type": "document",
+      "name": "chat.mdx",
+      "filePath": "apps/site/content/docs/zh/chat.mdx",
+      "summary": "Chinese documentation for chat features, covering three conversation modes, permission control, context management, conversation rewind, and session import.",
+      "tags": ["documentation", "chat", "chinese", "core-feature"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:apps/site/content/docs/zh/cli-tools.mdx",
+      "type": "document",
+      "name": "cli-tools.mdx",
+      "filePath": "apps/site/content/docs/zh/cli-tools.mdx",
+      "summary": "Chinese documentation for CLI Tools management, covering detection, recommended tools, AI-enhanced descriptions, and conversation integration.",
+      "tags": ["documentation", "cli-tools", "chinese", "tool-management"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:apps/site/content/docs/zh/design-agent.mdx",
+      "type": "document",
+      "name": "design-agent.mdx",
+      "filePath": "apps/site/content/docs/zh/design-agent.mdx",
+      "summary": "Chinese documentation for Design Agent image generation, covering single/batch generation, reference images, iterative editing, and gallery integration.",
+      "tags": ["documentation", "design-agent", "chinese", "image-generation"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:apps/site/content/docs/zh/faq.mdx",
+      "type": "document",
+      "name": "faq.mdx",
+      "filePath": "apps/site/content/docs/zh/faq.mdx",
+      "summary": "Chinese FAQ covering general questions, installation issues, usage guidance, and support channels for CodePilot.",
+      "tags": ["documentation", "faq", "chinese", "troubleshooting"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:apps/site/content/docs/zh/gallery.mdx",
+      "type": "document",
+      "name": "gallery.mdx",
+      "filePath": "apps/site/content/docs/zh/gallery.mdx",
+      "summary": "Chinese documentation for Gallery feature, covering browsing, filtering, image details with metadata, download/bookmark/delete actions, and storage location.",
+      "tags": ["documentation", "gallery", "chinese", "image-management"],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:apps/site/content/docs/zh/generative-ui.mdx",
+      "type": "document",
+      "name": "generative-ui.mdx",
+      "filePath": "apps/site/content/docs/zh/generative-ui.mdx",
+      "summary": "Chinese documentation for Generative UI, covering SVG diagrams, interactive charts, calculators, multi-widget narratives, drill-down interactions, theme fusion, security sandbox, and persistence.",
+      "tags": ["documentation", "generative-ui", "chinese", "visualization"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:apps/site/content/docs/zh/git-and-workspace.mdx",
+      "type": "document",
+      "name": "git-and-workspace.mdx",
+      "filePath": "apps/site/content/docs/zh/git-and-workspace.mdx",
+      "summary": "Chinese documentation for Git and Workspace features, covering top bar controls, file tree, file preview, Git panel, terminal panel, and panel layout.",
+      "tags": ["documentation", "git", "chinese", "workspace"],
+      "complexity": "complex"
+    },
+    {
+      "id": "document:apps/site/content/docs/zh/installation.mdx",
+      "type": "document",
+      "name": "installation.mdx",
+      "filePath": "apps/site/content/docs/zh/installation.mdx",
+      "summary": "Chinese detailed installation guide covering system requirements, platform installers, setup center workflow, Claude Code conflict resolution, and provider configuration.",
+      "tags": ["documentation", "installation", "chinese", "setup"],
+      "complexity": "complex"
+    },
+    {
+      "id": "document:apps/site/content/docs/zh/mcp.mdx",
+      "type": "document",
+      "name": "mcp.mdx",
+      "filePath": "apps/site/content/docs/zh/mcp.mdx",
+      "summary": "Chinese documentation for MCP Plugins, covering MCP overview, server management with list/JSON views, adding servers with different transports, and usage tips.",
+      "tags": ["documentation", "mcp", "chinese", "integration"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:apps/site/content/docs/zh/providers.mdx",
+      "type": "document",
+      "name": "providers.mdx",
+      "filePath": "apps/site/content/docs/zh/providers.mdx",
+      "summary": "Chinese documentation for Provider Configuration, covering CLI environment auth, manual setup, priority resolution, and supported providers.",
+      "tags": ["documentation", "providers", "chinese", "authentication"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:apps/site/content/docs/zh/skills.mdx",
+      "type": "document",
+      "name": "skills.mdx",
+      "filePath": "apps/site/content/docs/zh/skills.mdx",
+      "summary": "Chinese documentation for Skills, covering three categories, marketplace browsing, local skill management, and usage in conversations.",
+      "tags": ["documentation", "skills", "chinese", "extensibility"],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {
+      "source": "document:apps/site/content/docs/en/bridge/index.mdx",
+      "target": "document:apps/site/content/docs/en/bridge/telegram.mdx",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:apps/site/content/docs/en/bridge/index.mdx",
+      "target": "document:apps/site/content/docs/en/bridge/discord.mdx",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:apps/site/content/docs/en/bridge/index.mdx",
+      "target": "document:apps/site/content/docs/en/bridge/feishu.mdx",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:apps/site/content/docs/en/bridge/index.mdx",
+      "target": "document:apps/site/content/docs/en/bridge/qq.mdx",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:apps/site/content/docs/en/design-agent.mdx",
+      "target": "document:apps/site/content/docs/en/gallery.mdx",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:apps/site/content/docs/en/design-agent.mdx",
+      "target": "document:apps/site/content/docs/en/providers.mdx",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:apps/site/content/docs/en/index.mdx",
+      "target": "document:apps/site/content/docs/en/installation.mdx",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:apps/site/content/docs/en/index.mdx",
+      "target": "document:apps/site/content/docs/en/providers.mdx",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:apps/site/content/docs/en/index.mdx",
+      "target": "document:apps/site/content/docs/en/mcp.mdx",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:apps/site/content/docs/en/index.mdx",
+      "target": "document:apps/site/content/docs/en/skills.mdx",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:apps/site/content/docs/en/index.mdx",
+      "target": "document:apps/site/content/docs/en/bridge/index.mdx",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:apps/site/content/docs/en/index.mdx",
+      "target": "document:apps/site/content/docs/en/assistant-workspace.mdx",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:apps/site/content/docs/en/faq.mdx",
+      "target": "document:apps/site/content/docs/en/installation.mdx",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:apps/site/content/docs/en/faq.mdx",
+      "target": "document:apps/site/content/docs/en/providers.mdx",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:apps/site/content/docs/en/faq.mdx",
+      "target": "document:apps/site/content/docs/en/bridge/index.mdx",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:apps/site/content/docs/zh/index.mdx",
+      "target": "document:apps/site/content/docs/zh/installation.mdx",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:apps/site/content/docs/zh/index.mdx",
+      "target": "document:apps/site/content/docs/zh/providers.mdx",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:apps/site/content/docs/zh/index.mdx",
+      "target": "document:apps/site/content/docs/zh/mcp.mdx",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:apps/site/content/docs/zh/index.mdx",
+      "target": "document:apps/site/content/docs/zh/skills.mdx",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:apps/site/content/docs/zh/index.mdx",
+      "target": "document:apps/site/content/docs/zh/bridge/index.mdx",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:apps/site/content/docs/zh/index.mdx",
+      "target": "document:apps/site/content/docs/zh/assistant-workspace.mdx",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:apps/site/content/docs/zh/bridge/index.mdx",
+      "target": "document:apps/site/content/docs/zh/bridge/telegram.mdx",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:apps/site/content/docs/zh/bridge/index.mdx",
+      "target": "document:apps/site/content/docs/zh/bridge/discord.mdx",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:apps/site/content/docs/zh/bridge/index.mdx",
+      "target": "document:apps/site/content/docs/zh/bridge/feishu.mdx",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:apps/site/content/docs/zh/bridge/index.mdx",
+      "target": "document:apps/site/content/docs/zh/bridge/qq.mdx",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:apps/site/content/docs/zh/design-agent.mdx",
+      "target": "document:apps/site/content/docs/zh/gallery.mdx",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:apps/site/content/docs/zh/faq.mdx",
+      "target": "document:apps/site/content/docs/zh/installation.mdx",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:apps/site/content/docs/zh/faq.mdx",
+      "target": "document:apps/site/content/docs/zh/providers.mdx",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:apps/site/content/docs/zh/faq.mdx",
+      "target": "document:apps/site/content/docs/zh/bridge/index.mdx",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:apps/site/content/docs/en/index.mdx",
+      "target": "document:apps/site/content/docs/zh/index.mdx",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:apps/site/content/docs/en/installation.mdx",
+      "target": "document:apps/site/content/docs/zh/installation.mdx",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:apps/site/content/docs/en/providers.mdx",
+      "target": "document:apps/site/content/docs/zh/providers.mdx",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:apps/site/content/docs/en/mcp.mdx",
+      "target": "document:apps/site/content/docs/zh/mcp.mdx",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:apps/site/content/docs/en/skills.mdx",
+      "target": "document:apps/site/content/docs/zh/skills.mdx",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:apps/site/content/docs/en/chat.mdx",
+      "target": "document:apps/site/content/docs/zh/chat.mdx",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:apps/site/content/docs/en/git-and-workspace.mdx",
+      "target": "document:apps/site/content/docs/zh/git-and-workspace.mdx",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    }
+  ]
+}

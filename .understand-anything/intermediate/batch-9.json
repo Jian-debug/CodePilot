@@ -1,0 +1,183 @@
+{
+  "nodes": [
+    {
+      "id": "file:scripts/after-pack.js",
+      "type": "file",
+      "name": "after-pack.js",
+      "filePath": "scripts/after-pack.js",
+      "summary": "electron-builder afterPack hook that rebuilds better-sqlite3 native module for the target Electron ABI and copies the rebuilt binary into all standalone resource locations to prevent architecture mismatches.",
+      "tags": ["build-system", "native-module", "electron-builder", "post-build-hook", "database"],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:scripts/after-pack.js:afterPack",
+      "type": "function",
+      "name": "afterPack",
+      "filePath": "scripts/after-pack.js",
+      "lineRange": [17, 126],
+      "summary": "Main hook entry point that rebuilds better-sqlite3 for the Electron ABI via npx electron-rebuild (with fallback to @electron/rebuild API), then walks standalone resource directories to replace all better_sqlite3.node binaries with the rebuilt version.",
+      "tags": ["entry-point", "native-module", "rebuild", "electron-builder"],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:scripts/after-pack.js:walkAndReplace",
+      "type": "function",
+      "name": "walkAndReplace",
+      "filePath": "scripts/after-pack.js",
+      "lineRange": [88, 103],
+      "summary": "Recursively walks a directory tree and replaces any better_sqlite3.node file with the freshly rebuilt binary, logging size changes for verification.",
+      "tags": ["utility", "file-operations", "recursive"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:scripts/after-sign.js",
+      "type": "file",
+      "name": "after-sign.js",
+      "filePath": "scripts/after-sign.js",
+      "summary": "electron-builder afterSign hook for macOS code signing that detects real Developer ID certificates and skips ad-hoc signing when present, otherwise performs inside-out ad-hoc signing of native binaries, frameworks, helper apps, and the main app bundle to satisfy electron-updater ShipIt validation.",
+      "tags": ["code-signing", "macos", "electron-builder", "post-build-hook", "security"],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:scripts/after-sign.js:afterSign",
+      "type": "function",
+      "name": "afterSign",
+      "filePath": "scripts/after-sign.js",
+      "lineRange": [80, 183],
+      "summary": "Main hook that detects real Developer ID signatures via environment variables and codesign probes, then either verifies the existing signature or falls back to inside-out ad-hoc signing of all bundle components.",
+      "tags": ["entry-point", "code-signing", "macos", "security"],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:scripts/after-sign.js:codesign",
+      "type": "function",
+      "name": "codesign",
+      "filePath": "scripts/after-sign.js",
+      "lineRange": [27, 36],
+      "summary": "Ad-hoc signs a single target path using the macOS codesign utility; failures are logged but non-fatal to avoid breaking builds on edge-case binaries.",
+      "tags": ["utility", "code-signing", "macos"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:scripts/after-sign.js:collectFiles",
+      "type": "function",
+      "name": "collectFiles",
+      "filePath": "scripts/after-sign.js",
+      "lineRange": [41, 62],
+      "summary": "Recursively collects all files matching given extensions within a directory, skipping .app and .framework bundles since they are signed as units.",
+      "tags": ["utility", "file-operations", "recursive"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:scripts/after-sign.js:collectBundles",
+      "type": "function",
+      "name": "collectBundles",
+      "filePath": "scripts/after-sign.js",
+      "lineRange": [67, 78],
+      "summary": "Collects bundle directories (.app or .framework) at a given directory level for ad-hoc signing.",
+      "tags": ["utility", "file-operations"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:scripts/build-electron.mjs",
+      "type": "file",
+      "name": "build-electron.mjs",
+      "filePath": "scripts/build-electron.mjs",
+      "summary": "ESM build script that bundles Electron main and preload TypeScript entry points into JavaScript using esbuild with Node.js target, then resolves standalone symlink issues for electron-builder packaging.",
+      "tags": ["build-system", "electron", "esbuild", "bundler"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:scripts/build-electron.mjs:buildElectron",
+      "type": "function",
+      "name": "buildElectron",
+      "filePath": "scripts/build-electron.mjs",
+      "lineRange": [26, 60],
+      "summary": "Cleans and recreates the dist-electron directory, bundles electron/main.ts and electron/preload.ts with esbuild (node platform, external electron module, sourcemaps enabled), then resolves standalone symlinks.",
+      "tags": ["entry-point", "build", "electron"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:scripts/build-electron.mjs:resolveStandaloneSymlinks",
+      "type": "function",
+      "name": "resolveStandaloneSymlinks",
+      "filePath": "scripts/build-electron.mjs",
+      "lineRange": [6, 24],
+      "summary": "Replaces symlinks in .next/standalone/.next/node_modules with real file copies so electron-builder can package them without broken references.",
+      "tags": ["utility", "symlink", "nextjs"],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:scripts/after-pack.js",
+      "target": "function:scripts/after-pack.js:afterPack",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:scripts/after-pack.js",
+      "target": "function:scripts/after-pack.js:walkAndReplace",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:scripts/after-sign.js",
+      "target": "function:scripts/after-sign.js:afterSign",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:scripts/after-sign.js",
+      "target": "function:scripts/after-sign.js:codesign",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:scripts/after-sign.js",
+      "target": "function:scripts/after-sign.js:collectFiles",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:scripts/after-sign.js",
+      "target": "function:scripts/after-sign.js:collectBundles",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:scripts/build-electron.mjs",
+      "target": "function:scripts/build-electron.mjs:buildElectron",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:scripts/build-electron.mjs",
+      "target": "function:scripts/build-electron.mjs:resolveStandaloneSymlinks",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:scripts/after-sign.js",
+      "target": "file:scripts/after-pack.js",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:scripts/build-electron.mjs",
+      "target": "file:scripts/after-pack.js",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    }
+  ]
+}

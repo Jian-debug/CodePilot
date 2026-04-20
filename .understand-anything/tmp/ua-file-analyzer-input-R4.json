@@ -1,0 +1,142 @@
+{
+  "projectRoot": "D:/project/common/AI/CodePilot",
+  "batchFiles": [
+    {
+      "path": "src/hooks/useAccountInfo.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/hooks/useAppTheme.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/hooks/useBatchImageGen.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/hooks/useBridgeAdapter.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/hooks/useBridgeStatus.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/hooks/useChatCommands.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/hooks/useClientPlatform.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/hooks/useGitBranches.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/hooks/useGitLog.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/hooks/useGitStatus.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/hooks/useGitWorktrees.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/hooks/useImageGen.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/hooks/useNativeFolderPicker.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/hooks/usePopoverState.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/hooks/useSettings.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/hooks/useSplit.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/hooks/useTerminal.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/hooks/useTranslation.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/hooks/useUpdate.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/hooks/useUpdateChecker.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/hooks/useCliToolsFetch.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/hooks/useToast.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/hooks/useAssistantTrigger.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/hooks/useAssistantWorkspace.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/hooks/usePanel.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/hooks/useStreamSubscription.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/hooks/useClaudeStatus.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/hooks/useNotificationPoll.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/hooks/useCommandBadge.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/hooks/useProviderModels.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/hooks/useContextUsage.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/hooks/useGlobalSearchShortcut.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/hooks/useSSEStream.ts",
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/hooks/useSlashCommands.ts",
+      "fileCategory": "code"
+    }
+  ],
+  "batchImportData": {}
+}

@@ -1,0 +1,157 @@
+{
+  "projectRoot": "D:/project/common/AI/CodePilot",
+  "batchFiles": [
+    {
+      "path": "src/app/api/openai-oauth/start/route.ts",
+      "sizeLines": 27,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/openai-oauth/status/route.ts",
+      "sizeLines": 18,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/plugins/[id]/route.ts",
+      "sizeLines": 101,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/plugins/mcp/[name]/route.ts",
+      "sizeLines": 79,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/plugins/mcp/reconnect/route.ts",
+      "sizeLines": 24,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/plugins/mcp/route.ts",
+      "sizeLines": 188,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/plugins/mcp/status/route.ts",
+      "sizeLines": 36,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/plugins/mcp/toggle/route.ts",
+      "sizeLines": 44,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/plugins/route.ts",
+      "sizeLines": 17,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/providers/[id]/activate/route.ts",
+      "sizeLines": 52,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/providers/[id]/models/route.ts",
+      "sizeLines": 85,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/providers/[id]/route.ts",
+      "sizeLines": 142,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/providers/models/route.ts",
+      "sizeLines": 301,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/providers/options/route.ts",
+      "sizeLines": 40,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/providers/route.ts",
+      "sizeLines": 121,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/providers/set-default/route.ts",
+      "sizeLines": 24,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/providers/test/route.ts",
+      "sizeLines": 88,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/sdk/account/route.ts",
+      "sizeLines": 19,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/search/route.ts",
+      "sizeLines": 189,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/settings/app/route.ts",
+      "sizeLines": 75,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/settings/discord/route.ts",
+      "sizeLines": 73,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/settings/discord/verify/route.ts",
+      "sizeLines": 61,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/settings/feishu/route.ts",
+      "sizeLines": 70,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/settings/feishu/verify/route.ts",
+      "sizeLines": 74,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/settings/qq/route.ts",
+      "sizeLines": 66,
+      "fileCategory": "code"
+    }
+  ],
+  "batchImportData": {
+    "src/app/api/openai-oauth/start/route.ts": [],
+    "src/app/api/openai-oauth/status/route.ts": [],
+    "src/app/api/plugins/[id]/route.ts": [],
+    "src/app/api/plugins/mcp/[name]/route.ts": [],
+    "src/app/api/plugins/mcp/reconnect/route.ts": [],
+    "src/app/api/plugins/mcp/route.ts": [],
+    "src/app/api/plugins/mcp/status/route.ts": [],
+    "src/app/api/plugins/mcp/toggle/route.ts": [],
+    "src/app/api/plugins/route.ts": [],
+    "src/app/api/providers/[id]/activate/route.ts": [],
+    "src/app/api/providers/[id]/models/route.ts": [],
+    "src/app/api/providers/[id]/route.ts": [],
+    "src/app/api/providers/models/route.ts": [],
+    "src/app/api/providers/options/route.ts": [],
+    "src/app/api/providers/route.ts": [],
+    "src/app/api/providers/set-default/route.ts": [],
+    "src/app/api/providers/test/route.ts": [],
+    "src/app/api/sdk/account/route.ts": [],
+    "src/app/api/search/route.ts": [],
+    "src/app/api/settings/app/route.ts": [],
+    "src/app/api/settings/discord/route.ts": [],
+    "src/app/api/settings/discord/verify/route.ts": [],
+    "src/app/api/settings/feishu/route.ts": [],
+    "src/app/api/settings/feishu/verify/route.ts": [],
+    "src/app/api/settings/qq/route.ts": []
+  }
+}

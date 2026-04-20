@@ -1,0 +1,727 @@
+{
+  "projectRoot": "D:/project/common/AI/CodePilot",
+  "batchFiles": [
+    {
+      "path": "src/app/api/app/updates/route.ts",
+      "sizeLines": 80,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/bridge/channels/route.ts",
+      "sizeLines": 33,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/bridge/feishu/register/cancel/route.ts",
+      "sizeLines": 27,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/bridge/feishu/register/poll/route.ts",
+      "sizeLines": 96,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/bridge/feishu/register/start/route.ts",
+      "sizeLines": 21,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/bridge/route.ts",
+      "sizeLines": 56,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/bridge/settings/route.ts",
+      "sizeLines": 88,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/chat/interrupt/route.ts",
+      "sizeLines": 44,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/chat/messages/route.ts",
+      "sizeLines": 98,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/chat/mode/route.ts",
+      "sizeLines": 29,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/chat/model/route.ts",
+      "sizeLines": 29,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/chat/permission/route.ts",
+      "sizeLines": 74,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/chat/rewind/route.ts",
+      "sizeLines": 65,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/chat/route.ts",
+      "sizeLines": 1059,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/chat/sessions/[id]/messages/route.ts",
+      "sizeLines": 51,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/chat/sessions/[id]/route.ts",
+      "sizeLines": 117,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/chat/sessions/by-cwd/route.ts",
+      "sizeLines": 15,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/chat/sessions/route.ts",
+      "sizeLines": 56,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/chat/structured/route.ts",
+      "sizeLines": 71,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/claude-auth/route.ts",
+      "sizeLines": 38,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/claude-sessions/import/route.ts",
+      "sizeLines": 92,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/claude-sessions/route.ts",
+      "sizeLines": 12,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/claude-status/invalidate/route.ts",
+      "sizeLines": 15,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/claude-status/route.ts",
+      "sizeLines": 149,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/claude-upgrade/route.ts",
+      "sizeLines": 45,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/cli-tools/[id]/describe/route.ts",
+      "sizeLines": 226,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/cli-tools/[id]/detail/route.ts",
+      "sizeLines": 25,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/cli-tools/[id]/install/route.ts",
+      "sizeLines": 143,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/cli-tools/[id]/status/route.ts",
+      "sizeLines": 27,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/cli-tools/catalog/route.ts",
+      "sizeLines": 6,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/cli-tools/custom/[id]/route.ts",
+      "sizeLines": 17,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/cli-tools/custom/route.ts",
+      "sizeLines": 77,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/cli-tools/descriptions/route.ts",
+      "sizeLines": 35,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/cli-tools/installed/route.ts",
+      "sizeLines": 51,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/dashboard/refresh/route.ts",
+      "sizeLines": 113,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/dashboard/route.ts",
+      "sizeLines": 63,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/doctor/export/route.ts",
+      "sizeLines": 150,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/doctor/repair/route.ts",
+      "sizeLines": 188,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/doctor/route.ts",
+      "sizeLines": 37,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/files/browse/route.ts",
+      "sizeLines": 62,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/files/open/route.ts",
+      "sizeLines": 29,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/files/preview/route.ts",
+      "sizeLines": 60,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/files/raw/route.ts",
+      "sizeLines": 168,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/files/route.ts",
+      "sizeLines": 63,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/files/serve/route.ts",
+      "sizeLines": 121,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/files/suggest/route.ts",
+      "sizeLines": 109,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/git/branches/route.ts",
+      "sizeLines": 19,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/git/checkout/route.ts",
+      "sizeLines": 19,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/git/commit-detail/[sha]/route.ts",
+      "sizeLines": 23,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/git/commit/route.ts",
+      "sizeLines": 19,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/git/log/route.ts",
+      "sizeLines": 21,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/git/push/route.ts",
+      "sizeLines": 19,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/git/status/route.ts",
+      "sizeLines": 19,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/git/worktrees/derive/route.ts",
+      "sizeLines": 62,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/git/worktrees/route.ts",
+      "sizeLines": 19,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/health/route.ts",
+      "sizeLines": 5,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/media/[id]/favorite/route.ts",
+      "sizeLines": 31,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/media/[id]/route.ts",
+      "sizeLines": 73,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/media/[id]/tags/route.ts",
+      "sizeLines": 49,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/media/gallery/route.ts",
+      "sizeLines": 172,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/media/generate/route.ts",
+      "sizeLines": 66,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/media/jobs/[id]/cancel/route.ts",
+      "sizeLines": 38,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/media/jobs/[id]/items/route.ts",
+      "sizeLines": 49,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/media/jobs/[id]/pause/route.ts",
+      "sizeLines": 38,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/media/jobs/[id]/progress/route.ts",
+      "sizeLines": 89,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/media/jobs/[id]/resume/route.ts",
+      "sizeLines": 42,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/media/jobs/[id]/route.ts",
+      "sizeLines": 63,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/media/jobs/[id]/start/route.ts",
+      "sizeLines": 42,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/media/jobs/[id]/sync-context/route.ts",
+      "sizeLines": 99,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/media/jobs/plan/route.ts",
+      "sizeLines": 154,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/media/jobs/route.ts",
+      "sizeLines": 73,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/media/serve/route.ts",
+      "sizeLines": 127,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/media/tags/[id]/route.ts",
+      "sizeLines": 33,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/media/tags/route.ts",
+      "sizeLines": 56,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/openai-oauth/callback/route.ts",
+      "sizeLines": 9,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/openai-oauth/start/route.ts",
+      "sizeLines": 27,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/openai-oauth/status/route.ts",
+      "sizeLines": 18,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/plugins/[id]/route.ts",
+      "sizeLines": 101,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/plugins/mcp/[name]/route.ts",
+      "sizeLines": 79,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/plugins/mcp/reconnect/route.ts",
+      "sizeLines": 24,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/plugins/mcp/route.ts",
+      "sizeLines": 188,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/plugins/mcp/status/route.ts",
+      "sizeLines": 36,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/plugins/mcp/toggle/route.ts",
+      "sizeLines": 44,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/plugins/route.ts",
+      "sizeLines": 17,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/providers/[id]/activate/route.ts",
+      "sizeLines": 52,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/providers/[id]/models/route.ts",
+      "sizeLines": 85,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/providers/[id]/route.ts",
+      "sizeLines": 142,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/providers/models/route.ts",
+      "sizeLines": 301,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/providers/options/route.ts",
+      "sizeLines": 40,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/providers/route.ts",
+      "sizeLines": 121,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/providers/set-default/route.ts",
+      "sizeLines": 24,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/providers/test/route.ts",
+      "sizeLines": 88,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/sdk/account/route.ts",
+      "sizeLines": 19,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/search/route.ts",
+      "sizeLines": 189,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/settings/app/route.ts",
+      "sizeLines": 75,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/settings/discord/route.ts",
+      "sizeLines": 73,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/settings/discord/verify/route.ts",
+      "sizeLines": 61,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/settings/feishu/route.ts",
+      "sizeLines": 70,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/settings/feishu/verify/route.ts",
+      "sizeLines": 74,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/settings/qq/route.ts",
+      "sizeLines": 66,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/settings/qq/verify/route.ts",
+      "sizeLines": 72,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/settings/route.ts",
+      "sizeLines": 60,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/settings/sentry/route.ts",
+      "sizeLines": 34,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/settings/telegram/route.ts",
+      "sizeLines": 87,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/settings/telegram/verify/route.ts",
+      "sizeLines": 77,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/settings/weixin/accounts/[accountId]/route.ts",
+      "sizeLines": 95,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/settings/weixin/accounts/route.ts",
+      "sizeLines": 28,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/settings/weixin/login/start/route.ts",
+      "sizeLines": 19,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/settings/weixin/login/wait/route.ts",
+      "sizeLines": 58,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/settings/weixin/route.ts",
+      "sizeLines": 45,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/settings/workspace/route.ts",
+      "sizeLines": 239,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/setup/recent-projects/route.ts",
+      "sizeLines": 31,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/setup/route.ts",
+      "sizeLines": 108,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/skills/[name]/route.ts",
+      "sizeLines": 411,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/skills/marketplace/install/route.ts",
+      "sizeLines": 76,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/skills/marketplace/readme/route.ts",
+      "sizeLines": 95,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/skills/marketplace/remove/route.ts",
+      "sizeLines": 76,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/skills/marketplace/search/route.ts",
+      "sizeLines": 74,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/skills/route.ts",
+      "sizeLines": 490,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/skills/search/route.ts",
+      "sizeLines": 173,
+      "fileCategory": "code"
+    }
+  ],
+  "batchImportData": {
+    "src/app/api/app/updates/route.ts": [],
+    "src/app/api/bridge/channels/route.ts": [],
+    "src/app/api/bridge/feishu/register/cancel/route.ts": [],
+    "src/app/api/bridge/feishu/register/poll/route.ts": [],
+    "src/app/api/bridge/feishu/register/start/route.ts": [],
+    "src/app/api/bridge/route.ts": [],
+    "src/app/api/bridge/settings/route.ts": [],
+    "src/app/api/chat/interrupt/route.ts": [],
+    "src/app/api/chat/messages/route.ts": [],
+    "src/app/api/chat/mode/route.ts": [],
+    "src/app/api/chat/model/route.ts": [],
+    "src/app/api/chat/permission/route.ts": [],
+    "src/app/api/chat/rewind/route.ts": [],
+    "src/app/api/chat/route.ts": [],
+    "src/app/api/chat/sessions/[id]/messages/route.ts": [],
+    "src/app/api/chat/sessions/[id]/route.ts": [],
+    "src/app/api/chat/sessions/by-cwd/route.ts": [],
+    "src/app/api/chat/sessions/route.ts": [],
+    "src/app/api/chat/structured/route.ts": [],
+    "src/app/api/claude-auth/route.ts": [],
+    "src/app/api/claude-sessions/import/route.ts": [],
+    "src/app/api/claude-sessions/route.ts": [],
+    "src/app/api/claude-status/invalidate/route.ts": [],
+    "src/app/api/claude-status/route.ts": [],
+    "src/app/api/claude-upgrade/route.ts": [],
+    "src/app/api/cli-tools/[id]/describe/route.ts": [],
+    "src/app/api/cli-tools/[id]/detail/route.ts": [],
+    "src/app/api/cli-tools/[id]/install/route.ts": [],
+    "src/app/api/cli-tools/[id]/status/route.ts": [],
+    "src/app/api/cli-tools/catalog/route.ts": [],
+    "src/app/api/cli-tools/custom/[id]/route.ts": [],
+    "src/app/api/cli-tools/custom/route.ts": [],
+    "src/app/api/cli-tools/descriptions/route.ts": [],
+    "src/app/api/cli-tools/installed/route.ts": [],
+    "src/app/api/dashboard/refresh/route.ts": [],
+    "src/app/api/dashboard/route.ts": [],
+    "src/app/api/doctor/export/route.ts": [],
+    "src/app/api/doctor/repair/route.ts": [],
+    "src/app/api/doctor/route.ts": [],
+    "src/app/api/files/browse/route.ts": [],
+    "src/app/api/files/open/route.ts": [],
+    "src/app/api/files/preview/route.ts": [],
+    "src/app/api/files/raw/route.ts": [],
+    "src/app/api/files/route.ts": [],
+    "src/app/api/files/serve/route.ts": [],
+    "src/app/api/files/suggest/route.ts": [],
+    "src/app/api/git/branches/route.ts": [],
+    "src/app/api/git/checkout/route.ts": [],
+    "src/app/api/git/commit-detail/[sha]/route.ts": [],
+    "src/app/api/git/commit/route.ts": [],
+    "src/app/api/git/log/route.ts": [],
+    "src/app/api/git/push/route.ts": [],
+    "src/app/api/git/status/route.ts": [],
+    "src/app/api/git/worktrees/derive/route.ts": [],
+    "src/app/api/git/worktrees/route.ts": [],
+    "src/app/api/health/route.ts": [],
+    "src/app/api/media/[id]/favorite/route.ts": [],
+    "src/app/api/media/[id]/route.ts": [],
+    "src/app/api/media/[id]/tags/route.ts": [],
+    "src/app/api/media/gallery/route.ts": [],
+    "src/app/api/media/generate/route.ts": [],
+    "src/app/api/media/jobs/[id]/cancel/route.ts": [],
+    "src/app/api/media/jobs/[id]/items/route.ts": [],
+    "src/app/api/media/jobs/[id]/pause/route.ts": [],
+    "src/app/api/media/jobs/[id]/progress/route.ts": [],
+    "src/app/api/media/jobs/[id]/resume/route.ts": [],
+    "src/app/api/media/jobs/[id]/route.ts": [],
+    "src/app/api/media/jobs/[id]/start/route.ts": [],
+    "src/app/api/media/jobs/[id]/sync-context/route.ts": [],
+    "src/app/api/media/jobs/plan/route.ts": [],
+    "src/app/api/media/jobs/route.ts": [],
+    "src/app/api/media/serve/route.ts": [],
+    "src/app/api/media/tags/[id]/route.ts": [],
+    "src/app/api/media/tags/route.ts": [],
+    "src/app/api/openai-oauth/callback/route.ts": [],
+    "src/app/api/openai-oauth/start/route.ts": [],
+    "src/app/api/openai-oauth/status/route.ts": [],
+    "src/app/api/plugins/[id]/route.ts": [],
+    "src/app/api/plugins/mcp/[name]/route.ts": [],
+    "src/app/api/plugins/mcp/reconnect/route.ts": [],
+    "src/app/api/plugins/mcp/route.ts": [],
+    "src/app/api/plugins/mcp/status/route.ts": [],
+    "src/app/api/plugins/mcp/toggle/route.ts": [],
+    "src/app/api/plugins/route.ts": [],
+    "src/app/api/providers/[id]/activate/route.ts": [],
+    "src/app/api/providers/[id]/models/route.ts": [],
+    "src/app/api/providers/[id]/route.ts": [],
+    "src/app/api/providers/models/route.ts": [],
+    "src/app/api/providers/options/route.ts": [],
+    "src/app/api/providers/route.ts": [],
+    "src/app/api/providers/set-default/route.ts": [],
+    "src/app/api/providers/test/route.ts": [],
+    "src/app/api/sdk/account/route.ts": [],
+    "src/app/api/search/route.ts": [],
+    "src/app/api/settings/app/route.ts": [],
+    "src/app/api/settings/discord/route.ts": [],
+    "src/app/api/settings/discord/verify/route.ts": [],
+    "src/app/api/settings/feishu/route.ts": [],
+    "src/app/api/settings/feishu/verify/route.ts": [],
+    "src/app/api/settings/qq/route.ts": [],
+    "src/app/api/settings/qq/verify/route.ts": [],
+    "src/app/api/settings/route.ts": [],
+    "src/app/api/settings/sentry/route.ts": [],
+    "src/app/api/settings/telegram/route.ts": [],
+    "src/app/api/settings/telegram/verify/route.ts": [],
+    "src/app/api/settings/weixin/accounts/[accountId]/route.ts": [],
+    "src/app/api/settings/weixin/accounts/route.ts": [],
+    "src/app/api/settings/weixin/login/start/route.ts": [],
+    "src/app/api/settings/weixin/login/wait/route.ts": [],
+    "src/app/api/settings/weixin/route.ts": [],
+    "src/app/api/settings/workspace/route.ts": [],
+    "src/app/api/setup/recent-projects/route.ts": [],
+    "src/app/api/setup/route.ts": [],
+    "src/app/api/skills/[name]/route.ts": [],
+    "src/app/api/skills/marketplace/install/route.ts": [],
+    "src/app/api/skills/marketplace/readme/route.ts": [],
+    "src/app/api/skills/marketplace/remove/route.ts": [],
+    "src/app/api/skills/marketplace/search/route.ts": [],
+    "src/app/api/skills/route.ts": [],
+    "src/app/api/skills/search/route.ts": []
+  }
+}

@@ -1,0 +1,204 @@
+{
+  "projectRoot": "D:/project/common/AI/CodePilot",
+  "batchFiles": [
+    {
+      "path": "src/__tests__/unit/openai-oauth-retry.test.ts",
+      "sizeLines": 87,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/__tests__/unit/parallel-safety.test.ts",
+      "sizeLines": 293,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/__tests__/unit/permission-broker-bridge.manual-test.ts",
+      "sizeLines": 57,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/__tests__/unit/project-mcp-injection.test.ts",
+      "sizeLines": 257,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/__tests__/unit/prompt-dialog-replacement.test.ts",
+      "sizeLines": 185,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/__tests__/unit/provider-key-lifecycle.test.ts",
+      "sizeLines": 227,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/__tests__/unit/provider-presence.test.ts",
+      "sizeLines": 190,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/__tests__/unit/provider-preset.test.ts",
+      "sizeLines": 292,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/__tests__/unit/provider-resolver-fixes.test.ts",
+      "sizeLines": 259,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/__tests__/unit/provider-resolver.test.ts",
+      "sizeLines": 1741,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/__tests__/unit/resolve-session-model.test.ts",
+      "sizeLines": 130,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/__tests__/unit/runtime-legacy.test.ts",
+      "sizeLines": 55,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/__tests__/unit/runtime-selection.test.ts",
+      "sizeLines": 229,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/__tests__/unit/sdk-availability.test.ts",
+      "sizeLines": 213,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/__tests__/unit/sdk-subprocess-env.test.ts",
+      "sizeLines": 142,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/__tests__/unit/session-search.test.ts",
+      "sizeLines": 154,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/__tests__/unit/skill-kind.test.ts",
+      "sizeLines": 289,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/__tests__/unit/skill-nudge.test.ts",
+      "sizeLines": 133,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/__tests__/unit/sse-stream.test.ts",
+      "sizeLines": 295,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/__tests__/unit/stale-default-provider.test.ts",
+      "sizeLines": 388,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/__tests__/unit/structured-output.test.ts",
+      "sizeLines": 103,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/__tests__/unit/subdirectory-hint-tracker.test.ts",
+      "sizeLines": 298,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/__tests__/unit/task-scheduler.test.ts",
+      "sizeLines": 137,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/__tests__/unit/theme-loader.test.ts",
+      "sizeLines": 193,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/__tests__/unit/theme-render-css.test.ts",
+      "sizeLines": 107,
+      "fileCategory": "code"
+    }
+  ],
+  "batchImportData": {
+    "src/__tests__/unit/openai-oauth-retry.test.ts": [
+      "src/lib/openai-oauth.ts"
+    ],
+    "src/__tests__/unit/parallel-safety.test.ts": [
+      "src/lib/parallel-safety.ts"
+    ],
+    "src/__tests__/unit/permission-broker-bridge.manual-test.ts": [
+      "src/lib/bridge/permission-broker.ts"
+    ],
+    "src/__tests__/unit/project-mcp-injection.test.ts": [
+      "src/lib/mcp-loader.ts"
+    ],
+    "src/__tests__/unit/prompt-dialog-replacement.test.ts": [],
+    "src/__tests__/unit/provider-key-lifecycle.test.ts": [],
+    "src/__tests__/unit/provider-presence.test.ts": [
+      "src/lib/provider-presence.ts"
+    ],
+    "src/__tests__/unit/provider-preset.test.ts": [
+      "src/lib/provider-catalog.ts",
+      "src/lib/provider-resolver.ts"
+    ],
+    "src/__tests__/unit/provider-resolver-fixes.test.ts": [
+      "src/lib/db.ts",
+      "src/lib/provider-resolver.ts"
+    ],
+    "src/__tests__/unit/provider-resolver.test.ts": [
+      "src/lib/provider-catalog.ts",
+      "src/lib/provider-resolver.ts",
+      "src/lib/db.ts"
+    ],
+    "src/__tests__/unit/resolve-session-model.test.ts": [
+      "src/lib/resolve-session-model.ts"
+    ],
+    "src/__tests__/unit/runtime-legacy.test.ts": [],
+    "src/__tests__/unit/runtime-selection.test.ts": [],
+    "src/__tests__/unit/sdk-availability.test.ts": [],
+    "src/__tests__/unit/sdk-subprocess-env.test.ts": [
+      "src/lib/sdk-subprocess-env.ts"
+    ],
+    "src/__tests__/unit/session-search.test.ts": [
+      "src/lib/db.ts"
+    ],
+    "src/__tests__/unit/skill-kind.test.ts": [
+      "src/types/index.ts",
+      "src/lib/message-input-logic.ts"
+    ],
+    "src/__tests__/unit/skill-nudge.test.ts": [
+      "src/lib/skill-nudge.ts"
+    ],
+    "src/__tests__/unit/sse-stream.test.ts": [
+      "src/hooks/useSSEStream.ts",
+      "src/lib/context-compressor.ts"
+    ],
+    "src/__tests__/unit/stale-default-provider.test.ts": [
+      "src/lib/db.ts",
+      "src/lib/provider-resolver.ts",
+      "src/lib/error-classifier.ts"
+    ],
+    "src/__tests__/unit/structured-output.test.ts": [],
+    "src/__tests__/unit/subdirectory-hint-tracker.test.ts": [
+      "src/lib/subdirectory-hint-tracker.ts"
+    ],
+    "src/__tests__/unit/task-scheduler.test.ts": [
+      "src/lib/task-scheduler.ts"
+    ],
+    "src/__tests__/unit/theme-loader.test.ts": [
+      "src/lib/theme/loader.ts"
+    ],
+    "src/__tests__/unit/theme-render-css.test.ts": [
+      "src/lib/theme/render-css.ts",
+      "src/lib/theme/types.ts"
+    ]
+  }
+}

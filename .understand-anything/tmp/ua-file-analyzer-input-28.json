@@ -1,0 +1,176 @@
+{
+  "projectRoot": "D:/project/common/AI/CodePilot",
+  "batchFiles": [
+    {
+      "path": "src/components/setup/SetupCenter.tsx",
+      "sizeLines": 136,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/setup/WelcomeCard.tsx",
+      "sizeLines": 16,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/skills/CreateSkillDialog.tsx",
+      "sizeLines": 205,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/skills/InstallProgressDialog.tsx",
+      "sizeLines": 178,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/skills/MarketplaceBrowser.tsx",
+      "sizeLines": 140,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/skills/MarketplaceSkillCard.tsx",
+      "sizeLines": 58,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/skills/MarketplaceSkillDetail.tsx",
+      "sizeLines": 172,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/skills/SkillEditor.tsx",
+      "sizeLines": 253,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/skills/SkillListItem.tsx",
+      "sizeLines": 93,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/skills/SkillsManager.tsx",
+      "sizeLines": 347,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/terminal/TerminalDrawer.tsx",
+      "sizeLines": 78,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/terminal/TerminalInstance.tsx",
+      "sizeLines": 107,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ui/AssistantAvatar.tsx",
+      "sizeLines": 67,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ui/alert-dialog.tsx",
+      "sizeLines": 196,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ui/alert.tsx",
+      "sizeLines": 66,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ui/badge.tsx",
+      "sizeLines": 48,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ui/button-group.tsx",
+      "sizeLines": 83,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ui/button.tsx",
+      "sizeLines": 64,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ui/card.tsx",
+      "sizeLines": 92,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ui/collapsible.tsx",
+      "sizeLines": 33,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ui/command.tsx",
+      "sizeLines": 189,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ui/dialog.tsx",
+      "sizeLines": 158,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ui/dropdown-menu.tsx",
+      "sizeLines": 257,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ui/error-banner.tsx",
+      "sizeLines": 54,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ui/hover-card.tsx",
+      "sizeLines": 44,
+      "fileCategory": "code"
+    }
+  ],
+  "batchImportData": {
+    "src/components/setup/SetupCenter.tsx": [
+      "src/components/setup/WelcomeCard.tsx",
+      "src/components/setup/ClaudeCodeCard.tsx",
+      "src/components/setup/ProviderCard.tsx",
+      "src/components/setup/ProjectDirCard.tsx"
+    ],
+    "src/components/setup/WelcomeCard.tsx": [],
+    "src/components/skills/CreateSkillDialog.tsx": [],
+    "src/components/skills/InstallProgressDialog.tsx": [],
+    "src/components/skills/MarketplaceBrowser.tsx": [
+      "src/components/skills/MarketplaceSkillCard.tsx",
+      "src/components/skills/MarketplaceSkillDetail.tsx"
+    ],
+    "src/components/skills/MarketplaceSkillCard.tsx": [],
+    "src/components/skills/MarketplaceSkillDetail.tsx": [
+      "src/components/skills/InstallProgressDialog.tsx"
+    ],
+    "src/components/skills/SkillEditor.tsx": [
+      "src/components/skills/SkillListItem.tsx"
+    ],
+    "src/components/skills/SkillListItem.tsx": [],
+    "src/components/skills/SkillsManager.tsx": [
+      "src/components/skills/SkillListItem.tsx",
+      "src/components/skills/SkillEditor.tsx",
+      "src/components/skills/CreateSkillDialog.tsx",
+      "src/components/skills/MarketplaceBrowser.tsx"
+    ],
+    "src/components/terminal/TerminalDrawer.tsx": [
+      "src/components/terminal/TerminalInstance.tsx"
+    ],
+    "src/components/terminal/TerminalInstance.tsx": [],
+    "src/components/ui/AssistantAvatar.tsx": [],
+    "src/components/ui/alert-dialog.tsx": [],
+    "src/components/ui/alert.tsx": [],
+    "src/components/ui/badge.tsx": [],
+    "src/components/ui/button-group.tsx": [],
+    "src/components/ui/button.tsx": [],
+    "src/components/ui/card.tsx": [],
+    "src/components/ui/collapsible.tsx": [],
+    "src/components/ui/command.tsx": [],
+    "src/components/ui/dialog.tsx": [],
+    "src/components/ui/dropdown-menu.tsx": [],
+    "src/components/ui/error-banner.tsx": [],
+    "src/components/ui/hover-card.tsx": []
+  }
+}

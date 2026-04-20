@@ -1,0 +1,157 @@
+{
+  "projectRoot": "D:/project/common/AI/CodePilot",
+  "batchFiles": [
+    {
+      "path": "src/app/api/cli-tools/[id]/describe/route.ts",
+      "sizeLines": 226,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/cli-tools/[id]/detail/route.ts",
+      "sizeLines": 25,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/cli-tools/[id]/install/route.ts",
+      "sizeLines": 143,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/cli-tools/[id]/status/route.ts",
+      "sizeLines": 27,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/cli-tools/catalog/route.ts",
+      "sizeLines": 6,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/cli-tools/custom/[id]/route.ts",
+      "sizeLines": 17,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/cli-tools/custom/route.ts",
+      "sizeLines": 77,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/cli-tools/descriptions/route.ts",
+      "sizeLines": 35,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/cli-tools/installed/route.ts",
+      "sizeLines": 51,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/dashboard/refresh/route.ts",
+      "sizeLines": 113,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/dashboard/route.ts",
+      "sizeLines": 63,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/doctor/export/route.ts",
+      "sizeLines": 150,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/doctor/repair/route.ts",
+      "sizeLines": 188,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/doctor/route.ts",
+      "sizeLines": 37,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/files/browse/route.ts",
+      "sizeLines": 62,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/files/open/route.ts",
+      "sizeLines": 29,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/files/preview/route.ts",
+      "sizeLines": 60,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/files/raw/route.ts",
+      "sizeLines": 168,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/files/route.ts",
+      "sizeLines": 63,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/files/serve/route.ts",
+      "sizeLines": 121,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/files/suggest/route.ts",
+      "sizeLines": 109,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/git/branches/route.ts",
+      "sizeLines": 19,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/git/checkout/route.ts",
+      "sizeLines": 19,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/git/commit-detail/[sha]/route.ts",
+      "sizeLines": 23,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/app/api/git/commit/route.ts",
+      "sizeLines": 19,
+      "fileCategory": "code"
+    }
+  ],
+  "batchImportData": {
+    "src/app/api/cli-tools/[id]/describe/route.ts": [],
+    "src/app/api/cli-tools/[id]/detail/route.ts": [],
+    "src/app/api/cli-tools/[id]/install/route.ts": [],
+    "src/app/api/cli-tools/[id]/status/route.ts": [],
+    "src/app/api/cli-tools/catalog/route.ts": [],
+    "src/app/api/cli-tools/custom/[id]/route.ts": [],
+    "src/app/api/cli-tools/custom/route.ts": [],
+    "src/app/api/cli-tools/descriptions/route.ts": [],
+    "src/app/api/cli-tools/installed/route.ts": [],
+    "src/app/api/dashboard/refresh/route.ts": [],
+    "src/app/api/dashboard/route.ts": [],
+    "src/app/api/doctor/export/route.ts": [],
+    "src/app/api/doctor/repair/route.ts": [],
+    "src/app/api/doctor/route.ts": [],
+    "src/app/api/files/browse/route.ts": [],
+    "src/app/api/files/open/route.ts": [],
+    "src/app/api/files/preview/route.ts": [],
+    "src/app/api/files/raw/route.ts": [],
+    "src/app/api/files/route.ts": [],
+    "src/app/api/files/serve/route.ts": [],
+    "src/app/api/files/suggest/route.ts": [],
+    "src/app/api/git/branches/route.ts": [],
+    "src/app/api/git/checkout/route.ts": [],
+    "src/app/api/git/commit-detail/[sha]/route.ts": [],
+    "src/app/api/git/commit/route.ts": []
+  }
+}

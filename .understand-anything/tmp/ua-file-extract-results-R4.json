@@ -1,0 +1,5531 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 34,
+  "filesSkipped": [],
+  "results": [
+    {
+      "path": "src/hooks/useAccountInfo.ts",
+      "fileCategory": "code",
+      "totalLines": 42,
+      "nonEmptyLines": 36,
+      "functions": [
+        {
+          "name": "useAccountInfo",
+          "startLine": 12,
+          "endLine": 41,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "useAccountInfo",
+          "line": 12,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "useAccountInfo",
+          "callee": "useState",
+          "lineNumber": 17
+        },
+        {
+          "caller": "useAccountInfo",
+          "callee": "useState",
+          "lineNumber": 18
+        },
+        {
+          "caller": "useAccountInfo",
+          "callee": "useCallback",
+          "lineNumber": 20
+        },
+        {
+          "caller": "useAccountInfo",
+          "callee": "fetch",
+          "lineNumber": 22
+        },
+        {
+          "caller": "useAccountInfo",
+          "callee": "res.json",
+          "lineNumber": 24
+        },
+        {
+          "caller": "useAccountInfo",
+          "callee": "setAccountInfo",
+          "lineNumber": 26
+        },
+        {
+          "caller": "useAccountInfo",
+          "callee": "setLoading",
+          "lineNumber": 32
+        },
+        {
+          "caller": "useAccountInfo",
+          "callee": "useEffect",
+          "lineNumber": 36
+        },
+        {
+          "caller": "useAccountInfo",
+          "callee": "refresh",
+          "lineNumber": 37
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/hooks/useAppTheme.ts",
+      "fileCategory": "code",
+      "totalLines": 17,
+      "nonEmptyLines": 14,
+      "functions": [
+        {
+          "name": "useAppTheme",
+          "startLine": 4,
+          "endLine": 16,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "useAppTheme",
+          "line": 4,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "useAppTheme",
+          "callee": "useTheme",
+          "lineNumber": 5
+        },
+        {
+          "caller": "useAppTheme",
+          "callee": "useThemeFamily",
+          "lineNumber": 6
+        }
+      ],
+      "metrics": {
+        "importCount": 2,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/hooks/useBatchImageGen.ts",
+      "fileCategory": "code",
+      "totalLines": 486,
+      "nonEmptyLines": 429,
+      "functions": [
+        {
+          "name": "useBatchImageGen",
+          "startLine": 51,
+          "endLine": 57,
+          "params": []
+        },
+        {
+          "name": "useBatchImageGenState",
+          "startLine": 74,
+          "endLine": 485,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "BatchImageGenContext",
+          "line": 49,
+          "isDefault": false
+        },
+        {
+          "name": "useBatchImageGen",
+          "line": 51,
+          "isDefault": false
+        },
+        {
+          "name": "useBatchImageGenState",
+          "line": 74,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "useBatchImageGen",
+          "callee": "useContext",
+          "lineNumber": 52
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "useState",
+          "lineNumber": 75
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "useRef",
+          "lineNumber": 76
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "useCallback",
+          "lineNumber": 78
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "setState",
+          "lineNumber": 79
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "useCallback",
+          "lineNumber": 87
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "setState",
+          "lineNumber": 94
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "fetch",
+          "lineNumber": 97
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "JSON.stringify",
+          "lineNumber": 100
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "res.json().catch",
+          "lineNumber": 110
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "res.json",
+          "lineNumber": 110
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "res.body?.getReader",
+          "lineNumber": 114
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "reader.read",
+          "lineNumber": 122
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "decoder.decode",
+          "lineNumber": 125
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "buffer.split",
+          "lineNumber": 126
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "lines.pop",
+          "lineNumber": 127
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "line.startsWith",
+          "lineNumber": 131
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "line.slice(7).trim",
+          "lineNumber": 132
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "line.slice",
+          "lineNumber": 132
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "line.startsWith",
+          "lineNumber": 133
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "JSON.parse",
+          "lineNumber": 134
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "line.slice",
+          "lineNumber": 134
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "setState",
+          "lineNumber": 138
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "setState",
+          "lineNumber": 141
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "setState",
+          "lineNumber": 148
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "setState",
+          "lineNumber": 158
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "useCallback",
+          "lineNumber": 166
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "setState",
+          "lineNumber": 167
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "useCallback",
+          "lineNumber": 175
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "setState",
+          "lineNumber": 176
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "useCallback",
+          "lineNumber": 195
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "setState",
+          "lineNumber": 196
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "prev.plannerOutput.items.filter",
+          "lineNumber": 198
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "useCallback",
+          "lineNumber": 203
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "setState",
+          "lineNumber": 207
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "fetch",
+          "lineNumber": 211
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "JSON.stringify",
+          "lineNumber": 214
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "currentPlan.items.map",
+          "lineNumber": 216
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "createRes.json().catch",
+          "lineNumber": 227
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "createRes.json",
+          "lineNumber": 227
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "createRes.json",
+          "lineNumber": 231
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "setState",
+          "lineNumber": 232
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "fetch",
+          "lineNumber": 240
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "startRes.json().catch",
+          "lineNumber": 242
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "startRes.json",
+          "lineNumber": 242
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "connectProgressSSE",
+          "lineNumber": 247
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "setState",
+          "lineNumber": 249
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "useCallback",
+          "lineNumber": 257
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "progressSourceRef.current.close",
+          "lineNumber": 260
+        },
+        {
+          "caller": "handleEvent",
+          "callee": "JSON.parse",
+          "lineNumber": 268
+        },
+        {
+          "caller": "handleEvent",
+          "callee": "setState",
+          "lineNumber": 271
+        },
+        {
+          "caller": "handleEvent",
+          "callee": "setState",
+          "lineNumber": 275
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "es.addEventListener",
+          "lineNumber": 280
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "JSON.parse",
+          "lineNumber": 282
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "setState",
+          "lineNumber": 283
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "es.addEventListener",
+          "lineNumber": 291
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "es.addEventListener",
+          "lineNumber": 292
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "handleEvent",
+          "lineNumber": 293
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "refreshItems",
+          "lineNumber": 295
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "es.addEventListener",
+          "lineNumber": 297
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "es.addEventListener",
+          "lineNumber": 298
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "es.addEventListener",
+          "lineNumber": 300
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "handleEvent",
+          "lineNumber": 301
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "setState",
+          "lineNumber": 302
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "es.close",
+          "lineNumber": 303
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "refreshItems",
+          "lineNumber": 305
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "es.addEventListener",
+          "lineNumber": 308
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "handleEvent",
+          "lineNumber": 309
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "refreshItems",
+          "lineNumber": 310
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "es.addEventListener",
+          "lineNumber": 313
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "handleEvent",
+          "lineNumber": 314
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "setState",
+          "lineNumber": 315
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "es.close",
+          "lineNumber": 316
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "refreshItems",
+          "lineNumber": 318
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "es.addEventListener",
+          "lineNumber": 321
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "es.close",
+          "lineNumber": 322
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "es.close",
+          "lineNumber": 327
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "useCallback",
+          "lineNumber": 332
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "fetch",
+          "lineNumber": 334
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "res.json",
+          "lineNumber": 336
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "setState",
+          "lineNumber": 337
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "useCallback",
+          "lineNumber": 346
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "fetch",
+          "lineNumber": 349
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "setState",
+          "lineNumber": 350
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "setState",
+          "lineNumber": 355
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "useCallback",
+          "lineNumber": 362
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "fetch",
+          "lineNumber": 365
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "setState",
+          "lineNumber": 366
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "connectProgressSSE",
+          "lineNumber": 370
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "setState",
+          "lineNumber": 372
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "useCallback",
+          "lineNumber": 379
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "fetch",
+          "lineNumber": 382
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "progressSourceRef.current.close",
+          "lineNumber": 384
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "setState",
+          "lineNumber": 387
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "setState",
+          "lineNumber": 393
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "useCallback",
+          "lineNumber": 400
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "fetch",
+          "lineNumber": 404
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "setState",
+          "lineNumber": 405
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "connectProgressSSE",
+          "lineNumber": 410
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "setState",
+          "lineNumber": 412
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "useCallback",
+          "lineNumber": 419
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "setState",
+          "lineNumber": 422
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "fetch",
+          "lineNumber": 425
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "JSON.stringify",
+          "lineNumber": 428
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "res.json().catch",
+          "lineNumber": 432
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "res.json",
+          "lineNumber": 432
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "setState",
+          "lineNumber": 436
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "setState",
+          "lineNumber": 442
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "useCallback",
+          "lineNumber": 450
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "progressSourceRef.current.close",
+          "lineNumber": 452
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "setState",
+          "lineNumber": 455
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "useCallback",
+          "lineNumber": 458
+        },
+        {
+          "caller": "useBatchImageGenState",
+          "callee": "setState",
+          "lineNumber": 460
+        }
+      ],
+      "metrics": {
+        "importCount": 2,
+        "exportCount": 3,
+        "functionCount": 2,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/hooks/useBridgeAdapter.ts",
+      "fileCategory": "code",
+      "totalLines": 107,
+      "nonEmptyLines": 97,
+      "functions": [
+        {
+          "name": "useBridgeAdapter",
+          "startLine": 13,
+          "endLine": 106,
+          "params": [
+            "platform",
+            "defaults"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "useBridgeAdapter",
+          "line": 13,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "useBridgeAdapter",
+          "callee": "useState",
+          "lineNumber": 27
+        },
+        {
+          "caller": "useBridgeAdapter",
+          "callee": "useState",
+          "lineNumber": 28
+        },
+        {
+          "caller": "useBridgeAdapter",
+          "callee": "useState",
+          "lineNumber": 29
+        },
+        {
+          "caller": "useBridgeAdapter",
+          "callee": "useState",
+          "lineNumber": 30
+        },
+        {
+          "caller": "useBridgeAdapter",
+          "callee": "useState",
+          "lineNumber": 31
+        },
+        {
+          "caller": "useBridgeAdapter",
+          "callee": "useCallback",
+          "lineNumber": 35
+        },
+        {
+          "caller": "useBridgeAdapter",
+          "callee": "fetch",
+          "lineNumber": 37
+        },
+        {
+          "caller": "useBridgeAdapter",
+          "callee": "res.json",
+          "lineNumber": 39
+        },
+        {
+          "caller": "useBridgeAdapter",
+          "callee": "setSettings",
+          "lineNumber": 40
+        },
+        {
+          "caller": "useBridgeAdapter",
+          "callee": "setLoading",
+          "lineNumber": 45
+        },
+        {
+          "caller": "useBridgeAdapter",
+          "callee": "useEffect",
+          "lineNumber": 49
+        },
+        {
+          "caller": "useBridgeAdapter",
+          "callee": "refresh",
+          "lineNumber": 50
+        },
+        {
+          "caller": "useBridgeAdapter",
+          "callee": "useCallback",
+          "lineNumber": 53
+        },
+        {
+          "caller": "useBridgeAdapter",
+          "callee": "setSaving",
+          "lineNumber": 54
+        },
+        {
+          "caller": "useBridgeAdapter",
+          "callee": "fetch",
+          "lineNumber": 56
+        },
+        {
+          "caller": "useBridgeAdapter",
+          "callee": "JSON.stringify",
+          "lineNumber": 59
+        },
+        {
+          "caller": "useBridgeAdapter",
+          "callee": "setSettings",
+          "lineNumber": 62
+        },
+        {
+          "caller": "useBridgeAdapter",
+          "callee": "setSaving",
+          "lineNumber": 67
+        },
+        {
+          "caller": "useBridgeAdapter",
+          "callee": "useCallback",
+          "lineNumber": 71
+        },
+        {
+          "caller": "useBridgeAdapter",
+          "callee": "setVerifying",
+          "lineNumber": 72
+        },
+        {
+          "caller": "useBridgeAdapter",
+          "callee": "setVerifyResult",
+          "lineNumber": 73
+        },
+        {
+          "caller": "useBridgeAdapter",
+          "callee": "fetch",
+          "lineNumber": 75
+        },
+        {
+          "caller": "useBridgeAdapter",
+          "callee": "JSON.stringify",
+          "lineNumber": 78
+        },
+        {
+          "caller": "useBridgeAdapter",
+          "callee": "res.json",
+          "lineNumber": 80
+        },
+        {
+          "caller": "useBridgeAdapter",
+          "callee": "setVerifyResult",
+          "lineNumber": 83
+        },
+        {
+          "caller": "useBridgeAdapter",
+          "callee": "setVerifyResult",
+          "lineNumber": 90
+        },
+        {
+          "caller": "useBridgeAdapter",
+          "callee": "setVerifyResult",
+          "lineNumber": 96
+        },
+        {
+          "caller": "useBridgeAdapter",
+          "callee": "setVerifying",
+          "lineNumber": 98
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/hooks/useBridgeStatus.ts",
+      "fileCategory": "code",
+      "totalLines": 104,
+      "nonEmptyLines": 94,
+      "functions": [
+        {
+          "name": "useBridgeStatus",
+          "startLine": 21,
+          "endLine": 103,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "useBridgeStatus",
+          "line": 21,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "useBridgeStatus",
+          "callee": "useState",
+          "lineNumber": 29
+        },
+        {
+          "caller": "useBridgeStatus",
+          "callee": "useState",
+          "lineNumber": 30
+        },
+        {
+          "caller": "useBridgeStatus",
+          "callee": "useState",
+          "lineNumber": 31
+        },
+        {
+          "caller": "useBridgeStatus",
+          "callee": "useRef",
+          "lineNumber": 32
+        },
+        {
+          "caller": "useBridgeStatus",
+          "callee": "useCallback",
+          "lineNumber": 34
+        },
+        {
+          "caller": "useBridgeStatus",
+          "callee": "fetch",
+          "lineNumber": 36
+        },
+        {
+          "caller": "useBridgeStatus",
+          "callee": "res.json",
+          "lineNumber": 38
+        },
+        {
+          "caller": "useBridgeStatus",
+          "callee": "setBridgeStatus",
+          "lineNumber": 39
+        },
+        {
+          "caller": "useBridgeStatus",
+          "callee": "useEffect",
+          "lineNumber": 46
+        },
+        {
+          "caller": "useBridgeStatus",
+          "callee": "refreshStatus",
+          "lineNumber": 47
+        },
+        {
+          "caller": "useBridgeStatus",
+          "callee": "useEffect",
+          "lineNumber": 51
+        },
+        {
+          "caller": "useBridgeStatus",
+          "callee": "setInterval",
+          "lineNumber": 53
+        },
+        {
+          "caller": "useBridgeStatus",
+          "callee": "clearInterval",
+          "lineNumber": 55
+        },
+        {
+          "caller": "useBridgeStatus",
+          "callee": "clearInterval",
+          "lineNumber": 60
+        },
+        {
+          "caller": "useBridgeStatus",
+          "callee": "useCallback",
+          "lineNumber": 65
+        },
+        {
+          "caller": "useBridgeStatus",
+          "callee": "setStarting",
+          "lineNumber": 66
+        },
+        {
+          "caller": "useBridgeStatus",
+          "callee": "fetch",
+          "lineNumber": 68
+        },
+        {
+          "caller": "useBridgeStatus",
+          "callee": "JSON.stringify",
+          "lineNumber": 71
+        },
+        {
+          "caller": "useBridgeStatus",
+          "callee": "res.json",
+          "lineNumber": 73
+        },
+        {
+          "caller": "useBridgeStatus",
+          "callee": "refreshStatus",
+          "lineNumber": 74
+        },
+        {
+          "caller": "useBridgeStatus",
+          "callee": "setStarting",
+          "lineNumber": 82
+        },
+        {
+          "caller": "useBridgeStatus",
+          "callee": "useCallback",
+          "lineNumber": 86
+        },
+        {
+          "caller": "useBridgeStatus",
+          "callee": "setStopping",
+          "lineNumber": 87
+        },
+        {
+          "caller": "useBridgeStatus",
+          "callee": "fetch",
+          "lineNumber": 89
+        },
+        {
+          "caller": "useBridgeStatus",
+          "callee": "JSON.stringify",
+          "lineNumber": 92
+        },
+        {
+          "caller": "useBridgeStatus",
+          "callee": "refreshStatus",
+          "lineNumber": 94
+        },
+        {
+          "caller": "useBridgeStatus",
+          "callee": "setStopping",
+          "lineNumber": 98
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/hooks/useChatCommands.ts",
+      "fileCategory": "code",
+      "totalLines": 86,
+      "nonEmptyLines": 79,
+      "functions": [
+        {
+          "name": "useChatCommands",
+          "startLine": 11,
+          "endLine": 85,
+          "params": [
+            "{ sessionId, messages, setMessages, sendMessage }"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "useChatCommands",
+          "line": 11,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "useChatCommands",
+          "callee": "useCallback",
+          "lineNumber": 12
+        },
+        {
+          "caller": "useChatCommands",
+          "callee": "Date.now",
+          "lineNumber": 16
+        },
+        {
+          "caller": "useChatCommands",
+          "callee": "new Date().toISOString",
+          "lineNumber": 20
+        },
+        {
+          "caller": "useChatCommands",
+          "callee": "setMessages",
+          "lineNumber": 23
+        },
+        {
+          "caller": "useChatCommands",
+          "callee": "setMessages",
+          "lineNumber": 27
+        },
+        {
+          "caller": "useChatCommands",
+          "callee": "fetch(`/api/chat/sessions/${sessionId}`, {\r\n            method: 'PATCH',\r\n            headers: { 'Content-Type': 'application/json' },\r\n            body: JSON.stringify({ clear_messages: true }),\r\n          }).catch",
+          "lineNumber": 30
+        },
+        {
+          "caller": "useChatCommands",
+          "callee": "fetch",
+          "lineNumber": 30
+        },
+        {
+          "caller": "useChatCommands",
+          "callee": "JSON.stringify",
+          "lineNumber": 33
+        },
+        {
+          "caller": "useChatCommands",
+          "callee": "JSON.parse",
+          "lineNumber": 49
+        },
+        {
+          "caller": "useChatCommands",
+          "callee": "totalInput.toLocaleString",
+          "lineNumber": 66
+        },
+        {
+          "caller": "useChatCommands",
+          "callee": "totalOutput.toLocaleString",
+          "lineNumber": 66
+        },
+        {
+          "caller": "useChatCommands",
+          "callee": "totalCacheRead.toLocaleString",
+          "lineNumber": 66
+        },
+        {
+          "caller": "useChatCommands",
+          "callee": "totalCacheCreation.toLocaleString",
+          "lineNumber": 66
+        },
+        {
+          "caller": "useChatCommands",
+          "callee": "totalTokens.toLocaleString",
+          "lineNumber": 66
+        },
+        {
+          "caller": "useChatCommands",
+          "callee": "totalCost.toFixed",
+          "lineNumber": 66
+        },
+        {
+          "caller": "useChatCommands",
+          "callee": "Date.now",
+          "lineNumber": 70
+        },
+        {
+          "caller": "useChatCommands",
+          "callee": "new Date().toISOString",
+          "lineNumber": 74
+        },
+        {
+          "caller": "useChatCommands",
+          "callee": "setMessages",
+          "lineNumber": 77
+        },
+        {
+          "caller": "useChatCommands",
+          "callee": "sendMessage",
+          "lineNumber": 82
+        }
+      ],
+      "metrics": {
+        "importCount": 2,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/hooks/useClientPlatform.ts",
+      "fileCategory": "code",
+      "totalLines": 43,
+      "nonEmptyLines": 34,
+      "functions": [
+        {
+          "name": "useClientPlatform",
+          "startLine": 19,
+          "endLine": 42,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "useClientPlatform",
+          "line": 19,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "useClientPlatform",
+          "callee": "useState",
+          "lineNumber": 21
+        },
+        {
+          "caller": "useClientPlatform",
+          "callee": "useEffect",
+          "lineNumber": 23
+        },
+        {
+          "caller": "useClientPlatform",
+          "callee": "/^Win/i.test",
+          "lineNumber": 28
+        },
+        {
+          "caller": "useClientPlatform",
+          "callee": "/^Mac/i.test",
+          "lineNumber": 29
+        },
+        {
+          "caller": "useClientPlatform",
+          "callee": "/^Linux/i.test",
+          "lineNumber": 30
+        },
+        {
+          "caller": "useClientPlatform",
+          "callee": "setPlatform",
+          "lineNumber": 32
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/hooks/useGitBranches.ts",
+      "fileCategory": "code",
+      "totalLines": 32,
+      "nonEmptyLines": 27,
+      "functions": [
+        {
+          "name": "useGitBranches",
+          "startLine": 6,
+          "endLine": 31,
+          "params": [
+            "cwd"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "useGitBranches",
+          "line": 6,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "useGitBranches",
+          "callee": "useState",
+          "lineNumber": 7
+        },
+        {
+          "caller": "useGitBranches",
+          "callee": "useState",
+          "lineNumber": 8
+        },
+        {
+          "caller": "useGitBranches",
+          "callee": "useState",
+          "lineNumber": 9
+        },
+        {
+          "caller": "useGitBranches",
+          "callee": "useCallback",
+          "lineNumber": 11
+        },
+        {
+          "caller": "useGitBranches",
+          "callee": "setLoading",
+          "lineNumber": 13
+        },
+        {
+          "caller": "useGitBranches",
+          "callee": "setError",
+          "lineNumber": 14
+        },
+        {
+          "caller": "useGitBranches",
+          "callee": "fetch",
+          "lineNumber": 16
+        },
+        {
+          "caller": "useGitBranches",
+          "callee": "encodeURIComponent",
+          "lineNumber": 16
+        },
+        {
+          "caller": "useGitBranches",
+          "callee": "res.json",
+          "lineNumber": 18
+        },
+        {
+          "caller": "useGitBranches",
+          "callee": "res.json",
+          "lineNumber": 21
+        },
+        {
+          "caller": "useGitBranches",
+          "callee": "setBranches",
+          "lineNumber": 22
+        },
+        {
+          "caller": "useGitBranches",
+          "callee": "setError",
+          "lineNumber": 24
+        },
+        {
+          "caller": "useGitBranches",
+          "callee": "setLoading",
+          "lineNumber": 26
+        }
+      ],
+      "metrics": {
+        "importCount": 2,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/hooks/useGitLog.ts",
+      "fileCategory": "code",
+      "totalLines": 32,
+      "nonEmptyLines": 27,
+      "functions": [
+        {
+          "name": "useGitLog",
+          "startLine": 6,
+          "endLine": 31,
+          "params": [
+            "cwd"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "useGitLog",
+          "line": 6,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "useGitLog",
+          "callee": "useState",
+          "lineNumber": 7
+        },
+        {
+          "caller": "useGitLog",
+          "callee": "useState",
+          "lineNumber": 8
+        },
+        {
+          "caller": "useGitLog",
+          "callee": "useState",
+          "lineNumber": 9
+        },
+        {
+          "caller": "useGitLog",
+          "callee": "useCallback",
+          "lineNumber": 11
+        },
+        {
+          "caller": "useGitLog",
+          "callee": "setLoading",
+          "lineNumber": 13
+        },
+        {
+          "caller": "useGitLog",
+          "callee": "setError",
+          "lineNumber": 14
+        },
+        {
+          "caller": "useGitLog",
+          "callee": "fetch",
+          "lineNumber": 16
+        },
+        {
+          "caller": "useGitLog",
+          "callee": "encodeURIComponent",
+          "lineNumber": 16
+        },
+        {
+          "caller": "useGitLog",
+          "callee": "res.json",
+          "lineNumber": 18
+        },
+        {
+          "caller": "useGitLog",
+          "callee": "res.json",
+          "lineNumber": 21
+        },
+        {
+          "caller": "useGitLog",
+          "callee": "setEntries",
+          "lineNumber": 22
+        },
+        {
+          "caller": "useGitLog",
+          "callee": "setError",
+          "lineNumber": 24
+        },
+        {
+          "caller": "useGitLog",
+          "callee": "setLoading",
+          "lineNumber": 26
+        }
+      ],
+      "metrics": {
+        "importCount": 2,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/hooks/useGitStatus.ts",
+      "fileCategory": "code",
+      "totalLines": 64,
+      "nonEmptyLines": 52,
+      "functions": [
+        {
+          "name": "useGitStatus",
+          "startLine": 8,
+          "endLine": 63,
+          "params": [
+            "cwd"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "useGitStatus",
+          "line": 8,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "useGitStatus",
+          "callee": "useState",
+          "lineNumber": 9
+        },
+        {
+          "caller": "useGitStatus",
+          "callee": "useState",
+          "lineNumber": 10
+        },
+        {
+          "caller": "useGitStatus",
+          "callee": "useState",
+          "lineNumber": 11
+        },
+        {
+          "caller": "useGitStatus",
+          "callee": "useRef",
+          "lineNumber": 12
+        },
+        {
+          "caller": "useGitStatus",
+          "callee": "useCallback",
+          "lineNumber": 14
+        },
+        {
+          "caller": "useGitStatus",
+          "callee": "setLoading",
+          "lineNumber": 16
+        },
+        {
+          "caller": "useGitStatus",
+          "callee": "setError",
+          "lineNumber": 17
+        },
+        {
+          "caller": "useGitStatus",
+          "callee": "fetch",
+          "lineNumber": 19
+        },
+        {
+          "caller": "useGitStatus",
+          "callee": "encodeURIComponent",
+          "lineNumber": 19
+        },
+        {
+          "caller": "useGitStatus",
+          "callee": "res.json",
+          "lineNumber": 21
+        },
+        {
+          "caller": "useGitStatus",
+          "callee": "res.json",
+          "lineNumber": 24
+        },
+        {
+          "caller": "useGitStatus",
+          "callee": "setStatus",
+          "lineNumber": 25
+        },
+        {
+          "caller": "useGitStatus",
+          "callee": "setError",
+          "lineNumber": 27
+        },
+        {
+          "caller": "useGitStatus",
+          "callee": "setLoading",
+          "lineNumber": 29
+        },
+        {
+          "caller": "useGitStatus",
+          "callee": "useEffect",
+          "lineNumber": 34
+        },
+        {
+          "caller": "useGitStatus",
+          "callee": "setStatus",
+          "lineNumber": 36
+        },
+        {
+          "caller": "useGitStatus",
+          "callee": "fetchStatus",
+          "lineNumber": 40
+        },
+        {
+          "caller": "useGitStatus",
+          "callee": "setInterval",
+          "lineNumber": 42
+        },
+        {
+          "caller": "handleVisibility",
+          "callee": "fetchStatus",
+          "lineNumber": 46
+        },
+        {
+          "caller": "useGitStatus",
+          "callee": "document.addEventListener",
+          "lineNumber": 49
+        },
+        {
+          "caller": "handleRefreshEvent",
+          "callee": "fetchStatus",
+          "lineNumber": 52
+        },
+        {
+          "caller": "useGitStatus",
+          "callee": "window.addEventListener",
+          "lineNumber": 53
+        },
+        {
+          "caller": "useGitStatus",
+          "callee": "clearInterval",
+          "lineNumber": 56
+        },
+        {
+          "caller": "useGitStatus",
+          "callee": "document.removeEventListener",
+          "lineNumber": 57
+        },
+        {
+          "caller": "useGitStatus",
+          "callee": "window.removeEventListener",
+          "lineNumber": 58
+        }
+      ],
+      "metrics": {
+        "importCount": 2,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/hooks/useGitWorktrees.ts",
+      "fileCategory": "code",
+      "totalLines": 32,
+      "nonEmptyLines": 27,
+      "functions": [
+        {
+          "name": "useGitWorktrees",
+          "startLine": 6,
+          "endLine": 31,
+          "params": [
+            "cwd"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "useGitWorktrees",
+          "line": 6,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "useGitWorktrees",
+          "callee": "useState",
+          "lineNumber": 7
+        },
+        {
+          "caller": "useGitWorktrees",
+          "callee": "useState",
+          "lineNumber": 8
+        },
+        {
+          "caller": "useGitWorktrees",
+          "callee": "useState",
+          "lineNumber": 9
+        },
+        {
+          "caller": "useGitWorktrees",
+          "callee": "useCallback",
+          "lineNumber": 11
+        },
+        {
+          "caller": "useGitWorktrees",
+          "callee": "setLoading",
+          "lineNumber": 13
+        },
+        {
+          "caller": "useGitWorktrees",
+          "callee": "setError",
+          "lineNumber": 14
+        },
+        {
+          "caller": "useGitWorktrees",
+          "callee": "fetch",
+          "lineNumber": 16
+        },
+        {
+          "caller": "useGitWorktrees",
+          "callee": "encodeURIComponent",
+          "lineNumber": 16
+        },
+        {
+          "caller": "useGitWorktrees",
+          "callee": "res.json",
+          "lineNumber": 18
+        },
+        {
+          "caller": "useGitWorktrees",
+          "callee": "res.json",
+          "lineNumber": 21
+        },
+        {
+          "caller": "useGitWorktrees",
+          "callee": "setWorktrees",
+          "lineNumber": 22
+        },
+        {
+          "caller": "useGitWorktrees",
+          "callee": "setError",
+          "lineNumber": 24
+        },
+        {
+          "caller": "useGitWorktrees",
+          "callee": "setLoading",
+          "lineNumber": 26
+        }
+      ],
+      "metrics": {
+        "importCount": 2,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/hooks/useImageGen.ts",
+      "fileCategory": "code",
+      "totalLines": 109,
+      "nonEmptyLines": 93,
+      "functions": [
+        {
+          "name": "useImageGen",
+          "startLine": 25,
+          "endLine": 31,
+          "params": []
+        },
+        {
+          "name": "useImageGenState",
+          "startLine": 33,
+          "endLine": 108,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "ImageGenContext",
+          "line": 23,
+          "isDefault": false
+        },
+        {
+          "name": "useImageGen",
+          "line": 25,
+          "isDefault": false
+        },
+        {
+          "name": "useImageGenState",
+          "line": 33,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "useImageGen",
+          "callee": "useContext",
+          "lineNumber": 26
+        },
+        {
+          "caller": "useImageGenState",
+          "callee": "useState",
+          "lineNumber": 34
+        },
+        {
+          "caller": "useImageGenState",
+          "callee": "useState",
+          "lineNumber": 35
+        },
+        {
+          "caller": "useImageGenState",
+          "callee": "useState",
+          "lineNumber": 36
+        },
+        {
+          "caller": "useImageGenState",
+          "callee": "useRef",
+          "lineNumber": 37
+        },
+        {
+          "caller": "useImageGenState",
+          "callee": "useCallback",
+          "lineNumber": 39
+        },
+        {
+          "caller": "useImageGenState",
+          "callee": "abortRef.current.abort",
+          "lineNumber": 41
+        },
+        {
+          "caller": "useImageGenState",
+          "callee": "setGenerating",
+          "lineNumber": 46
+        },
+        {
+          "caller": "useImageGenState",
+          "callee": "file.arrayBuffer",
+          "lineNumber": 57
+        },
+        {
+          "caller": "useImageGenState",
+          "callee": "btoa",
+          "lineNumber": 58
+        },
+        {
+          "caller": "useImageGenState",
+          "callee": "new Uint8Array(buffer).reduce",
+          "lineNumber": 59
+        },
+        {
+          "caller": "useImageGenState",
+          "callee": "String.fromCharCode",
+          "lineNumber": 59
+        },
+        {
+          "caller": "useImageGenState",
+          "callee": "refImagesData.push",
+          "lineNumber": 61
+        },
+        {
+          "caller": "useImageGenState",
+          "callee": "fetch",
+          "lineNumber": 70
+        },
+        {
+          "caller": "useImageGenState",
+          "callee": "JSON.stringify",
+          "lineNumber": 73
+        },
+        {
+          "caller": "useImageGenState",
+          "callee": "res.json().catch",
+          "lineNumber": 78
+        },
+        {
+          "caller": "useImageGenState",
+          "callee": "res.json",
+          "lineNumber": 78
+        },
+        {
+          "caller": "useImageGenState",
+          "callee": "res.json",
+          "lineNumber": 82
+        },
+        {
+          "caller": "useImageGenState",
+          "callee": "setLastResult",
+          "lineNumber": 89
+        },
+        {
+          "caller": "useImageGenState",
+          "callee": "setGenerating",
+          "lineNumber": 97
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 3,
+        "functionCount": 2,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/hooks/useNativeFolderPicker.ts",
+      "fileCategory": "code",
+      "totalLines": 21,
+      "nonEmptyLines": 17,
+      "functions": [
+        {
+          "name": "useNativeFolderPicker",
+          "startLine": 7,
+          "endLine": 20,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "useNativeFolderPicker",
+          "line": 7,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "useNativeFolderPicker",
+          "callee": "useCallback",
+          "lineNumber": 10
+        },
+        {
+          "caller": "useNativeFolderPicker",
+          "callee": "window.electronAPI.dialog.openFolder",
+          "lineNumber": 13
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/hooks/usePopoverState.ts",
+      "fileCategory": "code",
+      "totalLines": 190,
+      "nonEmptyLines": 169,
+      "functions": [
+        {
+          "name": "usePopoverState",
+          "startLine": 24,
+          "endLine": 189,
+          "params": [
+            "modelName"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "usePopoverState",
+          "line": 24,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "usePopoverState",
+          "callee": "useRef",
+          "lineNumber": 25
+        },
+        {
+          "caller": "usePopoverState",
+          "callee": "useState",
+          "lineNumber": 26
+        },
+        {
+          "caller": "usePopoverState",
+          "callee": "useState",
+          "lineNumber": 27
+        },
+        {
+          "caller": "usePopoverState",
+          "callee": "useState",
+          "lineNumber": 28
+        },
+        {
+          "caller": "usePopoverState",
+          "callee": "useState",
+          "lineNumber": 29
+        },
+        {
+          "caller": "usePopoverState",
+          "callee": "useState",
+          "lineNumber": 30
+        },
+        {
+          "caller": "usePopoverState",
+          "callee": "useState",
+          "lineNumber": 31
+        },
+        {
+          "caller": "usePopoverState",
+          "callee": "useState",
+          "lineNumber": 32
+        },
+        {
+          "caller": "usePopoverState",
+          "callee": "useRef",
+          "lineNumber": 33
+        },
+        {
+          "caller": "usePopoverState",
+          "callee": "useRef",
+          "lineNumber": 34
+        },
+        {
+          "caller": "usePopoverState",
+          "callee": "useCallback",
+          "lineNumber": 36
+        },
+        {
+          "caller": "usePopoverState",
+          "callee": "setPopoverMode",
+          "lineNumber": 37
+        },
+        {
+          "caller": "usePopoverState",
+          "callee": "setPopoverItems",
+          "lineNumber": 38
+        },
+        {
+          "caller": "usePopoverState",
+          "callee": "setPopoverFilter",
+          "lineNumber": 39
+        },
+        {
+          "caller": "usePopoverState",
+          "callee": "setSelectedIndex",
+          "lineNumber": 40
+        },
+        {
+          "caller": "usePopoverState",
+          "callee": "setTriggerPos",
+          "lineNumber": 41
+        },
+        {
+          "caller": "usePopoverState",
+          "callee": "setAiSuggestions",
+          "lineNumber": 43
+        },
+        {
+          "caller": "usePopoverState",
+          "callee": "setAiSearchLoading",
+          "lineNumber": 44
+        },
+        {
+          "caller": "usePopoverState",
+          "callee": "clearTimeout",
+          "lineNumber": 46
+        },
+        {
+          "caller": "usePopoverState",
+          "callee": "aiSearchAbortRef.current.abort",
+          "lineNumber": 50
+        },
+        {
+          "caller": "usePopoverState",
+          "callee": "useMemo",
+          "lineNumber": 55
+        },
+        {
+          "caller": "usePopoverState",
+          "callee": "filterItems",
+          "lineNumber": 56
+        },
+        {
+          "caller": "usePopoverState",
+          "callee": "filteredItems.filter",
+          "lineNumber": 60
+        },
+        {
+          "caller": "usePopoverState",
+          "callee": "useEffect",
+          "lineNumber": 61
+        },
+        {
+          "caller": "usePopoverState",
+          "callee": "setAiSuggestions",
+          "lineNumber": 64
+        },
+        {
+          "caller": "usePopoverState",
+          "callee": "setAiSearchLoading",
+          "lineNumber": 65
+        },
+        {
+          "caller": "usePopoverState",
+          "callee": "clearTimeout",
+          "lineNumber": 67
+        },
+        {
+          "caller": "usePopoverState",
+          "callee": "aiSearchAbortRef.current.abort",
+          "lineNumber": 71
+        },
+        {
+          "caller": "usePopoverState",
+          "callee": "clearTimeout",
+          "lineNumber": 79
+        },
+        {
+          "caller": "usePopoverState",
+          "callee": "aiSearchAbortRef.current.abort",
+          "lineNumber": 82
+        },
+        {
+          "caller": "usePopoverState",
+          "callee": "setAiSearchLoading",
+          "lineNumber": 85
+        },
+        {
+          "caller": "usePopoverState",
+          "callee": "setTimeout",
+          "lineNumber": 87
+        },
+        {
+          "caller": "usePopoverState",
+          "callee": "popoverItems\r\n          .filter(i => !i.builtIn)\r\n          .map",
+          "lineNumber": 93
+        },
+        {
+          "caller": "usePopoverState",
+          "callee": "popoverItems\r\n          .filter",
+          "lineNumber": 93
+        },
+        {
+          "caller": "usePopoverState",
+          "callee": "(i.description || '').slice",
+          "lineNumber": 95
+        },
+        {
+          "caller": "usePopoverState",
+          "callee": "setAiSearchLoading",
+          "lineNumber": 98
+        },
+        {
+          "caller": "usePopoverState",
+          "callee": "fetch",
+          "lineNumber": 102
+        },
+        {
+          "caller": "usePopoverState",
+          "callee": "JSON.stringify",
+          "lineNumber": 106
+        },
+        {
+          "caller": "usePopoverState",
+          "callee": "setAiSuggestions",
+          "lineNumber": 116
+        },
+        {
+          "caller": "usePopoverState",
+          "callee": "setAiSearchLoading",
+          "lineNumber": 117
+        },
+        {
+          "caller": "usePopoverState",
+          "callee": "res.json",
+          "lineNumber": 121
+        },
+        {
+          "caller": "usePopoverState",
+          "callee": "filteredItems.map",
+          "lineNumber": 125
+        },
+        {
+          "caller": "usePopoverState",
+          "callee": "suggestions\r\n          .filter(name => !filteredNames.has(name))\r\n          .map(name => popoverItems.find(i => i.label === name))\r\n          .filter",
+          "lineNumber": 126
+        },
+        {
+          "caller": "usePopoverState",
+          "callee": "suggestions\r\n          .filter(name => !filteredNames.has(name))\r\n          .map",
+          "lineNumber": 126
+        },
+        {
+          "caller": "usePopoverState",
+          "callee": "suggestions\r\n          .filter",
+          "lineNumber": 126
+        },
+        {
+          "caller": "usePopoverState",
+          "callee": "filteredNames.has",
+          "lineNumber": 127
+        },
+        {
+          "caller": "usePopoverState",
+          "callee": "popoverItems.find",
+          "lineNumber": 128
+        },
+        {
+          "caller": "usePopoverState",
+          "callee": "setAiSuggestions",
+          "lineNumber": 131
+        },
+        {
+          "caller": "usePopoverState",
+          "callee": "setAiSuggestions",
+          "lineNumber": 135
+        },
+        {
+          "caller": "usePopoverState",
+          "callee": "setAiSearchLoading",
+          "lineNumber": 139
+        },
+        {
+          "caller": "usePopoverState",
+          "callee": "clearTimeout",
+          "lineNumber": 146
+        },
+        {
+          "caller": "usePopoverState",
+          "callee": "useMemo",
+          "lineNumber": 154
+        },
+        {
+          "caller": "usePopoverState",
+          "callee": "useEffect",
+          "lineNumber": 160
+        },
+        {
+          "caller": "handler",
+          "callee": "popoverRef.current.contains",
+          "lineNumber": 163
+        },
+        {
+          "caller": "handler",
+          "callee": "closePopover",
+          "lineNumber": 164
+        },
+        {
+          "caller": "usePopoverState",
+          "callee": "document.addEventListener",
+          "lineNumber": 167
+        },
+        {
+          "caller": "usePopoverState",
+          "callee": "document.removeEventListener",
+          "lineNumber": 168
+        }
+      ],
+      "metrics": {
+        "importCount": 3,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/hooks/useSettings.ts",
+      "fileCategory": "code",
+      "totalLines": 59,
+      "nonEmptyLines": 53,
+      "functions": [
+        {
+          "name": "useSettings",
+          "startLine": 7,
+          "endLine": 58,
+          "params": [
+            "endpoint",
+            "defaults"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "useSettings",
+          "line": 7,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "useSettings",
+          "callee": "useState",
+          "lineNumber": 17
+        },
+        {
+          "caller": "useSettings",
+          "callee": "useState",
+          "lineNumber": 18
+        },
+        {
+          "caller": "useSettings",
+          "callee": "useState",
+          "lineNumber": 19
+        },
+        {
+          "caller": "useSettings",
+          "callee": "useCallback",
+          "lineNumber": 21
+        },
+        {
+          "caller": "useSettings",
+          "callee": "fetch",
+          "lineNumber": 23
+        },
+        {
+          "caller": "useSettings",
+          "callee": "res.json",
+          "lineNumber": 25
+        },
+        {
+          "caller": "useSettings",
+          "callee": "setSettings",
+          "lineNumber": 26
+        },
+        {
+          "caller": "useSettings",
+          "callee": "setLoading",
+          "lineNumber": 31
+        },
+        {
+          "caller": "useSettings",
+          "callee": "useEffect",
+          "lineNumber": 35
+        },
+        {
+          "caller": "useSettings",
+          "callee": "refresh",
+          "lineNumber": 36
+        },
+        {
+          "caller": "useSettings",
+          "callee": "useCallback",
+          "lineNumber": 39
+        },
+        {
+          "caller": "useSettings",
+          "callee": "setSaving",
+          "lineNumber": 40
+        },
+        {
+          "caller": "useSettings",
+          "callee": "fetch",
+          "lineNumber": 42
+        },
+        {
+          "caller": "useSettings",
+          "callee": "JSON.stringify",
+          "lineNumber": 45
+        },
+        {
+          "caller": "useSettings",
+          "callee": "setSettings",
+          "lineNumber": 48
+        },
+        {
+          "caller": "useSettings",
+          "callee": "setSaving",
+          "lineNumber": 53
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/hooks/useSplit.ts",
+      "fileCategory": "code",
+      "totalLines": 33,
+      "nonEmptyLines": 27,
+      "functions": [
+        {
+          "name": "useSplit",
+          "startLine": 26,
+          "endLine": 32,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "SplitContext",
+          "line": 24,
+          "isDefault": false
+        },
+        {
+          "name": "useSplit",
+          "line": 26,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "useSplit",
+          "callee": "useContext",
+          "lineNumber": 27
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 2,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/hooks/useTerminal.ts",
+      "fileCategory": "code",
+      "totalLines": 107,
+      "nonEmptyLines": 91,
+      "functions": [
+        {
+          "name": "useTerminal",
+          "startLine": 6,
+          "endLine": 106,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "useTerminal",
+          "line": 6,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "useTerminal",
+          "callee": "usePanel",
+          "lineNumber": 7
+        },
+        {
+          "caller": "useTerminal",
+          "callee": "useState",
+          "lineNumber": 8
+        },
+        {
+          "caller": "useTerminal",
+          "callee": "useState",
+          "lineNumber": 11
+        },
+        {
+          "caller": "useTerminal",
+          "callee": "useState",
+          "lineNumber": 12
+        },
+        {
+          "caller": "useTerminal",
+          "callee": "useRef",
+          "lineNumber": 13
+        },
+        {
+          "caller": "useTerminal",
+          "callee": "useRef",
+          "lineNumber": 14
+        },
+        {
+          "caller": "useTerminal",
+          "callee": "useRef",
+          "lineNumber": 15
+        },
+        {
+          "caller": "useTerminal",
+          "callee": "useRef",
+          "lineNumber": 16
+        },
+        {
+          "caller": "useTerminal",
+          "callee": "useCallback",
+          "lineNumber": 18
+        },
+        {
+          "caller": "useTerminal",
+          "callee": "api.kill",
+          "lineNumber": 25
+        },
+        {
+          "caller": "useTerminal",
+          "callee": "Date.now",
+          "lineNumber": 31
+        },
+        {
+          "caller": "useTerminal",
+          "callee": "setExited",
+          "lineNumber": 33
+        },
+        {
+          "caller": "useTerminal",
+          "callee": "unsubDataRef.current",
+          "lineNumber": 36
+        },
+        {
+          "caller": "useTerminal",
+          "callee": "unsubExitRef.current",
+          "lineNumber": 37
+        },
+        {
+          "caller": "useTerminal",
+          "callee": "api.onData",
+          "lineNumber": 39
+        },
+        {
+          "caller": "useTerminal",
+          "callee": "onDataCallbackRef.current",
+          "lineNumber": 41
+        },
+        {
+          "caller": "useTerminal",
+          "callee": "api.onExit",
+          "lineNumber": 45
+        },
+        {
+          "caller": "useTerminal",
+          "callee": "setConnected",
+          "lineNumber": 47
+        },
+        {
+          "caller": "useTerminal",
+          "callee": "setExited",
+          "lineNumber": 48
+        },
+        {
+          "caller": "useTerminal",
+          "callee": "api.create",
+          "lineNumber": 52
+        },
+        {
+          "caller": "useTerminal",
+          "callee": "setConnected",
+          "lineNumber": 53
+        },
+        {
+          "caller": "useTerminal",
+          "callee": "useCallback",
+          "lineNumber": 56
+        },
+        {
+          "caller": "useTerminal",
+          "callee": "api.write",
+          "lineNumber": 59
+        },
+        {
+          "caller": "useTerminal",
+          "callee": "useCallback",
+          "lineNumber": 62
+        },
+        {
+          "caller": "useTerminal",
+          "callee": "api.resize",
+          "lineNumber": 65
+        },
+        {
+          "caller": "useTerminal",
+          "callee": "useCallback",
+          "lineNumber": 68
+        },
+        {
+          "caller": "useTerminal",
+          "callee": "api.kill",
+          "lineNumber": 72
+        },
+        {
+          "caller": "useTerminal",
+          "callee": "setConnected",
+          "lineNumber": 77
+        },
+        {
+          "caller": "useTerminal",
+          "callee": "useCallback",
+          "lineNumber": 80
+        },
+        {
+          "caller": "useTerminal",
+          "callee": "useEffect",
+          "lineNumber": 85
+        },
+        {
+          "caller": "useTerminal",
+          "callee": "unsubDataRef.current",
+          "lineNumber": 87
+        },
+        {
+          "caller": "useTerminal",
+          "callee": "unsubExitRef.current",
+          "lineNumber": 88
+        },
+        {
+          "caller": "useTerminal",
+          "callee": "window.electronAPI.terminal.kill(terminalIdRef.current).catch",
+          "lineNumber": 90
+        },
+        {
+          "caller": "useTerminal",
+          "callee": "window.electronAPI.terminal.kill",
+          "lineNumber": 90
+        }
+      ],
+      "metrics": {
+        "importCount": 2,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/hooks/useTranslation.ts",
+      "fileCategory": "code",
+      "totalLines": 9,
+      "nonEmptyLines": 6,
+      "functions": [
+        {
+          "name": "useTranslation",
+          "startLine": 6,
+          "endLine": 8,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "useTranslation",
+          "line": 6,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "useTranslation",
+          "callee": "useContext",
+          "lineNumber": 7
+        }
+      ],
+      "metrics": {
+        "importCount": 2,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/hooks/useUpdate.ts",
+      "fileCategory": "code",
+      "totalLines": 45,
+      "nonEmptyLines": 39,
+      "functions": [
+        {
+          "name": "useUpdate",
+          "startLine": 38,
+          "endLine": 44,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "UpdateContext",
+          "line": 36,
+          "isDefault": false
+        },
+        {
+          "name": "useUpdate",
+          "line": 38,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "useUpdate",
+          "callee": "useContext",
+          "lineNumber": 39
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 2,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/hooks/useUpdateChecker.ts",
+      "fileCategory": "code",
+      "totalLines": 165,
+      "nonEmptyLines": 151,
+      "functions": [
+        {
+          "name": "useUpdateChecker",
+          "startLine": 13,
+          "endLine": 164,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "useUpdateChecker",
+          "line": 13,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "useUpdateChecker",
+          "callee": "useState",
+          "lineNumber": 14
+        },
+        {
+          "caller": "useUpdateChecker",
+          "callee": "useState",
+          "lineNumber": 15
+        },
+        {
+          "caller": "useUpdateChecker",
+          "callee": "useState",
+          "lineNumber": 16
+        },
+        {
+          "caller": "useUpdateChecker",
+          "callee": "useEffect",
+          "lineNumber": 22
+        },
+        {
+          "caller": "useUpdateChecker",
+          "callee": "window.electronAPI!.updater!.onStatus",
+          "lineNumber": 24
+        },
+        {
+          "caller": "useUpdateChecker",
+          "callee": "setUpdateInfo",
+          "lineNumber": 27
+        },
+        {
+          "caller": "useUpdateChecker",
+          "callee": "localStorage.getItem",
+          "lineNumber": 42
+        },
+        {
+          "caller": "useUpdateChecker",
+          "callee": "setShowDialog",
+          "lineNumber": 44
+        },
+        {
+          "caller": "useUpdateChecker",
+          "callee": "setUpdateInfo",
+          "lineNumber": 49
+        },
+        {
+          "caller": "useUpdateChecker",
+          "callee": "setUpdateInfo",
+          "lineNumber": 52
+        },
+        {
+          "caller": "useUpdateChecker",
+          "callee": "setUpdateInfo",
+          "lineNumber": 60
+        },
+        {
+          "caller": "useUpdateChecker",
+          "callee": "setUpdateInfo",
+          "lineNumber": 69
+        },
+        {
+          "caller": "useUpdateChecker",
+          "callee": "setChecking",
+          "lineNumber": 77
+        },
+        {
+          "caller": "useUpdateChecker",
+          "callee": "setChecking",
+          "lineNumber": 79
+        },
+        {
+          "caller": "useUpdateChecker",
+          "callee": "useCallback",
+          "lineNumber": 86
+        },
+        {
+          "caller": "useUpdateChecker",
+          "callee": "setChecking",
+          "lineNumber": 87
+        },
+        {
+          "caller": "useUpdateChecker",
+          "callee": "fetch",
+          "lineNumber": 89
+        },
+        {
+          "caller": "useUpdateChecker",
+          "callee": "res.json",
+          "lineNumber": 91
+        },
+        {
+          "caller": "useUpdateChecker",
+          "callee": "setUpdateInfo",
+          "lineNumber": 99
+        },
+        {
+          "caller": "useUpdateChecker",
+          "callee": "localStorage.getItem",
+          "lineNumber": 102
+        },
+        {
+          "caller": "useUpdateChecker",
+          "callee": "setShowDialog",
+          "lineNumber": 104
+        },
+        {
+          "caller": "useUpdateChecker",
+          "callee": "setChecking",
+          "lineNumber": 110
+        },
+        {
+          "caller": "useUpdateChecker",
+          "callee": "useCallback",
+          "lineNumber": 115
+        },
+        {
+          "caller": "useUpdateChecker",
+          "callee": "window.electronAPI!.updater!.checkForUpdates",
+          "lineNumber": 118
+        },
+        {
+          "caller": "useUpdateChecker",
+          "callee": "checkForUpdatesBrowser",
+          "lineNumber": 124
+        },
+        {
+          "caller": "useUpdateChecker",
+          "callee": "useEffect",
+          "lineNumber": 128
+        },
+        {
+          "caller": "useUpdateChecker",
+          "callee": "checkForUpdatesBrowser",
+          "lineNumber": 130
+        },
+        {
+          "caller": "useUpdateChecker",
+          "callee": "setInterval",
+          "lineNumber": 131
+        },
+        {
+          "caller": "useUpdateChecker",
+          "callee": "clearInterval",
+          "lineNumber": 132
+        },
+        {
+          "caller": "useUpdateChecker",
+          "callee": "useCallback",
+          "lineNumber": 135
+        },
+        {
+          "caller": "useUpdateChecker",
+          "callee": "setShowDialog",
+          "lineNumber": 136
+        },
+        {
+          "caller": "useUpdateChecker",
+          "callee": "useCallback",
+          "lineNumber": 139
+        },
+        {
+          "caller": "useUpdateChecker",
+          "callee": "window.electronAPI!.updater!.downloadUpdate",
+          "lineNumber": 141
+        },
+        {
+          "caller": "useUpdateChecker",
+          "callee": "useCallback",
+          "lineNumber": 145
+        },
+        {
+          "caller": "useUpdateChecker",
+          "callee": "window.electronAPI!.updater!.quitAndInstall",
+          "lineNumber": 147
+        },
+        {
+          "caller": "useUpdateChecker",
+          "callee": "useMemo",
+          "lineNumber": 151
+        }
+      ],
+      "metrics": {
+        "importCount": 2,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/hooks/useCliToolsFetch.ts",
+      "fileCategory": "code",
+      "totalLines": 171,
+      "nonEmptyLines": 153,
+      "functions": [
+        {
+          "name": "useCliToolsFetch",
+          "startLine": 13,
+          "endLine": 170,
+          "params": [
+            "opts"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "useCliToolsFetch",
+          "line": 13,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "useCliToolsFetch",
+          "callee": "useState",
+          "lineNumber": 38
+        },
+        {
+          "caller": "useCliToolsFetch",
+          "callee": "useState",
+          "lineNumber": 39
+        },
+        {
+          "caller": "useCliToolsFetch",
+          "callee": "useCallback",
+          "lineNumber": 41
+        },
+        {
+          "caller": "useCliToolsFetch",
+          "callee": "Promise.all",
+          "lineNumber": 43
+        },
+        {
+          "caller": "useCliToolsFetch",
+          "callee": "fetch",
+          "lineNumber": 44
+        },
+        {
+          "caller": "useCliToolsFetch",
+          "callee": "fetch",
+          "lineNumber": 45
+        },
+        {
+          "caller": "useCliToolsFetch",
+          "callee": "installedRes.json",
+          "lineNumber": 47
+        },
+        {
+          "caller": "useCliToolsFetch",
+          "callee": "catalogRes.json",
+          "lineNumber": 48
+        },
+        {
+          "caller": "useCliToolsFetch",
+          "callee": "catalogMap.set",
+          "lineNumber": 57
+        },
+        {
+          "caller": "useCliToolsFetch",
+          "callee": "import",
+          "lineNumber": 63
+        },
+        {
+          "caller": "useCliToolsFetch",
+          "callee": "catalogMap.get",
+          "lineNumber": 78
+        },
+        {
+          "caller": "useCliToolsFetch",
+          "callee": "items.push",
+          "lineNumber": 85
+        },
+        {
+          "caller": "useCliToolsFetch",
+          "callee": "items.push",
+          "lineNumber": 97
+        },
+        {
+          "caller": "useCliToolsFetch",
+          "callee": "items.push",
+          "lineNumber": 110
+        },
+        {
+          "caller": "useCliToolsFetch",
+          "callee": "setCliTools",
+          "lineNumber": 118
+        },
+        {
+          "caller": "useCliToolsFetch",
+          "callee": "setCliTools",
+          "lineNumber": 120
+        },
+        {
+          "caller": "useCliToolsFetch",
+          "callee": "useCallback",
+          "lineNumber": 124
+        },
+        {
+          "caller": "useCliToolsFetch",
+          "callee": "closePopover",
+          "lineNumber": 125
+        },
+        {
+          "caller": "useCliToolsFetch",
+          "callee": "setCliFilter",
+          "lineNumber": 126
+        },
+        {
+          "caller": "useCliToolsFetch",
+          "callee": "inputValue.trim",
+          "lineNumber": 128
+        },
+        {
+          "caller": "useCliToolsFetch",
+          "callee": "setInputValue",
+          "lineNumber": 133
+        },
+        {
+          "caller": "useCliToolsFetch",
+          "callee": "setTimeout",
+          "lineNumber": 134
+        },
+        {
+          "caller": "useCliToolsFetch",
+          "callee": "ta.focus",
+          "lineNumber": 137
+        },
+        {
+          "caller": "useCliToolsFetch",
+          "callee": "setCliBadge",
+          "lineNumber": 143
+        },
+        {
+          "caller": "useCliToolsFetch",
+          "callee": "setTimeout",
+          "lineNumber": 144
+        },
+        {
+          "caller": "useCliToolsFetch",
+          "callee": "textareaRef.current?.focus",
+          "lineNumber": 144
+        },
+        {
+          "caller": "useCliToolsFetch",
+          "callee": "useCallback",
+          "lineNumber": 148
+        },
+        {
+          "caller": "useCliToolsFetch",
+          "callee": "closePopover",
+          "lineNumber": 150
+        },
+        {
+          "caller": "useCliToolsFetch",
+          "callee": "closePopover",
+          "lineNumber": 153
+        },
+        {
+          "caller": "useCliToolsFetch",
+          "callee": "setPopoverMode",
+          "lineNumber": 154
+        },
+        {
+          "caller": "useCliToolsFetch",
+          "callee": "setCliFilter",
+          "lineNumber": 155
+        },
+        {
+          "caller": "useCliToolsFetch",
+          "callee": "setSelectedIndex",
+          "lineNumber": 156
+        },
+        {
+          "caller": "useCliToolsFetch",
+          "callee": "setTimeout",
+          "lineNumber": 158
+        },
+        {
+          "caller": "useCliToolsFetch",
+          "callee": "cliSearchRef.current?.focus",
+          "lineNumber": 158
+        },
+        {
+          "caller": "useCliToolsFetch",
+          "callee": "fetchCliTools",
+          "lineNumber": 159
+        }
+      ],
+      "metrics": {
+        "importCount": 2,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/hooks/useToast.ts",
+      "fileCategory": "code",
+      "totalLines": 118,
+      "nonEmptyLines": 99,
+      "functions": [
+        {
+          "name": "showToast",
+          "startLine": 28,
+          "endLine": 33,
+          "params": [
+            "toast"
+          ]
+        },
+        {
+          "name": "showLoadingToast",
+          "startLine": 36,
+          "endLine": 38,
+          "params": [
+            "message"
+          ]
+        },
+        {
+          "name": "updateToast",
+          "startLine": 41,
+          "endLine": 45,
+          "params": [
+            "id",
+            "updates"
+          ]
+        },
+        {
+          "name": "useToastState",
+          "startLine": 47,
+          "endLine": 117,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "showToast",
+          "line": 28,
+          "isDefault": false
+        },
+        {
+          "name": "showLoadingToast",
+          "line": 36,
+          "isDefault": false
+        },
+        {
+          "name": "updateToast",
+          "line": 41,
+          "isDefault": false
+        },
+        {
+          "name": "useToastState",
+          "line": 47,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "showToast",
+          "callee": "globalAddToast",
+          "lineNumber": 30
+        },
+        {
+          "caller": "showLoadingToast",
+          "callee": "showToast",
+          "lineNumber": 37
+        },
+        {
+          "caller": "updateToast",
+          "callee": "globalUpdateToast",
+          "lineNumber": 43
+        },
+        {
+          "caller": "useToastState",
+          "callee": "useState",
+          "lineNumber": 48
+        },
+        {
+          "caller": "useToastState",
+          "callee": "useRef",
+          "lineNumber": 49
+        },
+        {
+          "caller": "useToastState",
+          "callee": "useRef",
+          "lineNumber": 50
+        },
+        {
+          "caller": "useToastState",
+          "callee": "useCallback",
+          "lineNumber": 52
+        },
+        {
+          "caller": "useToastState",
+          "callee": "setToasts",
+          "lineNumber": 53
+        },
+        {
+          "caller": "useToastState",
+          "callee": "prev.filter",
+          "lineNumber": 53
+        },
+        {
+          "caller": "useToastState",
+          "callee": "timersRef.current.get",
+          "lineNumber": 54
+        },
+        {
+          "caller": "useToastState",
+          "callee": "clearTimeout",
+          "lineNumber": 56
+        },
+        {
+          "caller": "useToastState",
+          "callee": "timersRef.current.delete",
+          "lineNumber": 57
+        },
+        {
+          "caller": "useToastState",
+          "callee": "useCallback",
+          "lineNumber": 61
+        },
+        {
+          "caller": "useToastState",
+          "callee": "setToasts",
+          "lineNumber": 65
+        },
+        {
+          "caller": "useToastState",
+          "callee": "next.shift",
+          "lineNumber": 69
+        },
+        {
+          "caller": "useToastState",
+          "callee": "timersRef.current.get",
+          "lineNumber": 70
+        },
+        {
+          "caller": "useToastState",
+          "callee": "clearTimeout",
+          "lineNumber": 72
+        },
+        {
+          "caller": "useToastState",
+          "callee": "timersRef.current.delete",
+          "lineNumber": 73
+        },
+        {
+          "caller": "useToastState",
+          "callee": "setTimeout",
+          "lineNumber": 80
+        },
+        {
+          "caller": "useToastState",
+          "callee": "removeToast",
+          "lineNumber": 80
+        },
+        {
+          "caller": "useToastState",
+          "callee": "timersRef.current.set",
+          "lineNumber": 81
+        },
+        {
+          "caller": "useToastState",
+          "callee": "useCallback",
+          "lineNumber": 86
+        },
+        {
+          "caller": "useToastState",
+          "callee": "setToasts",
+          "lineNumber": 87
+        },
+        {
+          "caller": "useToastState",
+          "callee": "prev.map",
+          "lineNumber": 87
+        },
+        {
+          "caller": "useToastState",
+          "callee": "timersRef.current.get",
+          "lineNumber": 90
+        },
+        {
+          "caller": "useToastState",
+          "callee": "clearTimeout",
+          "lineNumber": 91
+        },
+        {
+          "caller": "useToastState",
+          "callee": "setTimeout",
+          "lineNumber": 93
+        },
+        {
+          "caller": "useToastState",
+          "callee": "removeToast",
+          "lineNumber": 93
+        },
+        {
+          "caller": "useToastState",
+          "callee": "timersRef.current.set",
+          "lineNumber": 94
+        },
+        {
+          "caller": "useToastState",
+          "callee": "useEffect",
+          "lineNumber": 99
+        },
+        {
+          "caller": "useToastState",
+          "callee": "useEffect",
+          "lineNumber": 109
+        },
+        {
+          "caller": "useToastState",
+          "callee": "timers.forEach",
+          "lineNumber": 112
+        },
+        {
+          "caller": "useToastState",
+          "callee": "clearTimeout",
+          "lineNumber": 112
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 4,
+        "functionCount": 4,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/hooks/useAssistantTrigger.ts",
+      "fileCategory": "code",
+      "totalLines": 261,
+      "nonEmptyLines": 236,
+      "functions": [
+        {
+          "name": "removeHeartbeatIfOwned",
+          "startLine": 17,
+          "endLine": 26,
+          "params": [
+            "sessionId"
+          ]
+        },
+        {
+          "name": "startHeartbeat",
+          "startLine": 28,
+          "endLine": 41,
+          "params": [
+            "sessionId"
+          ]
+        },
+        {
+          "name": "clearOnboardingHeartbeat",
+          "startLine": 44,
+          "endLine": 52,
+          "params": [
+            "sessionId"
+          ]
+        },
+        {
+          "name": "isOwnerAlive",
+          "startLine": 58,
+          "endLine": 69,
+          "params": [
+            "expectedSessionId"
+          ]
+        },
+        {
+          "name": "useAssistantTrigger",
+          "startLine": 85,
+          "endLine": 260,
+          "params": [
+            "{\r\n  sessionId,\r\n  workingDirectory,\r\n  isStreaming,\r\n  mode,\r\n  currentModel,\r\n  currentProviderId,\r\n  initialMessages,\r\n  handleModeChange,\r\n  buildThinkingConfig,\r\n  sendMessageRef,\r\n  initMetaRef,\r\n}"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "clearOnboardingHeartbeat",
+          "line": 44,
+          "isDefault": false
+        },
+        {
+          "name": "useAssistantTrigger",
+          "line": 85,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "removeHeartbeatIfOwned",
+          "callee": "localStorage.getItem",
+          "lineNumber": 19
+        },
+        {
+          "caller": "removeHeartbeatIfOwned",
+          "callee": "JSON.parse",
+          "lineNumber": 21
+        },
+        {
+          "caller": "removeHeartbeatIfOwned",
+          "callee": "localStorage.removeItem",
+          "lineNumber": 23
+        },
+        {
+          "caller": "write",
+          "callee": "localStorage.setItem",
+          "lineNumber": 32
+        },
+        {
+          "caller": "write",
+          "callee": "JSON.stringify",
+          "lineNumber": 32
+        },
+        {
+          "caller": "write",
+          "callee": "Date.now",
+          "lineNumber": 32
+        },
+        {
+          "caller": "startHeartbeat",
+          "callee": "write",
+          "lineNumber": 35
+        },
+        {
+          "caller": "startHeartbeat",
+          "callee": "setInterval",
+          "lineNumber": 36
+        },
+        {
+          "caller": "startHeartbeat",
+          "callee": "clearInterval",
+          "lineNumber": 38
+        },
+        {
+          "caller": "startHeartbeat",
+          "callee": "removeHeartbeatIfOwned",
+          "lineNumber": 39
+        },
+        {
+          "caller": "clearOnboardingHeartbeat",
+          "callee": "removeHeartbeatIfOwned",
+          "lineNumber": 47
+        },
+        {
+          "caller": "clearOnboardingHeartbeat",
+          "callee": "localStorage.removeItem",
+          "lineNumber": 50
+        },
+        {
+          "caller": "isOwnerAlive",
+          "callee": "localStorage.getItem",
+          "lineNumber": 61
+        },
+        {
+          "caller": "isOwnerAlive",
+          "callee": "JSON.parse",
+          "lineNumber": 63
+        },
+        {
+          "caller": "isOwnerAlive",
+          "callee": "Date.now",
+          "lineNumber": 65
+        },
+        {
+          "caller": "useAssistantTrigger",
+          "callee": "useRef",
+          "lineNumber": 98
+        },
+        {
+          "caller": "useAssistantTrigger",
+          "callee": "useRef",
+          "lineNumber": 99
+        },
+        {
+          "caller": "useAssistantTrigger",
+          "callee": "useEffect",
+          "lineNumber": 102
+        },
+        {
+          "caller": "useAssistantTrigger",
+          "callee": "stopHeartbeatRef.current",
+          "lineNumber": 104
+        },
+        {
+          "caller": "useAssistantTrigger",
+          "callee": "useEffect",
+          "lineNumber": 111
+        },
+        {
+          "caller": "useAssistantTrigger",
+          "callee": "stopHeartbeatRef.current",
+          "lineNumber": 113
+        },
+        {
+          "caller": "useAssistantTrigger",
+          "callee": "useCallback",
+          "lineNumber": 118
+        },
+        {
+          "caller": "useAssistantTrigger",
+          "callee": "fetch",
+          "lineNumber": 123
+        },
+        {
+          "caller": "useAssistantTrigger",
+          "callee": "res.json",
+          "lineNumber": 125
+        },
+        {
+          "caller": "useAssistantTrigger",
+          "callee": "isOwnerAlive",
+          "lineNumber": 140
+        },
+        {
+          "caller": "useAssistantTrigger",
+          "callee": "fetch",
+          "lineNumber": 147
+        },
+        {
+          "caller": "useAssistantTrigger",
+          "callee": "JSON.stringify",
+          "lineNumber": 150
+        },
+        {
+          "caller": "useAssistantTrigger",
+          "callee": "clearRes.json",
+          "lineNumber": 156
+        },
+        {
+          "caller": "useAssistantTrigger",
+          "callee": "stopHeartbeatRef.current",
+          "lineNumber": 188
+        },
+        {
+          "caller": "useAssistantTrigger",
+          "callee": "startHeartbeat",
+          "lineNumber": 189
+        },
+        {
+          "caller": "useAssistantTrigger",
+          "callee": "fetch",
+          "lineNumber": 195
+        },
+        {
+          "caller": "useAssistantTrigger",
+          "callee": "JSON.stringify",
+          "lineNumber": 198
+        },
+        {
+          "caller": "useAssistantTrigger",
+          "callee": "stopHeartbeatRef.current",
+          "lineNumber": 204
+        },
+        {
+          "caller": "useAssistantTrigger",
+          "callee": "setRes.json",
+          "lineNumber": 208
+        },
+        {
+          "caller": "useAssistantTrigger",
+          "callee": "stopHeartbeatRef.current",
+          "lineNumber": 212
+        },
+        {
+          "caller": "useAssistantTrigger",
+          "callee": "stopHeartbeatRef.current",
+          "lineNumber": 219
+        },
+        {
+          "caller": "useAssistantTrigger",
+          "callee": "startStream",
+          "lineNumber": 228
+        },
+        {
+          "caller": "useAssistantTrigger",
+          "callee": "buildThinkingConfig",
+          "lineNumber": 235
+        },
+        {
+          "caller": "useAssistantTrigger",
+          "callee": "handleModeChange",
+          "lineNumber": 238
+        },
+        {
+          "caller": "useAssistantTrigger",
+          "callee": "sendMessageRef.current",
+          "lineNumber": 241
+        },
+        {
+          "caller": "useAssistantTrigger",
+          "callee": "console.log",
+          "lineNumber": 245
+        },
+        {
+          "caller": "useAssistantTrigger",
+          "callee": "console.error",
+          "lineNumber": 249
+        },
+        {
+          "caller": "useAssistantTrigger",
+          "callee": "useEffect",
+          "lineNumber": 254
+        },
+        {
+          "caller": "useAssistantTrigger",
+          "callee": "setTimeout",
+          "lineNumber": 255
+        },
+        {
+          "caller": "useAssistantTrigger",
+          "callee": "clearTimeout",
+          "lineNumber": 256
+        }
+      ],
+      "metrics": {
+        "importCount": 3,
+        "exportCount": 2,
+        "functionCount": 5,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/hooks/useAssistantWorkspace.ts",
+      "fileCategory": "code",
+      "totalLines": 98,
+      "nonEmptyLines": 86,
+      "functions": [
+        {
+          "name": "useAssistantWorkspace",
+          "startLine": 28,
+          "endLine": 97,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "useAssistantWorkspace",
+          "line": 28,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "useAssistantWorkspace",
+          "callee": "useState",
+          "lineNumber": 29
+        },
+        {
+          "caller": "useAssistantWorkspace",
+          "callee": "useState",
+          "lineNumber": 30
+        },
+        {
+          "caller": "useAssistantWorkspace",
+          "callee": "useState",
+          "lineNumber": 31
+        },
+        {
+          "caller": "useAssistantWorkspace",
+          "callee": "useCallback",
+          "lineNumber": 33
+        },
+        {
+          "caller": "useAssistantWorkspace",
+          "callee": "setError",
+          "lineNumber": 35
+        },
+        {
+          "caller": "useAssistantWorkspace",
+          "callee": "fetch",
+          "lineNumber": 36
+        },
+        {
+          "caller": "useAssistantWorkspace",
+          "callee": "res.json",
+          "lineNumber": 38
+        },
+        {
+          "caller": "useAssistantWorkspace",
+          "callee": "setWorkspace",
+          "lineNumber": 39
+        },
+        {
+          "caller": "useAssistantWorkspace",
+          "callee": "setError",
+          "lineNumber": 41
+        },
+        {
+          "caller": "useAssistantWorkspace",
+          "callee": "setError",
+          "lineNumber": 44
+        },
+        {
+          "caller": "useAssistantWorkspace",
+          "callee": "setLoading",
+          "lineNumber": 46
+        },
+        {
+          "caller": "useAssistantWorkspace",
+          "callee": "useEffect",
+          "lineNumber": 50
+        },
+        {
+          "caller": "useAssistantWorkspace",
+          "callee": "refetch",
+          "lineNumber": 51
+        },
+        {
+          "caller": "useAssistantWorkspace",
+          "callee": "useCallback",
+          "lineNumber": 54
+        },
+        {
+          "caller": "useAssistantWorkspace",
+          "callee": "fetch",
+          "lineNumber": 56
+        },
+        {
+          "caller": "useAssistantWorkspace",
+          "callee": "JSON.stringify",
+          "lineNumber": 59
+        },
+        {
+          "caller": "useAssistantWorkspace",
+          "callee": "refetch",
+          "lineNumber": 61
+        },
+        {
+          "caller": "useAssistantWorkspace",
+          "callee": "console.error",
+          "lineNumber": 63
+        },
+        {
+          "caller": "useAssistantWorkspace",
+          "callee": "useCallback",
+          "lineNumber": 67
+        },
+        {
+          "caller": "useAssistantWorkspace",
+          "callee": "fetch",
+          "lineNumber": 70
+        },
+        {
+          "caller": "useAssistantWorkspace",
+          "callee": "JSON.stringify",
+          "lineNumber": 73
+        },
+        {
+          "caller": "useAssistantWorkspace",
+          "callee": "refetch",
+          "lineNumber": 75
+        },
+        {
+          "caller": "useAssistantWorkspace",
+          "callee": "console.error",
+          "lineNumber": 77
+        },
+        {
+          "caller": "useAssistantWorkspace",
+          "callee": "getLocalDateString",
+          "lineNumber": 81
+        }
+      ],
+      "metrics": {
+        "importCount": 2,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/hooks/usePanel.ts",
+      "fileCategory": "code",
+      "totalLines": 62,
+      "nonEmptyLines": 53,
+      "functions": [
+        {
+          "name": "usePanel",
+          "startLine": 55,
+          "endLine": 61,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "PanelContext",
+          "line": 53,
+          "isDefault": false
+        },
+        {
+          "name": "usePanel",
+          "line": 55,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "usePanel",
+          "callee": "useContext",
+          "lineNumber": 56
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 2,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/hooks/useStreamSubscription.ts",
+      "fileCategory": "code",
+      "totalLines": 134,
+      "nonEmptyLines": 125,
+      "functions": [
+        {
+          "name": "useStreamSubscription",
+          "startLine": 20,
+          "endLine": 133,
+          "params": [
+            "{\r\n  sessionId,\r\n  setStreamSnapshot,\r\n  setStreamingSessionId,\r\n  setPendingApprovalSessionId,\r\n  setMessages,\r\n  onStreamCompleted,\r\n}"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "useStreamSubscription",
+          "line": 20,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "useStreamSubscription",
+          "callee": "useEffect",
+          "lineNumber": 28
+        },
+        {
+          "caller": "useStreamSubscription",
+          "callee": "getSnapshot",
+          "lineNumber": 30
+        },
+        {
+          "caller": "useStreamSubscription",
+          "callee": "setStreamSnapshot",
+          "lineNumber": 32
+        },
+        {
+          "caller": "useStreamSubscription",
+          "callee": "setStreamingSessionId",
+          "lineNumber": 34
+        },
+        {
+          "caller": "useStreamSubscription",
+          "callee": "setPendingApprovalSessionId",
+          "lineNumber": 37
+        },
+        {
+          "caller": "useStreamSubscription",
+          "callee": "fetch(`/api/chat/sessions/${sessionId}/messages?limit=50`)\r\n            .then(res => res.ok ? res.json() : null)\r\n            .then(data => {\r\n              if (data?.messages) {\r\n                setMessages(data.messages);\r\n              }\r\n            })\r\n            .catch",
+          "lineNumber": 44
+        },
+        {
+          "caller": "useStreamSubscription",
+          "callee": "fetch(`/api/chat/sessions/${sessionId}/messages?limit=50`)\r\n            .then(res => res.ok ? res.json() : null)\r\n            .then",
+          "lineNumber": 44
+        },
+        {
+          "caller": "useStreamSubscription",
+          "callee": "fetch(`/api/chat/sessions/${sessionId}/messages?limit=50`)\r\n            .then",
+          "lineNumber": 44
+        },
+        {
+          "caller": "useStreamSubscription",
+          "callee": "fetch",
+          "lineNumber": 44
+        },
+        {
+          "caller": "useStreamSubscription",
+          "callee": "res.json",
+          "lineNumber": 45
+        },
+        {
+          "caller": "useStreamSubscription",
+          "callee": "setMessages",
+          "lineNumber": 48
+        },
+        {
+          "caller": "useStreamSubscription",
+          "callee": "Date.now",
+          "lineNumber": 54
+        },
+        {
+          "caller": "useStreamSubscription",
+          "callee": "new Date().toISOString",
+          "lineNumber": 58
+        },
+        {
+          "caller": "useStreamSubscription",
+          "callee": "JSON.stringify",
+          "lineNumber": 59
+        },
+        {
+          "caller": "useStreamSubscription",
+          "callee": "transferPendingToMessage",
+          "lineNumber": 61
+        },
+        {
+          "caller": "useStreamSubscription",
+          "callee": "setMessages",
+          "lineNumber": 62
+        },
+        {
+          "caller": "useStreamSubscription",
+          "callee": "Date.now",
+          "lineNumber": 68
+        },
+        {
+          "caller": "useStreamSubscription",
+          "callee": "new Date().toISOString",
+          "lineNumber": 72
+        },
+        {
+          "caller": "useStreamSubscription",
+          "callee": "JSON.stringify",
+          "lineNumber": 73
+        },
+        {
+          "caller": "useStreamSubscription",
+          "callee": "transferPendingToMessage",
+          "lineNumber": 75
+        },
+        {
+          "caller": "useStreamSubscription",
+          "callee": "setMessages",
+          "lineNumber": 76
+        },
+        {
+          "caller": "useStreamSubscription",
+          "callee": "clearSnapshot",
+          "lineNumber": 78
+        },
+        {
+          "caller": "useStreamSubscription",
+          "callee": "setStreamSnapshot",
+          "lineNumber": 81
+        },
+        {
+          "caller": "useStreamSubscription",
+          "callee": "subscribe",
+          "lineNumber": 84
+        },
+        {
+          "caller": "useStreamSubscription",
+          "callee": "setStreamSnapshot",
+          "lineNumber": 85
+        },
+        {
+          "caller": "useStreamSubscription",
+          "callee": "setStreamingSessionId",
+          "lineNumber": 90
+        },
+        {
+          "caller": "useStreamSubscription",
+          "callee": "setStreamingSessionId",
+          "lineNumber": 92
+        },
+        {
+          "caller": "useStreamSubscription",
+          "callee": "setPendingApprovalSessionId",
+          "lineNumber": 93
+        },
+        {
+          "caller": "useStreamSubscription",
+          "callee": "setPendingApprovalSessionId",
+          "lineNumber": 97
+        },
+        {
+          "caller": "useStreamSubscription",
+          "callee": "setStreamingSessionId",
+          "lineNumber": 100
+        },
+        {
+          "caller": "useStreamSubscription",
+          "callee": "setPendingApprovalSessionId",
+          "lineNumber": 101
+        },
+        {
+          "caller": "useStreamSubscription",
+          "callee": "Date.now",
+          "lineNumber": 107
+        },
+        {
+          "caller": "useStreamSubscription",
+          "callee": "new Date().toISOString",
+          "lineNumber": 111
+        },
+        {
+          "caller": "useStreamSubscription",
+          "callee": "JSON.stringify",
+          "lineNumber": 112
+        },
+        {
+          "caller": "useStreamSubscription",
+          "callee": "transferPendingToMessage",
+          "lineNumber": 115
+        },
+        {
+          "caller": "useStreamSubscription",
+          "callee": "setMessages",
+          "lineNumber": 116
+        },
+        {
+          "caller": "useStreamSubscription",
+          "callee": "clearSnapshot",
+          "lineNumber": 120
+        },
+        {
+          "caller": "useStreamSubscription",
+          "callee": "onStreamCompleted",
+          "lineNumber": 124
+        },
+        {
+          "caller": "useStreamSubscription",
+          "callee": "unsubscribe",
+          "lineNumber": 129
+        }
+      ],
+      "metrics": {
+        "importCount": 4,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/hooks/useClaudeStatus.ts",
+      "fileCategory": "code",
+      "totalLines": 95,
+      "nonEmptyLines": 83,
+      "functions": [
+        {
+          "name": "useClaudeStatus",
+          "startLine": 27,
+          "endLine": 94,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "useClaudeStatus",
+          "line": 27,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "useClaudeStatus",
+          "callee": "useState",
+          "lineNumber": 28
+        },
+        {
+          "caller": "useClaudeStatus",
+          "callee": "useRef",
+          "lineNumber": 29
+        },
+        {
+          "caller": "useClaudeStatus",
+          "callee": "useRef",
+          "lineNumber": 30
+        },
+        {
+          "caller": "useClaudeStatus",
+          "callee": "useRef",
+          "lineNumber": 31
+        },
+        {
+          "caller": "useClaudeStatus",
+          "callee": "useRef",
+          "lineNumber": 32
+        },
+        {
+          "caller": "useClaudeStatus",
+          "callee": "useCallback",
+          "lineNumber": 34
+        },
+        {
+          "caller": "useClaudeStatus",
+          "callee": "clearTimeout",
+          "lineNumber": 35
+        },
+        {
+          "caller": "useClaudeStatus",
+          "callee": "setTimeout",
+          "lineNumber": 39
+        },
+        {
+          "caller": "useClaudeStatus",
+          "callee": "checkRef.current",
+          "lineNumber": 39
+        },
+        {
+          "caller": "useClaudeStatus",
+          "callee": "useCallback",
+          "lineNumber": 42
+        },
+        {
+          "caller": "useClaudeStatus",
+          "callee": "fetch",
+          "lineNumber": 44
+        },
+        {
+          "caller": "useClaudeStatus",
+          "callee": "res.json",
+          "lineNumber": 46
+        },
+        {
+          "caller": "useClaudeStatus",
+          "callee": "setStatus",
+          "lineNumber": 53
+        },
+        {
+          "caller": "useClaudeStatus",
+          "callee": "setStatus",
+          "lineNumber": 62
+        },
+        {
+          "caller": "useClaudeStatus",
+          "callee": "schedule",
+          "lineNumber": 64
+        },
+        {
+          "caller": "useClaudeStatus",
+          "callee": "useEffect",
+          "lineNumber": 67
+        },
+        {
+          "caller": "useClaudeStatus",
+          "callee": "useEffect",
+          "lineNumber": 71
+        },
+        {
+          "caller": "useClaudeStatus",
+          "callee": "setTimeout",
+          "lineNumber": 73
+        },
+        {
+          "caller": "useClaudeStatus",
+          "callee": "checkStatus",
+          "lineNumber": 73
+        },
+        {
+          "caller": "useClaudeStatus",
+          "callee": "clearTimeout",
+          "lineNumber": 75
+        },
+        {
+          "caller": "useClaudeStatus",
+          "callee": "clearTimeout",
+          "lineNumber": 76
+        },
+        {
+          "caller": "useClaudeStatus",
+          "callee": "useCallback",
+          "lineNumber": 80
+        },
+        {
+          "caller": "useClaudeStatus",
+          "callee": "checkStatus",
+          "lineNumber": 82
+        },
+        {
+          "caller": "useClaudeStatus",
+          "callee": "useCallback",
+          "lineNumber": 85
+        },
+        {
+          "caller": "useClaudeStatus",
+          "callee": "fetch",
+          "lineNumber": 87
+        },
+        {
+          "caller": "useClaudeStatus",
+          "callee": "checkStatus",
+          "lineNumber": 90
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/hooks/useNotificationPoll.ts",
+      "fileCategory": "code",
+      "totalLines": 77,
+      "nonEmptyLines": 67,
+      "functions": [
+        {
+          "name": "useNotificationPoll",
+          "startLine": 18,
+          "endLine": 76,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "useNotificationPoll",
+          "line": 18,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "useNotificationPoll",
+          "callee": "useRef",
+          "lineNumber": 19
+        },
+        {
+          "caller": "useNotificationPoll",
+          "callee": "useEffect",
+          "lineNumber": 22
+        },
+        {
+          "caller": "useNotificationPoll",
+          "callee": "Notification.requestPermission().catch",
+          "lineNumber": 29
+        },
+        {
+          "caller": "useNotificationPoll",
+          "callee": "Notification.requestPermission",
+          "lineNumber": 29
+        },
+        {
+          "caller": "useNotificationPoll",
+          "callee": "useEffect",
+          "lineNumber": 33
+        },
+        {
+          "caller": "poll",
+          "callee": "fetch",
+          "lineNumber": 36
+        },
+        {
+          "caller": "poll",
+          "callee": "res.json",
+          "lineNumber": 38
+        },
+        {
+          "caller": "poll",
+          "callee": "showToast",
+          "lineNumber": 43
+        },
+        {
+          "caller": "poll",
+          "callee": "window.electronAPI.notification.show({\r\n                title: notif.title,\r\n                body: notif.body || '',\r\n              }).catch",
+          "lineNumber": 52
+        },
+        {
+          "caller": "poll",
+          "callee": "window.electronAPI.notification.show",
+          "lineNumber": 52
+        },
+        {
+          "caller": "useNotificationPoll",
+          "callee": "setInterval",
+          "lineNumber": 71
+        },
+        {
+          "caller": "useNotificationPoll",
+          "callee": "clearInterval",
+          "lineNumber": 73
+        }
+      ],
+      "metrics": {
+        "importCount": 2,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/hooks/useCommandBadge.ts",
+      "fileCategory": "code",
+      "totalLines": 75,
+      "nonEmptyLines": 66,
+      "functions": [
+        {
+          "name": "useCommandBadge",
+          "startLine": 25,
+          "endLine": 74,
+          "params": [
+            "textareaRef"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "CommandBadge",
+          "line": 4,
+          "isDefault": false
+        },
+        {
+          "name": "CliBadge",
+          "line": 4,
+          "isDefault": false
+        },
+        {
+          "name": "useCommandBadge",
+          "line": 25,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "useCommandBadge",
+          "callee": "useState",
+          "lineNumber": 28
+        },
+        {
+          "caller": "useCommandBadge",
+          "callee": "useState",
+          "lineNumber": 29
+        },
+        {
+          "caller": "useCommandBadge",
+          "callee": "useCallback",
+          "lineNumber": 31
+        },
+        {
+          "caller": "useCommandBadge",
+          "callee": "setBadges",
+          "lineNumber": 32
+        },
+        {
+          "caller": "useCommandBadge",
+          "callee": "prev.every",
+          "lineNumber": 40
+        },
+        {
+          "caller": "useCommandBadge",
+          "callee": "prev.some",
+          "lineNumber": 42
+        },
+        {
+          "caller": "useCommandBadge",
+          "callee": "useCallback",
+          "lineNumber": 47
+        },
+        {
+          "caller": "useCommandBadge",
+          "callee": "setBadges",
+          "lineNumber": 49
+        },
+        {
+          "caller": "useCommandBadge",
+          "callee": "prev.filter",
+          "lineNumber": 49
+        },
+        {
+          "caller": "useCommandBadge",
+          "callee": "setTimeout",
+          "lineNumber": 50
+        },
+        {
+          "caller": "useCommandBadge",
+          "callee": "textareaRef.current?.focus",
+          "lineNumber": 50
+        },
+        {
+          "caller": "useCommandBadge",
+          "callee": "useCallback",
+          "lineNumber": 55
+        },
+        {
+          "caller": "useCommandBadge",
+          "callee": "setBadges",
+          "lineNumber": 56
+        },
+        {
+          "caller": "useCommandBadge",
+          "callee": "useCallback",
+          "lineNumber": 59
+        },
+        {
+          "caller": "useCommandBadge",
+          "callee": "setCliBadge",
+          "lineNumber": 60
+        },
+        {
+          "caller": "useCommandBadge",
+          "callee": "setTimeout",
+          "lineNumber": 61
+        },
+        {
+          "caller": "useCommandBadge",
+          "callee": "textareaRef.current?.focus",
+          "lineNumber": 61
+        }
+      ],
+      "metrics": {
+        "importCount": 2,
+        "exportCount": 3,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/hooks/useProviderModels.ts",
+      "fileCategory": "code",
+      "totalLines": 120,
+      "nonEmptyLines": 109,
+      "functions": [
+        {
+          "name": "useProviderModels",
+          "startLine": 44,
+          "endLine": 119,
+          "params": [
+            "providerId",
+            "modelName"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "DEFAULT_MODEL_OPTIONS",
+          "line": 12,
+          "isDefault": false
+        },
+        {
+          "name": "useProviderModels",
+          "line": 44,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "useProviderModels",
+          "callee": "useState",
+          "lineNumber": 48
+        },
+        {
+          "caller": "useProviderModels",
+          "callee": "useState",
+          "lineNumber": 49
+        },
+        {
+          "caller": "useProviderModels",
+          "callee": "useState",
+          "lineNumber": 50
+        },
+        {
+          "caller": "useProviderModels",
+          "callee": "useState",
+          "lineNumber": 51
+        },
+        {
+          "caller": "useProviderModels",
+          "callee": "useCallback",
+          "lineNumber": 53
+        },
+        {
+          "caller": "useProviderModels",
+          "callee": "fetch('/api/providers/models')\r\n      .then((r) => r.json())\r\n      .then((data) => {\r\n        if (data.groups && data.groups.length > 0) {\r\n          setProviderGroups(data.groups);\r\n        } else {\r\n          setProviderGroups([{\r\n            provider_id: 'env',\r\n            provider_name: 'Anthropic',\r\n            provider_type: 'anthropic',\r\n            models: DEFAULT_MODEL_OPTIONS,\r\n          }]);\r\n        }\r\n        setDefaultProviderId(data.default_provider_id || '');\r\n      })\r\n      .catch",
+          "lineNumber": 54
+        },
+        {
+          "caller": "useProviderModels",
+          "callee": "fetch('/api/providers/models')\r\n      .then((r) => r.json())\r\n      .then",
+          "lineNumber": 54
+        },
+        {
+          "caller": "useProviderModels",
+          "callee": "fetch('/api/providers/models')\r\n      .then",
+          "lineNumber": 54
+        },
+        {
+          "caller": "useProviderModels",
+          "callee": "fetch",
+          "lineNumber": 54
+        },
+        {
+          "caller": "useProviderModels",
+          "callee": "r.json",
+          "lineNumber": 55
+        },
+        {
+          "caller": "useProviderModels",
+          "callee": "setProviderGroups",
+          "lineNumber": 58
+        },
+        {
+          "caller": "useProviderModels",
+          "callee": "setProviderGroups",
+          "lineNumber": 60
+        },
+        {
+          "caller": "useProviderModels",
+          "callee": "setDefaultProviderId",
+          "lineNumber": 67
+        },
+        {
+          "caller": "useProviderModels",
+          "callee": "setProviderGroups",
+          "lineNumber": 70
+        },
+        {
+          "caller": "useProviderModels",
+          "callee": "setDefaultProviderId",
+          "lineNumber": 76
+        },
+        {
+          "caller": "useProviderModels",
+          "callee": "fetch('/api/providers/options?providerId=__global__')\r\n      .then(r => r.ok ? r.json() : null)\r\n      .then(data => {\r\n        setGlobalDefaultModel(data?.options?.default_model || undefined);\r\n        setGlobalDefaultProvider(data?.options?.default_model_provider || undefined);\r\n      })\r\n      .catch",
+          "lineNumber": 80
+        },
+        {
+          "caller": "useProviderModels",
+          "callee": "fetch('/api/providers/options?providerId=__global__')\r\n      .then(r => r.ok ? r.json() : null)\r\n      .then",
+          "lineNumber": 80
+        },
+        {
+          "caller": "useProviderModels",
+          "callee": "fetch('/api/providers/options?providerId=__global__')\r\n      .then",
+          "lineNumber": 80
+        },
+        {
+          "caller": "useProviderModels",
+          "callee": "fetch",
+          "lineNumber": 80
+        },
+        {
+          "caller": "useProviderModels",
+          "callee": "r.json",
+          "lineNumber": 81
+        },
+        {
+          "caller": "useProviderModels",
+          "callee": "setGlobalDefaultModel",
+          "lineNumber": 83
+        },
+        {
+          "caller": "useProviderModels",
+          "callee": "setGlobalDefaultProvider",
+          "lineNumber": 84
+        },
+        {
+          "caller": "useProviderModels",
+          "callee": "useEffect",
+          "lineNumber": 90
+        },
+        {
+          "caller": "useProviderModels",
+          "callee": "fetchAll",
+          "lineNumber": 91
+        },
+        {
+          "caller": "handler",
+          "callee": "fetchAll",
+          "lineNumber": 92
+        },
+        {
+          "caller": "useProviderModels",
+          "callee": "window.addEventListener",
+          "lineNumber": 93
+        },
+        {
+          "caller": "useProviderModels",
+          "callee": "window.removeEventListener",
+          "lineNumber": 94
+        },
+        {
+          "caller": "useProviderModels",
+          "callee": "providerGroups.find",
+          "lineNumber": 100
+        },
+        {
+          "caller": "useProviderModels",
+          "callee": "useMemo",
+          "lineNumber": 106
+        },
+        {
+          "caller": "useProviderModels",
+          "callee": "modelOptions.find",
+          "lineNumber": 107
+        }
+      ],
+      "metrics": {
+        "importCount": 2,
+        "exportCount": 2,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/hooks/useContextUsage.ts",
+      "fileCategory": "code",
+      "totalLines": 173,
+      "nonEmptyLines": 160,
+      "functions": [
+        {
+          "name": "useContextUsage",
+          "startLine": 43,
+          "endLine": 172,
+          "params": [
+            "messages",
+            "modelName",
+            "options"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "useContextUsage",
+          "line": 43,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "useContextUsage",
+          "callee": "useMemo",
+          "lineNumber": 65
+        },
+        {
+          "caller": "useContextUsage",
+          "callee": "getContextWindow",
+          "lineNumber": 66
+        },
+        {
+          "caller": "useContextUsage",
+          "callee": "Date.now",
+          "lineNumber": 81
+        },
+        {
+          "caller": "useContextUsage",
+          "callee": "JSON.parse",
+          "lineNumber": 130
+        },
+        {
+          "caller": "useContextUsage",
+          "callee": "Math.max",
+          "lineNumber": 145
+        }
+      ],
+      "metrics": {
+        "importCount": 3,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/hooks/useGlobalSearchShortcut.ts",
+      "fileCategory": "code",
+      "totalLines": 21,
+      "nonEmptyLines": 18,
+      "functions": [
+        {
+          "name": "useGlobalSearchShortcut",
+          "startLine": 3,
+          "endLine": 20,
+          "params": [
+            "onOpen"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "useGlobalSearchShortcut",
+          "line": 3,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "useGlobalSearchShortcut",
+          "callee": "useCallback",
+          "lineNumber": 4
+        },
+        {
+          "caller": "useGlobalSearchShortcut",
+          "callee": "e.key.toLowerCase",
+          "lineNumber": 7
+        },
+        {
+          "caller": "useGlobalSearchShortcut",
+          "callee": "e.preventDefault",
+          "lineNumber": 9
+        },
+        {
+          "caller": "useGlobalSearchShortcut",
+          "callee": "onOpen",
+          "lineNumber": 10
+        },
+        {
+          "caller": "useGlobalSearchShortcut",
+          "callee": "useEffect",
+          "lineNumber": 16
+        },
+        {
+          "caller": "useGlobalSearchShortcut",
+          "callee": "window.addEventListener",
+          "lineNumber": 17
+        },
+        {
+          "caller": "useGlobalSearchShortcut",
+          "callee": "window.removeEventListener",
+          "lineNumber": 18
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/hooks/useSSEStream.ts",
+      "fileCategory": "code",
+      "totalLines": 464,
+      "nonEmptyLines": 425,
+      "functions": [
+        {
+          "name": "maybeShowStatusToast",
+          "startLine": 103,
+          "endLine": 112,
+          "params": [
+            "statusData"
+          ]
+        },
+        {
+          "name": "handleSSEEvent",
+          "startLine": 118,
+          "endLine": 375,
+          "params": [
+            "event",
+            "accumulated",
+            "callbacks"
+          ]
+        },
+        {
+          "name": "consumeSSEStream",
+          "startLine": 381,
+          "endLine": 419,
+          "params": [
+            "reader",
+            "callbacks"
+          ]
+        },
+        {
+          "name": "useSSEStream",
+          "startLine": 425,
+          "endLine": 463,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "TOAST_STATUS_CODES",
+          "line": 92,
+          "isDefault": false
+        },
+        {
+          "name": "maybeShowStatusToast",
+          "line": 103,
+          "isDefault": false
+        },
+        {
+          "name": "consumeSSEStream",
+          "line": 381,
+          "isDefault": false
+        },
+        {
+          "name": "useSSEStream",
+          "line": 425,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "maybeShowStatusToast",
+          "callee": "TOAST_STATUS_CODES.has",
+          "lineNumber": 104
+        },
+        {
+          "caller": "maybeShowStatusToast",
+          "callee": "import('./useToast').then(({ showToast }) => {\r\n    showToast({\r\n      type: statusData.code === 'RUNTIME_EFFORT_IGNORED' ? 'warning' : 'info',\r\n      message: statusData.message || statusData.title || 'Status notification',\r\n      duration: 8000,\r\n    });\r\n  }).catch",
+          "lineNumber": 105
+        },
+        {
+          "caller": "maybeShowStatusToast",
+          "callee": "import('./useToast').then",
+          "lineNumber": 105
+        },
+        {
+          "caller": "maybeShowStatusToast",
+          "callee": "import",
+          "lineNumber": 105
+        },
+        {
+          "caller": "maybeShowStatusToast",
+          "callee": "showToast",
+          "lineNumber": 106
+        },
+        {
+          "caller": "handleSSEEvent",
+          "callee": "callbacks.onText",
+          "lineNumber": 126
+        },
+        {
+          "caller": "handleSSEEvent",
+          "callee": "callbacks.onThinking",
+          "lineNumber": 131
+        },
+        {
+          "caller": "handleSSEEvent",
+          "callee": "JSON.parse",
+          "lineNumber": 137
+        },
+        {
+          "caller": "handleSSEEvent",
+          "callee": "callbacks.onToolUse",
+          "lineNumber": 138
+        },
+        {
+          "caller": "handleSSEEvent",
+          "callee": "JSON.parse",
+          "lineNumber": 151
+        },
+        {
+          "caller": "handleSSEEvent",
+          "callee": "callbacks.onToolResult",
+          "lineNumber": 152
+        },
+        {
+          "caller": "handleSSEEvent",
+          "callee": "Array.isArray",
+          "lineNumber": 156
+        },
+        {
+          "caller": "handleSSEEvent",
+          "callee": "JSON.parse",
+          "lineNumber": 168
+        },
+        {
+          "caller": "handleSSEEvent",
+          "callee": "callbacks.onToolProgress",
+          "lineNumber": 170
+        },
+        {
+          "caller": "handleSSEEvent",
+          "callee": "Math.round",
+          "lineNumber": 170
+        },
+        {
+          "caller": "handleSSEEvent",
+          "callee": "callbacks.onToolOutput",
+          "lineNumber": 176
+        },
+        {
+          "caller": "handleSSEEvent",
+          "callee": "JSON.parse",
+          "lineNumber": 182
+        },
+        {
+          "caller": "handleSSEEvent",
+          "callee": "callbacks.onSkillNudge",
+          "lineNumber": 189
+        },
+        {
+          "caller": "handleSSEEvent",
+          "callee": "callbacks.onContextCompressed",
+          "lineNumber": 205
+        },
+        {
+          "caller": "handleSSEEvent",
+          "callee": "callbacks.onStatus",
+          "lineNumber": 213
+        },
+        {
+          "caller": "handleSSEEvent",
+          "callee": "callbacks.onInitMeta",
+          "lineNumber": 214
+        },
+        {
+          "caller": "handleSSEEvent",
+          "callee": "maybeShowStatusToast",
+          "lineNumber": 227
+        },
+        {
+          "caller": "handleSSEEvent",
+          "callee": "callbacks.onStatus",
+          "lineNumber": 228
+        },
+        {
+          "caller": "handleSSEEvent",
+          "callee": "callbacks.onStatus",
+          "lineNumber": 230
+        },
+        {
+          "caller": "handleSSEEvent",
+          "callee": "callbacks.onStatus",
+          "lineNumber": 233
+        },
+        {
+          "caller": "handleSSEEvent",
+          "callee": "JSON.parse",
+          "lineNumber": 240
+        },
+        {
+          "caller": "handleSSEEvent",
+          "callee": "callbacks.onResult",
+          "lineNumber": 242
+        },
+        {
+          "caller": "handleSSEEvent",
+          "callee": "callbacks.onResult",
+          "lineNumber": 244
+        },
+        {
+          "caller": "handleSSEEvent",
+          "callee": "callbacks.onStatus",
+          "lineNumber": 246
+        },
+        {
+          "caller": "handleSSEEvent",
+          "callee": "JSON.parse",
+          "lineNumber": 254
+        },
+        {
+          "caller": "handleSSEEvent",
+          "callee": "callbacks.onRateLimit",
+          "lineNumber": 255
+        },
+        {
+          "caller": "handleSSEEvent",
+          "callee": "JSON.parse",
+          "lineNumber": 267
+        },
+        {
+          "caller": "handleSSEEvent",
+          "callee": "callbacks.onContextUsage",
+          "lineNumber": 268
+        },
+        {
+          "caller": "handleSSEEvent",
+          "callee": "JSON.parse",
+          "lineNumber": 275
+        },
+        {
+          "caller": "handleSSEEvent",
+          "callee": "callbacks.onPermissionRequest",
+          "lineNumber": 276
+        },
+        {
+          "caller": "handleSSEEvent",
+          "callee": "JSON.parse",
+          "lineNumber": 285
+        },
+        {
+          "caller": "handleSSEEvent",
+          "callee": "callbacks.onToolTimeout",
+          "lineNumber": 286
+        },
+        {
+          "caller": "handleSSEEvent",
+          "callee": "callbacks.onModeChanged",
+          "lineNumber": 294
+        },
+        {
+          "caller": "handleSSEEvent",
+          "callee": "JSON.parse",
+          "lineNumber": 300
+        },
+        {
+          "caller": "handleSSEEvent",
+          "callee": "callbacks.onTaskUpdate",
+          "lineNumber": 301
+        },
+        {
+          "caller": "handleSSEEvent",
+          "callee": "JSON.parse",
+          "lineNumber": 310
+        },
+        {
+          "caller": "handleSSEEvent",
+          "callee": "callbacks.onRewindPoint",
+          "lineNumber": 312
+        },
+        {
+          "caller": "handleSSEEvent",
+          "callee": "callbacks.onKeepAlive",
+          "lineNumber": 321
+        },
+        {
+          "caller": "handleSSEEvent",
+          "callee": "JSON.parse",
+          "lineNumber": 329
+        },
+        {
+          "caller": "handleSSEEvent",
+          "callee": "links.push",
+          "lineNumber": 344
+        },
+        {
+          "caller": "handleSSEEvent",
+          "callee": "links.push",
+          "lineNumber": 346
+        },
+        {
+          "caller": "handleSSEEvent",
+          "callee": "links.push",
+          "lineNumber": 348
+        },
+        {
+          "caller": "handleSSEEvent",
+          "callee": "links.join",
+          "lineNumber": 353
+        },
+        {
+          "caller": "handleSSEEvent",
+          "callee": "callbacks.onError",
+          "lineNumber": 364
+        },
+        {
+          "caller": "consumeSSEStream",
+          "callee": "callbacks.onResult",
+          "lineNumber": 394
+        },
+        {
+          "caller": "consumeSSEStream",
+          "callee": "reader.read",
+          "lineNumber": 399
+        },
+        {
+          "caller": "consumeSSEStream",
+          "callee": "decoder.decode",
+          "lineNumber": 402
+        },
+        {
+          "caller": "consumeSSEStream",
+          "callee": "buffer.split",
+          "lineNumber": 403
+        },
+        {
+          "caller": "consumeSSEStream",
+          "callee": "lines.pop",
+          "lineNumber": 404
+        },
+        {
+          "caller": "consumeSSEStream",
+          "callee": "line.startsWith",
+          "lineNumber": 407
+        },
+        {
+          "caller": "consumeSSEStream",
+          "callee": "JSON.parse",
+          "lineNumber": 410
+        },
+        {
+          "caller": "consumeSSEStream",
+          "callee": "line.slice",
+          "lineNumber": 410
+        },
+        {
+          "caller": "consumeSSEStream",
+          "callee": "handleSSEEvent",
+          "lineNumber": 411
+        },
+        {
+          "caller": "useSSEStream",
+          "callee": "useRef",
+          "lineNumber": 426
+        },
+        {
+          "caller": "useSSEStream",
+          "callee": "useCallback",
+          "lineNumber": 428
+        },
+        {
+          "caller": "useSSEStream",
+          "callee": "callbacksRef.current?.onText",
+          "lineNumber": 437
+        },
+        {
+          "caller": "useSSEStream",
+          "callee": "callbacksRef.current?.onToolUse",
+          "lineNumber": 438
+        },
+        {
+          "caller": "useSSEStream",
+          "callee": "callbacksRef.current?.onToolResult",
+          "lineNumber": 439
+        },
+        {
+          "caller": "useSSEStream",
+          "callee": "callbacksRef.current?.onToolOutput",
+          "lineNumber": 440
+        },
+        {
+          "caller": "useSSEStream",
+          "callee": "callbacksRef.current?.onToolProgress",
+          "lineNumber": 441
+        },
+        {
+          "caller": "useSSEStream",
+          "callee": "callbacksRef.current?.onStatus",
+          "lineNumber": 442
+        },
+        {
+          "caller": "useSSEStream",
+          "callee": "callbacksRef.current?.onResult",
+          "lineNumber": 443
+        },
+        {
+          "caller": "useSSEStream",
+          "callee": "callbacksRef.current?.onPermissionRequest",
+          "lineNumber": 444
+        },
+        {
+          "caller": "useSSEStream",
+          "callee": "callbacksRef.current?.onToolTimeout",
+          "lineNumber": 445
+        },
+        {
+          "caller": "useSSEStream",
+          "callee": "callbacksRef.current?.onModeChanged",
+          "lineNumber": 446
+        },
+        {
+          "caller": "useSSEStream",
+          "callee": "callbacksRef.current?.onTaskUpdate",
+          "lineNumber": 447
+        },
+        {
+          "caller": "useSSEStream",
+          "callee": "callbacksRef.current?.onRewindPoint",
+          "lineNumber": 448
+        },
+        {
+          "caller": "useSSEStream",
+          "callee": "callbacksRef.current?.onThinking",
+          "lineNumber": 449
+        },
+        {
+          "caller": "useSSEStream",
+          "callee": "callbacksRef.current?.onKeepAlive",
+          "lineNumber": 450
+        },
+        {
+          "caller": "useSSEStream",
+          "callee": "callbacksRef.current?.onError",
+          "lineNumber": 451
+        },
+        {
+          "caller": "useSSEStream",
+          "callee": "callbacksRef.current?.onInitMeta",
+          "lineNumber": 452
+        },
+        {
+          "caller": "useSSEStream",
+          "callee": "callbacksRef.current?.onRateLimit",
+          "lineNumber": 453
+        },
+        {
+          "caller": "useSSEStream",
+          "callee": "callbacksRef.current?.onContextUsage",
+          "lineNumber": 454
+        },
+        {
+          "caller": "useSSEStream",
+          "callee": "consumeSSEStream",
+          "lineNumber": 457
+        }
+      ],
+      "metrics": {
+        "importCount": 2,
+        "exportCount": 4,
+        "functionCount": 4,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/hooks/useSlashCommands.ts",
+      "fileCategory": "code",
+      "totalLines": 288,
+      "nonEmptyLines": 261,
+      "functions": [
+        {
+          "name": "useSlashCommands",
+          "startLine": 18,
+          "endLine": 287,
+          "params": [
+            "opts"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "BUILT_IN_COMMANDS",
+          "line": 8,
+          "isDefault": false
+        },
+        {
+          "name": "COMMAND_PROMPTS",
+          "line": 8,
+          "isDefault": false
+        },
+        {
+          "name": "useSlashCommands",
+          "line": 18,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "useSlashCommands",
+          "callee": "useMemo",
+          "lineNumber": 63
+        },
+        {
+          "caller": "useSlashCommands",
+          "callee": "BUILT_IN_COMMANDS.map",
+          "lineNumber": 64
+        },
+        {
+          "caller": "useSlashCommands",
+          "callee": "useCallback",
+          "lineNumber": 69
+        },
+        {
+          "caller": "useSlashCommands",
+          "callee": "params.set",
+          "lineNumber": 72
+        },
+        {
+          "caller": "useSlashCommands",
+          "callee": "params.set",
+          "lineNumber": 73
+        },
+        {
+          "caller": "useSlashCommands",
+          "callee": "params.set",
+          "lineNumber": 74
+        },
+        {
+          "caller": "useSlashCommands",
+          "callee": "params.set",
+          "lineNumber": 75
+        },
+        {
+          "caller": "useSlashCommands",
+          "callee": "fetch",
+          "lineNumber": 76
+        },
+        {
+          "caller": "useSlashCommands",
+          "callee": "params.toString",
+          "lineNumber": 76
+        },
+        {
+          "caller": "useSlashCommands",
+          "callee": "res.json",
+          "lineNumber": 78
+        },
+        {
+          "caller": "useSlashCommands",
+          "callee": "items.map",
+          "lineNumber": 80
+        },
+        {
+          "caller": "useSlashCommands",
+          "callee": "useCallback",
+          "lineNumber": 92
+        },
+        {
+          "caller": "useSlashCommands",
+          "callee": "params.set",
+          "lineNumber": 96
+        },
+        {
+          "caller": "useSlashCommands",
+          "callee": "params.set",
+          "lineNumber": 97
+        },
+        {
+          "caller": "useSlashCommands",
+          "callee": "params.toString",
+          "lineNumber": 98
+        },
+        {
+          "caller": "useSlashCommands",
+          "callee": "fetch",
+          "lineNumber": 99
+        },
+        {
+          "caller": "useSlashCommands",
+          "callee": "res.json",
+          "lineNumber": 101
+        },
+        {
+          "caller": "useSlashCommands",
+          "callee": "skills\r\n          .filter((s: { source?: string; loaded?: boolean }) => {\r\n            // Exclude plugin-source skills that are not loaded in the current session\r\n            if (s.source === 'plugin' && s.loaded === false) return false;\r\n            return true;\r\n          })\r\n          .map",
+          "lineNumber": 103
+        },
+        {
+          "caller": "useSlashCommands",
+          "callee": "skills\r\n          .filter",
+          "lineNumber": 103
+        },
+        {
+          "caller": "useSlashCommands",
+          "callee": "Array.isArray",
+          "lineNumber": 128
+        },
+        {
+          "caller": "useSlashCommands",
+          "callee": "rawCmds.map(c => typeof c === 'string' ? c : (c as { name?: string })?.name).filter",
+          "lineNumber": 128
+        },
+        {
+          "caller": "useSlashCommands",
+          "callee": "rawCmds.map",
+          "lineNumber": 128
+        },
+        {
+          "caller": "useSlashCommands",
+          "callee": "Array.isArray",
+          "lineNumber": 131
+        },
+        {
+          "caller": "useSlashCommands",
+          "callee": "rawSkills.map(s => typeof s === 'string' ? s : (s as { name?: string })?.name).filter",
+          "lineNumber": 131
+        },
+        {
+          "caller": "useSlashCommands",
+          "callee": "rawSkills.map",
+          "lineNumber": 131
+        },
+        {
+          "caller": "useSlashCommands",
+          "callee": "apiSkills.filter",
+          "lineNumber": 136
+        },
+        {
+          "caller": "useSlashCommands",
+          "callee": "sdkSkillNames.has",
+          "lineNumber": 137
+        },
+        {
+          "caller": "useSlashCommands",
+          "callee": "sdkCommandNames.has",
+          "lineNumber": 138
+        },
+        {
+          "caller": "useSlashCommands",
+          "callee": "apiSkills.map",
+          "lineNumber": 142
+        },
+        {
+          "caller": "useSlashCommands",
+          "callee": "existingNames.has",
+          "lineNumber": 146
+        },
+        {
+          "caller": "useSlashCommands",
+          "callee": "apiSkills.push",
+          "lineNumber": 147
+        },
+        {
+          "caller": "useSlashCommands",
+          "callee": "existingNames.has",
+          "lineNumber": 160
+        },
+        {
+          "caller": "useSlashCommands",
+          "callee": "apiSkills.push",
+          "lineNumber": 161
+        },
+        {
+          "caller": "useSlashCommands",
+          "callee": "enrichedBuiltIns.map",
+          "lineNumber": 173
+        },
+        {
+          "caller": "useSlashCommands",
+          "callee": "apiSkills.filter",
+          "lineNumber": 174
+        },
+        {
+          "caller": "useSlashCommands",
+          "callee": "builtInNames.has",
+          "lineNumber": 174
+        },
+        {
+          "caller": "useSlashCommands",
+          "callee": "useCallback",
+          "lineNumber": 180
+        },
+        {
+          "caller": "useSlashCommands",
+          "callee": "resolveItemSelection",
+          "lineNumber": 183
+        },
+        {
+          "caller": "useSlashCommands",
+          "callee": "closePopover",
+          "lineNumber": 188
+        },
+        {
+          "caller": "useSlashCommands",
+          "callee": "setInputValue",
+          "lineNumber": 190
+        },
+        {
+          "caller": "useSlashCommands",
+          "callee": "closePopover",
+          "lineNumber": 191
+        },
+        {
+          "caller": "useSlashCommands",
+          "callee": "onCommand",
+          "lineNumber": 192
+        },
+        {
+          "caller": "useSlashCommands",
+          "callee": "closePopover",
+          "lineNumber": 198
+        },
+        {
+          "caller": "useSlashCommands",
+          "callee": "addBadge",
+          "lineNumber": 199
+        },
+        {
+          "caller": "useSlashCommands",
+          "callee": "setInputValue",
+          "lineNumber": 200
+        },
+        {
+          "caller": "useSlashCommands",
+          "callee": "closePopover",
+          "lineNumber": 201
+        },
+        {
+          "caller": "useSlashCommands",
+          "callee": "setTimeout",
+          "lineNumber": 202
+        },
+        {
+          "caller": "useSlashCommands",
+          "callee": "el.focus",
+          "lineNumber": 205
+        },
+        {
+          "caller": "useSlashCommands",
+          "callee": "el.setSelectionRange",
+          "lineNumber": 207
+        },
+        {
+          "caller": "useSlashCommands",
+          "callee": "setInputValue",
+          "lineNumber": 212
+        },
+        {
+          "caller": "useSlashCommands",
+          "callee": "onMentionInserted",
+          "lineNumber": 213
+        },
+        {
+          "caller": "useSlashCommands",
+          "callee": "closePopover",
+          "lineNumber": 218
+        },
+        {
+          "caller": "useSlashCommands",
+          "callee": "setTimeout",
+          "lineNumber": 219
+        },
+        {
+          "caller": "useSlashCommands",
+          "callee": "textareaRef.current?.focus",
+          "lineNumber": 219
+        },
+        {
+          "caller": "useSlashCommands",
+          "callee": "useCallback",
+          "lineNumber": 225
+        },
+        {
+          "caller": "useSlashCommands",
+          "callee": "setInputValue",
+          "lineNumber": 226
+        },
+        {
+          "caller": "useSlashCommands",
+          "callee": "detectPopoverTrigger",
+          "lineNumber": 232
+        },
+        {
+          "caller": "useSlashCommands",
+          "callee": "setPopoverMode",
+          "lineNumber": 235
+        },
+        {
+          "caller": "useSlashCommands",
+          "callee": "setPopoverFilter",
+          "lineNumber": 236
+        },
+        {
+          "caller": "useSlashCommands",
+          "callee": "setTriggerPos",
+          "lineNumber": 237
+        },
+        {
+          "caller": "useSlashCommands",
+          "callee": "setSelectedIndex",
+          "lineNumber": 238
+        },
+        {
+          "caller": "useSlashCommands",
+          "callee": "fetchFiles",
+          "lineNumber": 241
+        },
+        {
+          "caller": "useSlashCommands",
+          "callee": "setPopoverItems",
+          "lineNumber": 242
+        },
+        {
+          "caller": "useSlashCommands",
+          "callee": "fetchSkills",
+          "lineNumber": 244
+        },
+        {
+          "caller": "useSlashCommands",
+          "callee": "setPopoverItems",
+          "lineNumber": 245
+        },
+        {
+          "caller": "useSlashCommands",
+          "callee": "closePopover",
+          "lineNumber": 252
+        },
+        {
+          "caller": "useSlashCommands",
+          "callee": "useCallback",
+          "lineNumber": 261
+        },
+        {
+          "caller": "useSlashCommands",
+          "callee": "inputValue.slice",
+          "lineNumber": 265
+        },
+        {
+          "caller": "useSlashCommands",
+          "callee": "inputValue.slice",
+          "lineNumber": 266
+        },
+        {
+          "caller": "useSlashCommands",
+          "callee": "/\\s$/.test",
+          "lineNumber": 267
+        },
+        {
+          "caller": "useSlashCommands",
+          "callee": "setInputValue",
+          "lineNumber": 271
+        },
+        {
+          "caller": "useSlashCommands",
+          "callee": "textarea.focus",
+          "lineNumber": 276
+        },
+        {
+          "caller": "useSlashCommands",
+          "callee": "handleInputChange",
+          "lineNumber": 277
+        }
+      ],
+      "metrics": {
+        "importCount": 5,
+        "exportCount": 3,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    }
+  ]
+}

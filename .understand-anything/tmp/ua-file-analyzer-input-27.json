@@ -1,0 +1,189 @@
+{
+  "projectRoot": "D:/project/common/AI/CodePilot",
+  "batchFiles": [
+    {
+      "path": "src/components/plugins/PluginList.tsx",
+      "sizeLines": 95,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/project/FilePreview.tsx",
+      "sizeLines": 155,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/project/FileTree.tsx",
+      "sizeLines": 304,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/project/TaskCard.tsx",
+      "sizeLines": 144,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/project/TaskList.tsx",
+      "sizeLines": 116,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/settings/AppearanceSection.tsx",
+      "sizeLines": 237,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/settings/AssistantWorkspaceSection.tsx",
+      "sizeLines": 698,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/settings/CliSettingsSection.tsx",
+      "sizeLines": 660,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/settings/GeneralSection.tsx",
+      "sizeLines": 413,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/settings/PresetConnectDialog.tsx",
+      "sizeLines": 827,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/settings/ProviderDoctorDialog.tsx",
+      "sizeLines": 469,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/settings/ProviderForm.tsx",
+      "sizeLines": 479,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/settings/ProviderManager.tsx",
+      "sizeLines": 685,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/settings/ProviderOptionsSection.tsx",
+      "sizeLines": 105,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/settings/SettingsLayout.tsx",
+      "sizeLines": 112,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/settings/UsageStatsSection.tsx",
+      "sizeLines": 449,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/settings/WorkspaceConfirmDialogs.tsx",
+      "sizeLines": 199,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/settings/WorkspaceStatusCards.tsx",
+      "sizeLines": 110,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/settings/WorkspaceTabPanels.tsx",
+      "sizeLines": 200,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/settings/provider-presets.tsx",
+      "sizeLines": 165,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/settings/workspace-types.ts",
+      "sizeLines": 45,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/setup/ClaudeCodeCard.tsx",
+      "sizeLines": 194,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/setup/ProjectDirCard.tsx",
+      "sizeLines": 128,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/setup/ProviderCard.tsx",
+      "sizeLines": 151,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/setup/SetupCard.tsx",
+      "sizeLines": 69,
+      "fileCategory": "code"
+    }
+  ],
+  "batchImportData": {
+    "src/components/plugins/PluginList.tsx": [
+      "src/components/plugins/PluginCard.tsx"
+    ],
+    "src/components/project/FilePreview.tsx": [],
+    "src/components/project/FileTree.tsx": [],
+    "src/components/project/TaskCard.tsx": [],
+    "src/components/project/TaskList.tsx": [],
+    "src/components/settings/AppearanceSection.tsx": [],
+    "src/components/settings/AssistantWorkspaceSection.tsx": [
+      "src/components/settings/WorkspaceTabPanels.tsx",
+      "src/components/settings/WorkspaceConfirmDialogs.tsx",
+      "src/components/settings/WorkspaceStatusCards.tsx",
+      "src/components/settings/workspace-types.ts"
+    ],
+    "src/components/settings/CliSettingsSection.tsx": [],
+    "src/components/settings/GeneralSection.tsx": [
+      "src/components/settings/AppearanceSection.tsx"
+    ],
+    "src/components/settings/PresetConnectDialog.tsx": [
+      "src/components/settings/ProviderForm.tsx",
+      "src/components/settings/provider-presets.tsx"
+    ],
+    "src/components/settings/ProviderDoctorDialog.tsx": [],
+    "src/components/settings/ProviderForm.tsx": [],
+    "src/components/settings/ProviderManager.tsx": [
+      "src/components/settings/ProviderForm.tsx",
+      "src/components/settings/ProviderDoctorDialog.tsx",
+      "src/components/settings/PresetConnectDialog.tsx",
+      "src/components/settings/provider-presets.tsx",
+      "src/components/settings/ProviderOptionsSection.tsx"
+    ],
+    "src/components/settings/ProviderOptionsSection.tsx": [],
+    "src/components/settings/SettingsLayout.tsx": [
+      "src/components/settings/GeneralSection.tsx",
+      "src/components/settings/ProviderManager.tsx",
+      "src/components/settings/CliSettingsSection.tsx",
+      "src/components/settings/UsageStatsSection.tsx",
+      "src/components/settings/AssistantWorkspaceSection.tsx"
+    ],
+    "src/components/settings/UsageStatsSection.tsx": [],
+    "src/components/settings/WorkspaceConfirmDialogs.tsx": [],
+    "src/components/settings/WorkspaceStatusCards.tsx": [],
+    "src/components/settings/WorkspaceTabPanels.tsx": [
+      "src/components/settings/workspace-types.ts"
+    ],
+    "src/components/settings/provider-presets.tsx": [],
+    "src/components/settings/workspace-types.ts": [],
+    "src/components/setup/ClaudeCodeCard.tsx": [
+      "src/components/setup/SetupCard.tsx"
+    ],
+    "src/components/setup/ProjectDirCard.tsx": [
+      "src/components/setup/SetupCard.tsx"
+    ],
+    "src/components/setup/ProviderCard.tsx": [
+      "src/components/setup/SetupCard.tsx"
+    ],
+    "src/components/setup/SetupCard.tsx": []
+  }
+}
