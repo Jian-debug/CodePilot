@@ -10,6 +10,7 @@ import {
   Gear,
   WifiHigh,
   Terminal,
+  Storefront,
 } from "@/components/ui/icon";
 import { Button } from "@/components/ui/button";
 import {
@@ -33,6 +34,7 @@ interface NavRailProps {
 const navItems = [
   { href: "/chat", label: "Chats", icon: ChatCircle },
   { href: "/skills", label: "Skills", icon: Lightning },
+  { href: "/plugins", label: "Plugins", icon: Storefront },
   { href: "/mcp", label: "MCP", icon: Plug },
   { href: "/cli-tools", label: "CLI Tools", icon: Terminal },
   { href: "/gallery", label: "Gallery", icon: Image },
@@ -46,6 +48,7 @@ export function NavRail({ onToggleChatList, hasUpdate, readyToInstall, skipPermi
   const navLabelKeys: Record<string, TranslationKey> = {
     'Chats': 'nav.chats',
     'Skills': 'extensions.skills',
+    'Plugins': 'nav.plugins',
     'MCP': 'extensions.mcpServers',
     'Gallery': 'gallery.title',
     'Bridge': 'nav.bridge',

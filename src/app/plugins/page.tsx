@@ -1,12 +1,11 @@
 "use client";
 
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { PluginsManager } from "@/components/plugins/PluginsManager";
 
-export default function PluginsRedirect() {
-  const router = useRouter();
-  useEffect(() => {
-    router.replace("/skills");
-  }, [router]);
-  return null;
+export default function PluginsPage() {
+  return (
+    <div className="flex h-full flex-col">
+      <PluginsManager />
+    </div>
+  );
 }

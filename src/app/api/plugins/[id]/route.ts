@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import type { PluginInfo, ErrorResponse, SuccessResponse } from '@/types';
 import { getPluginInfoList, setPluginEnabled } from '@/lib/plugin-discovery';
+import fs from 'fs';
+import path from 'path';
 
 /**
  * Plugin ID format: "name@marketplace" (URL-encoded in the path segment).
@@ -20,10 +22,55 @@ function findPlugin(plugins: PluginInfo[], name: string, marketplace: string): P
   return plugins.find((p) => p.name === name && p.marketplace === marketplace);
 }
 
+interface ContentItem {
+  name: string;
+  description: string;
+}
+
+function readContentItems(dir: string, subDir: string): ContentItem[] {
+  const fullPath = path.join(dir, subDir);
+  if (!fs.existsSync(fullPath)) return [];
+
+  const items: ContentItem[] = [];
+  try {
+    const entries = fs.readdirSync(fullPath);
+    for (const entry of entries) {
+      const itemPath = path.join(fullPath, entry);
+      if (!fs.statSync(itemPath).isDirectory()) continue;
+
+      // Try to read description from skill/command/agent file
+      const mdPath = path.join(itemPath, 'SKILL.md');
+      const cmdPath = path.join(itemPath, 'CLAUDE.md');
+      const agentPath = path.join(itemPath, 'agent.md');
+
+      let description = '';
+      const targetPath = fs.existsSync(mdPath) ? mdPath : fs.existsSync(cmdPath) ? cmdPath : fs.existsSync(agentPath) ? agentPath : null;
+      if (targetPath) {
+        const content = fs.readFileSync(targetPath, 'utf-8');
+        // Extract first paragraph or description from frontmatter
+        const descMatch = content.match(/description:\s*(.+)/);
+        if (descMatch) {
+          description = descMatch[1].trim();
+        } else {
+          const paraMatch = content.match(/^## .+\n\n(.+?)\n/);
+          if (paraMatch) {
+            description = paraMatch[1].trim().slice(0, 200);
+          }
+        }
+      }
+
+      items.push({ name: entry, description });
+    }
+  } catch {
+    // ignore
+  }
+  return items;
+}
+
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
-): Promise<NextResponse<{ plugin: PluginInfo } | ErrorResponse>> {
+): Promise<NextResponse<{ plugin: PluginInfo & { skills: ContentItem[]; commands: ContentItem[]; agents: ContentItem[] } } | ErrorResponse>> {
   const { id } = await params;
   const parsed = parsePluginId(id);
 
@@ -43,7 +90,12 @@ export async function GET(
     return NextResponse.json({ error: 'Plugin not found' }, { status: 404 });
   }
 
-  return NextResponse.json({ plugin });
+  // Read skills, commands, agents from plugin directory
+  const skills = readContentItems(plugin.path, 'skills');
+  const commands = readContentItems(plugin.path, 'commands');
+  const agents = readContentItems(plugin.path, 'agents');
+
+  return NextResponse.json({ plugin: { ...plugin, skills, commands, agents } });
 }
 
 export async function PUT(

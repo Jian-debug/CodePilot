@@ -12,6 +12,7 @@ const zh: Record<TranslationKey, string> = {
   'nav.bridge': '远程桥接',
   'nav.cliTools': 'CLI 工具',
   'nav.skills': 'Skills',
+  'nav.plugins': 'Plugins',
   'nav.mcp': 'MCP',
   'nav.gallery': '素材库',
 

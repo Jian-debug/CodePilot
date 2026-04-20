@@ -15,6 +15,7 @@ const en = {
   'nav.bridge': 'Bridge',
   'nav.cliTools': 'CLI Tools',
   'nav.skills': 'Skills',
+  'nav.plugins': 'Plugins',
   'nav.mcp': 'MCP',
   'nav.gallery': 'Gallery',
 
