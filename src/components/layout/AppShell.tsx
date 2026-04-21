@@ -11,7 +11,7 @@ import { FeatureAnnouncementDialog } from "./FeatureAnnouncementDialog";
 import { UpdateBanner } from "./UpdateBanner";
 import { UnifiedTopBar } from "./UnifiedTopBar";
 import { PanelZone } from "./PanelZone";
-import { PanelContext, type PreviewViewMode } from "@/hooks/usePanel";
+import { PanelContext, type PreviewViewMode, type PreviewSource } from "@/hooks/usePanel";
 import { UpdateContext } from "@/hooks/useUpdate";
 import { useUpdateChecker } from "@/hooks/useUpdateChecker";
 import { ImageGenContext, useImageGenState } from "@/hooks/useImageGen";
@@ -60,8 +60,16 @@ const EMPTY_SET = new Set<string>();
 const CHATLIST_MIN = 180;
 const CHATLIST_MAX = 300;
 
-/** Extensions that default to "rendered" view mode */
-const RENDERED_EXTENSIONS = new Set([".md", ".mdx", ".html", ".htm"]);
+/**
+ * Extensions that default to "rendered" view mode when a file is opened
+ * via setPreviewSource / setPreviewFile. Keeping this list aligned with
+ * PreviewPanel's RENDERABLE_EXTENSIONS so anything we can actually
+ * render in Preview mode also lands there by default — previously .jsx
+ * / .tsx fell through to Source even though Sandpack can render them,
+ * which made the DiffSummary "Open preview" button surface source code
+ * when the user clicked a TSX card.
+ */
+const RENDERED_EXTENSIONS = new Set([".md", ".mdx", ".html", ".htm", ".jsx", ".tsx", ".csv", ".tsv"]);
 
 function defaultViewMode(filePath: string): PreviewViewMode {
   const dot = filePath.lastIndexOf(".");
@@ -112,10 +120,15 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   // markdown links as fallback when the frontend cannot directly dispatch the
   // open-setup-center event (e.g. rendering inside the SSE text stream). When
   // such a link is clicked the hash changes to `#providers`, and we surface
-  // the SetupCenter Provider card here.
+  // the SetupCenter Provider card here — EXCEPT on /settings itself, where
+  // SettingsLayout owns the #providers hash for its own section routing
+  // (see SettingsLayout.tsx `getSectionFromHash`). If we swallowed the hash
+  // there, clicking "Add Provider" inside SetupCenter would ping-pong the
+  // user back into SetupCenter instead of reaching the providers tab.
   useEffect(() => {
     const maybeOpenFromHash = () => {
       if (typeof window === 'undefined') return;
+      if (window.location.pathname === '/settings') return;
       if (window.location.hash === '#providers') {
         setSetupInitialCard('provider');
         setSetupOpen(true);
@@ -352,23 +365,48 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   }, [activeStreamingSessions]);
 
   // --- Doc Preview state ---
-  const [previewFile, setPreviewFileRaw] = useState<string | null>(null);
+  // Primary state is `previewSource` (Phase 1.5). `previewFile` is a derived
+  // view for legacy consumers (FileTreePanel toggle logic etc.). The adapter
+  // is one-way: setPreviewFile always produces kind:'file' sources, but
+  // callers can observe that an inline-* source makes previewFile appear null.
+  const [previewSource, setPreviewSourceRaw] = useState<PreviewSource | null>(null);
   const [previewViewMode, setPreviewViewMode] = useState<PreviewViewMode>("source");
 
-  const setPreviewFile = useCallback((path: string | null) => {
-    setPreviewFileRaw(path);
-    if (path) {
-      setPreviewViewMode(defaultViewMode(path));
+  const previewFile: string | null =
+    previewSource?.kind === "file" ? previewSource.filePath : null;
+
+  const setPreviewSource = useCallback((source: PreviewSource | null) => {
+    setPreviewSourceRaw(source);
+    if (source) {
+      // File sources respect the extension-based default view mode.
+      // Inline sources are always "rendered" — there's no raw path to show
+      // for source view, and all inline variants are meaningful only rendered.
+      if (source.kind === "file") {
+        setPreviewViewMode(defaultViewMode(source.filePath));
+      } else {
+        setPreviewViewMode("rendered");
+      }
       setPreviewOpen(true);
     } else {
       setPreviewOpen(false);
     }
   }, []);
 
+  const setPreviewFile = useCallback(
+    (path: string | null) => {
+      if (path === null) {
+        setPreviewSource(null);
+      } else {
+        setPreviewSource({ kind: "file", filePath: path });
+      }
+    },
+    [setPreviewSource],
+  );
+
   // Reset doc preview and panels when navigating between pages/sessions
   /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
-    setPreviewFileRaw(null);
+    setPreviewSourceRaw(null);
     setPreviewOpen(false);
   }, [pathname]);
   /* eslint-enable react-hooks/set-state-in-effect */
@@ -444,12 +482,14 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       setPendingApprovalSessionId,
       activeStreamingSessions,
       pendingApprovalSessionIds,
+      previewSource,
+      setPreviewSource,
       previewFile,
       setPreviewFile,
       previewViewMode,
       setPreviewViewMode,
     }),
-    [fileTreeOpen, gitPanelOpen, previewOpen, terminalOpen, dashboardPanelOpen, assistantPanelOpen, isAssistantWorkspace, currentBranch, gitDirtyCount, currentWorktreeLabel, workingDirectory, sessionId, sessionTitle, streamingSessionId, pendingApprovalSessionId, activeStreamingSessions, pendingApprovalSessionIds, previewFile, setPreviewFile, previewViewMode]
+    [fileTreeOpen, gitPanelOpen, previewOpen, terminalOpen, dashboardPanelOpen, assistantPanelOpen, isAssistantWorkspace, currentBranch, gitDirtyCount, currentWorktreeLabel, workingDirectory, sessionId, sessionTitle, streamingSessionId, pendingApprovalSessionId, activeStreamingSessions, pendingApprovalSessionIds, previewSource, setPreviewSource, previewFile, setPreviewFile, previewViewMode]
   );
 
   const imageGenValue = useImageGenState();

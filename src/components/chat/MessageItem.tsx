@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useCallback, useRef, useEffect, useMemo, memo } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
 import { cn } from '@/lib/utils';
 import type { Message, TokenUsage, FileAttachment, MediaBlock } from '@/types';
 import {
@@ -11,8 +10,9 @@ import {
 } from '@/components/ai-elements/message';
 import { ToolActionsGroup } from '@/components/ai-elements/tool-actions-group';
 import { MediaPreview } from './MediaPreview';
+import { DiffSummary } from './DiffSummary';
 import { Button } from "@/components/ui/button";
-import { Copy, Check, CaretDown, CaretUp, CaretRight, NotePencil, PushPin, DownloadSimple } from "@/components/ui/icon";
+import { Copy, Check, CaretDown, CaretUp, CaretRight, PushPin, DownloadSimple } from "@/components/ui/icon";
 import { FileAttachmentDisplay } from './FileAttachmentDisplay';
 import { ImageGenConfirmation } from './ImageGenConfirmation';
 import { ImageGenCard } from './ImageGenCard';
@@ -528,49 +528,6 @@ function TokenUsageDisplay({ usage }: { usage: TokenUsage }) {
 
 const COLLAPSE_HEIGHT = 300;
 
-// ---------------------------------------------------------------------------
-// Diff summary — shows modified files after assistant turn
-// ---------------------------------------------------------------------------
-
-function DiffSummary({ files }: { files: Array<{ path: string; name: string }> }) {
-  const [open, setOpen] = useState(false);
-  return (
-    <div className="mt-1">
-      <button
-        type="button"
-        onClick={() => setOpen(prev => !prev)}
-        className="flex items-center gap-1.5 text-[11px] text-muted-foreground/50 hover:text-muted-foreground transition-colors"
-      >
-        <CaretRight
-          size={10}
-          className={cn("shrink-0 transition-transform duration-200", open && "rotate-90")}
-        />
-        <span>Modified {files.length} file{files.length > 1 ? 's' : ''}</span>
-      </button>
-      <AnimatePresence initial={false}>
-        {open && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.15, ease: 'easeOut' }}
-            style={{ overflow: 'hidden' }}
-          >
-            <div className="ml-3 mt-0.5 space-y-0.5">
-              {files.map(f => (
-                <div key={f.path} className="flex items-center gap-1.5 text-[11px] font-mono text-muted-foreground/40">
-                  <NotePencil size={10} className="shrink-0" />
-                  <span className="truncate" title={f.path}>{f.name}</span>
-                </div>
-              ))}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
-  );
-}
-
 export const MessageItem = memo(function MessageItem({ message, sessionId, isAssistantProject, assistantName }: MessageItemProps) {
   const isUser = message.role === 'user';
 
@@ -578,6 +535,12 @@ export const MessageItem = memo(function MessageItem({ message, sessionId, isAss
   const [isExpanded, setIsExpanded] = useState(false);
   const [isOverflowing, setIsOverflowing] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
+
+  // Preview wiring for DiffSummary (Phase 2.3). Clicking a previewable row
+  // opens the artifact panel on that file. setPreviewSource auto-flips
+  // previewOpen (see AppShell.tsx setPreviewSource side effects) so callers
+  // don't need to set both.
+  const { setPreviewSource, workingDirectory } = usePanel();
 
 
   // Memoize expensive parsing: parseToolBlocks + pairTools
@@ -712,19 +675,82 @@ export const MessageItem = memo(function MessageItem({ message, sessionId, isAss
       {/* Diff summary for assistant messages with file modifications */}
       {!isUser && (() => {
         const WRITE_TOOLS = new Set(['write', 'edit', 'writefile', 'write_file', 'create_file', 'createfile', 'notebookedit', 'notebook_edit']);
+        // Tools whose semantics are "new file"; everything else in WRITE_TOOLS
+        // counts as "modify an existing file" (edit + notebookedit variants).
+        // This is a heuristic — some tools (e.g. write) do upsert — but the
+        // label is surfaced to the user only as a hint, not a correctness claim.
+        const CREATE_TOOLS = new Set(['write', 'writefile', 'write_file', 'create_file', 'createfile']);
+
+        // Assistant tools can emit either absolute paths ("/home/.../foo.md")
+        // or workspace-relative ones ("src/foo.md"). We treat the latter as
+        // relative to workingDirectory so the preview API's path-safety check
+        // and /api/files/write's baseDir enforcement both resolve to the
+        // right file. Windows drive paths (C:\...) are absolute too.
+        // (Codex P2.)
+        const isAbsolute = (p: string): boolean =>
+          p.startsWith('/') || /^[A-Za-z]:[/\\]/.test(p);
+        const resolveToolPath = (p: string): string => {
+          if (!p) return p;
+          if (isAbsolute(p)) return p;
+          if (!workingDirectory) return p;
+          const sep = workingDirectory.includes('\\') ? '\\' : '/';
+          return `${workingDirectory}${sep}${p}`;
+        };
+
         const modifiedFiles = pairedTools
           .filter(t => WRITE_TOOLS.has(t.name.toLowerCase()) && !t.isError)
           .map(t => {
             const inp = t.input as Record<string, unknown> | undefined;
-            const filePath = (inp?.file_path || inp?.path || inp?.filePath || '') as string;
-            const parts = filePath.split('/');
-            return { path: filePath, name: parts[parts.length - 1] || filePath };
+            const rawPath = (inp?.file_path || inp?.path || inp?.filePath || '') as string;
+            const resolvedPath = resolveToolPath(rawPath);
+            const parts = resolvedPath.split(/[/\\]/);
+            const toolName = t.name.toLowerCase();
+            const operation: 'created' | 'modified' = CREATE_TOOLS.has(toolName) ? 'created' : 'modified';
+            return { path: resolvedPath, name: parts[parts.length - 1] || resolvedPath, operation };
           })
           .filter(f => f.path);
         if (modifiedFiles.length === 0) return null;
-        // Deduplicate by path
+        // Deduplicate by path. When the same file appears multiple times (e.g.
+        // created then edited in one turn), the last tool wins — callers see
+        // "Modified" rather than "Created" which matches the file's final
+        // state at the end of the turn.
         const unique = [...new Map(modifiedFiles.map(f => [f.path, f])).values()];
-        return <DiffSummary files={unique} />;
+        return (
+          <DiffSummary
+            files={unique}
+            onPreview={(file) => setPreviewSource({ kind: 'file', filePath: file.path })}
+            // Phase 3: export long screenshot via the Electron IPC. Only
+            // .html/.htm rows pass the PREVIEWABLE+LONGSHOT gate in
+            // DiffSummary; for those, we fetch the raw file contents from
+            // /api/files/preview and hand them to the long-shot helper.
+            // Markdown / JSX long-shot support requires a prior render-
+            // to-HTML step (Streamdown serialize for .md; esbuild compile
+            // for .tsx) that's Phase 3 follow-up — DiffSummary already
+            // gates the button by extension so we won't get called for
+            // those unless the gate changes later.
+            onExportLongShot={async (file) => {
+              try {
+                const { exportHtmlAsLongShot } = await import('@/lib/artifact-export');
+                const qs = new URLSearchParams({ path: file.path });
+                if (workingDirectory) qs.set('baseDir', workingDirectory);
+                const res = await fetch(`/api/files/preview?${qs}`);
+                if (!res.ok) {
+                  const data = await res.json().catch(() => ({}));
+                  alert(`Export failed: ${data.error || res.status}`);
+                  return;
+                }
+                const { preview } = await res.json();
+                await exportHtmlAsLongShot({
+                  html: preview.content,
+                  filename: file.name.replace(/\.[^.]+$/, ''),
+                  width: 1024,
+                });
+              } catch (err) {
+                alert(`Export failed: ${err instanceof Error ? err.message : String(err)}`);
+              }
+            }}
+          />
+        );
       })()}
 
       {/* Footer with copy, timestamp and token usage */}

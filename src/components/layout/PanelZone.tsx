@@ -10,16 +10,22 @@ const DashboardPanel = dynamic(() => import("./panels/DashboardPanel").then(m =>
 const AssistantPanel = dynamic(() => import("./panels/AssistantPanel").then(m => ({ default: m.AssistantPanel })), { ssr: false });
 
 export function PanelZone() {
-  const { previewOpen, previewFile, gitPanelOpen, fileTreeOpen, dashboardPanelOpen, assistantPanelOpen } = usePanel();
+  const { previewOpen, previewSource, gitPanelOpen, fileTreeOpen, dashboardPanelOpen, assistantPanelOpen } = usePanel();
 
-  const anyOpen = (previewOpen && !!previewFile) || gitPanelOpen || fileTreeOpen || dashboardPanelOpen || assistantPanelOpen;
+  // Phase 1.5 migration: gate on previewSource (not previewFile).
+  //
+  // Previously this gated on `!!previewFile`, which rejects inline-html /
+  // inline-jsx / inline-datatable sources because they lack a filesystem
+  // path. After migration, any non-null previewSource mounts the panel and
+  // PreviewPanel itself branches on source.kind to pick the renderer.
+  const anyOpen = (previewOpen && !!previewSource) || gitPanelOpen || fileTreeOpen || dashboardPanelOpen || assistantPanelOpen;
 
   if (!anyOpen) return null;
 
   return (
     <div className="flex h-full shrink-0 border-l border-border/40 overflow-hidden">
       {assistantPanelOpen && <AssistantPanel />}
-      {previewOpen && previewFile && <PreviewPanel />}
+      {previewOpen && previewSource && <PreviewPanel />}
       {gitPanelOpen && <GitPanelContainer />}
       {fileTreeOpen && <FileTreePanel />}
       {dashboardPanelOpen && <DashboardPanel />}

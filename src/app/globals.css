@@ -354,3 +354,24 @@
   color: inherit !important;
   background-color: transparent !important;
 }
+
+/*
+ * CodeMirror isolation — Phase 4 (POC 0.4 path C).
+ *
+ * Tailwind v4 preflight (@layer base) resets pre/code font/margin/
+ * white-space. CodeMirror's .cm-scroller / .cm-line reuse pre-style
+ * behavior, so unisolated they end up with wrong line heights + cursor
+ * offsets. `all: revert-layer` inside the same base layer undoes the
+ * reset for everything under .cm-editor while preserving design-token
+ * inheritance (--border / --radius / font vars still cascade).
+ *
+ * Do NOT move this to a higher-specificity layer — that would hide the
+ * reset instead of unwinding it, and downstream component themes
+ * applied by EditorView.theme() wouldn't be able to override.
+ */
+@layer base {
+  .cm-editor,
+  .cm-editor * {
+    all: revert-layer;
+  }
+}

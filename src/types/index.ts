@@ -53,6 +53,12 @@ export interface FilePreview {
   line_count: number;
   /** When true, line_count is exact; when false it is a best-effort estimate. */
   line_count_exact: boolean;
+  /** When true, content is only the first N lines/bytes of a larger file. */
+  truncated: boolean;
+  /** Actual bytes read into content (UTF-8 byte length). */
+  bytes_read: number;
+  /** Total file size in bytes (from fs.stat). */
+  bytes_total: number;
 }
 
 // ==========================================
