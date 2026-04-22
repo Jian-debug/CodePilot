@@ -559,16 +559,47 @@ export interface PermissionResponseRequest {
 // Plugin / MCP Types
 // ==========================================
 
+/** One content directory inside a plugin (skills, commands, hooks, etc.) */
+export interface PluginDirectory {
+  /** Directory name, e.g. "skills", "hooks", "scripts" */
+  name: string;
+  /** Number of items found in this directory */
+  count: number;
+  /** Item names (skill names, hook event types, script names, etc.) */
+  items: string[];
+}
+
 export interface PluginInfo {
   name: string;
   description: string;
   author?: { name: string; url?: string };
   path: string;
   marketplace: string;
-  location: 'plugins' | 'external_plugins';
+  location: 'plugins' | 'external_plugins' | 'cache';
   hasCommands: boolean;
   hasSkills: boolean;
   hasAgents: boolean;
+  hasHooks: boolean;
+  /** Counts of skills/commands/agents/hooks found in the plugin directory */
+  skillCount: number;
+  commandCount: number;
+  agentCount: number;
+  hookCount: number;
+  /** Skill/command/agent/hook names for inline display */
+  skillNames: string[];
+  commandNames: string[];
+  agentNames: string[];
+  hookNames: string[];
+  /** All content directories found in the plugin, for detail view */
+  directories: PluginDirectory[];
+  /** Plugin version (from cache directory name) */
+  version?: string;
+  /** Last update timestamp (ISO format) */
+  lastUpdated?: string;
+  /** Install timestamp (ISO format) */
+  installedAt?: string;
+  /** Install scope: 'user' or 'project' */
+  scope?: 'user' | 'project';
   blocked: boolean;
   enabled: boolean;
 }

@@ -190,7 +190,7 @@ export default function NewChatPage() {
     });
 
     return () => { cancelled = true; };
-   
+
   }, []); // Run once on mount to validate initial values
 
   // Initialize workingDir from localStorage (or setup default), validating the path exists
@@ -271,8 +271,6 @@ export default function NewChatPage() {
   // Check provider availability — only 'completed' counts, 'skipped' means user deferred but has no real credentials
   useEffect(() => {
     const checkProvider = () => {
-      // Lock sending while we re-resolve the model/provider
-      setModelReady(false);
       fetch('/api/setup')
         .then(r => r.ok ? r.json() : null)
         .then(data => {
@@ -281,84 +279,6 @@ export default function NewChatPage() {
           }
         })
         .catch(() => {});
-      // Sync provider/model, applying global default model for new conversations.
-      const savedProviderId = localStorage.getItem('codepilot:last-provider-id');
-
-      // Fetch models + global default in parallel
-      const modelsP = fetch('/api/providers/models').then(r => r.ok ? r.json() : null);
-      const globalP = fetch('/api/providers/options?providerId=__global__').then(r => r.ok ? r.json() : null);
-
-      Promise.all([modelsP, globalP]).then(([modelsData, globalData]) => {
-        if (!modelsData?.groups || modelsData.groups.length === 0) {
-          setModelReady(true);
-          return;
-        }
-        const groups = modelsData.groups as Array<{ provider_id: string; models: Array<{ value: string }> }>;
-        const globalDefaultModel = globalData?.options?.default_model || '';
-        const globalDefaultProvider = globalData?.options?.default_model_provider || '';
-
-        // Validate and apply provider
-        if (savedProviderId !== null) {
-          const validProvider = groups.find(g => g.provider_id === savedProviderId);
-          if (validProvider) {
-            setCurrentProviderId(savedProviderId);
-          } else {
-            setCurrentProviderId('');
-            localStorage.removeItem('codepilot:last-provider-id');
-          }
-        }
-
-        // Apply global default for new conversations
-        // Case 1: both provider and model are set and valid
-        if (globalDefaultModel && globalDefaultProvider) {
-          const targetGroup = groups.find(g => g.provider_id === globalDefaultProvider);
-          const modelValid = targetGroup?.models.some(m => m.value === globalDefaultModel);
-          if (modelValid) {
-            setCurrentModel(globalDefaultModel);
-            setCurrentProviderId(globalDefaultProvider);
-            setModelReady(true);
-            return;
-          }
-        }
-        // Case 2: provider is set but model was cleared (e.g. after doctor repair / provider delete)
-        // → use that provider's first available model
-        if (globalDefaultProvider && !globalDefaultModel) {
-          const targetGroup = groups.find(g => g.provider_id === globalDefaultProvider);
-          if (targetGroup?.models?.length) {
-            setCurrentModel(targetGroup.models[0].value);
-            setCurrentProviderId(globalDefaultProvider);
-            setModelReady(true);
-            return;
-          }
-        }
-
-        // No global default — validate current model
-        const resolvedPid = savedProviderId && groups.find(g => g.provider_id === savedProviderId)
-          ? savedProviderId
-          : groups[0]?.provider_id || '';
-        const resolvedGroup = groups.find(g => g.provider_id === resolvedPid) || groups[0];
-        setCurrentProviderId(resolvedPid);
-        if (resolvedGroup?.models?.length > 0) {
-          const savedModel = localStorage.getItem('codepilot:last-model');
-          const validModel = savedModel && resolvedGroup.models.some(
-            (m: { value: string }) => m.value === savedModel
-          );
-          if (validModel) {
-            setCurrentModel(savedModel);
-          } else {
-            const fallback = resolvedGroup.models[0].value;
-            setCurrentModel(fallback);
-            localStorage.setItem('codepilot:last-model', fallback);
-          }
-        }
-        setModelReady(true);
-      }).catch(() => {
-        // On fetch failure, still apply localStorage values as-is (best effort)
-        if (savedProviderId !== null) setCurrentProviderId(savedProviderId);
-        const savedModel = localStorage.getItem('codepilot:last-model');
-        if (savedModel) setCurrentModel(savedModel);
-        setModelReady(true);
-      });
     };
     checkProvider();
 

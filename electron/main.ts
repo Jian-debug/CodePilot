@@ -140,7 +140,7 @@ async function isBridgeActive(): Promise<boolean> {
     return await new Promise<boolean>((resolve) => {
       const req = http.get(`http://127.0.0.1:${serverPort}/api/bridge`, (res: { statusCode?: number; on: (event: string, cb: (data?: Buffer) => void) => void }) => {
         let body = '';
-        res.on('data', (chunk: Buffer) => { body += chunk.toString(); });
+        res.on('data', (chunk?: Buffer) => { if (chunk) body += chunk.toString(); });
         res.on('end', () => {
           try {
             const data = JSON.parse(body);
@@ -282,7 +282,7 @@ function startBgNotifyPoll(): void {
       const data = await new Promise<string>((resolve, reject) => {
         const req = http.get(`http://127.0.0.1:${port}/api/tasks/notify`, (res) => {
           let body = '';
-          res.on('data', (chunk: Buffer) => { body += chunk.toString(); });
+          res.on('data', (chunk?: Buffer) => { if (chunk) body += chunk.toString(); });
           res.on('end', () => resolve(body));
         });
         req.on('error', reject);
@@ -536,7 +536,7 @@ function isPortFree(port: number): Promise<boolean> {
  * uncommon in practice. 8 candidates handles up to 8 concurrent CodePilot
  * instances before falling back to OS-assigned, which is plenty for normal use.
  */
-const STABLE_PORTS = [47823, 47824, 47825, 47826, 47827, 47828, 47829, 47830];
+const STABLE_PORTS = [47823];
 
 /** Allocate an OS-assigned port (last-resort fallback when all stable ports fail). */
 async function getDynamicPort(): Promise<number> {

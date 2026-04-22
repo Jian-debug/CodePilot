@@ -90,12 +90,21 @@ export async function GET(
     return NextResponse.json({ error: 'Plugin not found' }, { status: 404 });
   }
 
-  // Read skills, commands, agents from plugin directory
+  // Read content items from all known directories
   const skills = readContentItems(plugin.path, 'skills');
   const commands = readContentItems(plugin.path, 'commands');
   const agents = readContentItems(plugin.path, 'agents');
 
-  return NextResponse.json({ plugin: { ...plugin, skills, commands, agents } });
+  // Map directories to items with descriptions where available
+  const dirItemMap: Record<string, ContentItem[]> = { skills, commands, agents };
+  const directories = (plugin.directories || []).map((dir) => ({
+    ...dir,
+    items: dirItemMap[dir.name]
+      ? dirItemMap[dir.name].map((item) => item.name)
+      : dir.items,
+  }));
+
+  return NextResponse.json({ plugin: { ...plugin, skills, commands, agents, directories } });
 }
 
 export async function PUT(

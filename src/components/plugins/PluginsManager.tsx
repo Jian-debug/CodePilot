@@ -4,15 +4,14 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { cn } from '@/lib/utils';
+import type { IconComponent, PluginInfo } from '@/types';
 import {
   MagnifyingGlass,
   Plug,
-  Globe,
-  FolderOpen,
   CaretDown,
   CaretUp,
   Lightning,
@@ -25,8 +24,17 @@ import {
   SpinnerGap,
   Storefront,
   DownloadSimple,
+  Clock,
+  Bell,
+  Folder,
+  Code,
+  Book,
+  Gear,
+  File,
+  Desktop,
+  Copy,
+  ArrowSquareOut,
 } from '@/components/ui/icon';
-import type { PluginInfo } from '@/types';
 
 interface PluginSkillsInfo {
   name: string;
@@ -47,6 +55,8 @@ interface PluginDetailData extends PluginInfo {
   skills: PluginSkillsInfo[];
   commands: PluginCommandsInfo[];
   agents: PluginAgentsInfo[];
+  /** Full directory scan including hooks, scripts, etc. */
+  directories: Array<{ name: string; count: number; items: string[] }>;
 }
 
 interface MarketplacePlugin {
@@ -65,6 +75,45 @@ function parsePluginId(id: string): { name: string; marketplace: string } {
   };
 }
 
+/** Human-readable label for a plugin source */
+function sourceLabel(marketplace: string): string {
+  if (marketplace === 'external') return 'External';
+  return marketplace
+    .split(/[-_]/)
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(' ');
+}
+
+/** Format ISO date to relative time string (e.g. "2 天前") */
+function formatRelativeTime(isoDate?: string): string {
+  if (!isoDate) return '';
+  const now = Date.now();
+  const then = new Date(isoDate).getTime();
+  const diffMs = now - then;
+  const diffMin = Math.floor(diffMs / 60000);
+  if (diffMin < 60) return `${diffMin} 分钟前`;
+  const diffHr = Math.floor(diffMin / 60);
+  if (diffHr < 24) return `${diffHr} 小时前`;
+  const diffDay = Math.floor(diffHr / 24);
+  if (diffDay < 30) return `${diffDay} 天前`;
+  const diffMon = Math.floor(diffDay / 30);
+  return `${diffMon} 个月前`;
+}
+
+/** Directory key → display label and icon */
+const DIR_META: Record<string, { label: string; icon: IconComponent }> = {
+  skills: { label: 'Skills', icon: Lightning },
+  commands: { label: 'Commands', icon: Terminal },
+  agents: { label: 'Agents', icon: GameController },
+  hooks: { label: 'Hooks', icon: Bell },
+  scripts: { label: 'Scripts', icon: Code },
+  modes: { label: 'Modes', icon: Folder },
+  docs: { label: 'Docs', icon: Book },
+  packages: { label: 'Packages', icon: Folder },
+  ui: { label: 'UI', icon: Desktop },
+  tests: { label: 'Tests', icon: Gear },
+};
+
 type ViewTab = 'installed' | 'marketplace';
 
 export function PluginsManager() {
@@ -72,9 +121,6 @@ export function PluginsManager() {
   const [loading, setLoading] = useState(true);
   const [viewTab, setViewTab] = useState<ViewTab>('installed');
   const [search, setSearch] = useState('');
-  const [sourceFilter, setSourceFilter] = useState<'all' | 'plugins' | 'external'>('all');
-  const [selectedPlugin, setSelectedPlugin] = useState<PluginDetailData | null>(null);
-  const [detailLoading, setDetailLoading] = useState(false);
   const [blocklist, setBlocklist] = useState<Set<string>>(new Set());
   const [showBlocklist, setShowBlocklist] = useState(false);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
@@ -87,6 +133,30 @@ export function PluginsManager() {
   const [installLog, setInstallLog] = useState<string>('');
   const [installing, setInstalling] = useState(false);
   const searchDebounceRef = useRef<ReturnType<typeof setTimeout>>(null);
+
+  // Detail panel
+  const [selectedPlugin, setSelectedPlugin] = useState<PluginDetailData | null>(null);
+  const [detailLoading, setDetailLoading] = useState(false);
+
+  // File preview dialog
+  const [filePreview, setFilePreview] = useState<{ path: string; name: string; content: string; isMarkdown: boolean; directory?: boolean; children?: { name: string; isDirectory: boolean }[] } | null>(null);
+  const [previewLoading, setPreviewLoading] = useState(false);
+
+  const handleOpenFile = useCallback(async (dirName: string, itemName: string) => {
+    setPreviewLoading(true);
+    try {
+      const filePath = `${dirName}/${itemName}`;
+      const pluginKey = `${selectedPlugin?.name}@${selectedPlugin?.marketplace}`;
+      const res = await fetch(`/api/plugins/${encodeURIComponent(pluginKey)}/file?path=${encodeURIComponent(filePath)}`);
+      if (!res.ok) throw new Error('Failed to load file');
+      const data = await res.json();
+      setFilePreview({ path: data.path, name: data.name, content: data.content, isMarkdown: data.isMarkdown, directory: data.directory, children: data.children });
+    } catch (e) {
+      console.error('Failed to load file:', e);
+    } finally {
+      setPreviewLoading(false);
+    }
+  }, [selectedPlugin]);
 
   const fetchPlugins = useCallback(async () => {
     try {
@@ -124,9 +194,7 @@ export function PluginsManager() {
     if (viewTab !== 'marketplace') return;
     if (searchDebounceRef.current) clearTimeout(searchDebounceRef.current);
     searchDebounceRef.current = setTimeout(() => {
-      // For now, show installed plugins as marketplace results
-      // In a full implementation, this would call an external marketplace API
-      setMarketplaceResults(plugins.map((p) => ({
+      setMarketplaceResults([...uniquePlugins.values()].map((p) => ({
         id: `${p.name}@${p.marketplace}`,
         name: p.name,
         description: p.description,
@@ -259,7 +327,6 @@ export function PluginsManager() {
         return;
       }
 
-      // Read SSE stream
       const reader = res.body?.getReader();
       const decoder = new TextDecoder();
       if (reader) {
@@ -346,13 +413,22 @@ export function PluginsManager() {
     setInstalling(false);
   }, [fetchPlugins]);
 
-  const filtered = plugins.filter((p) => {
-    const matchesSearch =
+  // Deduplicate plugins by name@marketplace, then filter by search
+  const uniquePlugins = plugins.reduce<Map<string, PluginInfo>>((map, p) => {
+    const key = `${p.name}@${p.marketplace}`;
+    const existing = map.get(key);
+    if (!existing || p.skillCount > (existing.skillCount || 0)) {
+      map.set(key, p);
+    }
+    return map;
+  }, new Map());
+
+  const filteredPlugins = [...uniquePlugins.values()].filter((p) => {
+    return (
       p.name.toLowerCase().includes(search.toLowerCase()) ||
-      p.description.toLowerCase().includes(search.toLowerCase());
-    if (sourceFilter === 'all') return matchesSearch;
-    return matchesSearch && p.location === sourceFilter;
-  });
+      p.description.toLowerCase().includes(search.toLowerCase())
+    );
+  }).sort((a, b) => (a.name || '').localeCompare(b.name || ''));
 
   const pluginsCount = plugins.filter((p) => p.location === 'plugins').length;
   const externalCount = plugins.filter((p) => p.location === 'external_plugins').length;
@@ -372,7 +448,7 @@ export function PluginsManager() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-xl font-semibold">Plugins</h1>
-            <p className="text-sm text-muted-foreground mt-1">Manage plugins containing skills, commands, and agents</p>
+            <p className="text-sm text-muted-foreground mt-1">{plugins.length} plugins installed</p>
           </div>
         </div>
         {/* Segmented control */}
@@ -510,11 +586,11 @@ export function PluginsManager() {
       ) : (
         /* Installed plugins view */
         <div className="flex flex-1 min-h-0">
-          {/* Left: plugin list */}
+          {/* Left: grouped plugin list */}
           <div className="w-80 shrink-0 flex flex-col overflow-hidden border-r border-border/50">
-            {/* Search and filters */}
+            {/* Search and blocklist toggle */}
             <div className="shrink-0 px-4 pt-3 pb-2">
-              <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center justify-between">
                 <div className="relative flex-1 mr-2">
                   <MagnifyingGlass size={14} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground" />
                   <Input
@@ -534,17 +610,6 @@ export function PluginsManager() {
                   <Lock size={16} />
                 </Button>
               </div>
-              <Tabs value={sourceFilter} onValueChange={(v) => setSourceFilter(v as typeof sourceFilter)}>
-                <TabsList className="w-full">
-                  <TabsTrigger value="all" className="flex-1 text-xs">All ({plugins.length})</TabsTrigger>
-                  <TabsTrigger value="plugins" className="flex-1 text-xs">
-                    <Globe size={12} className="mr-1" />Market ({pluginsCount})
-                  </TabsTrigger>
-                  <TabsTrigger value="external" className="flex-1 text-xs">
-                    <FolderOpen size={12} className="mr-1" />External ({externalCount})
-                  </TabsTrigger>
-                </TabsList>
-              </Tabs>
             </div>
 
             {/* List */}
@@ -580,14 +645,14 @@ export function PluginsManager() {
                     })
                   )}
                 </div>
-              ) : filtered.length === 0 ? (
+              ) : filteredPlugins.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-12 text-muted-foreground gap-2">
                   <Plug size={32} className="opacity-40" />
                   <p className="text-xs">{plugins.length === 0 ? 'No plugins found' : 'No matching plugins'}</p>
                 </div>
               ) : (
                 <div className="space-y-1">
-                  {filtered.map((plugin) => {
+                  {filteredPlugins.map((plugin) => {
                     const id = `${plugin.name}@${plugin.marketplace}`;
                     const isLoading = actionLoading === id;
                     return (
@@ -602,34 +667,66 @@ export function PluginsManager() {
                       >
                         <div className="flex items-start justify-between gap-2">
                           <div className="min-w-0 flex-1">
-                            <div className="flex items-center gap-1.5">
+                            <div className="flex items-center gap-1.5 flex-wrap">
                               <Plug size={13} className="text-muted-foreground shrink-0" />
                               <span className="text-sm font-medium truncate">{plugin.name}</span>
+                              {plugin.version && (
+                                <Badge variant="outline" className="text-[10px] h-4 px-1">v{plugin.version}</Badge>
+                              )}
+                              <Badge variant="outline" className="text-[10px] h-4 px-1">{sourceLabel(plugin.marketplace)}</Badge>
                               {plugin.blocked && (
                                 <Badge variant="destructive" className="text-[10px] h-4 px-1">Blocked</Badge>
                               )}
+                              {plugin.scope === 'project' && (
+                                <Badge variant="outline" className="text-[10px] h-4 px-1">Project</Badge>
+                              )}
                             </div>
                             <p className="text-xs text-muted-foreground line-clamp-1 mt-0.5">{plugin.description}</p>
-                            <div className="flex items-center gap-2 mt-1">
-                              <Badge variant="outline" className="text-[10px] h-4 px-1">
-                                {plugin.marketplace === 'external' ? 'External' : plugin.marketplace}
-                              </Badge>
-                              {plugin.hasSkills && (
-                                <span className="text-[10px] text-muted-foreground flex items-center gap-0.5">
-                                  <Lightning size={10} />Skills
-                                </span>
-                              )}
-                              {plugin.hasCommands && (
-                                <span className="text-[10px] text-muted-foreground flex items-center gap-0.5">
-                                  <Terminal size={10} />Commands
-                                </span>
-                              )}
-                              {plugin.hasAgents && (
-                                <span className="text-[10px] text-muted-foreground flex items-center gap-0.5">
-                                  <GameController size={10} />Agents
-                                </span>
-                              )}
-                            </div>
+                            {/* Directory badges */}
+                            {plugin.directories?.length > 0 && (
+                              <div className="flex items-center gap-1.5 mt-1.5 flex-wrap">
+                                {plugin.directories.map((dir) => {
+                                  const meta = DIR_META[dir.name];
+                                  if (!meta) return null;
+                                  const Icon = meta.icon;
+                                  return (
+                                    <Badge key={dir.name} variant="secondary" className="text-[10px] h-4 px-1 gap-0.5">
+                                      <Icon size={9} />{dir.count} {meta.label}
+                                    </Badge>
+                                  );
+                                })}
+                              </div>
+                            )}
+                            {/* Item name tags */}
+                            {plugin.directories?.some((d) => d.items?.length > 0) && (
+                              <div className="flex items-center gap-1 mt-1 flex-wrap">
+                                {plugin.directories.flatMap((dir) =>
+                                  (dir.items || []).slice(0, 3).map((item) => (
+                                    <span key={`${dir.name}-${item}`} className="text-[10px] px-1 py-0 rounded bg-muted/60 text-muted-foreground truncate max-w-[100px]" title={item}>
+                                      {dir.name === 'commands' ? `/${item}` : item}
+                                    </span>
+                                  )),
+                                )}
+                                {plugin.directories.reduce((sum, d) => sum + (d.items?.length || 0), 0) > 9 && (
+                                  <span className="text-[10px] text-muted-foreground">+more</span>
+                                )}
+                              </div>
+                            )}
+                            {/* Last updated & installed time */}
+                            {(plugin.lastUpdated || plugin.installedAt) && (
+                              <div className="flex items-center gap-2 mt-1 text-muted-foreground">
+                                {plugin.installedAt && (
+                                  <span className="text-[10px] flex items-center gap-0.5" title={`安装于 ${plugin.installedAt}`}>
+                                    <DownloadSimple size={9} />{formatRelativeTime(plugin.installedAt)}
+                                  </span>
+                                )}
+                                {plugin.lastUpdated && (
+                                  <span className="text-[10px] flex items-center gap-0.5" title={`更新于 ${plugin.lastUpdated}`}>
+                                    <Clock size={9} />{formatRelativeTime(plugin.lastUpdated)}
+                                  </span>
+                                )}
+                              </div>
+                            )}
                           </div>
                           {!plugin.blocked && (
                             <Switch
@@ -655,7 +752,14 @@ export function PluginsManager() {
                 <SpinnerGap size={20} className="animate-spin text-muted-foreground" />
               </div>
             ) : selectedPlugin ? (
-              <PluginDetailView plugin={selectedPlugin} onClose={() => setSelectedPlugin(null)} onToggle={handleToggle} onBlock={handleBlock} actionLoading={actionLoading} />
+              <PluginDetailView
+                plugin={selectedPlugin}
+                onClose={() => setSelectedPlugin(null)}
+                onToggle={handleToggle}
+                onBlock={handleBlock}
+                onOpenFile={handleOpenFile}
+                actionLoading={actionLoading}
+              />
             ) : (
               <div className="flex flex-col items-center justify-center h-full text-muted-foreground gap-3">
                 <Plug size={48} className="opacity-30" />
@@ -668,6 +772,49 @@ export function PluginsManager() {
           </div>
         </div>
       )}
+
+      {/* File preview dialog */}
+      <Dialog open={!!filePreview || previewLoading} onOpenChange={(open) => { if (!open) setFilePreview(null); }}>
+        <DialogContent className="max-w-3xl max-h-[80vh]">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <File size={16} className="text-muted-foreground" />
+              {filePreview?.name || 'Loading...'}
+            </DialogTitle>
+            {filePreview && (
+              <DialogDescription className="font-mono text-xs truncate">
+                {filePreview.path}
+                {filePreview.directory && ' (directory)'}
+              </DialogDescription>
+            )}
+          </DialogHeader>
+          {previewLoading && !filePreview ? (
+            <div className="flex items-center justify-center py-12">
+              <SpinnerGap size={20} className="animate-spin text-muted-foreground" />
+              <span className="ml-2 text-xs text-muted-foreground">Loading file...</span>
+            </div>
+          ) : filePreview ? (
+            <div className="overflow-hidden">
+              {/* Directory file list */}
+              {filePreview.directory && filePreview.children && filePreview.children.length > 0 && (
+                <div className="flex flex-wrap gap-1 mb-3 pb-2">
+                  {filePreview.children.map((child) => (
+                    <Badge key={child.name} variant={child.isDirectory ? 'secondary' : 'outline'} className="text-[10px]">
+                      {child.isDirectory ? '📁' : '📄'} {child.name}
+                    </Badge>
+                  ))}
+                </div>
+              )}
+              {/* File content */}
+              {filePreview.content ? (
+                <pre className="text-xs font-mono whitespace-pre-wrap overflow-auto max-h-[50vh] leading-relaxed">{filePreview.content}</pre>
+              ) : (
+                <div className="py-12 text-center text-sm text-muted-foreground">No readable files found in this directory</div>
+              )}
+            </div>
+          ) : null}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
@@ -677,36 +824,57 @@ function PluginDetailView({
   onClose,
   onToggle,
   onBlock,
+  onOpenFile,
   actionLoading,
 }: {
   plugin: PluginDetailData;
   onClose: () => void;
   onToggle: (plugin: PluginInfo, enabled: boolean) => void;
   onBlock: (plugin: PluginInfo) => void;
+  onOpenFile: (dirName: string, itemName: string) => void;
   actionLoading: string | null;
 }) {
-  const [expanded, setExpanded] = useState<'skills' | 'commands' | 'agents' | null>('skills');
+  const [expanded, setExpanded] = useState<string | null>('skills');
   const isLoading = actionLoading === `${plugin.name}@${plugin.marketplace}`;
+
+  // Compute total stats from directories
+  const totalItems = (plugin.directories || []).reduce((sum, d) => sum + d.count, 0);
 
   return (
     <div className="flex flex-col h-full overflow-hidden">
       {/* Header */}
-      <div className="shrink-0 border-b border-border/50 px-6 pt-4 pb-3">
+      <div className="shrink-0 border-b border-border/50 px-6 pt-4 pb-4">
         <div className="flex items-start justify-between">
           <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-wrap">
               <Plug size={18} className="text-muted-foreground" />
               <h2 className="text-lg font-semibold">{plugin.name}</h2>
+              {plugin.version && (
+                <Badge variant="outline" className="text-xs">v{plugin.version}</Badge>
+              )}
+              {plugin.scope === 'project' && (
+                <Badge variant="outline" className="text-xs">Project</Badge>
+              )}
               {plugin.blocked && (
                 <Badge variant="destructive">Blocked</Badge>
               )}
             </div>
             <p className="text-sm text-muted-foreground mt-1">{plugin.description}</p>
-            <div className="flex items-center gap-2 mt-2">
-              <Badge variant="outline">{plugin.marketplace === 'external' ? 'External' : plugin.marketplace}</Badge>
+            <div className="flex items-center gap-2 mt-2 flex-wrap">
+              <Badge variant="outline">{sourceLabel(plugin.marketplace)}</Badge>
+              {plugin.installedAt && (
+                <span className="text-xs text-muted-foreground flex items-center gap-1">
+                  <DownloadSimple size={11} />{formatRelativeTime(plugin.installedAt)}安装
+                </span>
+              )}
+              {plugin.lastUpdated && (
+                <span className="text-xs text-muted-foreground flex items-center gap-1">
+                  <Clock size={11} />{formatRelativeTime(plugin.lastUpdated)}更新
+                </span>
+              )}
               {!plugin.blocked && (
                 <div className="flex items-center gap-2">
-                  <span className="text-xs text-muted-foreground">{plugin.enabled ? 'Enabled' : 'Disabled'}</span>
+                  <span className="text-xs text-muted-foreground">{plugin.enabled ? '已启用' : '已禁用'}</span>
                   <Switch checked={plugin.enabled} disabled={isLoading} onCheckedChange={(checked) => onToggle(plugin, checked)} />
                 </div>
               )}
@@ -730,43 +898,59 @@ function PluginDetailView({
             </Button>
           </div>
         </div>
-        <p className="text-xs text-muted-foreground font-mono mt-2 truncate">{plugin.path}</p>
+
+        {/* Stats summary */}
+        {totalItems > 0 && (
+          <div className="flex gap-3 mt-3 flex-wrap">
+            {(plugin.directories || []).map((dir) => {
+              const meta = DIR_META[dir.name];
+              if (!meta || dir.count === 0) return null;
+              const Icon = meta.icon;
+              return (
+                <div key={dir.name} className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-muted/50 text-xs">
+                  <Icon size={13} className="text-muted-foreground" />
+                  <span className="font-medium">{dir.count}</span>
+                  <span className="text-muted-foreground">{meta.label}</span>
+                </div>
+              );
+            })}
+          </div>
+        )}
+
+        <p className="text-xs text-muted-foreground font-mono mt-3 truncate">{plugin.path}</p>
       </div>
 
       {/* Content */}
       <div className="flex-1 overflow-y-auto min-h-0 p-6">
         <div className="space-y-4">
-          {/* Skills */}
-          <PluginSection
-            title="Skills"
-            icon={Lightning}
-            items={plugin.skills}
-            expanded={expanded === 'skills'}
-            onToggle={() => setExpanded(expanded === 'skills' ? null : 'skills')}
-          />
+          {/* Dynamic directory sections */}
+          {plugin.directories?.map((dir) => {
+            const meta = DIR_META[dir.name];
+            if (!meta) return null;
+            const dirItems = dir.name === 'skills'
+              ? plugin.skills
+              : dir.name === 'commands'
+                ? plugin.commands
+                : dir.name === 'agents'
+                  ? plugin.agents
+                  : (dir.items || []).map((name) => ({ name, description: '' }));
+            return (
+              <PluginSection
+                key={dir.name}
+                title={meta.label}
+                icon={meta.icon}
+                items={dirItems}
+                expanded={expanded === dir.name}
+                onToggle={() => setExpanded(expanded === dir.name ? null : dir.name)}
+                onOpenItem={(itemName) => onOpenFile(dir.name, itemName)}
+              />
+            );
+          })}
 
-          {/* Commands */}
-          <PluginSection
-            title="Commands"
-            icon={Terminal}
-            items={plugin.commands}
-            expanded={expanded === 'commands'}
-            onToggle={() => setExpanded(expanded === 'commands' ? null : 'commands')}
-          />
-
-          {/* Agents */}
-          <PluginSection
-            title="Agents"
-            icon={GameController}
-            items={plugin.agents}
-            expanded={expanded === 'agents'}
-            onToggle={() => setExpanded(expanded === 'agents' ? null : 'agents')}
-          />
-
-          {plugin.skills.length === 0 && plugin.commands.length === 0 && plugin.agents.length === 0 && (
+          {(!plugin.directories || plugin.directories.length === 0) && (
             <div className="flex flex-col items-center justify-center py-12 text-muted-foreground gap-2">
               <Info size={24} className="opacity-40" />
-              <p className="text-xs">No skills, commands, or agents found</p>
+              <p className="text-xs">No content directories found</p>
             </div>
           )}
         </div>
@@ -781,12 +965,14 @@ function PluginSection({
   items,
   expanded,
   onToggle,
+  onOpenItem,
 }: {
   title: string;
   icon: React.ElementType;
   items: { name: string; description: string }[];
   expanded: boolean;
   onToggle: () => void;
+  onOpenItem?: (name: string) => void;
 }) {
   if (items.length === 0) return null;
 
@@ -807,7 +993,14 @@ function PluginSection({
         <CardContent className="pt-0 pb-3">
           <div className="space-y-2">
             {items.map((item) => (
-              <div key={item.name} className="flex items-start gap-2 px-3 py-2 rounded-md bg-muted/50">
+              <button
+                key={item.name}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onOpenItem?.(item.name);
+                }}
+                className="w-full flex items-start gap-2 px-3 py-2 rounded-md bg-muted/50 hover:bg-muted transition-colors text-left"
+              >
                 <ArrowRight size={12} className="text-muted-foreground mt-0.5 shrink-0" />
                 <div className="min-w-0">
                   <p className="text-sm font-medium">{item.name}</p>
@@ -815,7 +1008,7 @@ function PluginSection({
                     <p className="text-xs text-muted-foreground">{item.description}</p>
                   )}
                 </div>
-              </div>
+              </button>
             ))}
           </div>
         </CardContent>

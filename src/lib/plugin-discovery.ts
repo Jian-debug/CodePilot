@@ -28,6 +28,7 @@ import type { PluginInfo } from '@/types';
 
 interface PluginManifest {
   name: string;
+  version?: string;
   description?: string;
   author?: { name: string; url?: string };
   commands?: unknown;
@@ -43,16 +44,219 @@ interface Blocklist {
   plugins: BlocklistEntry[];
 }
 
+interface PluginDirectoryEntry {
+  name: string;
+  count: number;
+  items: string[];
+}
+
 interface DiscoveredPlugin {
   name: string;
   description: string;
   author?: { name: string; url?: string };
   path: string;
   marketplace: string;
-  location: 'plugins' | 'external_plugins';
+  location: 'plugins' | 'external_plugins' | 'cache';
   hasCommands: boolean;
   hasSkills: boolean;
   hasAgents: boolean;
+  hasHooks: boolean;
+  skillCount: number;
+  commandCount: number;
+  agentCount: number;
+  hookCount: number;
+  skillNames: string[];
+  commandNames: string[];
+  agentNames: string[];
+  hookNames: string[];
+  directories: PluginDirectoryEntry[];
+  version?: string;
+  lastUpdated?: string;
+  installedAt?: string;
+  scope?: 'user' | 'project';
+}
+
+/**
+ * Read installed_plugins.json — the authoritative record of installed plugins.
+ * Format: { "marketplace-name": { source: { source, repo? }, installLocation, lastUpdated } }
+ */
+interface InstalledPluginEntry {
+  source: { source: string; repo?: string; path?: string };
+  installLocation: string;
+  lastUpdated?: string;
+}
+
+interface KnownPluginVersionEntry {
+  scope: 'user' | 'project';
+  projectPath?: string;
+  installPath: string;
+  version: string;
+  installedAt: string;
+  lastUpdated: string;
+  gitCommitSha: string;
+}
+
+interface KnownMarketplacesData {
+  version: number;
+  plugins: Record<string, KnownPluginVersionEntry[]>;
+}
+
+function readInstalledPlugins(): Record<string, InstalledPluginEntry> {
+  const installedPath = path.join(os.homedir(), '.claude', 'plugins', 'installed_plugins.json');
+  return readJsonFile(installedPath) as Record<string, InstalledPluginEntry>;
+}
+
+function readKnownMarketplaces(): KnownMarketplacesData {
+  const kmPath = path.join(os.homedir(), '.claude', 'plugins', 'known_marketplaces.json');
+  return readJsonFile(kmPath) as unknown as KnownMarketplacesData;
+}
+
+/**
+ * Extract version from a cache install path like:
+ *   ~/.claude/plugins/cache/{market}/{plugin}/{version}/
+ * Falls back to checking installed_plugins.json for the marketplace entry.
+ */
+function extractVersionFromCache(pluginName: string, marketplace: string): { version?: string; lastUpdated?: string; scope?: string } {
+  const cacheDir = path.join(os.homedir(), '.claude', 'plugins', 'cache');
+  if (!fs.existsSync(cacheDir)) return {};
+
+  // Try: cache/{marketplace}/{pluginName}/{version}/
+  const pluginCacheDir = path.join(cacheDir, marketplace, pluginName);
+  if (fs.existsSync(pluginCacheDir)) {
+    try {
+      const versions = fs.readdirSync(pluginCacheDir);
+      for (const ver of versions) {
+        const verDir = path.join(pluginCacheDir, ver);
+        if (fs.statSync(verDir).isDirectory() && /^\d+\./.test(ver)) {
+          return { version: ver };
+        }
+      }
+    } catch { /* ignore */ }
+  }
+
+  // Also try: cache/{marketplace}/{version}/ (flat, no plugin sub-dir)
+  const flatCacheDir = path.join(cacheDir, marketplace);
+  if (fs.existsSync(flatCacheDir)) {
+    try {
+      const entries = fs.readdirSync(flatCacheDir);
+      for (const entry of entries) {
+        const entryDir = path.join(flatCacheDir, entry);
+        if (!fs.statSync(entryDir).isDirectory()) continue;
+        if (/^\d+\./.test(entry)) {
+          return { version: entry };
+        }
+        // Check sub-entries for version
+        try {
+          const subEntries = fs.readdirSync(entryDir);
+          for (const sub of subEntries) {
+            const subDir = path.join(entryDir, sub);
+            if (fs.statSync(subDir).isDirectory() && /^\d+\./.test(sub)) {
+              return { version: sub };
+            }
+          }
+        } catch { /* ignore */ }
+      }
+    } catch { /* ignore */ }
+  }
+
+  return {};
+}
+
+/** Enrich a DiscoveredPlugin with version and metadata from installed_plugins.json and known_marketplaces.json */
+function enrichPluginMetadata(plugin: DiscoveredPlugin, installed: Record<string, InstalledPluginEntry>, known: KnownMarketplacesData): void {
+  // Try to find matching entry in known_marketplaces.json
+  // Keys are like "superpowers@superpowers-marketplace" or "claude-mem@thedotmack"
+  const pluginKey = `${plugin.name}@${plugin.marketplace}`;
+  const knownEntry = known.plugins?.[pluginKey];
+  if (knownEntry && knownEntry.length > 0) {
+    const latest = knownEntry[0]; // first entry is typically the latest
+    plugin.version = latest.version;
+    plugin.lastUpdated = latest.lastUpdated;
+    plugin.installedAt = latest.installedAt;
+    plugin.scope = latest.scope;
+    return;
+  }
+
+  // Fallback: try to extract version from cache directory
+  const verInfo = extractVersionFromCache(plugin.name, plugin.marketplace);
+  if (verInfo.version) {
+    plugin.version = verInfo.version;
+  }
+
+  // Try installed_plugins.json for lastUpdated
+  const installedEntry = installed[plugin.marketplace];
+  if (installedEntry?.lastUpdated) {
+    plugin.lastUpdated = installedEntry.lastUpdated;
+  }
+}
+
+/** Known plugin content directories and how to count them */
+const PLUGIN_DIRS: Array<{ key: string; label: string; mode: 'subdirs' | 'files' | 'hooks' }> = [
+  { key: 'skills', label: 'Skills', mode: 'subdirs' },
+  { key: 'commands', label: 'Commands', mode: 'subdirs' },
+  { key: 'agents', label: 'Agents', mode: 'subdirs' },
+  { key: 'hooks', label: 'Hooks', mode: 'hooks' },
+  { key: 'scripts', label: 'Scripts', mode: 'files' },
+  { key: 'modes', label: 'Modes', mode: 'subdirs' },
+  { key: 'docs', label: 'Docs', mode: 'subdirs' },
+  { key: 'packages', label: 'Packages', mode: 'subdirs' },
+  { key: 'ui', label: 'UI', mode: 'subdirs' },
+  { key: 'tests', label: 'Tests', mode: 'subdirs' },
+];
+
+/** Scan all known content directories in a plugin */
+function scanAllDirectories(pluginDir: string): PluginDirectoryEntry[] {
+  const results: PluginDirectoryEntry[] = [];
+  for (const { key, mode } of PLUGIN_DIRS) {
+    const dirPath = path.join(pluginDir, key);
+    if (!fs.existsSync(dirPath)) continue;
+    const items: string[] = [];
+
+    if (mode === 'subdirs') {
+      try {
+        const entries = fs.readdirSync(dirPath);
+        items.push(...entries.filter((e) => fs.statSync(path.join(dirPath, e)).isDirectory()));
+      } catch { /* ignore */ }
+    } else if (mode === 'files') {
+      try {
+        const entries = fs.readdirSync(dirPath);
+        items.push(...entries.filter((e) => fs.statSync(path.join(dirPath, e)).isFile() && !e.startsWith('.')));
+      } catch { /* ignore */ }
+    } else if (mode === 'hooks') {
+      // Count event types from hooks.json + subdirectory names
+      const hooksJsonPath = path.join(dirPath, 'hooks.json');
+      if (fs.existsSync(hooksJsonPath)) {
+        try {
+          const raw = fs.readFileSync(hooksJsonPath, 'utf-8');
+          const data = JSON.parse(raw);
+          if (data.hooks && typeof data.hooks === 'object') {
+            items.push(...Object.keys(data.hooks));
+          }
+        } catch { /* ignore */ }
+      }
+      try {
+        const entries = fs.readdirSync(dirPath);
+        for (const entry of entries) {
+          if (entry === 'hooks.json' || entry.startsWith('hooks-') || entry.startsWith('.')) continue;
+          const p = path.join(dirPath, entry);
+          if (fs.statSync(p).isDirectory() && !items.includes(entry)) {
+            items.push(entry);
+          }
+        }
+      } catch { /* ignore */ }
+    }
+
+    if (items.length > 0) {
+      results.push({ name: key, count: items.length, items });
+    }
+  }
+  return results;
+}
+
+/** Extract counts/names from scanned directories for backward-compatible fields */
+function extractDirInfo(dirs: PluginDirectoryEntry[], key: string): { count: number; names: string[] } {
+  const entry = dirs.find((d) => d.name === key);
+  return { count: entry?.count ?? 0, names: entry?.items ?? [] };
 }
 
 /**
@@ -265,36 +469,55 @@ export function discoverMarketplacePlugins(): DiscoveredPlugin[] {
   const plugins: DiscoveredPlugin[] = [];
   const claudeDir = path.join(os.homedir(), '.claude', 'plugins');
 
-  // Scan marketplaces: ~/.claude/plugins/marketplaces/{mkt}/plugins/*/
+  // Load metadata sources for enrichment
+  const installedPlugins = readInstalledPlugins();
+  const knownMarketplaces = readKnownMarketplaces();
+
+  // Scan marketplaces: ~/.claude/plugins/marketplaces/{mkt}/*/
+  // Each marketplace directory contains plugin directories directly
   const marketplacesDir = path.join(claudeDir, 'marketplaces');
   if (fs.existsSync(marketplacesDir)) {
     try {
       const marketplaces = fs.readdirSync(marketplacesDir);
       for (const mkt of marketplaces) {
-        const pluginsDir = path.join(marketplacesDir, mkt, 'plugins');
-        if (!fs.existsSync(pluginsDir)) continue;
+        const mktDir = path.join(marketplacesDir, mkt);
+        if (!fs.statSync(mktDir).isDirectory()) continue;
 
         try {
-          const pluginNames = fs.readdirSync(pluginsDir);
+          const pluginNames = fs.readdirSync(mktDir);
           for (const pluginName of pluginNames) {
-            const pluginDir = path.join(pluginsDir, pluginName);
+            const pluginDir = path.join(mktDir, pluginName);
             if (!fs.statSync(pluginDir).isDirectory()) continue;
 
             const manifest = readManifest(pluginDir);
-            const name = manifest?.name || pluginName;
-            const description = manifest?.description || `Plugin: ${name}`;
+            // Skip if no manifest found
+            if (!manifest) continue;
 
-            plugins.push({
+            const name = manifest.name || pluginName;
+            const description = manifest.description || `Plugin: ${name}`;
+            const directories = scanAllDirectories(pluginDir);
+            const sc = extractDirInfo(directories, 'skills');
+            const cc = extractDirInfo(directories, 'commands');
+            const ac = extractDirInfo(directories, 'agents');
+            const hc = extractDirInfo(directories, 'hooks');
+
+            const plugin: DiscoveredPlugin = {
               name,
               description,
-              author: manifest?.author,
+              author: manifest.author,
               path: path.resolve(pluginDir),
               marketplace: mkt,
               location: 'plugins',
-              hasCommands: fs.existsSync(path.join(pluginDir, 'commands')),
-              hasSkills: fs.existsSync(path.join(pluginDir, 'skills')),
-              hasAgents: fs.existsSync(path.join(pluginDir, 'agents')),
-            });
+              hasCommands: cc.count > 0,
+              hasSkills: sc.count > 0,
+              hasAgents: ac.count > 0,
+              hasHooks: hc.count > 0,
+              skillCount: sc.count, commandCount: cc.count, agentCount: ac.count, hookCount: hc.count,
+              skillNames: sc.names, commandNames: cc.names, agentNames: ac.names, hookNames: hc.names,
+              directories,
+            };
+            enrichPluginMetadata(plugin, installedPlugins, knownMarketplaces);
+            plugins.push(plugin);
           }
         } catch {
           // ignore per-marketplace errors
@@ -302,6 +525,93 @@ export function discoverMarketplacePlugins(): DiscoveredPlugin[] {
       }
     } catch {
       // ignore
+    }
+  }
+
+  // Scan cache: ~/.claude/plugins/cache/{market}/{plugin}/{version}/
+  // Use the latest version for each plugin+market combination
+  const cacheDir = path.join(claudeDir, 'cache');
+  if (fs.existsSync(cacheDir)) {
+    try {
+      const cacheMarkets = fs.readdirSync(cacheDir);
+      // Track best version per "market/plugin" key
+      const cachePlugins = new Map<string, { dir: string; version: string }>();
+      for (const market of cacheMarkets) {
+        const marketDir = path.join(cacheDir, market);
+        if (!fs.statSync(marketDir).isDirectory()) continue;
+
+        try {
+          const pluginNames = fs.readdirSync(marketDir);
+          for (const pluginName of pluginNames) {
+            const pluginDir = path.join(marketDir, pluginName);
+            if (!fs.statSync(pluginDir).isDirectory()) continue;
+
+            // Find version subdirectories
+            try {
+              const versions = fs.readdirSync(pluginDir);
+              for (const ver of versions) {
+                const verDir = path.join(pluginDir, ver);
+                if (!fs.statSync(verDir).isDirectory()) continue;
+                // Accept version if it has a manifest OR has actual content directories
+                const hasManifest = !!readManifest(verDir);
+                const dirs = scanAllDirectories(verDir);
+                const sc = extractDirInfo(dirs, 'skills');
+                const cc = extractDirInfo(dirs, 'commands');
+                const ac = extractDirInfo(dirs, 'agents');
+                if (hasManifest || sc.count > 0 || cc.count > 0 || ac.count > 0) {
+                  const key = `${market}/${pluginName}`;
+                  const existing = cachePlugins.get(key);
+                  if (!existing || ver > existing.version) {
+                    cachePlugins.set(key, { dir: verDir, version: ver });
+                  }
+                }
+              }
+            } catch {
+              // ignore
+            }
+          }
+        } catch {
+          // ignore per-market errors
+        }
+      }
+
+      // Add cached plugins (only if not already found in marketplaces)
+      const existingPaths = new Set(plugins.map((p) => p.path));
+      for (const [key, { dir, version }] of cachePlugins) {
+        const resolvedPath = path.resolve(dir);
+        if (existingPaths.has(resolvedPath)) continue;
+
+        const manifest = readManifest(dir);
+        const name = manifest?.name || key.split('/')[1];
+        const description = manifest?.description || `Plugin: ${name}`;
+        const market = key.split('/')[0];
+        const directories = scanAllDirectories(dir);
+        const sc = extractDirInfo(directories, 'skills');
+        const cc = extractDirInfo(directories, 'commands');
+        const ac = extractDirInfo(directories, 'agents');
+        const hc = extractDirInfo(directories, 'hooks');
+
+        const plugin: DiscoveredPlugin = {
+          name,
+          description,
+          author: manifest?.author,
+          path: resolvedPath,
+          marketplace: market,
+          location: 'cache',
+          hasCommands: cc.count > 0,
+          hasSkills: sc.count > 0,
+          hasAgents: ac.count > 0,
+          hasHooks: hc.count > 0,
+          skillCount: sc.count, commandCount: cc.count, agentCount: ac.count, hookCount: hc.count,
+          skillNames: sc.names, commandNames: cc.names, agentNames: ac.names, hookNames: hc.names,
+          directories,
+          version,
+        };
+        enrichPluginMetadata(plugin, installedPlugins, knownMarketplaces);
+        plugins.push(plugin);
+      }
+    } catch {
+      // ignore cache scan errors
     }
   }
 
@@ -317,18 +627,29 @@ export function discoverMarketplacePlugins(): DiscoveredPlugin[] {
         const manifest = readManifest(pluginDir);
         const name = manifest?.name || pluginName;
         const description = manifest?.description || `Plugin: ${name}`;
+        const directories = scanAllDirectories(pluginDir);
+        const sc = extractDirInfo(directories, 'skills');
+        const cc = extractDirInfo(directories, 'commands');
+        const ac = extractDirInfo(directories, 'agents');
+        const hc = extractDirInfo(directories, 'hooks');
 
-        plugins.push({
+        const plugin: DiscoveredPlugin = {
           name,
           description,
           author: manifest?.author,
           path: path.resolve(pluginDir),
           marketplace: 'external',
           location: 'external_plugins',
-          hasCommands: fs.existsSync(path.join(pluginDir, 'commands')),
-          hasSkills: fs.existsSync(path.join(pluginDir, 'skills')),
-          hasAgents: fs.existsSync(path.join(pluginDir, 'agents')),
-        });
+          hasCommands: cc.count > 0,
+          hasSkills: sc.count > 0,
+          hasAgents: ac.count > 0,
+          hasHooks: hc.count > 0,
+          skillCount: sc.count, commandCount: cc.count, agentCount: ac.count, hookCount: hc.count,
+          skillNames: sc.names, commandNames: cc.names, agentNames: ac.names, hookNames: hc.names,
+          directories,
+        };
+        enrichPluginMetadata(plugin, installedPlugins, knownMarketplaces);
+        plugins.push(plugin);
       }
     } catch {
       // ignore
@@ -372,6 +693,20 @@ export function getPluginInfoList(cwd?: string): PluginInfo[] {
       hasCommands: plugin.hasCommands,
       hasSkills: plugin.hasSkills,
       hasAgents: plugin.hasAgents,
+      hasHooks: plugin.hasHooks,
+      skillCount: plugin.skillCount,
+      commandCount: plugin.commandCount,
+      agentCount: plugin.agentCount,
+      hookCount: plugin.hookCount,
+      skillNames: plugin.skillNames,
+      commandNames: plugin.commandNames,
+      agentNames: plugin.agentNames,
+      hookNames: plugin.hookNames,
+      directories: plugin.directories,
+      version: plugin.version,
+      lastUpdated: plugin.lastUpdated,
+      installedAt: plugin.installedAt,
+      scope: plugin.scope,
       blocked: isBlocked,
       enabled,
     };

@@ -15,6 +15,7 @@ import {
   Image,
   WifiHigh,
   Gear,
+  Storefront,
 } from "@/components/ui/icon";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -423,6 +424,7 @@ export function ChatListPanel({ open, width, hasUpdate, readyToInstall }: ChatLi
 
   const navItems = [
     { href: "/skills", label: t('nav.skills' as TranslationKey), icon: Lightning },
+    { href: "/plugins", label: t('nav.plugins' as TranslationKey), icon: Storefront },
     { href: "/mcp", label: t('nav.mcp' as TranslationKey), icon: Plug },
     { href: "/cli-tools", label: t('nav.cliTools' as TranslationKey), icon: Terminal },
     { href: "/gallery", label: t('nav.gallery' as TranslationKey), icon: Image },
