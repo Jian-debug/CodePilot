@@ -212,6 +212,26 @@ export function ChatView({ sessionId, initialMessages = [], initialHasMore = fal
     await manager.startFromAPI(sessionId, objective, config, modelId);
   }, [sessionId]);
 
+  // ── Swarm completion: refresh messages ──
+  useEffect(() => {
+    const handler = async (e: Event) => {
+      const detail = (e as CustomEvent).detail;
+      if (detail?.sessionId !== sessionId) return;
+      // Fetch latest messages from API to include swarm-generated ones
+      try {
+        const res = await fetch(`/api/chat/sessions/${sessionId}/messages`);
+        if (!res.ok) return;
+        const data = await res.json();
+        const msgs: Message[] = data.messages ?? [];
+        if (msgs.length > messages.length) {
+          setMessages(msgs);
+        }
+      } catch { /* best effort */ }
+    };
+    window.addEventListener('swarm:completed', handler);
+    return () => window.removeEventListener('swarm:completed', handler);
+  }, [sessionId, messages.length]);
+
   // ── Skill nudge banner ──
   // Listens for 'skill-nudge' window events dispatched by stream-session-manager
   // when the agent loop completes a complex multi-step workflow.
