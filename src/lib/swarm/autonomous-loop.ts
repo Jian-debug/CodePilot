@@ -1,13 +1,13 @@
 import { streamClaude } from '@/lib/claude-client';
-import { addMessage, getMessages, getSession, getSessionSummary } from '@/lib/db';
-import type { SwarmConfig, SwarmAgent, SwarmTask, SwarmLogEntry, SwarmAgentStatus, SwarmTaskStatus } from '@/types';
+import { addMessage, getSession } from '@/lib/db';
+import type { SwarmConfig, SwarmLogEntry, SwarmAgentStatus, SwarmTaskStatus } from '@/types';
 
 export interface LoopCallbacks {
   onAgentStatus: (agentId: string, status: SwarmAgentStatus, work?: string, progress?: number) => void;
   onTaskUpdate: (taskId: string, status: SwarmTaskStatus) => void;
   onLog: (entry: Omit<SwarmLogEntry, 'id' | 'timestamp'>) => void;
   onIteration: (iteration: number) => void;
-  onToolCall: (agentId: string) => void;
+  onToolCall: (agentId: string, toolName: string) => void;
   onComplete: (error?: string) => void;
   shouldStop: () => boolean;
 }
@@ -23,13 +23,13 @@ export async function runAutonomousLoop(params: {
   sessionId: string;
   objective: string;
   config: SwarmConfig;
+  abortSignal?: AbortSignal;
   callbacks: LoopCallbacks;
 }): Promise<void> {
-  const { sessionId, objective, config, callbacks } = params;
+  const { sessionId, objective, config, abortSignal, callbacks } = params;
   const { maxIterations, autoRetry } = config;
 
   const agentId = 'autonomous';
-  const agentName = 'Autonomous';
 
   // Build the system prompt for autonomous mode
   const systemPrompt = `You are working in autonomous mode. Your objective is:
@@ -50,6 +50,12 @@ If you encounter errors, try to recover. You have up to ${maxIterations} iterati
   let iteration = 0;
   let taskComplete = false;
   let lastResponseText = '';
+
+  // Local abort controller — linked to external abortSignal if provided
+  const localAbort = new AbortController();
+  if (abortSignal) {
+    abortSignal.addEventListener('abort', () => localAbort.abort());
+  }
 
   while (iteration < maxIterations && !taskComplete) {
     if (callbacks.shouldStop()) {
@@ -81,26 +87,22 @@ If you encounter errors, try to recover. You have up to ${maxIterations} iterati
         sessionId,
         sdkSessionId: session.sdk_session_id || undefined,
         model: session.model || undefined,
+        systemPrompt,
         workingDirectory: session.working_directory || undefined,
-        abortController: new AbortController(),
+        abortController: localAbort,
         permissionMode: 'acceptEdits',
-        bypassPermissions: false,
+        bypassPermissions: true,
         autoTrigger: false,
-        onRuntimeStatusChange: (status: string) => {
-          if (status === 'waiting_permission') {
-            callbacks.onAgentStatus(agentId, 'running', 'Waiting for permission...', undefined);
-          }
-        },
       });
 
       // Read the stream and collect events
       const reader = stream.getReader();
       let textBuffer = '';
-      let toolCallCount = 0;
 
       try {
         while (true) {
-          if (callbacks.shouldStop()) {
+          if (callbacks.shouldStop() || abortSignal?.aborted) {
+            localAbort.abort();
             callbacks.onComplete('User stopped the swarm');
             return;
           }
@@ -116,15 +118,13 @@ If you encounter errors, try to recover. You have up to ${maxIterations} iterati
               switch (event.type) {
                 case 'text':
                   textBuffer += event.data;
-                  // Update progress based on text length (rough estimate)
                   const progress = Math.min(90, Math.floor((textBuffer.length / 2000) * 90));
                   callbacks.onAgentStatus(agentId, 'running', `Writing response (${textBuffer.length} chars)`, progress);
                   break;
                 case 'tool_use':
-                  toolCallCount++;
-                  callbacks.onToolCall(agentId);
                   try {
                     const toolData = JSON.parse(event.data);
+                    callbacks.onToolCall(agentId, toolData.name);
                     callbacks.onLog({ agentId, message: `Calling ${toolData.name}...`, type: 'tool_call' });
                     callbacks.onAgentStatus(agentId, 'running', `Tool: ${toolData.name}`, undefined);
                   } catch { /* ignore parse errors */ }
@@ -183,6 +183,11 @@ If you encounter errors, try to recover. You have up to ${maxIterations} iterati
         await new Promise(r => setTimeout(r, 500));
       }
     } catch (error) {
+      if (abortSignal?.aborted || localAbort.signal.aborted) {
+        callbacks.onComplete('User stopped the swarm');
+        return;
+      }
+
       const errMsg = error instanceof Error ? error.message : String(error);
       callbacks.onLog({ agentId, message: `Iteration ${iteration} failed: ${errMsg}`, type: 'error' });
 
@@ -190,7 +195,9 @@ If you encounter errors, try to recover. You have up to ${maxIterations} iterati
         callbacks.onComplete(`Iteration ${iteration} failed: ${errMsg}`);
         return;
       }
-      // autoRetry: continue to next iteration
+
+      // Rate-limit backoff between retries
+      await new Promise(r => setTimeout(r, 1000));
     }
   }
 

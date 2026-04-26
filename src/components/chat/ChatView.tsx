@@ -1029,7 +1029,7 @@ export function ChatView({ sessionId, initialMessages = [], initialHasMore = fal
         hasMessages={messages.length > 0}
       />
       <ChatComposerActionBar
-        left={<><ModeIndicator mode={mode} onModeChange={handleModeChange} disabled={isStreaming} /><SwarmButton sessionId={sessionId} objective={lastUserMessage} onStartSwarm={handleStartSwarm} disabled={isStreaming || !lastUserMessage} /><ImageGenToggle /></>}
+        left={<><ModeIndicator mode={mode} onModeChange={handleModeChange} disabled={isStreaming} /><SwarmButton objective={lastUserMessage} onStartSwarm={handleStartSwarm} disabled={isStreaming || !lastUserMessage} /><ImageGenToggle /></>}
         center={
           <ChatPermissionSelector
             sessionId={sessionId}

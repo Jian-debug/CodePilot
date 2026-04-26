@@ -1,16 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server';
 import type { SwarmConfig } from '@/types';
 import { runAutonomousLoop } from '@/lib/swarm/autonomous-loop';
+import { acquireSessionLock, releaseSessionLock, setSessionRuntimeStatus } from '@/lib/db';
+import crypto from 'crypto';
 
-const runtime = 'nodejs';
-const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
+
+/** Module-level map: sessionId -> { stopped, abortController } for controlling running swarms */
+const ACTIVE_SWARMS = new Map<string, { stopped: boolean; abortController: AbortController }>();
 
 /**
  * POST /api/chat/swarm — Start a Swarm session
  *
  * For autonomous topology, this runs the autonomous loop and streams
- * SSE events with progress updates. Other topologies (hierarchical,
- * sequential) return a placeholder for now.
+ * SSE events with progress updates. Other topologies return a placeholder.
  */
 export async function POST(request: NextRequest) {
   try {
@@ -29,17 +33,31 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Prevent concurrent chat requests on this session
+    const lockId = crypto.randomBytes(8).toString('hex');
+    const lockAcquired = acquireSessionLock(sessionId, lockId, `swarm-${process.pid}`, 600);
+    if (!lockAcquired) {
+      return NextResponse.json(
+        { error: 'Session is busy processing another request', code: 'SESSION_BUSY' },
+        { status: 409 },
+      );
+    }
+    setSessionRuntimeStatus(sessionId, 'running');
+
     // For autonomous topology, run the loop and stream SSE
     if (config.topology === 'autonomous') {
-      return runAutonomousSSE(sessionId, objective, config);
+      return runAutonomousSSE(sessionId, objective, config, lockId);
     }
 
-    // Other topologies: return placeholder
+    // Release lock immediately for non-autonomous (placeholder) responses
+    try { releaseSessionLock(sessionId, lockId); } catch { /* best effort */ }
+    setSessionRuntimeStatus(sessionId, 'idle');
+
     return NextResponse.json({
       message: `Topology '${config.topology}' not yet implemented. Only 'autonomous' is supported in v1.`,
       swarmSession: {
         sessionId,
-        active: true,
+        active: false,
         config,
         currentIteration: 0,
         startedAt: Date.now(),
@@ -58,9 +76,13 @@ function runAutonomousSSE(
   sessionId: string,
   objective: string,
   config: SwarmConfig,
+  lockId: string,
 ): Response {
   const swarmSessionId = `swarm-${sessionId}-${Date.now()}`;
-  let stopped = false;
+
+  // Create an abort controller shared between the SSE stream and the active swarm entry
+  const abortController = new AbortController();
+  ACTIVE_SWARMS.set(sessionId, { stopped: false, abortController });
 
   const stream = new ReadableStream<string>({
     async start(controller) {
@@ -77,37 +99,50 @@ function runAutonomousSSE(
         startedAt: Date.now(),
       });
 
-      await runAutonomousLoop({
-        sessionId,
-        objective,
-        config,
-        callbacks: {
-          onAgentStatus: (agentId, status, work, progress) => {
-            enqueue('agent_status', { agentId, status, currentWork: work, progress });
+      try {
+        await runAutonomousLoop({
+          sessionId,
+          objective,
+          config,
+          abortSignal: abortController.signal,
+          callbacks: {
+            onAgentStatus: (agentId, status, work, progress) => {
+              enqueue('agent_status', { agentId, status, currentWork: work, progress });
+            },
+            onTaskUpdate: (taskId, status) => {
+              enqueue('task_update', { taskId, status });
+            },
+            onLog: (entry) => {
+              enqueue('log', entry);
+            },
+            onIteration: (iteration) => {
+              enqueue('iteration', { current: iteration, max: config.maxIterations });
+            },
+            onToolCall: (agentId, toolName) => {
+              enqueue('tool_call', { agentId, toolName });
+            },
+            onComplete: (error) => {
+              enqueue('done', { error });
+              controller.close();
+            },
+            shouldStop: () => ACTIVE_SWARMS.get(sessionId)?.stopped ?? true,
           },
-          onTaskUpdate: (taskId, status) => {
-            enqueue('task_update', { taskId, status });
-          },
-          onLog: (entry) => {
-            enqueue('log', entry);
-          },
-          onIteration: (iteration) => {
-            enqueue('iteration', { current: iteration, max: config.maxIterations });
-          },
-          onToolCall: (agentId) => {
-            enqueue('tool_call', { agentId });
-          },
-          onComplete: (error) => {
-            enqueue('done', { error });
-            controller.close();
-          },
-          shouldStop: () => stopped,
-        },
-      });
+        });
+      } finally {
+        // Clean up
+        ACTIVE_SWARMS.delete(sessionId);
+        try { releaseSessionLock(sessionId, lockId); } catch { /* best effort */ }
+        setSessionRuntimeStatus(sessionId, 'idle');
+      }
     },
 
     cancel() {
-      stopped = true;
+      // Client disconnected — stop the swarm
+      const entry = ACTIVE_SWARMS.get(sessionId);
+      if (entry) {
+        entry.stopped = true;
+        entry.abortController.abort();
+      }
     },
   });
 
@@ -123,18 +158,26 @@ function runAutonomousSSE(
 /** DELETE /api/chat/swarm — Stop a running swarm */
 export async function DELETE(req: Request) {
   try {
-    const body: { swarmSessionId: string } = await req.json();
+    const body: { sessionId: string } = await req.json();
 
-    if (!body?.swarmSessionId) {
+    if (!body?.sessionId) {
       return NextResponse.json(
-        { error: 'swarmSessionId is required' },
+        { error: 'sessionId is required' },
         { status: 400 },
       );
     }
 
-    // The actual stop happens via AbortController in the SSE stream.
-    // For v1, the stream cancel() handler sets `stopped = true`.
-    return NextResponse.json({ message: 'Swarm session stop requested' });
+    const entry = ACTIVE_SWARMS.get(body.sessionId);
+    if (!entry) {
+      return NextResponse.json(
+        { error: 'No active swarm found for this session' },
+        { status: 404 },
+      );
+    }
+
+    entry.stopped = true;
+    entry.abortController.abort();
+    return NextResponse.json({ message: 'Swarm session stopped' });
   } catch (error) {
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'Failed to stop swarm' },

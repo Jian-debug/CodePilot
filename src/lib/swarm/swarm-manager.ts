@@ -140,8 +140,19 @@ class SwarmManager {
         break;
       }
       case 'tool_call': {
-        const d = event.data as { agentId: string };
+        const d = event.data as { agentId: string; toolName?: string };
         this.incrementToolCall(d.agentId);
+        if (d.toolName) {
+          this.addLog({ agentId: d.agentId, message: `Tool call: ${d.toolName}`, type: 'tool_call' });
+        }
+        break;
+      }
+      case 'permission_request': {
+        // Log permission requests so the user can see them in the comm log
+        const d = event.data as { toolName?: string };
+        if (d.toolName) {
+          this.addLog({ agentId: 'autonomous', message: `Permission needed: ${d.toolName}`, type: 'error' });
+        }
         break;
       }
       case 'done': {
@@ -209,6 +220,7 @@ class SwarmManager {
 
   stop(error?: string): void {
     if (!this.state) return;
+    this.abort(); // Also abort any in-flight fetch
     this.state = {
       ...this.state,
       active: false,
@@ -218,7 +230,7 @@ class SwarmManager {
     this.notify();
   }
 
-  /** Stop an in-flight API request */
+  /** Abort any in-flight API request */
   abort(): void {
     this.abortController?.abort();
     this.abortController = null;

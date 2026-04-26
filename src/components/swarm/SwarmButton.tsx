@@ -28,13 +28,12 @@ const TOPOLOGIES: { id: SwarmTopology; titleKey: TranslationKey; descKey: Transl
 ];
 
 interface SwarmButtonProps {
-  sessionId: string;
   objective: string;
   onStartSwarm: (objective: string, config: SwarmConfig) => void;
   disabled?: boolean;
 }
 
-export function SwarmButton({ sessionId, objective, onStartSwarm, disabled }: SwarmButtonProps) {
+export function SwarmButton({ objective, onStartSwarm, disabled }: SwarmButtonProps) {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [topology, setTopology] = useState<SwarmTopology>('autonomous');
