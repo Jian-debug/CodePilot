@@ -193,24 +193,7 @@ export function SwarmButton({ objective, onStartSwarm, disabled }: SwarmButtonPr
 
             {/* Settings */}
             <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <span className="text-sm">{t('swarm.qualityCheck' as TranslationKey)}</span>
-                <button
-                  type="button"
-                  onClick={() => setQualityCheck(!qualityCheck)}
-                  className={cn(
-                    'relative h-5 w-9 rounded-full transition-colors',
-                    qualityCheck ? 'bg-primary' : 'bg-muted',
-                  )}
-                >
-                  <div
-                    className={cn(
-                      'absolute top-0.5 h-4 w-4 rounded-full bg-white transition-transform',
-                      qualityCheck ? 'translate-x-4' : 'translate-x-0.5',
-                    )}
-                  />
-                </button>
-              </div>
+              {/* qualityCheck hidden — v1 has no Critic logic */}
               <div className="flex items-center justify-between">
                 <span className="text-sm">{t('swarm.maxIterations' as TranslationKey)}</span>
                 <div className="flex items-center gap-2">

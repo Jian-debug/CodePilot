@@ -26,6 +26,10 @@ export function defaultAgentsForTopology(topology: SwarmTopology): SwarmAgent[] 
         status: 'idle',
         toolCallCount: 0,
       }];
+    default: {
+      const _exhaustive: never = topology;
+      throw new Error(`Unknown topology: ${topology}`);
+    }
   }
 }
 
@@ -53,11 +57,14 @@ class SwarmManager {
     };
     this.toolCallDetails = [];
     this.logBuffer = [];
+    this.resolvedModel = '';
     this.notify();
     return this.state;
   }
 
   async startFromAPI(sessionId: string, objective: string, config: SwarmConfig, modelId?: string): Promise<void> {
+    // Abort any in-progress session before starting a new one
+    this.abort();
     this.start(sessionId, config);
     this.resolvedModel = modelId || '';
     this.abortController = new AbortController();
@@ -231,9 +238,13 @@ class SwarmManager {
   stop(error?: string): void {
     if (!this.state) return;
 
-    const duration = this.state.completedAt
-      ? this.state.completedAt - (this.state.startedAt || this.state.completedAt)
-      : 0;
+    // Cancel pending RAF before computing final state
+    if (this.rafHandle) {
+      cancelAnimationFrame(this.rafHandle);
+      this.rafHandle = null;
+    }
+
+    const duration = Date.now() - (this.state.startedAt || 0);
     const toolCalls: Record<string, number> = {};
     for (const { toolName } of this.toolCallDetails) {
       toolCalls[toolName] = (toolCalls[toolName] || 0) + 1;
@@ -297,9 +308,14 @@ class SwarmManager {
 
   reset(): void {
     this.abort();
-    if (this.logBuffer.length > 0) {
-      this.flushLogBuffer();
+    if (this.rafHandle) {
+      cancelAnimationFrame(this.rafHandle);
+      this.rafHandle = null;
     }
+    // Discard buffer on reset rather than flushing
+    this.logBuffer = [];
+    this.toolCallDetails = [];
+    this.resolvedModel = '';
     this.state = null;
     this.notify();
   }

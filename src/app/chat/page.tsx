@@ -99,7 +99,14 @@ export default function NewChatPage() {
   const [swarmSessionKey, setSwarmSessionKey] = useState(0);
 
   const handleStartSwarm = useCallback(async (objective: string, config: SwarmConfig, modelId?: string) => {
-    if (!objective || !createdSessionId) return;
+    if (!createdSessionId) {
+      alert('请先发送一条消息后再启动 Swarm');
+      return;
+    }
+    if (!objective) {
+      alert('请先在输入框中输入内容');
+      return;
+    }
     const manager = getSwarmManager();
     setSwarmSessionKey(k => k + 1);
     await manager.startFromAPI(createdSessionId, objective, config, modelId);
@@ -819,7 +826,7 @@ export default function NewChatPage() {
         initialValue={prefillText}
       />
       <ChatComposerActionBar
-        left={<><ModeIndicator mode={mode} onModeChange={setMode} disabled={isStreaming} /><SwarmButton objective={prefillText} onStartSwarm={handleStartSwarm} disabled={isStreaming || !modelReady || !prefillText} /><ImageGenToggle /></>}
+        left={<><ModeIndicator mode={mode} onModeChange={setMode} disabled={isStreaming} /><SwarmButton objective={prefillText} onStartSwarm={handleStartSwarm} disabled={isStreaming || !modelReady} /><ImageGenToggle /></>}
         center={
           <ChatPermissionSelector
             permissionProfile={permissionProfile}
