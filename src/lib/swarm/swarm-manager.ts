@@ -217,10 +217,19 @@ class SwarmManager {
 
   updateTaskStatus(taskId: string, status: SwarmTaskStatus): void {
     if (!this.state) return;
-    this.state = {
-      ...this.state,
-      tasks: this.state.tasks.map(t => t.id === taskId ? { ...t, status } : t),
-    };
+    const existing = this.state.tasks.find(t => t.id === taskId);
+    if (!existing) {
+      // Auto-create task (hierarchical topology sends events before manager knows)
+      this.state = {
+        ...this.state,
+        tasks: [...this.state.tasks, { id: taskId, title: taskId, status, agentId: '' }],
+      };
+    } else {
+      this.state = {
+        ...this.state,
+        tasks: this.state.tasks.map(t => t.id === taskId ? { ...t, status } : t),
+      };
+    }
     this.notify();
   }
 

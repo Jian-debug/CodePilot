@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import type { SwarmConfig } from '@/types';
 import { runAutonomousLoop } from '@/lib/swarm/autonomous-loop';
+import { runHierarchicalLoop, type LoopCallbacks as HierarchicalCallbacks } from '@/lib/swarm/hierarchical-loop';
 import { acquireSessionLock, releaseSessionLock, setSessionRuntimeStatus } from '@/lib/db';
 // Ensure runtimes are registered (side-effect import triggers registration)
 import '@/lib/runtime';
@@ -65,7 +66,12 @@ export async function POST(request: NextRequest) {
       return runAutonomousSSE(sessionId, objective, config, lockId, resolved);
     }
 
-    // Release lock immediately for non-autonomous (placeholder) responses
+    // For hierarchical topology, run the planner-coder loop with SSE
+    if (config.topology === 'hierarchical') {
+      return runHierarchicalSSE(sessionId, objective, config, lockId, resolved);
+    }
+
+    // Release lock immediately for unsupported topologies (placeholder)
     try { releaseSessionLock(sessionId, lockId); } catch { /* best effort */ }
     setSessionRuntimeStatus(sessionId, 'idle');
 
@@ -156,6 +162,88 @@ function runAutonomousSSE(
 
     cancel() {
       // Client disconnected — stop the swarm
+      const entry = ACTIVE_SWARMS.get(sessionId);
+      if (entry) {
+        entry.stopped = true;
+        entry.abortController.abort();
+      }
+    },
+  });
+
+  return new Response(stream, {
+    headers: {
+      'Content-Type': 'text/event-stream',
+      'Cache-Control': 'no-cache',
+      'Connection': 'keep-alive',
+    },
+  });
+}
+
+function runHierarchicalSSE(
+  sessionId: string,
+  objective: string,
+  config: SwarmConfig,
+  lockId: string,
+  resolvedModel: SwarmModelResolution,
+): Response {
+  const swarmSessionId = `swarm-${sessionId}-${Date.now()}`;
+  const abortController = new AbortController();
+  ACTIVE_SWARMS.set(sessionId, { stopped: false, abortController });
+
+  const stream = new ReadableStream<string>({
+    async start(controller) {
+      const enqueue = (type: string, data: unknown) => {
+        controller.enqueue(`data: ${JSON.stringify({ type, data })}\n\n`);
+      };
+
+      enqueue('init', {
+        swarmSessionId,
+        sessionId,
+        topology: config.topology,
+        maxIterations: config.maxIterations,
+        startedAt: Date.now(),
+      });
+
+      try {
+        const callbacks: HierarchicalCallbacks = {
+          onAgentStatus: (agentId, status, work, progress) => {
+            enqueue('agent_status', { agentId, status, currentWork: work, progress });
+          },
+          onTaskUpdate: (taskId, status) => {
+            enqueue('task_update', { taskId, status });
+          },
+          onLog: (entry) => {
+            enqueue('log', entry);
+          },
+          onIteration: (iteration) => {
+            enqueue('iteration', { current: iteration, max: config.maxIterations });
+          },
+          onToolCall: (agentId, toolName) => {
+            enqueue('tool_call', { agentId, toolName });
+          },
+          onComplete: (error) => {
+            enqueue('done', { error });
+            controller.close();
+          },
+          shouldStop: () => ACTIVE_SWARMS.get(sessionId)?.stopped ?? true,
+        };
+
+        await runHierarchicalLoop({
+          sessionId,
+          objective,
+          config,
+          modelOverride: resolvedModel.upstreamModel,
+          abortSignal: abortController.signal,
+          callbacks,
+        });
+      } finally {
+        ACTIVE_SWARMS.delete(sessionId);
+        try { releaseSessionLock(sessionId, lockId); } catch { /* best effort */ }
+        setSessionRuntimeStatus(sessionId, 'idle');
+      }
+    },
+
+    cancel() {
       const entry = ACTIVE_SWARMS.get(sessionId);
       if (entry) {
         entry.stopped = true;
