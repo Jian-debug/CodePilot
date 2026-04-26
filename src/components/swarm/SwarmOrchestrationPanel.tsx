@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState, useRef, useCallback } from 'react';
-import type { SwarmState, SwarmAgent, SwarmTask, SwarmLogEntry, SwarmConfig } from '@/types';
+import type { SwarmState, SwarmAgent, SwarmTask, SwarmLogEntry, SwarmConfig, SwarmSummary, SwarmLogFilter } from '@/types';
 import { getSwarmManager } from '@/lib/swarm/swarm-manager';
 import { useTranslation } from '@/hooks/useTranslation';
 import type { TranslationKey } from '@/i18n';
@@ -41,6 +41,24 @@ const AGENT_ICONS: Record<string, string> = {
   autonomous: '🤖',
 };
 
+const LOG_FILTERS: { id: SwarmLogFilter; label: string }[] = [
+  { id: 'all', label: '全部' },
+  { id: 'tool_call', label: '工具' },
+  { id: 'error', label: '错误' },
+];
+
+function formatTime(ts: number): string {
+  const d = new Date(ts);
+  return d.toTimeString().slice(0, 8); // HH:mm:ss
+}
+
+function formatDuration(ms: number): string {
+  const s = Math.floor(ms / 1000);
+  const m = Math.floor(s / 60);
+  const sec = s % 60;
+  return `${m}:${String(sec).padStart(2, '0')}`;
+}
+
 interface SwarmOrchestrationPanelProps {
   sessionId: string;
 }
@@ -48,6 +66,8 @@ interface SwarmOrchestrationPanelProps {
 export function SwarmOrchestrationPanel({ sessionId }: SwarmOrchestrationPanelProps) {
   const { t } = useTranslation();
   const [state, setState] = useState<SwarmState | null>(null);
+  const [logFilter, setLogFilter] = useState<SwarmLogFilter>('all');
+  const [autoScroll, setAutoScroll] = useState(true);
   const logRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -57,7 +77,6 @@ export function SwarmOrchestrationPanel({ sessionId }: SwarmOrchestrationPanelPr
         setState(s);
       }
     });
-    // Initial state
     const current = manager.getState();
     if (current && current.sessionId === sessionId) {
       setState(current);
@@ -65,14 +84,14 @@ export function SwarmOrchestrationPanel({ sessionId }: SwarmOrchestrationPanelPr
     return unsubscribe;
   }, [sessionId]);
 
+  // Auto-scroll logs when new entries arrive (unless paused)
   useEffect(() => {
-    if (logRef.current) {
+    if (autoScroll && logRef.current) {
       logRef.current.scrollTop = logRef.current.scrollHeight;
     }
-  }, [state?.logs.length]);
+  }, [state?.logs.length, autoScroll]);
 
   const handleStop = useCallback(async () => {
-    // Tell the server to stop the running swarm loop
     try {
       await fetch('/api/chat/swarm', {
         method: 'DELETE',
@@ -80,16 +99,39 @@ export function SwarmOrchestrationPanel({ sessionId }: SwarmOrchestrationPanelPr
         body: JSON.stringify({ sessionId }),
       });
     } catch { /* best effort */ }
-    // Then abort the client-side fetch and update local state
     const manager = getSwarmManager();
     manager.stop();
   }, [sessionId]);
+
+  const handleClose = useCallback(() => {
+    const manager = getSwarmManager();
+    manager.reset();
+    setState(null);
+  }, []);
+
+  // Show summary panel when completed
+  if (!state?.active && state?.summary) {
+    return (
+      <SummaryPanel
+        summary={state.summary}
+        config={state.config}
+        startedAt={state.startedAt}
+        completedAt={state.completedAt}
+        onClose={handleClose}
+      />
+    );
+  }
 
   if (!state || !state.active) return null;
 
   const elapsed = state.startedAt ? Math.floor((Date.now() - state.startedAt) / 1000) : 0;
   const minutes = Math.floor(elapsed / 60);
   const seconds = elapsed % 60;
+
+  // Filter logs
+  const filteredLogs = logFilter === 'all'
+    ? state.logs
+    : state.logs.filter(l => l.type === logFilter);
 
   return (
     <div className="mx-auto w-full max-w-3xl px-4 py-3">
@@ -144,20 +186,120 @@ export function SwarmOrchestrationPanel({ sessionId }: SwarmOrchestrationPanelPr
 
         {/* Communication log */}
         <div className="px-4 pb-3">
-          <div className="mb-2 text-xs font-medium">{t('swarm.commLog' as TranslationKey)}</div>
+          <div className="mb-2 flex items-center justify-between">
+            <span className="text-xs font-medium">{t('swarm.commLog' as TranslationKey)}</span>
+            <div className="flex gap-1">
+              {LOG_FILTERS.map(f => (
+                <button
+                  key={f.id}
+                  type="button"
+                  onClick={() => setLogFilter(f.id)}
+                  className={cn(
+                    'rounded px-1.5 py-0.5 text-[10px] font-medium transition-colors',
+                    logFilter === f.id
+                      ? 'bg-primary/15 text-primary'
+                      : 'text-muted-foreground hover:text-foreground',
+                  )}
+                >
+                  {f.label}
+                </button>
+              ))}
+            </div>
+          </div>
           <div
             ref={logRef}
-            className="max-h-28 overflow-y-auto rounded-lg border border-border/60 bg-[oklch(0.10_0.002_49)] p-3 font-mono text-[11px] leading-relaxed"
+            onMouseEnter={() => setAutoScroll(false)}
+            onMouseLeave={() => setAutoScroll(true)}
+            className="max-h-40 overflow-y-auto rounded-lg border border-border/60 bg-[oklch(0.10_0.002_49)] p-3 font-mono text-[11px] leading-relaxed"
           >
-            {state.logs.length === 0 ? (
+            {filteredLogs.length === 0 ? (
               <div className="text-muted-foreground/50">{t('swarm.commLogEmpty' as TranslationKey)}</div>
             ) : (
-              state.logs.map((log) => (
+              filteredLogs.map((log) => (
                 <LogEntry key={log.id} entry={log} agents={state.agents} />
               ))
             )}
           </div>
         </div>
+      </div>
+    </div>
+  );
+}
+
+function SummaryPanel({
+  summary,
+  config,
+  startedAt,
+  completedAt,
+  onClose,
+}: {
+  summary: SwarmSummary;
+  config: SwarmConfig;
+  startedAt?: number;
+  completedAt?: number;
+  onClose: () => void;
+}) {
+  const { t } = useTranslation();
+
+  const statusIcon = summary.status === 'completed' ? '✅' : summary.status === 'failed' ? '❌' : '⏹️';
+  const statusColor = summary.status === 'completed'
+    ? 'text-status-success-foreground'
+    : summary.status === 'failed'
+    ? 'text-status-error-foreground'
+    : 'text-muted-foreground';
+
+  return (
+    <div className="mx-auto w-full max-w-3xl px-4 py-3">
+      <div className="rounded-xl border border-border/60 bg-card overflow-hidden">
+        <div className="flex items-center justify-between border-b border-border/60 px-4 py-2.5">
+          <div className="flex items-center gap-2">
+            <span className="text-lg">{statusIcon}</span>
+            <span className={cn('text-sm font-semibold', statusColor)}>
+              {summary.status === 'completed' ? 'Swarm 已完成' : summary.status === 'failed' ? 'Swarm 失败' : 'Swarm 已停止'}
+            </span>
+          </div>
+          <Button variant="ghost" size="sm" className="h-6 px-2 text-[11px]" onClick={onClose}>
+            关闭
+          </Button>
+        </div>
+        <div className="grid grid-cols-4 gap-4 p-4 text-center">
+          <div>
+            <div className="text-[10px] text-muted-foreground">耗时</div>
+            <div className="text-sm font-mono font-semibold">{formatDuration(summary.duration)}</div>
+          </div>
+          <div>
+            <div className="text-[10px] text-muted-foreground">迭代</div>
+            <div className="text-sm font-mono font-semibold">{summary.iterations}</div>
+          </div>
+          <div>
+            <div className="text-[10px] text-muted-foreground">工具调用</div>
+            <div className="text-sm font-mono font-semibold">{summary.totalToolCalls}</div>
+          </div>
+          <div>
+            <div className="text-[10px] text-muted-foreground">拓扑</div>
+            <div className="text-sm font-semibold">{config.topology}</div>
+          </div>
+        </div>
+        {summary.totalToolCalls > 0 && (
+          <div className="px-4 pb-3">
+            <div className="mb-1 text-[10px] text-muted-foreground">工具明细</div>
+            <div className="rounded-lg border border-border/60 p-2 font-mono text-[11px]">
+              {Object.entries(summary.toolCalls).map(([name, count]) => (
+                <div key={name} className="flex justify-between py-0.5">
+                  <span>{name}</span>
+                  <span className="text-muted-foreground">x{count}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+        {summary.message && (
+          <div className="px-4 pb-3">
+            <div className="rounded-lg border border-border/60 bg-muted/30 p-2 font-mono text-[11px] text-muted-foreground">
+              {summary.message.slice(0, 200)}{summary.message.length > 200 ? '...' : ''}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -264,6 +406,7 @@ function LogEntry({ entry, agents }: { entry: SwarmLogEntry; agents: SwarmAgent[
 
   return (
     <div className="mb-0.5">
+      <span className="text-muted-foreground/40">[{formatTime(entry.timestamp)}]</span>{' '}
       <span className={agentColor}>[{agent?.role.name || entry.agentId}]</span>{' '}
       <span className={msgColor()}>{entry.message}</span>
     </div>
