@@ -170,7 +170,7 @@ class SwarmManager {
     }
   }
 
-  private bufferLog(entry: Omit<SwarmLogEntry, 'id' | 'timestamp'>): void {
+  bufferLog(entry: Omit<SwarmLogEntry, 'id' | 'timestamp'>): void {
     this.logBuffer.push(entry);
     if (this.rafHandle === null) {
       this.rafHandle = requestAnimationFrame(() => {
@@ -313,6 +313,20 @@ class SwarmManager {
   abort(): void {
     this.abortController?.abort();
     this.abortController = null;
+  }
+
+  async sendIntervention(sessionId: string, message: string): Promise<boolean> {
+    if (!this.state?.active) return false;
+    try {
+      const res = await fetch('/api/chat/swarm/intervene', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sessionId, message }),
+      });
+      return res.ok;
+    } catch {
+      return false;
+    }
   }
 
   reset(): void {

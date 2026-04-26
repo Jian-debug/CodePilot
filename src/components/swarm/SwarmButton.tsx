@@ -55,6 +55,14 @@ export function SwarmButton({ sessionId, objective, onStartSwarm, disabled }: Sw
   const [loadingModels, setLoadingModels] = useState(false);
   const [history, setHistory] = useState<SwarmHistoryEntry[]>([]);
 
+  // Local state for objective — defaults to prop, user can edit
+  const [objectiveInput, setObjectiveInput] = useState(objective);
+
+  // Sync when dialog re-opens with new objective
+  useEffect(() => {
+    if (open) setObjectiveInput(objective);
+  }, [open, objective]);
+
   // Fetch available models and history when dialog opens
   useEffect(() => {
     if (!open) return;
@@ -76,14 +84,14 @@ export function SwarmButton({ sessionId, objective, onStartSwarm, disabled }: Sw
   }, [open, sessionId]);
 
   const handleStart = useCallback(() => {
-    onStartSwarm(objective, {
+    onStartSwarm(objectiveInput, {
       topology,
       qualityCheck,
       maxIterations,
       autoRetry,
     }, selectedModel || undefined);
     setOpen(false);
-  }, [objective, topology, qualityCheck, maxIterations, autoRetry, selectedModel, onStartSwarm]);
+  }, [objectiveInput, topology, qualityCheck, maxIterations, autoRetry, selectedModel, onStartSwarm]);
 
   return (
     <>
@@ -143,6 +151,18 @@ export function SwarmButton({ sessionId, objective, onStartSwarm, disabled }: Sw
 
           {activeTab === 'config' && (
             <div className="space-y-5">
+              {/* Objective editor */}
+              <div>
+                <label className="text-sm font-medium">执行目标</label>
+                <textarea
+                  value={objectiveInput}
+                  onChange={(e) => setObjectiveInput(e.target.value)}
+                  rows={3}
+                  className="mt-2 flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring resize-none font-mono text-[12px] leading-relaxed"
+                  placeholder="输入 Swarm 要执行的任务目标..."
+                />
+              </div>
+
               {/* Topology selector */}
               <div>
                 <label className="text-sm font-medium">{t('swarm.topology' as TranslationKey)}</label>
@@ -277,7 +297,7 @@ export function SwarmButton({ sessionId, objective, onStartSwarm, disabled }: Sw
             {activeTab === 'config' && (
               <Button
                 onClick={handleStart}
-                disabled={availableModels.length === 0 && !loadingModels}
+                disabled={!objectiveInput.trim() || (availableModels.length === 0 && !loadingModels)}
               >
                 {t('swarm.start' as TranslationKey)}
               </Button>

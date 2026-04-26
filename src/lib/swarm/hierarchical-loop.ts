@@ -10,6 +10,7 @@ export interface LoopCallbacks {
   onToolCall: (agentId: string, toolName: string) => void;
   onComplete: (error?: string) => void;
   shouldStop: () => boolean;
+  getInterventions?: () => string[];
 }
 
 interface SubTask {
@@ -100,6 +101,19 @@ Respond ONLY with a JSON array of subtasks in this format:
       callbacks.onAgentStatus('coder', 'running', `Working on: ${task.title}`, Math.floor((i / parsedTasks.length) * 100));
       callbacks.onLog({ agentId: 'coder', message: `Starting subtask: ${task.title}`, type: 'info' });
 
+      const interventionContext = callbacks.getInterventions
+        ? (() => {
+            const interventions = callbacks.getInterventions!();
+            if (interventions.length === 0) return '';
+            for (const msg of interventions) {
+              callbacks.onLog({ agentId: 'coder', message: `User intervention: ${msg.slice(0, 80)}${msg.length > 80 ? '...' : ''}`, type: 'info' });
+            }
+            return '\n\n<user_interventions>\n'
+              + interventions.map(m => `<message>${m}</message>`).join('\n')
+              + '\nIncorporate these instructions into your work.\n</user_interventions>\n';
+          })()
+        : '';
+
       const coderPrompt = `Execute the following subtask as part of the larger objective:
 
 Overall objective: ${objective}
@@ -107,7 +121,7 @@ Overall objective: ${objective}
 Current subtask (${i + 1}/${parsedTasks.length}):
 Title: ${task.title}
 Description: ${task.description}
-
+${interventionContext}
 Use your tools to complete this subtask. When done, respond with a brief summary.`;
 
       await runSingleTurn({

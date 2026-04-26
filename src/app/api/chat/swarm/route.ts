@@ -12,8 +12,12 @@ import type { SwarmModelResolution } from '@/lib/swarm/swarm-model-resolver';
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
-/** Module-level map: sessionId -> { stopped, abortController } for controlling running swarms */
-const ACTIVE_SWARMS = new Map<string, { stopped: boolean; abortController: AbortController }>();
+/** Module-level map: sessionId -> { stopped, abortController, interventionQueue } for controlling running swarms */
+const ACTIVE_SWARMS = new Map<string, {
+  stopped: boolean;
+  abortController: AbortController;
+  interventionQueue: string[];
+}>();
 
 /**
  * POST /api/chat/swarm — Start a Swarm session
@@ -105,7 +109,7 @@ function runAutonomousSSE(
 
   // Create an abort controller shared between the SSE stream and the active swarm entry
   const abortController = new AbortController();
-  ACTIVE_SWARMS.set(sessionId, { stopped: false, abortController });
+  ACTIVE_SWARMS.set(sessionId, { stopped: false, abortController, interventionQueue: [] });
 
   const stream = new ReadableStream<string>({
     async start(controller) {
@@ -150,6 +154,13 @@ function runAutonomousSSE(
               controller.close();
             },
             shouldStop: () => ACTIVE_SWARMS.get(sessionId)?.stopped ?? true,
+            getInterventions: () => {
+              const entry = ACTIVE_SWARMS.get(sessionId);
+              if (!entry) return [];
+              const msgs = [...entry.interventionQueue];
+              entry.interventionQueue.length = 0;
+              return msgs;
+            },
           },
         });
       } finally {
@@ -188,7 +199,7 @@ function runHierarchicalSSE(
 ): Response {
   const swarmSessionId = `swarm-${sessionId}-${Date.now()}`;
   const abortController = new AbortController();
-  ACTIVE_SWARMS.set(sessionId, { stopped: false, abortController });
+  ACTIVE_SWARMS.set(sessionId, { stopped: false, abortController, interventionQueue: [] });
 
   const stream = new ReadableStream<string>({
     async start(controller) {
@@ -226,6 +237,13 @@ function runHierarchicalSSE(
             controller.close();
           },
           shouldStop: () => ACTIVE_SWARMS.get(sessionId)?.stopped ?? true,
+          getInterventions: () => {
+            const entry = ACTIVE_SWARMS.get(sessionId);
+            if (!entry) return [];
+            const msgs = [...entry.interventionQueue];
+            entry.interventionQueue.length = 0;
+            return msgs;
+          },
         };
 
         await runHierarchicalLoop({
@@ -287,6 +305,36 @@ export async function DELETE(req: Request) {
   } catch (error) {
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'Failed to stop swarm' },
+      { status: 500 },
+    );
+  }
+}
+
+/** POST /api/chat/swarm/intervene — Send an intervention message to a running swarm */
+export async function PATCH(req: Request) {
+  try {
+    const body: { sessionId: string; message: string } = await req.json();
+
+    if (!body?.sessionId || !body?.message) {
+      return NextResponse.json(
+        { error: 'sessionId and message are required' },
+        { status: 400 },
+      );
+    }
+
+    const entry = ACTIVE_SWARMS.get(body.sessionId);
+    if (!entry || entry.stopped) {
+      return NextResponse.json(
+        { error: 'No active swarm running for this session' },
+        { status: 404 },
+      );
+    }
+
+    entry.interventionQueue.push(body.message);
+    return NextResponse.json({ message: 'Intervention queued' });
+  } catch (error) {
+    return NextResponse.json(
+      { error: error instanceof Error ? error.message : 'Failed to queue intervention' },
       { status: 500 },
     );
   }

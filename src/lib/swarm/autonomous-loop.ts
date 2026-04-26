@@ -10,6 +10,8 @@ export interface LoopCallbacks {
   onToolCall: (agentId: string, toolName: string) => void;
   onComplete: (error?: string) => void;
   shouldStop: () => boolean;
+  /** Drain accumulated user intervention messages since last check */
+  getInterventions?: () => string[];
 }
 
 /**
@@ -71,9 +73,23 @@ If you encounter errors, try to recover. You have up to ${maxIterations} iterati
 
     try {
       // Build the prompt for this iteration
+      let interventionContext = '';
+      if (callbacks.getInterventions) {
+        const interventions = callbacks.getInterventions();
+        if (interventions.length > 0) {
+          interventionContext = '\n\n<user_interventions>\n'
+            + interventions.map(m => `<message>${m}</message>`).join('\n')
+            + '\nThe user has provided additional instructions. Incorporate them into your work on the objective.\n'
+            + '</user_interventions>\n';
+          for (const msg of interventions) {
+            callbacks.onLog({ agentId, message: `User intervention: ${msg.slice(0, 80)}${msg.length > 80 ? '...' : ''}`, type: 'info' });
+          }
+        }
+      }
+
       const prompt = iteration === 1
-        ? objective
-        : `Continue working on the objective. Previous response:\n\n${lastResponseText.slice(0, 3000)}\n\nProceed with the next steps. End with __SWARM_TASK_COMPLETE__ when done.`;
+        ? objective + interventionContext
+        : `Continue working on the objective. Previous response:\n\n${lastResponseText.slice(0, 3000)}\n\nProceed with the next steps. End with __SWARM_TASK_COMPLETE__ when done.` + interventionContext;
 
       // Get session info for streamClaude
       const session = getSession(sessionId);

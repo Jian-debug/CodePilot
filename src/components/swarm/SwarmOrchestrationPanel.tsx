@@ -68,6 +68,7 @@ export function SwarmOrchestrationPanel({ sessionId }: SwarmOrchestrationPanelPr
   const [state, setState] = useState<SwarmState | null>(null);
   const [logFilter, setLogFilter] = useState<SwarmLogFilter>('all');
   const [autoScroll, setAutoScroll] = useState(true);
+  const [interventionInput, setInterventionInput] = useState('');
   const logRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -102,6 +103,19 @@ export function SwarmOrchestrationPanel({ sessionId }: SwarmOrchestrationPanelPr
     const manager = getSwarmManager();
     manager.stop();
   }, [sessionId]);
+
+  const handleIntervention = useCallback(async () => {
+    if (!interventionInput.trim()) return;
+    const msg = interventionInput.trim();
+    const manager = getSwarmManager();
+    // Local echo for immediate feedback
+    manager.bufferLog({ agentId: 'user', message: `📝 ${msg}`, type: 'info' });
+    setInterventionInput('');
+    const ok = await manager.sendIntervention(sessionId, msg);
+    if (!ok) {
+      manager.bufferLog({ agentId: 'system', message: '干预发送失败，Swarm 可能已结束', type: 'error' });
+    }
+  }, [sessionId, interventionInput]);
 
   const handleClose = useCallback(() => {
     const manager = getSwarmManager();
@@ -219,6 +233,29 @@ export function SwarmOrchestrationPanel({ sessionId }: SwarmOrchestrationPanelPr
                 <LogEntry key={log.id} entry={log} agents={state.agents} />
               ))
             )}
+          </div>
+        </div>
+
+        {/* Intervention input */}
+        <div className="border-t border-border/60 px-4 py-3">
+          <div className="mb-1.5 text-xs font-medium text-muted-foreground">实时干预</div>
+          <div className="flex gap-2">
+            <input
+              type="text"
+              value={interventionInput}
+              onChange={(e) => setInterventionInput(e.target.value)}
+              onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleIntervention(); } }}
+              placeholder="输入指令，Agent 将在下一轮响应..."
+              className="flex-1 rounded-md border border-input bg-background px-3 py-1.5 text-xs shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring font-mono"
+            />
+            <Button
+              size="sm"
+              onClick={handleIntervention}
+              disabled={!interventionInput.trim()}
+              className="h-auto px-3 py-1.5 text-xs"
+            >
+              发送
+            </Button>
           </div>
         </div>
       </div>
