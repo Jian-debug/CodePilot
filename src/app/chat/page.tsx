@@ -9,6 +9,7 @@ import { ChatComposerActionBar } from '@/components/chat/ChatComposerActionBar';
 import { ModeIndicator } from '@/components/chat/ModeIndicator';
 import { ChatPermissionSelector } from '@/components/chat/ChatPermissionSelector';
 import { ImageGenToggle } from '@/components/chat/ImageGenToggle';
+import { SwarmButton } from '@/components/swarm/SwarmButton';
 import { PermissionPrompt } from '@/components/chat/PermissionPrompt';
 import { ChatEmptyState } from '@/components/chat/ChatEmptyState';
 import { OnboardingWizard } from '@/components/assistant/OnboardingWizard';
@@ -19,6 +20,8 @@ import { useTranslation } from '@/hooks/useTranslation';
 import { usePanel } from '@/hooks/usePanel';
 import { maybeShowStatusToast } from '@/hooks/useSSEStream';
 import { seedSnapshotPatch } from '@/lib/stream-session-manager';
+import { getSwarmManager } from '@/lib/swarm/swarm-manager';
+import type { SwarmConfig } from '@/types';
 
 interface ToolUseInfo {
   id: string;
@@ -91,6 +94,23 @@ export default function NewChatPage() {
   // Provider options (thinking mode + 1M context)
   const [thinkingMode, setThinkingMode] = useState<string>('adaptive');
   const [context1m, setContext1m] = useState(false);
+
+  // Swarm state
+  const [swarmSessionKey, setSwarmSessionKey] = useState(0);
+
+  const handleStartSwarm = useCallback((config: SwarmConfig) => {
+    const manager = getSwarmManager();
+    const sid = createdSessionId || '';
+    manager.start(sid, config);
+
+    // If no session yet, create one first then start swarm
+    if (!createdSessionId) {
+      // Swarm needs an existing session — open the config dialog again after session creation
+      // For now, the user will need to send a message first to create a session
+      // This is a known limitation — v2 will auto-create a session for swarm
+    }
+    setSwarmSessionKey(k => k + 1);
+  }, [createdSessionId]);
 
   // Fetch provider-specific options (with abort to prevent stale responses on fast switch)
   useEffect(() => {
@@ -806,7 +826,7 @@ export default function NewChatPage() {
         initialValue={prefillText}
       />
       <ChatComposerActionBar
-        left={<><ModeIndicator mode={mode} onModeChange={setMode} disabled={isStreaming} /><ImageGenToggle /></>}
+        left={<><ModeIndicator mode={mode} onModeChange={setMode} disabled={isStreaming} /><SwarmButton sessionId={createdSessionId || ''} onStartSwarm={handleStartSwarm} disabled={isStreaming || !modelReady} /><ImageGenToggle /></>}
         center={
           <ChatPermissionSelector
             permissionProfile={permissionProfile}

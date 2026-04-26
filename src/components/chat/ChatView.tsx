@@ -33,6 +33,10 @@ import { setLastGeneratedImages, loadLastGenerated } from '@/lib/image-ref-store
 import { useChatCommands } from '@/hooks/useChatCommands';
 import { useAssistantTrigger } from '@/hooks/useAssistantTrigger';
 import { useStreamSubscription } from '@/hooks/useStreamSubscription';
+import { SwarmButton } from '@/components/swarm/SwarmButton';
+import { SwarmOrchestrationPanel } from '@/components/swarm/SwarmOrchestrationPanel';
+import { getSwarmManager } from '@/lib/swarm/swarm-manager';
+import type { SwarmConfig } from '@/types';
 import {
   startStream,
   stopStream,
@@ -193,6 +197,21 @@ export function ChatView({ sessionId, initialMessages = [], initialHasMore = fal
   const pendingPermission = streamSnapshot?.pendingPermission ?? null;
   const permissionResolved = streamSnapshot?.permissionResolved ?? null;
   const rewindPoints = getRewindPoints(sessionId);
+
+  // ── Swarm state ──
+  const [swarmActive, setSwarmActive] = useState(false);
+  const [swarmSessionKey, setSwarmSessionKey] = useState(0);
+
+  const handleStartSwarm = useCallback((config: SwarmConfig) => {
+    const manager = getSwarmManager();
+    const state = manager.start(sessionId, config);
+    setSwarmActive(true);
+    setSwarmSessionKey(k => k + 1);
+
+    // Send the swarm objective as a normal message to trigger the agent
+    const objective = config.objective || 'Please execute the current task using swarm mode.';
+    sendMessageRef.current?.(objective);
+  }, [sessionId]);
 
   // ── Skill nudge banner ──
   // Listens for 'skill-nudge' window events dispatched by stream-session-manager
@@ -867,6 +886,8 @@ export function ChatView({ sessionId, initialMessages = [], initialHasMore = fal
         isAssistantProject={isAssistantProject}
         assistantName={assistantName}
       />
+      {/* Swarm orchestration panel — shown when swarm mode is active */}
+      <SwarmOrchestrationPanel key={swarmSessionKey} sessionId={sessionId} />
       {/* End-of-turn terminal reason chip (only shown when stream is not active) */}
       {!isStreaming && (
         <TerminalReasonChip
@@ -1007,7 +1028,7 @@ export function ChatView({ sessionId, initialMessages = [], initialHasMore = fal
         hasMessages={messages.length > 0}
       />
       <ChatComposerActionBar
-        left={<><ModeIndicator mode={mode} onModeChange={handleModeChange} disabled={isStreaming} /><ImageGenToggle /></>}
+        left={<><ModeIndicator mode={mode} onModeChange={handleModeChange} disabled={isStreaming} /><SwarmButton sessionId={sessionId} onStartSwarm={handleStartSwarm} disabled={isStreaming} /><ImageGenToggle /></>}
         center={
           <ChatPermissionSelector
             sessionId={sessionId}

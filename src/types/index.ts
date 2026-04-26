@@ -1349,3 +1349,70 @@ export interface ScheduledTask {
   created_at: string;
   updated_at: string;
 }
+
+// ==========================================
+// Swarm / Multi-Agent Types
+// ==========================================
+
+export type SwarmTopology = 'hierarchical' | 'sequential' | 'autonomous';
+
+export type SwarmAgentStatus = 'idle' | 'planning' | 'running' | 'reviewing' | 'completed' | 'failed' | 'stopped';
+export type SwarmTaskStatus = 'queued' | 'running' | 'completed' | 'failed' | 'waiting';
+
+export interface AgentRole {
+  id: string;
+  name: string;
+  description: string;
+  /** System prompt appended for this agent */
+  systemPrompt?: string;
+}
+
+export interface SwarmAgent {
+  role: AgentRole;
+  status: SwarmAgentStatus;
+  /** Current work description (shown in the agent card) */
+  currentWork?: string;
+  /** Progress 0-100, only for running agents */
+  progress?: number;
+  toolCallCount: number;
+  startedAt?: number;
+  completedAt?: number;
+  error?: string;
+}
+
+export interface SwarmTask {
+  id: string;
+  title: string;
+  agentId: string;
+  status: SwarmTaskStatus;
+}
+
+export interface SwarmLogEntry {
+  id: string;
+  timestamp: number;
+  agentId: string;
+  message: string;
+  type: 'info' | 'tool_call' | 'tool_result' | 'error' | 'status';
+}
+
+export interface SwarmConfig {
+  topology: SwarmTopology;
+  qualityCheck: boolean;
+  maxIterations: number;
+  autoRetry: boolean;
+  /** Optional custom objective; defaults to the user's input prompt */
+  objective?: string;
+}
+
+export interface SwarmState {
+  sessionId: string;
+  active: boolean;
+  config: SwarmConfig;
+  agents: SwarmAgent[];
+  tasks: SwarmTask[];
+  logs: SwarmLogEntry[];
+  currentIteration: number;
+  startedAt?: number;
+  completedAt?: number;
+  error?: string;
+}
