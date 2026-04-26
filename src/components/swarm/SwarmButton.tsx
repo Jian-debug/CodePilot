@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useTranslation } from '@/hooks/useTranslation';
 import type { TranslationKey } from '@/i18n';
 import { Button } from '@/components/ui/button';
@@ -27,9 +27,16 @@ const TOPOLOGIES: { id: SwarmTopology; titleKey: TranslationKey; descKey: Transl
   { id: 'autonomous', titleKey: 'swarm.topologyAutonomous' as TranslationKey, descKey: 'swarm.topologyAutonomousDesc' as TranslationKey },
 ];
 
+interface ModelOption {
+  modelId: string;
+  upstreamModelId: string;
+  displayName: string;
+  isRecommended: boolean;
+}
+
 interface SwarmButtonProps {
   objective: string;
-  onStartSwarm: (objective: string, config: SwarmConfig) => void;
+  onStartSwarm: (objective: string, config: SwarmConfig, modelId?: string) => void;
   disabled?: boolean;
 }
 
@@ -40,6 +47,27 @@ export function SwarmButton({ objective, onStartSwarm, disabled }: SwarmButtonPr
   const [qualityCheck, setQualityCheck] = useState(true);
   const [maxIterations, setMaxIterations] = useState(5);
   const [autoRetry, setAutoRetry] = useState(true);
+  const [selectedModel, setSelectedModel] = useState<string>('');
+  const [availableModels, setAvailableModels] = useState<ModelOption[]>([]);
+  const [loadingModels, setLoadingModels] = useState(false);
+
+  // Fetch available models when dialog opens
+  useEffect(() => {
+    if (!open) return;
+    setLoadingModels(true);
+    fetch('/api/chat/swarm/models')
+      .then(r => r.json())
+      .then(data => {
+        if (data.models) {
+          setAvailableModels(data.models);
+          // Auto-select recommended
+          const recommended = data.models.find((m: ModelOption) => m.isRecommended);
+          setSelectedModel(recommended?.modelId || data.models[0]?.modelId || '');
+        }
+      })
+      .catch(() => { /* provider not configured */ })
+      .finally(() => setLoadingModels(false));
+  }, [open]);
 
   const handleStart = useCallback(() => {
     onStartSwarm(objective, {
@@ -47,9 +75,9 @@ export function SwarmButton({ objective, onStartSwarm, disabled }: SwarmButtonPr
       qualityCheck,
       maxIterations,
       autoRetry,
-    });
+    }, selectedModel || undefined);
     setOpen(false);
-  }, [objective, topology, qualityCheck, maxIterations, autoRetry, onStartSwarm]);
+  }, [objective, topology, qualityCheck, maxIterations, autoRetry, selectedModel, onStartSwarm]);
 
   return (
     <>
@@ -109,6 +137,32 @@ export function SwarmButton({ objective, onStartSwarm, disabled }: SwarmButtonPr
                     <div className="mt-0.5 text-[11px] text-muted-foreground">{t(topo.descKey)}</div>
                   </button>
                 ))}
+              </div>
+            </div>
+
+            {/* Model selector */}
+            <div>
+              <label className="text-sm font-medium">{t('swarm.model' as TranslationKey)}</label>
+              <div className="mt-2 flex items-center gap-2">
+                {loadingModels ? (
+                  <div className="h-9 w-full animate-pulse rounded-md bg-muted" />
+                ) : availableModels.length > 0 ? (
+                  <select
+                    value={selectedModel}
+                    onChange={(e) => setSelectedModel(e.target.value)}
+                    className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                  >
+                    {availableModels.map((m) => (
+                      <option key={m.modelId} value={m.modelId}>
+                        {m.displayName}{m.isRecommended ? ` (${t('swarm.recommended' as TranslationKey)})` : ''}
+                      </option>
+                    ))}
+                  </select>
+                ) : (
+                  <span className="text-xs text-muted-foreground">
+                    {t('swarm.noModels' as TranslationKey)}
+                  </span>
+                )}
               </div>
             </div>
 
@@ -196,7 +250,10 @@ export function SwarmButton({ objective, onStartSwarm, disabled }: SwarmButtonPr
             <Button variant="outline" onClick={() => setOpen(false)}>
               {t('swarm.cancel' as TranslationKey)}
             </Button>
-            <Button onClick={handleStart}>
+            <Button
+              onClick={handleStart}
+              disabled={availableModels.length === 0 && !loadingModels}
+            >
               {t('swarm.start' as TranslationKey)}
             </Button>
           </DialogFooter>

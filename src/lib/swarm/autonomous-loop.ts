@@ -23,10 +23,11 @@ export async function runAutonomousLoop(params: {
   sessionId: string;
   objective: string;
   config: SwarmConfig;
+  modelOverride?: string;  // resolved model from active provider
   abortSignal?: AbortSignal;
   callbacks: LoopCallbacks;
 }): Promise<void> {
-  const { sessionId, objective, config, abortSignal, callbacks } = params;
+  const { sessionId, objective, config, modelOverride, abortSignal, callbacks } = params;
   const { maxIterations, autoRetry } = config;
 
   const agentId = 'autonomous';
@@ -81,12 +82,13 @@ If you encounter errors, try to recover. You have up to ${maxIterations} iterati
         return;
       }
 
-      // Stream the response and collect text
+      // Stream the response — use resolved model from active provider,
+      // falling back to session model if no override was given
       const stream = streamClaude({
         prompt,
         sessionId,
         sdkSessionId: session.sdk_session_id || undefined,
-        model: session.model || undefined,
+        model: modelOverride || session.model || undefined,
         systemPrompt,
         workingDirectory: session.working_directory || undefined,
         abortController: localAbort,

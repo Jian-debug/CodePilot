@@ -55,7 +55,7 @@ class SwarmManager {
    * Start the autonomous loop by calling the API and consuming the SSE stream.
    * Updates local state in real-time as events arrive.
    */
-  async startFromAPI(sessionId: string, objective: string, config: SwarmConfig): Promise<void> {
+  async startFromAPI(sessionId: string, objective: string, config: SwarmConfig, modelId?: string): Promise<void> {
     // Initialize local state
     this.start(sessionId, config);
 
@@ -65,7 +65,7 @@ class SwarmManager {
       const response = await fetch('/api/chat/swarm', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ sessionId, objective, config }),
+        body: JSON.stringify({ sessionId, objective, config, modelId }),
         signal: this.abortController.signal,
       });
 

@@ -98,11 +98,11 @@ export default function NewChatPage() {
   // Swarm state
   const [swarmSessionKey, setSwarmSessionKey] = useState(0);
 
-  const handleStartSwarm = useCallback(async (objective: string, config: SwarmConfig) => {
+  const handleStartSwarm = useCallback(async (objective: string, config: SwarmConfig, modelId?: string) => {
     if (!objective || !createdSessionId) return;
     const manager = getSwarmManager();
     setSwarmSessionKey(k => k + 1);
-    await manager.startFromAPI(createdSessionId, objective, config);
+    await manager.startFromAPI(createdSessionId, objective, config, modelId);
   }, [createdSessionId]);
 
   // Fetch provider-specific options (with abort to prevent stale responses on fast switch)

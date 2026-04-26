@@ -5,6 +5,8 @@ import { acquireSessionLock, releaseSessionLock, setSessionRuntimeStatus } from 
 // Ensure runtimes are registered (side-effect import triggers registration)
 import '@/lib/runtime';
 import crypto from 'crypto';
+import { resolveSwarmModel, getSwarmModelOptions } from '@/lib/swarm/swarm-model-resolver';
+import type { SwarmModelResolution } from '@/lib/swarm/swarm-model-resolver';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -24,9 +26,10 @@ export async function POST(request: NextRequest) {
       sessionId: string;
       objective: string;
       config: SwarmConfig;
+      modelId?: string;  // optional user-selected model override
     } = await request.json();
 
-    const { sessionId, objective, config } = body;
+    const { sessionId, objective, config, modelId } = body;
 
     if (!sessionId || !objective || !config) {
       return NextResponse.json(
@@ -46,9 +49,20 @@ export async function POST(request: NextRequest) {
     }
     setSessionRuntimeStatus(sessionId, 'running');
 
+    // Resolve the model: user-selected > auto-match to active provider
+    const resolved = resolveSwarmModel(modelId);
+    if (!resolved) {
+      try { releaseSessionLock(sessionId, lockId); } catch { /* best effort */ }
+      setSessionRuntimeStatus(sessionId, 'idle');
+      return NextResponse.json(
+        { error: 'No provider configured. Please set up an AI provider in Settings.' },
+        { status: 500 },
+      );
+    }
+
     // For autonomous topology, run the loop and stream SSE
     if (config.topology === 'autonomous') {
-      return runAutonomousSSE(sessionId, objective, config, lockId);
+      return runAutonomousSSE(sessionId, objective, config, lockId, resolved);
     }
 
     // Release lock immediately for non-autonomous (placeholder) responses
@@ -79,6 +93,7 @@ function runAutonomousSSE(
   objective: string,
   config: SwarmConfig,
   lockId: string,
+  resolvedModel: SwarmModelResolution,
 ): Response {
   const swarmSessionId = `swarm-${sessionId}-${Date.now()}`;
 
@@ -106,6 +121,7 @@ function runAutonomousSSE(
           sessionId,
           objective,
           config,
+          modelOverride: resolvedModel.upstreamModel,
           abortSignal: abortController.signal,
           callbacks: {
             onAgentStatus: (agentId, status, work, progress) => {
@@ -183,6 +199,25 @@ export async function DELETE(req: Request) {
   } catch (error) {
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'Failed to stop swarm' },
+      { status: 500 },
+    );
+  }
+}
+
+/** GET /api/chat/swarm/models — List available models for the active provider */
+export async function GET() {
+  try {
+    const options = getSwarmModelOptions();
+    if (options.length === 0) {
+      return NextResponse.json(
+        { error: 'No provider configured. Please set up an AI provider in Settings.' },
+        { status: 500 },
+      );
+    }
+    return NextResponse.json({ models: options });
+  } catch (error) {
+    return NextResponse.json(
+      { error: error instanceof Error ? error.message : 'Failed to load models' },
       { status: 500 },
     );
   }

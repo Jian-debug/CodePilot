@@ -205,13 +205,13 @@ export function ChatView({ sessionId, initialMessages = [], initialHasMore = fal
   // Derive objective from the last user message
   const lastUserMessage = messages.filter(m => m.role === 'user').pop()?.content ?? '';
 
-  const handleStartSwarm = useCallback(async (objective: string, config: SwarmConfig) => {
+  const handleStartSwarm = useCallback(async (objective: string, config: SwarmConfig, modelId?: string) => {
     if (!objective) return;
     const manager = getSwarmManager();
     setSwarmActive(true);
     setSwarmSessionKey(k => k + 1);
     // Start the autonomous loop — consumes SSE stream and updates state in real-time
-    await manager.startFromAPI(sessionId, objective, config);
+    await manager.startFromAPI(sessionId, objective, config, modelId);
   }, [sessionId]);
 
   // ── Skill nudge banner ──
