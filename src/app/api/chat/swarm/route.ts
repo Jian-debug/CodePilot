@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import type { SwarmConfig, SwarmStats } from '@/types';
 import { runAutonomousLoop } from '@/lib/swarm/autonomous-loop';
 import { runHierarchicalLoop, type LoopCallbacks as HierarchicalCallbacks } from '@/lib/swarm/hierarchical-loop';
-import { acquireSessionLock, releaseSessionLock, setSessionRuntimeStatus } from '@/lib/db';
+import { acquireSessionLock, releaseSessionLock, setSessionRuntimeStatus, getSetting } from '@/lib/db';
 // Ensure runtimes are registered (side-effect import triggers registration)
 import '@/lib/runtime';
 import crypto from 'crypto';
@@ -24,35 +24,26 @@ async function sendSwarmNotification(
   stats: SwarmStats | undefined,
   error?: string,
 ): Promise<void> {
+  const durationSec = Math.round(duration / 1000);
+  const toolSummary = stats?.tools.reduce<Record<string, number>>((acc, t) => {
+    acc[t.name] = (acc[t.name] || 0) + 1;
+    return acc;
+  }, {}) || {};
+  const toolList = Object.entries(toolSummary).map(([k, v]) => `${k}(${v})`).join(', ');
+  const skillList = stats?.skills.map(s => s.name).join(', ') || 'none';
+
+  const emoji = status === 'completed' ? '✅' : status === 'stopped' ? '⏸️' : '❌';
+  const statusText = status === 'completed' ? '执行完成' : status === 'stopped' ? '已中止' : '执行失败';
+
+  let text = `${emoji} **Swarm ${statusText}**\n\n`;
+  text += `目标: ${objective.slice(0, 100)}${objective.length > 100 ? '...' : ''}\n`;
+  text += `耗时: ${durationSec}秒 | 迭代: ${iterations}\n`;
+  if (toolList) text += `工具: ${toolList}\n`;
+  text += `Skills: ${skillList}\n`;
+  if (error) text += `\n错误: ${error}`;
+
+  // Always send in-app notification
   try {
-    const { loadFeishuConfig } = await import('@/lib/channels/feishu/config');
-    const feishuConfig = loadFeishuConfig();
-    if (!feishuConfig) return;
-
-    const lark = await import('@larksuiteoapi/node-sdk');
-    const client = new lark.Client({
-      appId: feishuConfig.appId,
-      appSecret: feishuConfig.appSecret,
-    });
-
-    const durationSec = Math.round(duration / 1000);
-    const toolSummary = stats?.tools.reduce<Record<string, number>>((acc, t) => {
-      acc[t.name] = (acc[t.name] || 0) + 1;
-      return acc;
-    }, {}) || {};
-    const toolList = Object.entries(toolSummary).map(([k, v]) => `${k}(${v})`).join(', ');
-    const skillList = stats?.skills.map(s => s.name).join(', ') || 'none';
-
-    const emoji = status === 'completed' ? '✅' : status === 'stopped' ? '⏸️' : '❌';
-    const statusText = status === 'completed' ? '执行完成' : status === 'stopped' ? '已中止' : '执行失败';
-
-    let text = `${emoji} **Swarm ${statusText}**\n\n`;
-    text += `目标: ${objective.slice(0, 100)}${objective.length > 100 ? '...' : ''}\n`;
-    text += `耗时: ${durationSec}秒 | 迭代: ${iterations}\n`;
-    if (toolList) text += `工具: ${toolList}\n`;
-    text += `Skills: ${skillList}\n`;
-    if (error) text += `\n错误: ${error}`;
-
     const { sendNotification } = await import('@/lib/notification-manager');
     await sendNotification({
       title: `Swarm ${statusText}`,
@@ -60,7 +51,36 @@ async function sendSwarmNotification(
       priority: status === 'failed' ? 'urgent' : 'normal',
     });
   } catch (err) {
-    console.error('[swarm] Notification failed:', err);
+    console.error('[swarm] In-app notification failed:', err);
+  }
+
+  // Send Feishu notification if configured with a target chat ID.
+  // Note: FeishuConfig is primarily for inbound bridge. Outbound notifications
+  // require bridge_feishu_notify_chat_id to be set in settings.
+  try {
+    const { loadFeishuConfig } = await import('@/lib/channels/feishu/config');
+    const feishuConfig = loadFeishuConfig();
+    if (!feishuConfig?.appId || !feishuConfig?.appSecret) return;
+
+    const notifyChatId = process.env.FEISHU_NOTIFY_CHAT_ID || getSetting('bridge_feishu_notify_chat_id');
+    if (!notifyChatId) return; // no outbound target configured
+
+    const lark = await import('@larksuiteoapi/node-sdk');
+    const client = new lark.Client({
+      appId: feishuConfig.appId,
+      appSecret: feishuConfig.appSecret,
+    });
+
+    const content = JSON.stringify({
+      zh_cn: { content: [[{ tag: 'md', text }]] },
+    });
+    await client.im.message.create({
+      params: { receive_id_type: 'chat_id' },
+      data: { receive_id: notifyChatId, content, msg_type: 'post' },
+    });
+  } catch (err) {
+    // Feishu not configured or send failed — already sent in-app notification
+    console.error('[swarm] Feishu notification failed:', err);
   }
 }
 

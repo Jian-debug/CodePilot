@@ -2,6 +2,12 @@ import { streamClaude } from '@/lib/claude-client';
 import { addMessage, getSession } from '@/lib/db';
 import type { SwarmConfig, SwarmLogEntry, SwarmAgentStatus, SwarmTaskStatus, SwarmStats, SwarmToolStat, SwarmSkillStat, SwarmExternalStat } from '@/types';
 
+/** Tool names that indicate a Skill invocation (provider-agnostic) */
+const SKILL_TOOL_NAMES = ['Skill', 'skill', 'use_skill', 'useSkill', 'invoke_skill'];
+
+/** Tool names that indicate an external capability call */
+const EXTERNAL_TOOL_NAMES = ['Bash', 'bash', 'mcp', 'mcp_tool', 'http', 'fetch', 'curl', 'web_fetch', 'browser'];
+
 export interface LoopCallbacks {
   onAgentStatus: (agentId: string, status: SwarmAgentStatus, work?: string, progress?: number) => void;
   onTaskUpdate: (taskId: string, status: SwarmTaskStatus) => void;
@@ -200,16 +206,16 @@ If you encounter errors, try to recover. You have up to ${maxIterations} iterati
                         input,
                       });
                       // Categorize: skill, external, or regular tool
-                      if (toolName === 'Skill' || toolName === 'skill') {
+                      if (SKILL_TOOL_NAMES.includes(toolName)) {
                         skillStats.push({
-                          name: input.slice(0, 50) || 'unknown-skill',
+                          name: input.slice(0, 50) || toolName,
                           agentId,
                           timestamp: Date.now(),
                           result: content.slice(0, 100),
                         });
-                      } else if (toolName === 'Bash' || toolName === 'bash' || toolName === 'mcp') {
+                      } else if (EXTERNAL_TOOL_NAMES.some(n => n.toLowerCase() === toolName.toLowerCase())) {
                         externalStats.push({
-                          type: toolName === 'Bash' ? 'cli' : 'mcp',
+                          type: ['Bash', 'bash'].includes(toolName) ? 'cli' : 'mcp',
                           name: toolName,
                           agentId,
                           timestamp: Date.now(),
