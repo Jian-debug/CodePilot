@@ -1415,4 +1415,16 @@ export interface SwarmState {
   startedAt?: number;
   completedAt?: number;
   error?: string;
+  summary?: SwarmSummary;
 }
+
+export interface SwarmSummary {
+  status: 'completed' | 'failed' | 'stopped';
+  duration: number;       // ms
+  iterations: number;
+  toolCalls: Record<string, number>; // toolName -> count
+  totalToolCalls: number;
+  message?: string;       // completion/failure reason
+}
+
+export type SwarmLogFilter = 'all' | 'tool_call' | 'error';
