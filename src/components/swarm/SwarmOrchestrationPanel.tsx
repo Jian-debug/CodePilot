@@ -71,10 +71,19 @@ export function SwarmOrchestrationPanel({ sessionId }: SwarmOrchestrationPanelPr
     }
   }, [state?.logs.length]);
 
-  const handleStop = useCallback(() => {
+  const handleStop = useCallback(async () => {
+    // Tell the server to stop the running swarm loop
+    try {
+      await fetch('/api/chat/swarm', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sessionId }),
+      });
+    } catch { /* best effort */ }
+    // Then abort the client-side fetch and update local state
     const manager = getSwarmManager();
     manager.stop();
-  }, []);
+  }, [sessionId]);
 
   if (!state || !state.active) return null;
 

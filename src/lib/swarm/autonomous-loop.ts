@@ -98,6 +98,8 @@ If you encounter errors, try to recover. You have up to ${maxIterations} iterati
       // Read the stream and collect events
       const reader = stream.getReader();
       let textBuffer = '';
+      let hasToolCalls = false;
+      let hasError = false;
 
       try {
         while (true) {
@@ -122,6 +124,7 @@ If you encounter errors, try to recover. You have up to ${maxIterations} iterati
                   callbacks.onAgentStatus(agentId, 'running', `Writing response (${textBuffer.length} chars)`, progress);
                   break;
                 case 'tool_use':
+                  hasToolCalls = true;
                   try {
                     const toolData = JSON.parse(event.data);
                     callbacks.onToolCall(agentId, toolData.name);
@@ -146,6 +149,7 @@ If you encounter errors, try to recover. You have up to ${maxIterations} iterati
                   try {
                     const resultData = JSON.parse(event.data);
                     if (resultData.is_error) {
+                      hasError = true;
                       callbacks.onLog({ agentId, message: `Turn failed: ${resultData.subtype || 'unknown error'}`, type: 'error' });
                     }
                   } catch { /* ignore */ }
@@ -165,17 +169,30 @@ If you encounter errors, try to recover. You have up to ${maxIterations} iterati
         addMessage(sessionId, 'assistant', textBuffer);
       }
 
-      // Check for completion marker
+      // Check for completion:
+      // 1. Model explicitly marked complete
+      // 2. Model produced text but no tool calls → it's done
+      // 3. Model errored with no tool calls → retry or stop
       if (textBuffer.includes('__SWARM_TASK_COMPLETE__')) {
         taskComplete = true;
         callbacks.onLog({ agentId, message: 'Task marked complete by agent.', type: 'info' });
         break;
       }
 
-      // If autoRetry is disabled and we got here, we're done after max iterations
-      if (!autoRetry && iteration >= maxIterations) {
-        callbacks.onLog({ agentId, message: `Reached max iterations (${maxIterations}).`, type: 'info' });
+      if (!hasToolCalls && textBuffer.trim().length > 20 && !hasError) {
+        // Model responded with text but no tool calls — consider it done
+        taskComplete = true;
+        callbacks.onLog({ agentId, message: 'Agent completed (no tool calls needed).', type: 'info' });
         break;
+      }
+
+      if (hasError && !hasToolCalls) {
+        // Turn failed and no work was done
+        if (!autoRetry) {
+          callbacks.onComplete('Agent turn failed with no tool calls');
+          return;
+        }
+        callbacks.onLog({ agentId, message: 'Retrying after failed turn...', type: 'info' });
       }
 
       // Small delay between iterations to avoid rate limiting

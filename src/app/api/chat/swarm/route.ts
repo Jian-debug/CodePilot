@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import type { SwarmConfig } from '@/types';
 import { runAutonomousLoop } from '@/lib/swarm/autonomous-loop';
 import { acquireSessionLock, releaseSessionLock, setSessionRuntimeStatus } from '@/lib/db';
+// Ensure runtimes are registered (side-effect import triggers registration)
+import '@/lib/runtime';
 import crypto from 'crypto';
 
 export const runtime = 'nodejs';
