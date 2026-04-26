@@ -1,6 +1,6 @@
 import { streamClaude } from '@/lib/claude-client';
 import { addMessage, getSession } from '@/lib/db';
-import type { SwarmConfig, SwarmLogEntry, SwarmAgentStatus, SwarmTaskStatus } from '@/types';
+import type { SwarmConfig, SwarmLogEntry, SwarmAgentStatus, SwarmTaskStatus, SwarmStats } from '@/types';
 
 export interface LoopCallbacks {
   onAgentStatus: (agentId: string, status: SwarmAgentStatus, work?: string, progress?: number) => void;
@@ -8,7 +8,7 @@ export interface LoopCallbacks {
   onLog: (entry: Omit<SwarmLogEntry, 'id' | 'timestamp'>) => void;
   onIteration: (iteration: number) => void;
   onToolCall: (agentId: string, toolName: string) => void;
-  onComplete: (error?: string) => void;
+  onComplete: (error?: string, stats?: SwarmStats) => void;
   shouldStop: () => boolean;
   getInterventions?: () => string[];
 }
@@ -41,7 +41,7 @@ export async function runHierarchicalLoop(params: {
   try {
     const session = getSession(sessionId);
     if (!session) {
-      callbacks.onComplete('Session not found');
+      callbacks.onComplete('Session not found', { tools: [], skills: [], externals: [], agents: {} });
       return;
     }
 
@@ -64,7 +64,7 @@ Respond ONLY with a JSON array of subtasks in this format:
     });
 
     if (callbacks.shouldStop()) {
-      callbacks.onComplete('User stopped');
+      callbacks.onComplete('User stopped', { tools: [], skills: [], externals: [], agents: {} });
       return;
     }
 
@@ -92,7 +92,7 @@ Respond ONLY with a JSON array of subtasks in this format:
     // Phase 2: Coder executes each subtask
     for (let i = 0; i < parsedTasks.length; i++) {
       if (callbacks.shouldStop()) {
-        callbacks.onComplete('User stopped');
+        callbacks.onComplete('User stopped', { tools: [], skills: [], externals: [], agents: {} });
         return;
       }
 

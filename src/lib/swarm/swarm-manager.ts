@@ -1,4 +1,4 @@
-import type { SwarmState, SwarmConfig, SwarmTopology, SwarmAgent, SwarmTask, SwarmLogEntry, SwarmAgentStatus, SwarmTaskStatus, SwarmSummary, AgentRole } from '@/types';
+import type { SwarmState, SwarmConfig, SwarmTopology, SwarmAgent, SwarmTask, SwarmLogEntry, SwarmAgentStatus, SwarmTaskStatus, SwarmSummary, AgentRole, SwarmStats } from '@/types';
 import { saveSwarmHistory } from './swarm-history';
 
 const DEFAULT_AGENTS: AgentRole[] = [
@@ -41,6 +41,8 @@ class SwarmManager {
   private rafHandle: number | null = null;
   private toolCallDetails: Array<{ toolName: string }> = [];
   private resolvedModel: string = '';
+  private pendingStats: SwarmStats | null = null;
+  private pendingError: string | undefined;
 
   getState(): SwarmState | null { return this.state; }
 
@@ -163,7 +165,9 @@ class SwarmManager {
         break;
       }
       case 'done': {
-        const d = event.data as { error?: string };
+        const d = event.data as { error?: string; stats?: SwarmStats };
+        this.pendingStats = d.stats || null;
+        this.pendingError = d.error;
         this.stop(d.error);
         break;
       }
@@ -267,6 +271,7 @@ class SwarmManager {
       toolCalls,
       totalToolCalls: this.toolCallDetails.length,
       message: error,
+      stats: this.pendingStats || undefined,
     };
 
     if (this.logBuffer.length > 0) {
@@ -339,6 +344,8 @@ class SwarmManager {
     this.logBuffer = [];
     this.toolCallDetails = [];
     this.resolvedModel = '';
+    this.pendingStats = null;
+    this.pendingError = undefined;
     this.state = null;
     this.notify();
   }

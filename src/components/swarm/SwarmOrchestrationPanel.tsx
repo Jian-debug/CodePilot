@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState, useRef, useCallback } from 'react';
-import type { SwarmState, SwarmAgent, SwarmTask, SwarmLogEntry, SwarmConfig, SwarmSummary, SwarmLogFilter } from '@/types';
+import type { SwarmState, SwarmAgent, SwarmTask, SwarmLogEntry, SwarmConfig, SwarmSummary, SwarmLogFilter, SwarmStats } from '@/types';
 import { getSwarmManager } from '@/lib/swarm/swarm-manager';
 import { useTranslation } from '@/hooks/useTranslation';
 import type { TranslationKey } from '@/i18n';
@@ -277,6 +277,7 @@ function SummaryPanel({
   onClose: () => void;
 }) {
   const { t } = useTranslation();
+  const [statsExpanded, setStatsExpanded] = useState(true);
 
   const statusIcon = summary.status === 'completed' ? '✅' : summary.status === 'failed' ? '❌' : '⏹️';
   const statusColor = summary.status === 'completed'
@@ -284,6 +285,9 @@ function SummaryPanel({
     : summary.status === 'failed'
     ? 'text-status-error-foreground'
     : 'text-muted-foreground';
+
+  const stats = summary.stats;
+  const hasDetailedStats = !!(stats && (stats.tools.length > 0 || stats.skills.length > 0 || stats.externals.length > 0));
 
   return (
     <div className="mx-auto w-full max-w-3xl px-4 py-3">
@@ -317,9 +321,24 @@ function SummaryPanel({
             <div className="text-sm font-semibold">{config.topology}</div>
           </div>
         </div>
+
+        {/* Detailed stats */}
+        {hasDetailedStats && (
+          <div className="px-4 pb-3">
+            <button
+              type="button"
+              onClick={() => setStatsExpanded(!statsExpanded)}
+              className="flex w-full items-center justify-between text-[11px] font-medium text-muted-foreground hover:text-foreground"
+            >
+              <span>统计明细 {statsExpanded ? '▼' : '▶'}</span>
+            </button>
+            {statsExpanded && <StatsDetail stats={stats!} />}
+          </div>
+        )}
+
         {summary.totalToolCalls > 0 && (
           <div className="px-4 pb-3">
-            <div className="mb-1 text-[10px] text-muted-foreground">工具明细</div>
+            <div className="mb-1 text-[10px] text-muted-foreground">工具汇总</div>
             <div className="rounded-lg border border-border/60 p-2 font-mono text-[11px]">
               {Object.entries(summary.toolCalls).map(([name, count]) => (
                 <div key={name} className="flex justify-between py-0.5">
@@ -338,6 +357,129 @@ function SummaryPanel({
           </div>
         )}
       </div>
+    </div>
+  );
+}
+
+function StatsDetail({ stats }: { stats: SwarmStats }) {
+  // Group tools by name
+  const toolGroups = stats.tools.reduce<Record<string, { count: number; success: number; fail: number; avgMs: number; totalMs: number }>>((acc, t) => {
+    if (!acc[t.name]) acc[t.name] = { count: 0, success: 0, fail: 0, avgMs: 0, totalMs: 0 };
+    acc[t.name].count++;
+    if (t.success) acc[t.name].success++; else acc[t.name].fail++;
+    acc[t.name].totalMs += t.duration || 0;
+    acc[t.name].avgMs = Math.round(acc[t.name].totalMs / acc[t.name].count);
+    return acc;
+  }, {});
+
+  return (
+    <div className="space-y-3 mt-2">
+      {/* Tool calls */}
+      {stats.tools.length > 0 && (
+        <div>
+          <div className="mb-1 text-[10px] font-medium text-muted-foreground">
+            工具调用 ({stats.tools.length}次)
+          </div>
+          <div className="rounded-lg border border-border/60 overflow-hidden">
+            <table className="w-full text-[11px] font-mono">
+              <thead className="bg-muted/50">
+                <tr>
+                  <th className="px-2 py-1 text-left font-medium">工具</th>
+                  <th className="px-2 py-1 text-center">次数</th>
+                  <th className="px-2 py-1 text-center">成功</th>
+                  <th className="px-2 py-1 text-center">失败</th>
+                  <th className="px-2 py-1 text-right">平均耗时</th>
+                </tr>
+              </thead>
+              <tbody>
+                {Object.entries(toolGroups).map(([name, g]) => (
+                  <tr key={name} className="border-t border-border/30">
+                    <td className="px-2 py-1">{name}</td>
+                    <td className="px-2 py-1 text-center">{g.count}</td>
+                    <td className="px-2 py-1 text-center text-status-success-foreground">{g.success}</td>
+                    <td className="px-2 py-1 text-center">{g.fail > 0 ? <span className="text-status-error-foreground">{g.fail}</span> : '0'}</td>
+                    <td className="px-2 py-1 text-right text-muted-foreground">{g.avgMs}ms</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
+      {/* Skills */}
+      {stats.skills.length > 0 && (
+        <div>
+          <div className="mb-1 text-[10px] font-medium text-muted-foreground">
+            Skills ({stats.skills.length}次)
+          </div>
+          <div className="rounded-lg border border-border/60 p-2 font-mono text-[11px]">
+            {stats.skills.map((s, i) => (
+              <div key={i} className="flex justify-between py-0.5">
+                <span>{s.name}</span>
+                <span className="text-muted-foreground">{s.result.slice(0, 40)}{s.result.length > 40 ? '...' : ''}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Externals */}
+      {stats.externals.length > 0 && (
+        <div>
+          <div className="mb-1 text-[10px] font-medium text-muted-foreground">
+            外部能力 ({stats.externals.length}次)
+          </div>
+          <div className="rounded-lg border border-border/60 overflow-hidden">
+            <table className="w-full text-[11px] font-mono">
+              <thead className="bg-muted/50">
+                <tr>
+                  <th className="px-2 py-1 text-left font-medium">类型</th>
+                  <th className="px-2 py-1 text-left">名称</th>
+                  <th className="px-2 py-1 text-center">状态</th>
+                </tr>
+              </thead>
+              <tbody>
+                {stats.externals.map((e, i) => (
+                  <tr key={i} className="border-t border-border/30">
+                    <td className="px-2 py-1">
+                      <span className={cn(
+                        'rounded px-1 py-0.5 text-[10px]',
+                        e.type === 'cli' ? 'bg-muted/50' : 'bg-status-info-muted text-status-info-foreground',
+                      )}>
+                        {e.type}
+                      </span>
+                    </td>
+                    <td className="px-2 py-1 truncate max-w-[200px]">{e.name}</td>
+                    <td className="px-2 py-1 text-center">
+                      {e.success
+                        ? <span className="text-status-success-foreground">✓</span>
+                        : <span className="text-status-error-foreground">✗</span>}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
+      {/* Agent breakdown */}
+      {Object.keys(stats.agents).length > 0 && (
+        <div>
+          <div className="mb-1 text-[10px] font-medium text-muted-foreground">Agent 统计</div>
+          <div className="rounded-lg border border-border/60 p-2 font-mono text-[11px]">
+            {Object.entries(stats.agents).map(([id, a]) => (
+              <div key={id} className="flex justify-between py-0.5">
+                <span>{id}</span>
+                <span className="text-muted-foreground">
+                  {a.iterations}轮 · {a.toolCalls}工具 · {a.skillCalls}Skill · {a.externalCalls}外部
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

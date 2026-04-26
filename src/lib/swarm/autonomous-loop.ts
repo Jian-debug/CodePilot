@@ -1,6 +1,6 @@
 import { streamClaude } from '@/lib/claude-client';
 import { addMessage, getSession } from '@/lib/db';
-import type { SwarmConfig, SwarmLogEntry, SwarmAgentStatus, SwarmTaskStatus } from '@/types';
+import type { SwarmConfig, SwarmLogEntry, SwarmAgentStatus, SwarmTaskStatus, SwarmStats, SwarmToolStat, SwarmSkillStat, SwarmExternalStat } from '@/types';
 
 export interface LoopCallbacks {
   onAgentStatus: (agentId: string, status: SwarmAgentStatus, work?: string, progress?: number) => void;
@@ -8,7 +8,7 @@ export interface LoopCallbacks {
   onLog: (entry: Omit<SwarmLogEntry, 'id' | 'timestamp'>) => void;
   onIteration: (iteration: number) => void;
   onToolCall: (agentId: string, toolName: string) => void;
-  onComplete: (error?: string) => void;
+  onComplete: (error?: string, stats?: SwarmStats) => void;
   shouldStop: () => boolean;
   /** Drain accumulated user intervention messages since last check */
   getInterventions?: () => string[];
@@ -54,6 +54,27 @@ If you encounter errors, try to recover. You have up to ${maxIterations} iterati
   let taskComplete = false;
   let lastResponseText = '';
 
+  // Stats collection
+  const toolStats: SwarmToolStat[] = [];
+  const skillStats: SwarmSkillStat[] = [];
+  const externalStats: SwarmExternalStat[] = [];
+  const activeToolStart = new Map<string, number>(); // tool_name -> timestamp
+
+  const buildStats = (): SwarmStats => ({
+    tools: [...toolStats],
+    skills: [...skillStats],
+    externals: [...externalStats],
+    agents: {
+      [agentId]: {
+        iterations: iteration,
+        toolCalls: toolStats.length,
+        skillCalls: skillStats.length,
+        externalCalls: externalStats.length,
+        statusHistory: [],
+      },
+    },
+  });
+
   // Local abort controller — linked to external abortSignal if provided
   const localAbort = new AbortController();
   if (abortSignal) {
@@ -62,7 +83,7 @@ If you encounter errors, try to recover. You have up to ${maxIterations} iterati
 
   while (iteration < maxIterations && !taskComplete) {
     if (callbacks.shouldStop()) {
-      callbacks.onComplete('User stopped the swarm');
+      callbacks.onComplete('User stopped the swarm', buildStats());
       return;
     }
 
@@ -123,7 +144,7 @@ If you encounter errors, try to recover. You have up to ${maxIterations} iterati
         while (true) {
           if (callbacks.shouldStop() || abortSignal?.aborted) {
             localAbort.abort();
-            callbacks.onComplete('User stopped the swarm');
+            callbacks.onComplete('User stopped the swarm', buildStats());
             return;
           }
 
@@ -148,6 +169,8 @@ If you encounter errors, try to recover. You have up to ${maxIterations} iterati
                     callbacks.onToolCall(agentId, toolData.name);
                     callbacks.onLog({ agentId, message: `Calling ${toolData.name}...`, type: 'tool_call' });
                     callbacks.onAgentStatus(agentId, 'running', `Tool: ${toolData.name}`, undefined);
+                    // Track tool start time for duration
+                    activeToolStart.set(toolData.name, Date.now());
                   } catch { /* ignore parse errors */ }
                   break;
                 case 'tool_result':
@@ -158,6 +181,44 @@ If you encounter errors, try to recover. You have up to ${maxIterations} iterati
                       ? resultData.content.slice(0, 100)
                       : '';
                     callbacks.onLog({ agentId, message: `Tool result${isErr}: ${content}`, type: 'tool_result' });
+                    // Record tool call stats
+                    const startTime = activeToolStart.get(resultData.tool_name || '');
+                    if (startTime) {
+                      const duration = Date.now() - startTime;
+                      activeToolStart.delete(resultData.tool_name || '');
+                      const toolName = resultData.tool_name || 'unknown';
+                      const input = typeof resultData.input === 'string'
+                        ? resultData.input.slice(0, 200)
+                        : '';
+                      toolStats.push({
+                        name: toolName,
+                        agentId,
+                        timestamp: Date.now(),
+                        success: !resultData.is_error,
+                        error: resultData.is_error ? content : undefined,
+                        duration,
+                        input,
+                      });
+                      // Categorize: skill, external, or regular tool
+                      if (toolName === 'Skill' || toolName === 'skill') {
+                        skillStats.push({
+                          name: input.slice(0, 50) || 'unknown-skill',
+                          agentId,
+                          timestamp: Date.now(),
+                          result: content.slice(0, 100),
+                        });
+                      } else if (toolName === 'Bash' || toolName === 'bash' || toolName === 'mcp') {
+                        externalStats.push({
+                          type: toolName === 'Bash' ? 'cli' : 'mcp',
+                          name: toolName,
+                          agentId,
+                          timestamp: Date.now(),
+                          success: !resultData.is_error,
+                          input: input.slice(0, 150),
+                          output: content.slice(0, 150),
+                        });
+                      }
+                    }
                   } catch { /* ignore */ }
                   break;
                 case 'error':
@@ -207,7 +268,12 @@ If you encounter errors, try to recover. You have up to ${maxIterations} iterati
       if (hasError && !hasToolCalls) {
         // Turn failed and no work was done
         if (!autoRetry) {
-          callbacks.onComplete('Agent turn failed with no tool calls');
+          callbacks.onComplete('Agent turn failed with no tool calls', {
+            tools: toolStats,
+            skills: skillStats,
+            externals: externalStats,
+            agents: { [agentId]: { iterations: iteration, toolCalls: toolStats.length, skillCalls: skillStats.length, externalCalls: externalStats.length, statusHistory: [] } },
+          });
           return;
         }
         callbacks.onLog({ agentId, message: 'Retrying after failed turn...', type: 'info' });
@@ -219,7 +285,7 @@ If you encounter errors, try to recover. You have up to ${maxIterations} iterati
       }
     } catch (error) {
       if (abortSignal?.aborted || localAbort.signal.aborted) {
-        callbacks.onComplete('User stopped the swarm');
+        callbacks.onComplete('User stopped the swarm', buildStats());
         return;
       }
 
@@ -227,7 +293,12 @@ If you encounter errors, try to recover. You have up to ${maxIterations} iterati
       callbacks.onLog({ agentId, message: `Iteration ${iteration} failed: ${errMsg}`, type: 'error' });
 
       if (!autoRetry) {
-        callbacks.onComplete(`Iteration ${iteration} failed: ${errMsg}`);
+        callbacks.onComplete(`Iteration ${iteration} failed: ${errMsg}`, {
+            tools: toolStats,
+            skills: skillStats,
+            externals: externalStats,
+            agents: { [agentId]: { iterations: iteration, toolCalls: toolStats.length, skillCalls: skillStats.length, externalCalls: externalStats.length, statusHistory: [] } },
+          });
         return;
       }
 
@@ -245,5 +316,5 @@ If you encounter errors, try to recover. You have up to ${maxIterations} iterati
     callbacks.onLog({ agentId, message: `Swarm finished after ${iteration} iterations.`, type: 'info' });
   }
 
-  callbacks.onComplete();
+  callbacks.onComplete(undefined, buildStats());
 }

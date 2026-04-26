@@ -1425,6 +1425,56 @@ export interface SwarmSummary {
   toolCalls: Record<string, number>; // toolName -> count
   totalToolCalls: number;
   message?: string;       // completion/failure reason
+  stats?: SwarmStats;     // detailed execution statistics
+}
+
+/**
+ * Detailed execution statistics for a Swarm run.
+ * Captures tool calls, skills, external capabilities, and per-agent breakdown.
+ */
+export interface SwarmStats {
+  tools: SwarmToolStat[];    // Each tool invocation record
+  skills: SwarmSkillStat[];  // Skill invocations
+  externals: SwarmExternalStat[]; // External capability calls (MCP, CLI, HTTP)
+  agents: Record<string, SwarmAgentStat>; // Per-agent breakdown
+  tokens?: { input: number; output: number }; // Token usage (if available)
+}
+
+export interface SwarmToolStat {
+  name: string;
+  agentId: string;
+  timestamp: number;
+  success: boolean;
+  error?: string;
+  duration?: number; // ms
+  input?: string;    // truncated tool input
+}
+
+export interface SwarmSkillStat {
+  name: string;
+  args?: Record<string, string>;
+  agentId: string;
+  timestamp: number;
+  result: string;    // truncated result
+}
+
+export interface SwarmExternalStat {
+  type: 'mcp' | 'cli' | 'http';
+  name: string;      // MCP server name, CLI binary, or URL
+  method?: string;   // MCP tool name, CLI args, or HTTP method
+  agentId: string;
+  timestamp: number;
+  success: boolean;
+  input?: string;    // truncated input/args
+  output?: string;   // truncated result
+}
+
+export interface SwarmAgentStat {
+  iterations: number;
+  toolCalls: number;
+  skillCalls: number;
+  externalCalls: number;
+  statusHistory: Array<{ status: string; timestamp: number }>;
 }
 
 export type SwarmLogFilter = 'all' | 'tool_call' | 'error';

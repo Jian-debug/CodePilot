@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import type { SwarmConfig } from '@/types';
+import type { SwarmConfig, SwarmStats } from '@/types';
 import { runAutonomousLoop } from '@/lib/swarm/autonomous-loop';
 import { runHierarchicalLoop, type LoopCallbacks as HierarchicalCallbacks } from '@/lib/swarm/hierarchical-loop';
 import { acquireSessionLock, releaseSessionLock, setSessionRuntimeStatus } from '@/lib/db';
@@ -12,11 +12,67 @@ import type { SwarmModelResolution } from '@/lib/swarm/swarm-model-resolver';
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
-/** Module-level map: sessionId -> { stopped, abortController, interventionQueue } for controlling running swarms */
+/**
+ * Send a Feishu notification when a swarm completes/fails.
+ * Reuses the project's existing Feishu outbound infrastructure.
+ */
+async function sendSwarmNotification(
+  objective: string,
+  status: 'completed' | 'failed' | 'stopped',
+  duration: number,
+  iterations: number,
+  stats: SwarmStats | undefined,
+  error?: string,
+): Promise<void> {
+  try {
+    const { loadFeishuConfig } = await import('@/lib/channels/feishu/config');
+    const feishuConfig = loadFeishuConfig();
+    if (!feishuConfig) return;
+
+    const lark = await import('@larksuiteoapi/node-sdk');
+    const client = new lark.Client({
+      appId: feishuConfig.appId,
+      appSecret: feishuConfig.appSecret,
+    });
+
+    const durationSec = Math.round(duration / 1000);
+    const toolSummary = stats?.tools.reduce<Record<string, number>>((acc, t) => {
+      acc[t.name] = (acc[t.name] || 0) + 1;
+      return acc;
+    }, {}) || {};
+    const toolList = Object.entries(toolSummary).map(([k, v]) => `${k}(${v})`).join(', ');
+    const skillList = stats?.skills.map(s => s.name).join(', ') || 'none';
+
+    const emoji = status === 'completed' ? '✅' : status === 'stopped' ? '⏸️' : '❌';
+    const statusText = status === 'completed' ? '执行完成' : status === 'stopped' ? '已中止' : '执行失败';
+
+    let text = `${emoji} **Swarm ${statusText}**\n\n`;
+    text += `目标: ${objective.slice(0, 100)}${objective.length > 100 ? '...' : ''}\n`;
+    text += `耗时: ${durationSec}秒 | 迭代: ${iterations}\n`;
+    if (toolList) text += `工具: ${toolList}\n`;
+    text += `Skills: ${skillList}\n`;
+    if (error) text += `\n错误: ${error}`;
+
+    const { sendNotification } = await import('@/lib/notification-manager');
+    await sendNotification({
+      title: `Swarm ${statusText}`,
+      body: text,
+      priority: status === 'failed' ? 'urgent' : 'normal',
+    });
+  } catch (err) {
+    console.error('[swarm] Notification failed:', err);
+  }
+}
+
+// ─── POST handler ─────────────────────────────────────────────────────────────
+
+/** Module-level map: sessionId -> { stopped, abortController, interventionQueue, stats, objective } for controlling running swarms */
 const ACTIVE_SWARMS = new Map<string, {
   stopped: boolean;
   abortController: AbortController;
   interventionQueue: string[];
+  stats?: SwarmStats;
+  objective?: string;
 }>();
 
 /**
@@ -109,7 +165,7 @@ function runAutonomousSSE(
 
   // Create an abort controller shared between the SSE stream and the active swarm entry
   const abortController = new AbortController();
-  ACTIVE_SWARMS.set(sessionId, { stopped: false, abortController, interventionQueue: [] });
+  ACTIVE_SWARMS.set(sessionId, { stopped: false, abortController, interventionQueue: [], objective });
 
   const stream = new ReadableStream<string>({
     async start(controller) {
@@ -118,13 +174,18 @@ function runAutonomousSSE(
       };
 
       // Send initial state
+      const startedAt = Date.now();
       enqueue('init', {
         swarmSessionId,
         sessionId,
         topology: config.topology,
         maxIterations: config.maxIterations,
-        startedAt: Date.now(),
+        startedAt,
       });
+
+      // Track iterations for notification
+      let iterationCount = 0;
+      const initStartedAt = startedAt;
 
       try {
         await runAutonomousLoop({
@@ -144,13 +205,24 @@ function runAutonomousSSE(
               enqueue('log', entry);
             },
             onIteration: (iteration) => {
+              iterationCount = iteration;
               enqueue('iteration', { current: iteration, max: config.maxIterations });
             },
             onToolCall: (agentId, toolName) => {
               enqueue('tool_call', { agentId, toolName });
             },
-            onComplete: (error) => {
-              enqueue('done', { error });
+            onComplete: (error, stats) => {
+              const entry = ACTIVE_SWARMS.get(sessionId);
+              if (entry && stats) entry.stats = stats;
+              // Send Feishu notification
+              const status = (error === 'User stopped the swarm' || error === 'User stopped')
+                ? 'stopped' as const
+                : error ? 'failed' as const
+                : 'completed' as const;
+              const duration = Date.now() - (initStartedAt || Date.now());
+              const iterations_count = entry ? 0 : 0; // tracked via SSE iteration events
+              sendSwarmNotification(entry?.objective || objective, status, duration, iterations_count, stats, error).catch(() => {});
+              enqueue('done', { error, stats });
               controller.close();
             },
             shouldStop: () => ACTIVE_SWARMS.get(sessionId)?.stopped ?? true,
@@ -199,7 +271,7 @@ function runHierarchicalSSE(
 ): Response {
   const swarmSessionId = `swarm-${sessionId}-${Date.now()}`;
   const abortController = new AbortController();
-  ACTIVE_SWARMS.set(sessionId, { stopped: false, abortController, interventionQueue: [] });
+  ACTIVE_SWARMS.set(sessionId, { stopped: false, abortController, interventionQueue: [], objective });
 
   const stream = new ReadableStream<string>({
     async start(controller) {
@@ -215,6 +287,9 @@ function runHierarchicalSSE(
         startedAt: Date.now(),
       });
 
+      let iterationCount = 0;
+      const initStartedAt = Date.now();
+
       try {
         const callbacks: HierarchicalCallbacks = {
           onAgentStatus: (agentId, status, work, progress) => {
@@ -227,13 +302,22 @@ function runHierarchicalSSE(
             enqueue('log', entry);
           },
           onIteration: (iteration) => {
+            iterationCount = iteration;
             enqueue('iteration', { current: iteration, max: config.maxIterations });
           },
           onToolCall: (agentId, toolName) => {
             enqueue('tool_call', { agentId, toolName });
           },
-          onComplete: (error) => {
-            enqueue('done', { error });
+          onComplete: (error, stats) => {
+            const entry = ACTIVE_SWARMS.get(sessionId);
+            if (entry && stats) entry.stats = stats;
+            const status = (error === 'User stopped the swarm' || error === 'User stopped')
+              ? 'stopped' as const
+              : error ? 'failed' as const
+              : 'completed' as const;
+            const duration = Date.now() - initStartedAt;
+            sendSwarmNotification(entry?.objective || objective, status, duration, iterationCount, stats, error).catch(() => {});
+            enqueue('done', { error, stats });
             controller.close();
           },
           shouldStop: () => ACTIVE_SWARMS.get(sessionId)?.stopped ?? true,
