@@ -200,7 +200,6 @@ export function ChatView({ sessionId, initialMessages = [], initialHasMore = fal
 
   // ── Swarm state ──
   const [swarmActive, setSwarmActive] = useState(false);
-  const [swarmSessionKey, setSwarmSessionKey] = useState(0);
 
   // Derive objective from the last user message
   const lastUserMessage = messages.filter(m => m.role === 'user').pop()?.content ?? '';
@@ -209,8 +208,7 @@ export function ChatView({ sessionId, initialMessages = [], initialHasMore = fal
     if (!objective) return;
     const manager = getSwarmManager();
     setSwarmActive(true);
-    setSwarmSessionKey(k => k + 1);
-    // Start the autonomous loop — consumes SSE stream and updates state in real-time
+    // Start the autonomous loop
     await manager.startFromAPI(sessionId, objective, config, modelId);
   }, [sessionId]);
 
@@ -888,7 +886,7 @@ export function ChatView({ sessionId, initialMessages = [], initialHasMore = fal
         assistantName={assistantName}
       />
       {/* Swarm orchestration panel — shown when swarm mode is active */}
-      <SwarmOrchestrationPanel key={swarmSessionKey} sessionId={sessionId} />
+      <SwarmOrchestrationPanel sessionId={sessionId} />
       {/* End-of-turn terminal reason chip (only shown when stream is not active) */}
       {!isStreaming && (
         <TerminalReasonChip
