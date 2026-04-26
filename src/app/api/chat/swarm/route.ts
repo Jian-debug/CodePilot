@@ -1,14 +1,24 @@
-import { NextResponse } from 'next/server';
-import type { SwarmConfig, SwarmState } from '@/types';
+import { NextRequest, NextResponse } from 'next/server';
+import type { SwarmConfig } from '@/types';
+import { runAutonomousLoop } from '@/lib/swarm/autonomous-loop';
 
-/** POST /api/chat/swarm — Start a new Swarm session */
-export async function POST(req: Request) {
+const runtime = 'nodejs';
+const dynamic = 'force-dynamic';
+
+/**
+ * POST /api/chat/swarm — Start a Swarm session
+ *
+ * For autonomous topology, this runs the autonomous loop and streams
+ * SSE events with progress updates. Other topologies (hierarchical,
+ * sequential) return a placeholder for now.
+ */
+export async function POST(request: NextRequest) {
   try {
     const body: {
       sessionId: string;
       objective: string;
       config: SwarmConfig;
-    } = await req.json();
+    } = await request.json();
 
     const { sessionId, objective, config } = body;
 
@@ -19,26 +29,21 @@ export async function POST(req: Request) {
       );
     }
 
-    // For v1, we simply acknowledge the swarm session.
-    // The actual agent execution happens through the normal chat endpoint.
-    // The SwarmOrchestrationPanel manages the state client-side.
-    // In future phases, this endpoint will:
-    // 1. Spawn Planner agent via SDK query()
-    // 2. Generate task pipeline
-    // 3. Dispatch worker agents
-    // 4. Run reviewer loop
+    // For autonomous topology, run the loop and stream SSE
+    if (config.topology === 'autonomous') {
+      return runAutonomousSSE(sessionId, objective, config);
+    }
 
-    const swarmSession: Omit<SwarmState, 'agents' | 'tasks' | 'logs'> = {
-      sessionId,
-      active: true,
-      config,
-      currentIteration: 1,
-      startedAt: Date.now(),
-    };
-
+    // Other topologies: return placeholder
     return NextResponse.json({
-      swarmSession,
-      message: 'Swarm session initialized',
+      message: `Topology '${config.topology}' not yet implemented. Only 'autonomous' is supported in v1.`,
+      swarmSession: {
+        sessionId,
+        active: true,
+        config,
+        currentIteration: 0,
+        startedAt: Date.now(),
+      },
     });
   } catch (error) {
     console.error('[swarm] Failed to start swarm:', error);
@@ -49,36 +54,87 @@ export async function POST(req: Request) {
   }
 }
 
-/** GET /api/chat/swarm — Get current swarm state */
-export async function GET(req: Request) {
-  const url = new URL(req.url);
-  const sessionId = url.searchParams.get('sessionId');
+function runAutonomousSSE(
+  sessionId: string,
+  objective: string,
+  config: SwarmConfig,
+): Response {
+  const swarmSessionId = `swarm-${sessionId}-${Date.now()}`;
+  let stopped = false;
 
-  if (!sessionId) {
-    return NextResponse.json(
-      { error: 'sessionId is required' },
-      { status: 400 },
-    );
-  }
+  const stream = new ReadableStream<string>({
+    async start(controller) {
+      const enqueue = (type: string, data: unknown) => {
+        controller.enqueue(`data: ${JSON.stringify({ type, data })}\n\n`);
+      };
 
-  // v1: swarm state is managed client-side via SwarmManager
-  return NextResponse.json({ active: false });
+      // Send initial state
+      enqueue('init', {
+        swarmSessionId,
+        sessionId,
+        topology: config.topology,
+        maxIterations: config.maxIterations,
+        startedAt: Date.now(),
+      });
+
+      await runAutonomousLoop({
+        sessionId,
+        objective,
+        config,
+        callbacks: {
+          onAgentStatus: (agentId, status, work, progress) => {
+            enqueue('agent_status', { agentId, status, currentWork: work, progress });
+          },
+          onTaskUpdate: (taskId, status) => {
+            enqueue('task_update', { taskId, status });
+          },
+          onLog: (entry) => {
+            enqueue('log', entry);
+          },
+          onIteration: (iteration) => {
+            enqueue('iteration', { current: iteration, max: config.maxIterations });
+          },
+          onToolCall: (agentId) => {
+            enqueue('tool_call', { agentId });
+          },
+          onComplete: (error) => {
+            enqueue('done', { error });
+            controller.close();
+          },
+          shouldStop: () => stopped,
+        },
+      });
+    },
+
+    cancel() {
+      stopped = true;
+    },
+  });
+
+  return new Response(stream, {
+    headers: {
+      'Content-Type': 'text/event-stream',
+      'Cache-Control': 'no-cache',
+      'Connection': 'keep-alive',
+    },
+  });
 }
 
 /** DELETE /api/chat/swarm — Stop a running swarm */
 export async function DELETE(req: Request) {
   try {
-    const body: { sessionId: string } = await req.json();
+    const body: { swarmSessionId: string } = await req.json();
 
-    if (!body?.sessionId) {
+    if (!body?.swarmSessionId) {
       return NextResponse.json(
-        { error: 'sessionId is required' },
+        { error: 'swarmSessionId is required' },
         { status: 400 },
       );
     }
 
-    // v1: acknowledge stop — actual cleanup is client-side
-    return NextResponse.json({ message: 'Swarm session stopped' });
+    // The actual stop happens via AbortController in the SSE stream.
+    // For v1, the stream cancel() handler sets `stopped = true`.
+    return NextResponse.json({ message: 'Swarm session stop requested' });
   } catch (error) {
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'Failed to stop swarm' },

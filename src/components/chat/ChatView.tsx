@@ -202,15 +202,16 @@ export function ChatView({ sessionId, initialMessages = [], initialHasMore = fal
   const [swarmActive, setSwarmActive] = useState(false);
   const [swarmSessionKey, setSwarmSessionKey] = useState(0);
 
-  const handleStartSwarm = useCallback((config: SwarmConfig) => {
+  // Derive objective from the last user message
+  const lastUserMessage = messages.filter(m => m.role === 'user').pop()?.content ?? '';
+
+  const handleStartSwarm = useCallback(async (objective: string, config: SwarmConfig) => {
+    if (!objective) return;
     const manager = getSwarmManager();
-    const state = manager.start(sessionId, config);
     setSwarmActive(true);
     setSwarmSessionKey(k => k + 1);
-
-    // Send the swarm objective as a normal message to trigger the agent
-    const objective = config.objective || 'Please execute the current task using swarm mode.';
-    sendMessageRef.current?.(objective);
+    // Start the autonomous loop — consumes SSE stream and updates state in real-time
+    await manager.startFromAPI(sessionId, objective, config);
   }, [sessionId]);
 
   // ── Skill nudge banner ──
@@ -1028,7 +1029,7 @@ export function ChatView({ sessionId, initialMessages = [], initialHasMore = fal
         hasMessages={messages.length > 0}
       />
       <ChatComposerActionBar
-        left={<><ModeIndicator mode={mode} onModeChange={handleModeChange} disabled={isStreaming} /><SwarmButton sessionId={sessionId} onStartSwarm={handleStartSwarm} disabled={isStreaming} /><ImageGenToggle /></>}
+        left={<><ModeIndicator mode={mode} onModeChange={handleModeChange} disabled={isStreaming} /><SwarmButton sessionId={sessionId} objective={lastUserMessage} onStartSwarm={handleStartSwarm} disabled={isStreaming || !lastUserMessage} /><ImageGenToggle /></>}
         center={
           <ChatPermissionSelector
             sessionId={sessionId}

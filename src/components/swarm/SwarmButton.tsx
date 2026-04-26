@@ -29,27 +29,28 @@ const TOPOLOGIES: { id: SwarmTopology; titleKey: TranslationKey; descKey: Transl
 
 interface SwarmButtonProps {
   sessionId: string;
-  onStartSwarm: (config: SwarmConfig) => void;
+  objective: string;
+  onStartSwarm: (objective: string, config: SwarmConfig) => void;
   disabled?: boolean;
 }
 
-export function SwarmButton({ sessionId, onStartSwarm, disabled }: SwarmButtonProps) {
+export function SwarmButton({ sessionId, objective, onStartSwarm, disabled }: SwarmButtonProps) {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
-  const [topology, setTopology] = useState<SwarmTopology>('hierarchical');
+  const [topology, setTopology] = useState<SwarmTopology>('autonomous');
   const [qualityCheck, setQualityCheck] = useState(true);
   const [maxIterations, setMaxIterations] = useState(5);
   const [autoRetry, setAutoRetry] = useState(true);
 
   const handleStart = useCallback(() => {
-    onStartSwarm({
+    onStartSwarm(objective, {
       topology,
       qualityCheck,
       maxIterations,
       autoRetry,
     });
     setOpen(false);
-  }, [topology, qualityCheck, maxIterations, autoRetry, onStartSwarm]);
+  }, [objective, topology, qualityCheck, maxIterations, autoRetry, onStartSwarm]);
 
   return (
     <>

@@ -23,7 +23,7 @@ export function defaultAgentsForTopology(topology: SwarmTopology): SwarmAgent[] 
     case 'autonomous':
       return [{
         role: { id: 'autonomous', name: 'Autonomous', description: 'Self-iterating agent' },
-        status: 'running',
+        status: 'idle',
         toolCallCount: 0,
       }];
   }
@@ -32,6 +32,7 @@ export function defaultAgentsForTopology(topology: SwarmTopology): SwarmAgent[] 
 class SwarmManager {
   private state: SwarmState | null = null;
   private listeners = new Set<(state: SwarmState) => void>();
+  private abortController: AbortController | null = null;
 
   getState(): SwarmState | null { return this.state; }
 
@@ -48,6 +49,107 @@ class SwarmManager {
     };
     this.notify();
     return this.state;
+  }
+
+  /**
+   * Start the autonomous loop by calling the API and consuming the SSE stream.
+   * Updates local state in real-time as events arrive.
+   */
+  async startFromAPI(sessionId: string, objective: string, config: SwarmConfig): Promise<void> {
+    // Initialize local state
+    this.start(sessionId, config);
+
+    this.abortController = new AbortController();
+
+    try {
+      const response = await fetch('/api/chat/swarm', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sessionId, objective, config }),
+        signal: this.abortController.signal,
+      });
+
+      if (!response.ok) {
+        const errText = await response.text();
+        throw new Error(`API returned ${response.status}: ${errText}`);
+      }
+
+      // Consume SSE stream
+      const reader = response.body?.getReader();
+      if (!reader) {
+        throw new Error('Response body is not readable');
+      }
+
+      const decoder = new TextDecoder();
+      let buffer = '';
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split('\n');
+        buffer = lines.pop() || ''; // Keep incomplete line in buffer
+
+        for (const line of lines) {
+          if (!line.startsWith('data: ')) continue;
+          try {
+            const event = JSON.parse(line.slice(6));
+            this.handleSSEEvent(event);
+          } catch { /* skip malformed */ }
+        }
+      }
+    } catch (error) {
+      if (error instanceof Error && error.name === 'AbortError') {
+        this.stop('User stopped');
+      } else {
+        this.stop(error instanceof Error ? error.message : 'Unknown error');
+      }
+    }
+  }
+
+  private handleSSEEvent(event: { type: string; data: unknown }): void {
+    if (!this.state) return;
+
+    switch (event.type) {
+      case 'init': {
+        const d = event.data as { swarmSessionId: string; startedAt: number };
+        this.state = { ...this.state, startedAt: d.startedAt };
+        this.notify();
+        break;
+      }
+      case 'agent_status': {
+        const d = event.data as { agentId: string; status: SwarmAgentStatus; currentWork?: string; progress?: number };
+        this.updateAgentStatus(d.agentId, d.status, d.currentWork, d.progress);
+        break;
+      }
+      case 'task_update': {
+        const d = event.data as { taskId: string; status: SwarmTaskStatus };
+        this.updateTaskStatus(d.taskId, d.status);
+        break;
+      }
+      case 'log': {
+        const d = event.data as Omit<SwarmLogEntry, 'id' | 'timestamp'>;
+        this.addLog(d);
+        break;
+      }
+      case 'iteration': {
+        const d = event.data as { current: number; max: number };
+        this.state = { ...this.state, currentIteration: d.current };
+        this.notify();
+        break;
+      }
+      case 'tool_call': {
+        const d = event.data as { agentId: string };
+        this.incrementToolCall(d.agentId);
+        break;
+      }
+      case 'done': {
+        const d = event.data as { error?: string };
+        this.stop(d.error);
+        break;
+      }
+    }
   }
 
   updateAgentStatus(agentId: string, status: SwarmAgentStatus, currentWork?: string, progress?: number): void {
@@ -116,7 +218,14 @@ class SwarmManager {
     this.notify();
   }
 
+  /** Stop an in-flight API request */
+  abort(): void {
+    this.abortController?.abort();
+    this.abortController = null;
+  }
+
   reset(): void {
+    this.abort();
     this.state = null;
     this.notify();
   }

@@ -98,18 +98,11 @@ export default function NewChatPage() {
   // Swarm state
   const [swarmSessionKey, setSwarmSessionKey] = useState(0);
 
-  const handleStartSwarm = useCallback((config: SwarmConfig) => {
+  const handleStartSwarm = useCallback(async (objective: string, config: SwarmConfig) => {
+    if (!objective || !createdSessionId) return;
     const manager = getSwarmManager();
-    const sid = createdSessionId || '';
-    manager.start(sid, config);
-
-    // If no session yet, create one first then start swarm
-    if (!createdSessionId) {
-      // Swarm needs an existing session — open the config dialog again after session creation
-      // For now, the user will need to send a message first to create a session
-      // This is a known limitation — v2 will auto-create a session for swarm
-    }
     setSwarmSessionKey(k => k + 1);
+    await manager.startFromAPI(createdSessionId, objective, config);
   }, [createdSessionId]);
 
   // Fetch provider-specific options (with abort to prevent stale responses on fast switch)
@@ -826,7 +819,7 @@ export default function NewChatPage() {
         initialValue={prefillText}
       />
       <ChatComposerActionBar
-        left={<><ModeIndicator mode={mode} onModeChange={setMode} disabled={isStreaming} /><SwarmButton sessionId={createdSessionId || ''} onStartSwarm={handleStartSwarm} disabled={isStreaming || !modelReady} /><ImageGenToggle /></>}
+        left={<><ModeIndicator mode={mode} onModeChange={setMode} disabled={isStreaming} /><SwarmButton sessionId={createdSessionId || ''} objective={prefillText} onStartSwarm={handleStartSwarm} disabled={isStreaming || !modelReady || !prefillText} /><ImageGenToggle /></>}
         center={
           <ChatPermissionSelector
             permissionProfile={permissionProfile}
