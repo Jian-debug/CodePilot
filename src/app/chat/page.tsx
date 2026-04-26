@@ -826,7 +826,7 @@ export default function NewChatPage() {
         initialValue={prefillText}
       />
       <ChatComposerActionBar
-        left={<><ModeIndicator mode={mode} onModeChange={setMode} disabled={isStreaming} /><SwarmButton objective={prefillText} onStartSwarm={handleStartSwarm} disabled={isStreaming || !modelReady} /><ImageGenToggle /></>}
+        left={<><ModeIndicator mode={mode} onModeChange={setMode} disabled={isStreaming} /><SwarmButton sessionId="" objective={prefillText} onStartSwarm={handleStartSwarm} disabled={isStreaming || !modelReady} /><ImageGenToggle /></>}
         center={
           <ChatPermissionSelector
             permissionProfile={permissionProfile}
