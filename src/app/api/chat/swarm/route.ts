@@ -240,8 +240,7 @@ function runAutonomousSSE(
                 : error ? 'failed' as const
                 : 'completed' as const;
               const duration = Date.now() - (initStartedAt || Date.now());
-              const iterations_count = entry ? 0 : 0; // tracked via SSE iteration events
-              sendSwarmNotification(entry?.objective || objective, status, duration, iterations_count, stats, error).catch(() => {});
+              sendSwarmNotification(entry?.objective || objective, status, duration, iterationCount, stats, error).catch(() => {});
               enqueue('done', { error, stats });
               controller.close();
             },
