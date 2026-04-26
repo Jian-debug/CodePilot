@@ -189,7 +189,7 @@ async function runSingleTurn(params: {
   const toolStats: SwarmToolStat[] = [];
   const skillStats: SwarmSkillStat[] = [];
   const externalStats: SwarmExternalStat[] = [];
-  const activeToolStart = new Map<string, number>();
+  const activeToolStart = new Map<string, { ts: number; name: string; input?: unknown }>();
 
   const stream = streamClaude({
     prompt,
@@ -229,27 +229,25 @@ async function runSingleTurn(params: {
               try {
                 const toolData = JSON.parse(event.data);
                 callbacks.onToolCall(agentId, toolData.name);
-                activeToolStart.set(`${toolData.name}_${Date.now()}`, Date.now());
+                activeToolStart.set(toolData.id, { ts: Date.now(), name: toolData.name, input: toolData.input });
               } catch { /* ignore */ }
               break;
             case 'tool_result':
               try {
                 const resultData = JSON.parse(event.data);
-                const toolName = resultData.tool_name || 'unknown';
-                // Find and remove the matching start time
+                const toolUseId = resultData.tool_use_id;
+                const toolInfo = activeToolStart.get(toolUseId || '');
+                const toolName = toolInfo?.name || 'unknown';
                 let duration: number | undefined;
-                for (const [key, startTime] of activeToolStart) {
-                  if (key.startsWith(`${toolName}_`)) {
-                    duration = Date.now() - startTime;
-                    activeToolStart.delete(key);
-                    break;
-                  }
+                if (toolInfo) {
+                  duration = Date.now() - toolInfo.ts;
+                  activeToolStart.delete(toolUseId || '');
                 }
                 const content = typeof resultData.content === 'string'
                   ? resultData.content.slice(0, 100)
                   : '';
-                const input = typeof resultData.input === 'string'
-                  ? resultData.input.slice(0, 200)
+                const input = toolInfo?.input
+                  ? (typeof toolInfo.input === 'string' ? toolInfo.input : JSON.stringify(toolInfo.input)).slice(0, 200)
                   : '';
                 const success = !resultData.is_error;
                 toolStats.push({

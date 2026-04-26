@@ -64,7 +64,7 @@ If you encounter errors, try to recover. You have up to ${maxIterations} iterati
   const toolStats: SwarmToolStat[] = [];
   const skillStats: SwarmSkillStat[] = [];
   const externalStats: SwarmExternalStat[] = [];
-  const activeToolStart = new Map<string, number>(); // tool_name -> timestamp
+  const activeToolStart = new Map<string, { ts: number; name: string; input?: unknown }>(); // tool_use_id -> {timestamp, name, input}
 
   const buildStats = (): SwarmStats => ({
     tools: [...toolStats],
@@ -175,8 +175,7 @@ If you encounter errors, try to recover. You have up to ${maxIterations} iterati
                     callbacks.onToolCall(agentId, toolData.name);
                     callbacks.onLog({ agentId, message: `Calling ${toolData.name}...`, type: 'tool_call' });
                     callbacks.onAgentStatus(agentId, 'running', `Tool: ${toolData.name}`, undefined);
-                    // Track tool start time for duration
-                    activeToolStart.set(toolData.name, Date.now());
+                    activeToolStart.set(toolData.id, { ts: Date.now(), name: toolData.name, input: toolData.input });
                   } catch { /* ignore parse errors */ }
                   break;
                 case 'tool_result':
@@ -188,13 +187,14 @@ If you encounter errors, try to recover. You have up to ${maxIterations} iterati
                       : '';
                     callbacks.onLog({ agentId, message: `Tool result${isErr}: ${content}`, type: 'tool_result' });
                     // Record tool call stats
-                    const startTime = activeToolStart.get(resultData.tool_name || '');
-                    if (startTime) {
-                      const duration = Date.now() - startTime;
-                      activeToolStart.delete(resultData.tool_name || '');
-                      const toolName = resultData.tool_name || 'unknown';
-                      const input = typeof resultData.input === 'string'
-                        ? resultData.input.slice(0, 200)
+                    const toolUseId = resultData.tool_use_id;
+                    const toolInfo = activeToolStart.get(toolUseId || '');
+                    if (toolInfo) {
+                      const duration = Date.now() - toolInfo.ts;
+                      activeToolStart.delete(toolUseId || '');
+                      const toolName = toolInfo.name;
+                      const input = toolInfo.input
+                        ? (typeof toolInfo.input === 'string' ? toolInfo.input : JSON.stringify(toolInfo.input)).slice(0, 200)
                         : '';
                       toolStats.push({
                         name: toolName,
