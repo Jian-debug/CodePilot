@@ -1,4 +1,5 @@
-import type { SwarmState, SwarmConfig, SwarmTopology, SwarmAgent, SwarmTask, SwarmLogEntry, SwarmAgentStatus, SwarmTaskStatus, AgentRole } from '@/types';
+import type { SwarmState, SwarmConfig, SwarmTopology, SwarmAgent, SwarmTask, SwarmLogEntry, SwarmAgentStatus, SwarmTaskStatus, SwarmSummary, AgentRole } from '@/types';
+import { saveSwarmHistory } from './swarm-history';
 
 const DEFAULT_AGENTS: AgentRole[] = [
   { id: 'planner', name: 'Planner', description: 'Task decomposition & planning' },
@@ -9,11 +10,10 @@ const DEFAULT_AGENTS: AgentRole[] = [
 export function defaultAgentsForTopology(topology: SwarmTopology): SwarmAgent[] {
   switch (topology) {
     case 'hierarchical':
-      return DEFAULT_AGENTS.map(r => ({
-        role: r,
-        status: r.id === 'planner' ? 'running' : 'idle',
-        toolCallCount: 0,
-      }));
+      return [
+        { role: DEFAULT_AGENTS[0], status: 'running', toolCallCount: 0 },
+        { role: DEFAULT_AGENTS[1], status: 'idle', toolCallCount: 0 },
+      ];
     case 'sequential':
       return DEFAULT_AGENTS.map(r => ({
         role: r,
@@ -33,6 +33,10 @@ class SwarmManager {
   private state: SwarmState | null = null;
   private listeners = new Set<(state: SwarmState) => void>();
   private abortController: AbortController | null = null;
+  private logBuffer: Omit<SwarmLogEntry, 'id' | 'timestamp'>[] = [];
+  private rafHandle: number | null = null;
+  private toolCallDetails: Array<{ toolName: string }> = [];
+  private resolvedModel: string = '';
 
   getState(): SwarmState | null { return this.state; }
 
@@ -47,18 +51,15 @@ class SwarmManager {
       currentIteration: 1,
       startedAt: Date.now(),
     };
+    this.toolCallDetails = [];
+    this.logBuffer = [];
     this.notify();
     return this.state;
   }
 
-  /**
-   * Start the autonomous loop by calling the API and consuming the SSE stream.
-   * Updates local state in real-time as events arrive.
-   */
   async startFromAPI(sessionId: string, objective: string, config: SwarmConfig, modelId?: string): Promise<void> {
-    // Initialize local state
     this.start(sessionId, config);
-
+    this.resolvedModel = modelId || '';
     this.abortController = new AbortController();
 
     try {
@@ -74,7 +75,6 @@ class SwarmManager {
         throw new Error(`API returned ${response.status}: ${errText}`);
       }
 
-      // Consume SSE stream
       const reader = response.body?.getReader();
       if (!reader) {
         throw new Error('Response body is not readable');
@@ -89,7 +89,7 @@ class SwarmManager {
 
         buffer += decoder.decode(value, { stream: true });
         const lines = buffer.split('\n');
-        buffer = lines.pop() || ''; // Keep incomplete line in buffer
+        buffer = lines.pop() || '';
 
         for (const line of lines) {
           if (!line.startsWith('data: ')) continue;
@@ -130,7 +130,7 @@ class SwarmManager {
       }
       case 'log': {
         const d = event.data as Omit<SwarmLogEntry, 'id' | 'timestamp'>;
-        this.addLog(d);
+        this.bufferLog(d);
         break;
       }
       case 'iteration': {
@@ -143,15 +143,15 @@ class SwarmManager {
         const d = event.data as { agentId: string; toolName?: string };
         this.incrementToolCall(d.agentId);
         if (d.toolName) {
-          this.addLog({ agentId: d.agentId, message: `Tool call: ${d.toolName}`, type: 'tool_call' });
+          this.toolCallDetails.push({ toolName: d.toolName });
+          this.bufferLog({ agentId: d.agentId, message: `Tool call: ${d.toolName}`, type: 'tool_call' });
         }
         break;
       }
       case 'permission_request': {
-        // Log permission requests so the user can see them in the comm log
         const d = event.data as { toolName?: string };
         if (d.toolName) {
-          this.addLog({ agentId: 'autonomous', message: `Permission needed: ${d.toolName}`, type: 'error' });
+          this.bufferLog({ agentId: 'autonomous', message: `Permission needed: ${d.toolName}`, type: 'error' });
         }
         break;
       }
@@ -161,6 +161,31 @@ class SwarmManager {
         break;
       }
     }
+  }
+
+  private bufferLog(entry: Omit<SwarmLogEntry, 'id' | 'timestamp'>): void {
+    this.logBuffer.push(entry);
+    if (this.rafHandle === null) {
+      this.rafHandle = requestAnimationFrame(() => {
+        this.flushLogBuffer();
+      });
+    }
+  }
+
+  private flushLogBuffer(): void {
+    this.rafHandle = null;
+    if (!this.state || this.logBuffer.length === 0) return;
+    const newLogs = this.logBuffer.map(entry => ({
+      ...entry,
+      id: `log-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+      timestamp: Date.now(),
+    }));
+    this.state = {
+      ...this.state,
+      logs: [...this.state.logs, ...newLogs],
+    };
+    this.logBuffer = [];
+    this.notify();
   }
 
   updateAgentStatus(agentId: string, status: SwarmAgentStatus, currentWork?: string, progress?: number): void {
@@ -192,21 +217,6 @@ class SwarmManager {
     this.notify();
   }
 
-  addLog(entry: Omit<SwarmLogEntry, 'id' | 'timestamp'>): void {
-    if (!this.state) return;
-    this.state = {
-      ...this.state,
-      logs: [...this.state.logs, { ...entry, id: `log-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`, timestamp: Date.now() }],
-    };
-    this.notify();
-  }
-
-  incrementIteration(): void {
-    if (!this.state) return;
-    this.state = { ...this.state, currentIteration: this.state.currentIteration + 1 };
-    this.notify();
-  }
-
   incrementToolCall(agentId: string): void {
     if (!this.state) return;
     this.state = {
@@ -220,17 +230,66 @@ class SwarmManager {
 
   stop(error?: string): void {
     if (!this.state) return;
-    this.abort(); // Also abort any in-flight fetch
-    this.state = {
-      ...this.state,
-      active: false,
-      completedAt: Date.now(),
-      ...(error ? { error } : {}),
+
+    const duration = this.state.completedAt
+      ? this.state.completedAt - (this.state.startedAt || this.state.completedAt)
+      : 0;
+    const toolCalls: Record<string, number> = {};
+    for (const { toolName } of this.toolCallDetails) {
+      toolCalls[toolName] = (toolCalls[toolName] || 0) + 1;
+    }
+
+    const status: SwarmSummary['status'] = error === 'User stopped' ? 'stopped' : error ? 'failed' : 'completed';
+    const summary: SwarmSummary = {
+      status,
+      duration,
+      iterations: this.state.currentIteration,
+      toolCalls,
+      totalToolCalls: this.toolCallDetails.length,
+      message: error,
     };
+
+    if (this.logBuffer.length > 0) {
+      const newLogs = this.logBuffer.map(entry => ({
+        ...entry,
+        id: `log-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+        timestamp: Date.now(),
+      }));
+      this.state = {
+        ...this.state,
+        active: false,
+        completedAt: Date.now(),
+        error,
+        summary,
+        logs: [...this.state.logs, ...newLogs],
+      };
+      this.logBuffer = [];
+    } else {
+      this.state = {
+        ...this.state,
+        active: false,
+        completedAt: Date.now(),
+        error,
+        summary,
+      };
+    }
+
+    saveSwarmHistory(
+      this.state.sessionId,
+      this.state.config,
+      summary,
+      this.resolvedModel || this.state.config.topology,
+    );
+
+    if (typeof window !== 'undefined' && status === 'completed') {
+      window.dispatchEvent(new CustomEvent('swarm:completed', {
+        detail: { sessionId: this.state.sessionId },
+      }));
+    }
+
     this.notify();
   }
 
-  /** Abort any in-flight API request */
   abort(): void {
     this.abortController?.abort();
     this.abortController = null;
@@ -238,6 +297,9 @@ class SwarmManager {
 
   reset(): void {
     this.abort();
+    if (this.logBuffer.length > 0) {
+      this.flushLogBuffer();
+    }
     this.state = null;
     this.notify();
   }
