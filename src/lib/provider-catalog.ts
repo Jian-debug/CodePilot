@@ -816,6 +816,35 @@ export const VENDOR_PRESETS: VendorPreset[] = [
     iconKey: 'google',
   },
 
+  // ── NVIDIA ──
+  {
+    key: 'nvidia',
+    name: 'NVIDIA',
+    description: 'NVIDIA API Catalog — DeepSeek, Llama, and more via OpenAI-compatible API',
+    descriptionZh: 'NVIDIA API Catalog — 通过 OpenAI 兼容 API 访问 DeepSeek、Llama 等模型',
+    protocol: 'openai-compatible',
+    authStyle: 'api_key',
+    baseUrl: 'https://integrate.api.nvidia.com/v1',
+    defaultEnvOverrides: {},
+    defaultModels: [
+      { modelId: 'deepseek-v4-pro', upstreamModelId: 'deepseek-ai/deepseek-v4-pro', displayName: 'DeepSeek V4 Pro', role: 'default' },
+      { modelId: 'deepseek-v4-flash', upstreamModelId: 'deepseek-ai/deepseek-v4-flash', displayName: 'DeepSeek V4 Flash', role: 'haiku' },
+    ],
+    defaultRoleModels: {
+      default: 'deepseek-ai/deepseek-v4-pro',
+      sonnet: 'deepseek-ai/deepseek-v4-pro',
+      opus: 'deepseek-ai/deepseek-v4-pro',
+      haiku: 'deepseek-ai/deepseek-v4-flash',
+    },
+    fields: ['api_key'],
+    iconKey: 'nvidia',
+    meta: {
+      apiKeyUrl: 'https://build.nvidia.com/explore/discover',
+      docsUrl: 'https://docs.api.nvidia.com/',
+      billingModel: 'pay_as_you_go',
+    },
+  },
+
   // ── OpenAI (Image) ──
   {
     key: 'openai-image',
@@ -935,8 +964,13 @@ export function inferProtocolFromLegacy(
   if (providerType === 'gemini-image') return 'gemini-image';
   if (providerType === 'openai-image') return 'openai-image';
 
-  // For 'custom' type, check if the base_url matches a known Anthropic-compatible vendor
+  // For 'custom' type, check if the base_url matches a known vendor
   if (providerType === 'custom') {
+    // NVIDIA uses OpenAI-compatible API
+    if (baseUrl.toLowerCase().includes('nvidia.com')) {
+      return 'openai-compatible';
+    }
+
     const anthropicUrls = [
       'bigmodel.cn', 'z.ai',            // GLM
       'kimi.com', 'moonshot.cn', 'moonshot.ai',  // Kimi/Moonshot
