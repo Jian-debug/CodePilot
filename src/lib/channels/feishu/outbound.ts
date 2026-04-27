@@ -192,6 +192,7 @@ async function sendAsPost(
 
   const content = JSON.stringify({
     zh_cn: {
+      title: '',
       content: [[{ tag: 'md', text: mdText }]],
     },
   });
