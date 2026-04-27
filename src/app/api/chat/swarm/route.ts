@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import * as lark from '@larksuiteoapi/node-sdk';
 import type { SwarmConfig, SwarmStats } from '@/types';
 import { runAutonomousLoop } from '@/lib/swarm/autonomous-loop';
 import { runHierarchicalLoop, type LoopCallbacks as HierarchicalCallbacks } from '@/lib/swarm/hierarchical-loop';
@@ -8,13 +9,33 @@ import '@/lib/runtime';
 import crypto from 'crypto';
 import { resolveSwarmModel, getSwarmModelOptions } from '@/lib/swarm/swarm-model-resolver';
 import type { SwarmModelResolution } from '@/lib/swarm/swarm-model-resolver';
+import { sendMessage } from '@/lib/channels/feishu/outbound';
+import type { OutboundMessage } from '@/lib/bridge/types';
+
+/** Resolve Feishu domain string to SDK domain constant. */
+function resolveFeishuDomain(brand: string): lark.Domain | string {
+  if (brand === 'lark') return lark.Domain.Lark;
+  if (brand === 'feishu') return lark.Domain.Feishu;
+  return brand.replace(/\/+$/, '');
+}
+
+/** Create a Feishu REST client for outbound API calls. */
+function createFeishuClient(appId: string, appSecret: string, domain: string): lark.Client {
+  return new lark.Client({
+    appId,
+    appSecret,
+    domain: resolveFeishuDomain(domain),
+    disableTokenCache: false,
+  });
+}
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 /**
  * Send a Feishu notification when a swarm completes/fails.
- * Reuses the project's existing Feishu outbound infrastructure.
+ * Reuses the project's existing Feishu outbound infrastructure
+ * (sendMessage from outbound.ts) for proper encoding and retry handling.
  */
 async function sendSwarmNotification(
   objective: string,
@@ -23,6 +44,8 @@ async function sendSwarmNotification(
   iterations: number,
   stats: SwarmStats | undefined,
   error?: string,
+  topology?: string,
+  maxIterations?: number,
 ): Promise<void> {
   const durationSec = Math.round(duration / 1000);
   const toolSummary = stats?.tools.reduce<Record<string, number>>((acc, t) => {
@@ -30,24 +53,39 @@ async function sendSwarmNotification(
     return acc;
   }, {}) || {};
   const toolList = Object.entries(toolSummary).map(([k, v]) => `${k}(${v})`).join(', ');
-  const skillList = stats?.skills.map(s => s.name).join(', ') || 'none';
+  const skillList = stats?.skills.length
+    ? (() => {
+        const skCount: Record<string, number> = {};
+        for (const s of stats.skills) skCount[s.name] = (skCount[s.name] || 0) + 1;
+        return Object.entries(skCount).map(([k, v]) => `${k}(${v})`).join(', ');
+      })()
+    : '无';
+  const externalList = stats?.externals.length
+    ? (() => {
+        const extCount: Record<string, number> = {};
+        for (const e of stats.externals) extCount[e.name] = (extCount[e.name] || 0) + 1;
+        return Object.entries(extCount).map(([k, v]) => `${k}(${v})`).join(', ');
+      })()
+    : '无';
 
   const emoji = status === 'completed' ? '✅' : status === 'stopped' ? '⏸️' : '❌';
   const statusText = status === 'completed' ? '执行完成' : status === 'stopped' ? '已中止' : '执行失败';
 
-  let text = `${emoji} **Swarm ${statusText}**\n\n`;
-  text += `目标: ${objective.slice(0, 100)}${objective.length > 100 ? '...' : ''}\n`;
-  text += `耗时: ${durationSec}秒 | 迭代: ${iterations}\n`;
-  if (toolList) text += `工具: ${toolList}\n`;
-  text += `Skills: ${skillList}\n`;
-  if (error) text += `\n错误: ${error}`;
-
   // Always send in-app notification
+  const notifText =
+    `${emoji} **Swarm ${statusText}**\n\n` +
+    `目标: ${objective.slice(0, 100)}${objective.length > 100 ? '...' : ''}\n` +
+    `拓扑: ${topology || 'autonomous'} | 耗时: ${durationSec}秒 | 迭代: ${iterations}/${maxIterations || 0}\n` +
+    `工具: ${toolList}\n` +
+    `Skills: ${skillList}\n` +
+    `外部: ${externalList}` +
+    (error ? `\n错误: ${error}` : '');
+
   try {
     const { sendNotification } = await import('@/lib/notification-manager');
     await sendNotification({
       title: `Swarm ${statusText}`,
-      body: text,
+      body: notifText,
       priority: status === 'failed' ? 'urgent' : 'normal',
     });
   } catch (err) {
@@ -55,31 +93,36 @@ async function sendSwarmNotification(
   }
 
   // Send Feishu notification if configured with a target chat ID.
-  // Note: FeishuConfig is primarily for inbound bridge. Outbound notifications
-  // require bridge_feishu_notify_chat_id to be set in settings.
   try {
     const { loadFeishuConfig } = await import('@/lib/channels/feishu/config');
     const feishuConfig = loadFeishuConfig();
-    if (!feishuConfig?.appId || !feishuConfig?.appSecret) return;
+    if (!feishuConfig?.appId || !feishuConfig?.appSecret) {
+      console.log('[swarm/feishu] Skipped: missing appId or appSecret');
+      return;
+    }
 
     const notifyChatId = process.env.FEISHU_NOTIFY_CHAT_ID || getSetting('bridge_feishu_notify_chat_id');
-    if (!notifyChatId) return; // no outbound target configured
+    if (!notifyChatId) {
+      console.log('[swarm/feishu] Skipped: no bridge_feishu_notify_chat_id configured');
+      return;
+    }
 
-    const lark = await import('@larksuiteoapi/node-sdk');
-    const client = new lark.Client({
-      appId: feishuConfig.appId,
-      appSecret: feishuConfig.appSecret,
-    });
+    const client = createFeishuClient(feishuConfig.appId, feishuConfig.appSecret, feishuConfig.domain);
 
-    const content = JSON.stringify({
-      zh_cn: { content: [[{ tag: 'md', text }]] },
-    });
-    await client.im.message.create({
-      params: { receive_id_type: 'chat_id' },
-      data: { receive_id: notifyChatId, content, msg_type: 'post' },
-    });
+    const msg: OutboundMessage = {
+      address: { channelType: 'feishu', chatId: notifyChatId },
+      text: notifText,
+      parseMode: 'plain',
+    };
+
+    console.log('[swarm/feishu] Sending notification, text length:', notifText.length);
+    const result = await sendMessage(client, msg);
+    if (result.ok) {
+      console.log('[swarm/feishu] Send success, message_id:', result.messageId);
+    } else {
+      console.error('[swarm/feishu] Send failed:', result.error);
+    }
   } catch (err) {
-    // Feishu not configured or send failed — already sent in-app notification
     console.error('[swarm] Feishu notification failed:', err);
   }
 }
@@ -240,7 +283,9 @@ function runAutonomousSSE(
                 : error ? 'failed' as const
                 : 'completed' as const;
               const duration = Date.now() - (initStartedAt || Date.now());
-              sendSwarmNotification(entry?.objective || objective, status, duration, iterationCount, stats, error).catch(() => {});
+              sendSwarmNotification(entry?.objective || objective, status, duration, iterationCount, stats, error, config.topology, config.maxIterations).catch((err) => {
+                console.error('[swarm] Notification promise rejected:', err);
+              });
               enqueue('done', { error, stats });
               controller.close();
             },
@@ -335,7 +380,7 @@ function runHierarchicalSSE(
               : error ? 'failed' as const
               : 'completed' as const;
             const duration = Date.now() - initStartedAt;
-            sendSwarmNotification(entry?.objective || objective, status, duration, iterationCount, stats, error).catch(() => {});
+            sendSwarmNotification(entry?.objective || objective, status, duration, iterationCount, stats, error, config.topology, config.maxIterations).catch(() => {});
             enqueue('done', { error, stats });
             controller.close();
           },
