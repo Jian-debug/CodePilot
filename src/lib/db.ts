@@ -3,7 +3,7 @@ import path from 'path';
 import crypto from 'crypto';
 import fs from 'fs';
 import os from 'os';
-import type { ChatSession, Message, SettingsMap, TaskItem, TaskStatus, ApiProvider, CreateProviderRequest, UpdateProviderRequest, MediaJob, MediaJobStatus, MediaJobItem, MediaJobItemStatus, MediaContextEvent, BatchConfig, CustomCliTool, ScheduledTask, WorkflowRecord, WorkflowStatus, WorkflowStepRecord, WorkflowStepStatus, WorkflowVerifyStrategy, WorkflowStepAttemptRecord, WorkflowAttemptStatus } from '@/types';
+import type { ChatSession, Message, SettingsMap, TaskItem, TaskStatus, ApiProvider, CreateProviderRequest, UpdateProviderRequest, MediaJob, MediaJobStatus, MediaJobItem, MediaJobItemStatus, MediaContextEvent, BatchConfig, CustomCliTool, ScheduledTask, WorkflowRecord, WorkflowStatus, WorkflowStepRecord, WorkflowStepStatus, WorkflowVerifyStrategy, WorkflowStepComplexity, WorkflowStepAttemptRecord, WorkflowAttemptStatus } from '@/types';
 import type { ChannelType, ChannelBinding } from './bridge/types';
 import { getLocalDateString, localDayStartAsUTC } from './utils';
 import { inferProtocolFromLegacy } from './provider-catalog';
@@ -322,6 +322,7 @@ function initDb(db: Database.Database): void {
       status TEXT NOT NULL DEFAULT 'pending'
         CHECK(status IN ('pending','planning','running','completed','failed','cancelled')),
       result TEXT,
+      parent_workflow_id TEXT NOT NULL DEFAULT '',
       created_at TEXT NOT NULL DEFAULT (datetime('now')),
       updated_at TEXT NOT NULL DEFAULT (datetime('now')),
       completed_at TEXT,
@@ -340,6 +341,8 @@ function initDb(db: Database.Database): void {
       verify_strategy TEXT NOT NULL DEFAULT 'llm'
         CHECK(verify_strategy IN ('llm','command','both','none')),
       verify_command TEXT NOT NULL DEFAULT '',
+      complexity TEXT NOT NULL DEFAULT 'low'
+        CHECK(complexity IN ('low','medium','high')),
       status TEXT NOT NULL DEFAULT 'pending'
         CHECK(status IN ('pending','running','passed','failed','skipped')),
       result TEXT,
@@ -487,6 +490,21 @@ function migrateDb(db: Database.Database): void {
 
   if (!msgColNames.includes('is_heartbeat_ack')) {
     safeAddColumn(db, "ALTER TABLE messages ADD COLUMN is_heartbeat_ack INTEGER NOT NULL DEFAULT 0");
+  }
+
+  // Dynamic Workflow: add complexity column to workflow_steps for DBs created
+  // before per-step complexity existed. (No CHECK in the ALTER — writes always
+  // go through normalizeComplexity, and fresh DBs get the CHECK via CREATE TABLE.)
+  const wfStepCols = db.prepare("PRAGMA table_info(workflow_steps)").all() as { name: string }[];
+  if (!wfStepCols.some((c) => c.name === 'complexity')) {
+    safeAddColumn(db, "ALTER TABLE workflow_steps ADD COLUMN complexity TEXT NOT NULL DEFAULT 'low'");
+  }
+
+  // Dynamic Workflow: add parent_workflow_id to workflows for recursive
+  // decomposition (sub-workflows reference their parent; '' = top-level).
+  const wfCols = db.prepare("PRAGMA table_info(workflows)").all() as { name: string }[];
+  if (!wfCols.some((c) => c.name === 'parent_workflow_id')) {
+    safeAddColumn(db, "ALTER TABLE workflows ADD COLUMN parent_workflow_id TEXT NOT NULL DEFAULT ''");
   }
 
   // Ensure tasks table exists for databases created before this migration
@@ -2972,13 +2990,13 @@ function nowTimestamp(): string {
 
 // ── Workflows ───────────────────────────────────────────────────
 
-export function createWorkflow(sessionId: string, goal: string): WorkflowRecord {
+export function createWorkflow(sessionId: string, goal: string, parentWorkflowId = ''): WorkflowRecord {
   const db = getDb();
   const id = crypto.randomBytes(16).toString('hex');
   const now = nowTimestamp();
   db.prepare(
-    'INSERT INTO workflows (id, session_id, goal, status, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?)'
-  ).run(id, sessionId, goal, 'pending', now, now);
+    'INSERT INTO workflows (id, session_id, goal, status, parent_workflow_id, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?)'
+  ).run(id, sessionId, goal, 'pending', parentWorkflowId, now, now);
   return getWorkflow(id)!;
 }
 
@@ -3020,6 +3038,7 @@ export interface CreateWorkflowStepInput {
   dependsOn?: number[];
   verifyStrategy?: WorkflowVerifyStrategy;
   verifyCommand?: string;
+  complexity?: WorkflowStepComplexity;
 }
 
 export function createWorkflowStep(workflowId: string, data: CreateWorkflowStepInput): WorkflowStepRecord {
@@ -3028,8 +3047,8 @@ export function createWorkflowStep(workflowId: string, data: CreateWorkflowStepI
   const now = nowTimestamp();
   db.prepare(
     `INSERT INTO workflow_steps
-       (id, workflow_id, idx, title, instructions, acceptance_criteria, depends_on, verify_strategy, verify_command, status, created_at, updated_at)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+       (id, workflow_id, idx, title, instructions, acceptance_criteria, depends_on, verify_strategy, verify_command, complexity, status, created_at, updated_at)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
   ).run(
     id,
     workflowId,
@@ -3040,6 +3059,7 @@ export function createWorkflowStep(workflowId: string, data: CreateWorkflowStepI
     JSON.stringify(data.dependsOn || []),
     data.verifyStrategy || 'llm',
     data.verifyCommand || '',
+    data.complexity || 'low',
     'pending',
     now,
     now,
@@ -3130,4 +3150,38 @@ export function updateWorkflowStepAttempt(
      SET status = ?, verdict = ?, feedback = ?, output = ?, input_tokens = ?, output_tokens = ?, ended_at = ?
      WHERE id = ?`
   ).run(status, verdict, feedback, output, inputTokens, outputTokens, endedAt, id);
+}
+
+
+/**
+ * Full detail of one workflow run — the workflow record, its steps (ordered by
+ * idx), and each step's attempts keyed by step id (ordered by attempt_no).
+ * Used by the P2 WorkflowView reload path (GET /api/workflows) so a session's
+ * most recent workflow can be reconstructed after the live snapshot is gone.
+ */
+export interface WorkflowDetail {
+  workflow: WorkflowRecord;
+  steps: WorkflowStepRecord[];
+  attemptsByStep: Record<string, WorkflowStepAttemptRecord[]>;
+}
+
+export function getWorkflowDetail(workflowId: string): WorkflowDetail | undefined {
+  const workflow = getWorkflow(workflowId);
+  if (!workflow) return undefined;
+  const steps = getWorkflowSteps(workflowId);
+  const attemptsByStep: Record<string, WorkflowStepAttemptRecord[]> = {};
+  for (const step of steps) {
+    attemptsByStep[step.id] = getWorkflowStepAttempts(step.id);
+  }
+  return { workflow, steps, attemptsByStep };
+}
+
+/** Latest top-level workflow (with full detail) for a session, or undefined if
+ *  none. Sub-workflows (parent_workflow_id set) are excluded so the reload view
+ *  shows the workflow the user actually launched, not a recursive child. */
+export function getLatestWorkflowDetailBySession(sessionId: string): WorkflowDetail | undefined {
+  const workflows = getWorkflowsBySession(sessionId); // already ORDER BY created_at DESC
+  const topLevel = workflows.find((w) => !w.parent_workflow_id);
+  if (!topLevel) return undefined;
+  return getWorkflowDetail(topLevel.id);
 }

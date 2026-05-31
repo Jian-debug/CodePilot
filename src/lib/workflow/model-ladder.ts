@@ -20,6 +20,7 @@
 import { resolveProvider } from '../provider-resolver';
 import { findPresetForLegacy } from '../provider-catalog';
 import type { LadderRung } from './types';
+import type { WorkflowStepComplexity } from '@/types';
 
 export interface BuildLadderOptions {
   providerId?: string;
@@ -88,6 +89,42 @@ export function buildModelLadder(opts: BuildLadderOptions): LadderRung[] {
 /** Pick the strongest rung (last) for verification — a strong judge is desirable. */
 export function strongestRung(ladder: LadderRung[]): LadderRung | undefined {
   return ladder[ladder.length - 1];
+}
+
+/**
+ * The rung to use for attempt `i` (0-based). Walk the ladder cheap→strong; once
+ * past the end, repeat the strongest rung. This lets a step retry on the best
+ * model (with the verifier's feedback) after exhausting its distinct models,
+ * instead of failing after a single strong attempt.
+ */
+export function rungForAttempt(ladder: LadderRung[], i: number): LadderRung {
+  if (ladder.length === 0) throw new Error('rungForAttempt: empty ladder');
+  return i < ladder.length ? ladder[i] : ladder[ladder.length - 1];
+}
+
+/**
+ * Trim the lower (cheaper) rungs of a ladder based on a step's assessed
+ * complexity, so a hard step starts at a capable model instead of wasting a
+ * near-certain-to-fail cheap attempt + verification round. The ladder still
+ * escalates upward from the chosen start, and at least one rung always remains:
+ *   low    → full ladder (cheapest first)
+ *   medium → drop the cheapest rung
+ *   high   → start at the strongest rung
+ */
+export function startRungForComplexity(
+  ladder: LadderRung[],
+  complexity: WorkflowStepComplexity,
+): LadderRung[] {
+  if (ladder.length <= 1) return ladder;
+  switch (complexity) {
+    case 'high':
+      return ladder.slice(ladder.length - 1);
+    case 'medium':
+      return ladder.slice(1);
+    case 'low':
+    default:
+      return ladder;
+  }
 }
 
 function dedupeRungs(rungs: LadderRung[]): LadderRung[] {

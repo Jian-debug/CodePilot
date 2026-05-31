@@ -7,13 +7,40 @@
  * failure), streams workflow_* progress to the parent SSE stream, and returns
  * the merged result text.
  *
- * Auto-triggering (keyword / setting) is deferred to P4 — for now the model
- * reaches workflows by calling this tool.
+ * Auto-triggering (P4): the model still reaches workflows by calling this tool,
+ * but the agent loop now appends a system-prompt suggestion to use it when a
+ * turn looks like a large, multi-step task and `workflow_auto_suggest` is on
+ * (see workflow/auto-trigger.ts). Fully automatic execution is still deferred.
  */
 
 import { tool } from 'ai';
 import { z } from 'zod';
 import { runWorkflow } from '../workflow/engine';
+import { getSetting } from '../db';
+
+/** Parse the workflow_max_concurrency setting → clamped 1..8, default 3. */
+function resolveMaxConcurrency(): number {
+  const raw = getSetting('workflow_max_concurrency');
+  const n = raw ? parseInt(raw, 10) : NaN;
+  if (!Number.isFinite(n)) return 3;
+  return Math.min(8, Math.max(1, n));
+}
+
+/** Parse the workflow_step_retries setting → clamped 0..3, default 1. */
+function resolveTopRungRetries(): number {
+  const raw = getSetting('workflow_step_retries');
+  const n = raw ? parseInt(raw, 10) : NaN;
+  if (!Number.isFinite(n)) return 1;
+  return Math.min(3, Math.max(0, n));
+}
+
+/** Parse the workflow_max_depth setting → clamped 0..2, default 1 (0 disables recursion). */
+function resolveMaxDepth(): number {
+  const raw = getSetting('workflow_max_depth');
+  const n = raw ? parseInt(raw, 10) : NaN;
+  if (!Number.isFinite(n)) return 1;
+  return Math.min(2, Math.max(0, n));
+}
 
 export function createWorkflowTool(ctx: {
   workingDirectory: string;
@@ -50,6 +77,9 @@ export function createWorkflowTool(ctx: {
           permissionMode: ctx.permissionMode,
           abortSignal: ctx.abortSignal,
           emitSSE,
+          maxConcurrency: resolveMaxConcurrency(),
+          topRungRetries: resolveTopRungRetries(),
+          maxDepth: resolveMaxDepth(),
         });
       } catch (err) {
         const msg = err instanceof Error ? err.message : String(err);

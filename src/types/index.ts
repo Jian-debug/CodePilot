@@ -164,6 +164,16 @@ export type WorkflowAttemptStatus = 'running' | 'passed' | 'failed' | 'error';
 /** How a step's output is verified before it counts as "passed". */
 export type WorkflowVerifyStrategy = 'llm' | 'command' | 'both' | 'none';
 
+/**
+ * Estimated difficulty of a step, assessed by the planner. Selects where the
+ * step *starts* on the model ladder so a hard step skips wasted cheap attempts:
+ *   low    → start at the cheapest rung (then escalate on failure)
+ *   medium → skip the cheapest rung
+ *   high   → start at the strongest rung
+ * Defaults to 'low' (the pre-existing full-ladder behaviour) when unset.
+ */
+export type WorkflowStepComplexity = 'low' | 'medium' | 'high';
+
 /** A workflow run — the top-level decomposed plan for one goal. */
 export interface WorkflowRecord {
   id: string;
@@ -172,6 +182,8 @@ export interface WorkflowRecord {
   status: WorkflowStatus;
   /** Final merged result text (set on completion). */
   result: string | null;
+  /** Parent workflow id when this is a recursive sub-workflow ('' = top-level). */
+  parent_workflow_id: string;
   created_at: string;
   updated_at: string;
   completed_at: string | null;
@@ -190,6 +202,8 @@ export interface WorkflowStepRecord {
   verify_strategy: WorkflowVerifyStrategy;
   /** Shell command for command/both verification (empty = none). */
   verify_command: string;
+  /** Planner-assessed difficulty; selects the starting rung on the model ladder. */
+  complexity: WorkflowStepComplexity;
   status: WorkflowStepStatus;
   result: string | null;
   created_at: string;
@@ -622,6 +636,7 @@ export interface WorkflowPlanEvent {
     title: string;
     dependsOn: number[];
     verifyStrategy: WorkflowVerifyStrategy;
+    complexity: WorkflowStepComplexity;
   }>;
 }
 
@@ -658,6 +673,60 @@ export interface WorkflowVerifyEvent {
   feedback: string;
   /** Optional 0-100 confidence/quality score from the LLM judge. */
   score?: number;
+}
+
+// ── Dynamic Workflow client view-state (P2) ─────────────────────
+// Aggregated, render-ready shapes the WorkflowView panel consumes. The
+// reducer in workflow-view-reducer.ts folds the four workflow_* SSE events
+// (live) — or the persisted DB records (reload) — into a single
+// WorkflowViewState. These types never touch the DB or the wire.
+
+/** One attempt at a step with a specific model, as shown in the UI. */
+export interface WorkflowViewAttempt {
+  attemptId: string;
+  attemptNo: number;
+  /** Provider ID that ran this attempt ('' = env/default). */
+  providerId: string;
+  model: string;
+  /** Capability rung this attempt represents (small | default | sonnet | opus | override | session). */
+  role: string;
+  status: WorkflowAttemptStatus;
+  /** Verification outcome — undefined until the verify event lands. */
+  passed?: boolean;
+  /** Verification method that produced the verdict. */
+  via?: WorkflowVerifyStrategy;
+  /** Actionable feedback the next (stronger) attempt receives on failure. */
+  feedback?: string;
+  /** Optional 0-100 quality score from the LLM judge. */
+  score?: number;
+}
+
+/** One step of the decomposed plan, with its attempt ladder. */
+export interface WorkflowViewStep {
+  stepId: string;
+  idx: number;
+  title: string;
+  dependsOn: number[];
+  verifyStrategy: WorkflowVerifyStrategy;
+  /** Planner-assessed difficulty (drives the starting model rung). */
+  complexity: WorkflowStepComplexity;
+  status: WorkflowStepStatus;
+  attempts: WorkflowViewAttempt[];
+}
+
+/**
+ * Derived top-level state of a workflow run for the UI. The engine emits no
+ * structured "workflow finished" event, so `status` is derived from the steps
+ * (see deriveWorkflowStatus): a failed step halts the run, all-passed means
+ * completed, otherwise it's still running.
+ */
+export interface WorkflowViewState {
+  workflowId: string;
+  goal: string;
+  status: 'planning' | 'running' | 'completed' | 'failed';
+  steps: WorkflowViewStep[];
+  /** Epoch ms when the plan was first observed (for ordering / display). */
+  startedAt: number;
 }
 
 // ==========================================
@@ -1219,6 +1288,14 @@ export interface SessionStreamSnapshot {
     /** Epoch ms at which the snapshot was taken */
     capturedAt: number;
   };
+  /**
+   * Dynamic workflow view-state (P2). Populated by stream-session-manager as it
+   * folds workflow_plan / workflow_step / workflow_attempt / workflow_verify
+   * events. Present only when the current turn invoked the Workflow tool;
+   * absent otherwise. Preserved across stream completion so the panel stays
+   * visible after the run finishes.
+   */
+  workflow?: WorkflowViewState | null;
 }
 
 export interface StreamEvent {

@@ -7,7 +7,7 @@
  * the runWorkflow options bag.
  */
 
-import type { WorkflowVerifyStrategy } from '@/types';
+import type { WorkflowVerifyStrategy, WorkflowStepComplexity } from '@/types';
 
 /** SSE emit callback — same shape as ToolContext.emitSSE. */
 export type EmitSSE = (event: { type: string; data: string }) => void;
@@ -37,6 +37,8 @@ export interface PlannedStep {
   verifyStrategy: WorkflowVerifyStrategy;
   /** Shell command for command/both verification (empty when not applicable). */
   verifyCommand: string;
+  /** Planner-assessed difficulty; selects the starting rung on the model ladder. */
+  complexity: WorkflowStepComplexity;
   /** Optional explicit model ladder override (model IDs) for this step. */
   modelOverride?: string[];
 }
@@ -77,6 +79,24 @@ export interface RunWorkflowOptions {
   emitSSE: EmitSSE;
   /** Max attempts (ladder rungs) per step. Defaults to the ladder length. */
   maxAttemptsPerStep?: number;
+  /**
+   * Extra feedback-driven retries on the strongest rung after a step exhausts
+   * its distinct-model ladder, before it's marked failed. Default 1. This is
+   * what gives a hard step (which starts at the top rung) a real second chance.
+   */
+  topRungRetries?: number;
   /** Whether a failed step halts the whole workflow (default true). */
   haltOnStepFailure?: boolean;
+  /**
+   * Max steps to run concurrently (P3 parallel fan-out). Defaults to 3. Set to
+   * 1 to force serial execution. Independent steps (no dependency path between
+   * them) run in parallel up to this cap; dependencies are always respected.
+   */
+  maxConcurrency?: number;
+  /** Recursion depth of this workflow (top-level = 0). Internal. */
+  depth?: number;
+  /** Max recursion depth — a hard failed step may decompose while depth < maxDepth. */
+  maxDepth?: number;
+  /** Set on sub-workflows so they're excluded from the session's "latest" view. */
+  parentWorkflowId?: string;
 }

@@ -17,6 +17,7 @@ import { runAgentLoop } from '../agent-loop';
 import { assembleTools } from '../agent-tools';
 import type { PermissionMode } from '../permission-checker';
 import { verifyStep } from './verifier';
+import { rungForAttempt } from './model-ladder';
 import {
   createWorkflowStepAttempt,
   updateWorkflowStepAttempt,
@@ -66,12 +67,14 @@ export async function runStep(opts: RunStepOptions): Promise<StepRunResult> {
   });
   updateWorkflowStep(step.id, { status: 'running' });
 
-  const rungCount = Math.min(opts.maxAttempts, ladder.length) || ladder.length;
+  // Total attempts may exceed the ladder length: extra attempts repeat the
+  // strongest rung (feedback-driven retries) — see rungForAttempt.
+  const attemptCount = Math.max(1, opts.maxAttempts || ladder.length);
   let feedback = '';
   let lastOutput = '';
 
-  for (let i = 0; i < rungCount; i++) {
-    const rung = ladder[i];
+  for (let i = 0; i < attemptCount; i++) {
+    const rung = rungForAttempt(ladder, i);
     const attemptNo = i + 1;
 
     if (opts.abortSignal?.aborted) break;
@@ -201,7 +204,7 @@ export async function runStep(opts: RunStepOptions): Promise<StepRunResult> {
     title: step.title,
     status: 'failed',
   });
-  return { stepId: step.id, passed: false, output: lastOutput, attempts: rungCount };
+  return { stepId: step.id, passed: false, output: lastOutput, attempts: attemptCount };
 }
 
 // ── Worker (constrained agent loop) ─────────────────────────────
@@ -331,7 +334,7 @@ function buildWorkerPrompt(instructions: string, priorContext?: string, feedback
     prompt = `Context from earlier completed steps:\n${priorContext}\n\n---\n\nYour step:\n${instructions}`;
   }
   if (feedback && feedback.trim()) {
-    prompt += `\n\n---\n\nA previous attempt with a weaker model failed verification. Address this feedback:\n${feedback}`;
+    prompt += `\n\n---\n\nA previous attempt failed verification. Address this feedback specifically:\n${feedback}`;
   }
   return prompt;
 }

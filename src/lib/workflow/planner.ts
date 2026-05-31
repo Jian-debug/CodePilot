@@ -9,7 +9,10 @@
 
 import { generateTextFromProvider } from '../text-generator';
 import type { PlannedStep } from './types';
-import type { WorkflowVerifyStrategy } from '@/types';
+import type { WorkflowVerifyStrategy, WorkflowStepComplexity } from '@/types';
+
+/** Defensive upper bound on plan size (the prompt asks for 2-6 steps). */
+const MAX_STEPS = 24;
 
 const PLANNER_SYSTEM = `You are a planning module for an autonomous coding workflow.
 Decompose the user's goal into an ordered list of concrete, independently-verifiable steps.
@@ -22,10 +25,23 @@ Rules:
 - "verifyStrategy": "llm" (judge output against criteria — default), "command" (run a shell
   command and check exit code), "both", or "none". Use "command"/"both" only when there is a
   concrete test/build/lint command worth running; put it in "verifyCommand".
+- "complexity": "low" | "medium" | "high" — your honest estimate of how hard the step is.
+  "low" = trivial/mechanical (rename, add a field, simple wiring); "medium" = standard feature
+  work; "high" = tricky, cross-cutting, algorithmic, or ambiguous. This selects which model the
+  step starts on (low starts on a cheap fast model, high starts on the strongest), so be accurate.
+
+Parallelism & safety (IMPORTANT):
+- Steps with NO dependency relationship may run AT THE SAME TIME (in parallel).
+- Therefore "dependsOn" is also a safety mechanism: if two steps would read or write the SAME
+  files (or otherwise conflict), you MUST add a dependsOn edge so they run in order — never leave
+  a write/write or write/read conflict between two steps that lack a dependency between them.
+- Keep genuinely independent steps independent (empty or disjoint dependsOn) so they can fan out.
+- Do not create dependency cycles.
 
 Respond with ONLY a JSON array, no prose, no code fences. Schema per element:
 { "title": string, "instructions": string, "acceptanceCriteria": string,
-  "dependsOn": number[], "verifyStrategy": "llm"|"command"|"both"|"none", "verifyCommand": string }`;
+  "dependsOn": number[], "verifyStrategy": "llm"|"command"|"both"|"none", "verifyCommand": string,
+  "complexity": "low"|"medium"|"high" }`;
 
 export interface PlanWorkflowOptions {
   goal: string;
@@ -57,6 +73,14 @@ export async function planWorkflow(opts: PlanWorkflowOptions): Promise<PlannedSt
     console.warn('[workflow/planner] could not parse a step array, falling back to single step');
     return [singleStepFallback(opts.goal)];
   }
+  // Defensive cap: a pathological plan with dozens of steps would spawn an
+  // unbounded number of (expensive) agent runs. The prompt asks for 2-6 steps;
+  // anything past MAX_STEPS is almost certainly degenerate, so truncate. Any
+  // dependsOn edges pointing beyond the cap are dropped later by the scheduler.
+  if (parsed.length > MAX_STEPS) {
+    console.warn(`[workflow/planner] plan had ${parsed.length} steps; truncating to ${MAX_STEPS}`);
+    return parsed.slice(0, MAX_STEPS);
+  }
   return parsed;
 }
 
@@ -68,6 +92,7 @@ function singleStepFallback(goal: string): PlannedStep {
     dependsOn: [],
     verifyStrategy: 'llm',
     verifyCommand: '',
+    complexity: 'medium',
   };
 }
 
@@ -109,6 +134,7 @@ function parseSteps(raw: string): PlannedStep[] | null {
       dependsOn: normalizeDependsOn(o.dependsOn),
       verifyStrategy: normalizeStrategy(o.verifyStrategy),
       verifyCommand: typeof o.verifyCommand === 'string' ? o.verifyCommand.trim() : '',
+      complexity: normalizeComplexity(o.complexity),
     });
   }
   return steps.length > 0 ? steps : null;
@@ -122,4 +148,9 @@ function normalizeDependsOn(value: unknown): number[] {
 function normalizeStrategy(value: unknown): WorkflowVerifyStrategy {
   if (value === 'command' || value === 'both' || value === 'none' || value === 'llm') return value;
   return 'llm';
+}
+
+function normalizeComplexity(value: unknown): WorkflowStepComplexity {
+  if (value === 'medium' || value === 'high' || value === 'low') return value;
+  return 'low';
 }

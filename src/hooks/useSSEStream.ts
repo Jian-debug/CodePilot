@@ -1,5 +1,14 @@
 import { useRef, useCallback } from 'react';
-import type { SSEEvent, TokenUsage, PermissionRequestEvent, MediaBlock } from '@/types';
+import type {
+  SSEEvent,
+  TokenUsage,
+  PermissionRequestEvent,
+  MediaBlock,
+  WorkflowPlanEvent,
+  WorkflowStepEvent,
+  WorkflowAttemptEvent,
+  WorkflowVerifyEvent,
+} from '@/types';
 
 interface ToolUseInfo {
   id: string;
@@ -45,6 +54,14 @@ export interface SSECallbacks {
   onKeepAlive: () => void;
   onError: (accumulated: string) => void;
   onSkillNudge?: (data: SkillNudgeData) => void;
+  /** Dynamic workflow (P2): decomposed step plan, emitted once after planning. */
+  onWorkflowPlan?: (event: WorkflowPlanEvent) => void;
+  /** Dynamic workflow (P2): a step's lifecycle status changed. */
+  onWorkflowStep?: (event: WorkflowStepEvent) => void;
+  /** Dynamic workflow (P2): an attempt at a step with a specific model. */
+  onWorkflowAttempt?: (event: WorkflowAttemptEvent) => void;
+  /** Dynamic workflow (P2): verification verdict for an attempt. */
+  onWorkflowVerify?: (event: WorkflowVerifyEvent) => void;
   onContextCompressed?: (data: { message: string; messagesCompressed: number; tokensSaved: number }) => void;
   onInitMeta?: (meta: {
     tools?: unknown;
@@ -322,6 +339,42 @@ function handleSSEEvent(
       return accumulated;
     }
 
+    case 'workflow_plan': {
+      try {
+        callbacks.onWorkflowPlan?.(JSON.parse(event.data) as WorkflowPlanEvent);
+      } catch {
+        // skip malformed workflow_plan data
+      }
+      return accumulated;
+    }
+
+    case 'workflow_step': {
+      try {
+        callbacks.onWorkflowStep?.(JSON.parse(event.data) as WorkflowStepEvent);
+      } catch {
+        // skip malformed workflow_step data
+      }
+      return accumulated;
+    }
+
+    case 'workflow_attempt': {
+      try {
+        callbacks.onWorkflowAttempt?.(JSON.parse(event.data) as WorkflowAttemptEvent);
+      } catch {
+        // skip malformed workflow_attempt data
+      }
+      return accumulated;
+    }
+
+    case 'workflow_verify': {
+      try {
+        callbacks.onWorkflowVerify?.(JSON.parse(event.data) as WorkflowVerifyEvent);
+      } catch {
+        // skip malformed workflow_verify data
+      }
+      return accumulated;
+    }
+
     case 'error': {
       // Try to parse structured error JSON from error-classifier
       let errorDisplay: string;
@@ -452,6 +505,10 @@ export function useSSEStream() {
         onInitMeta: (m) => callbacksRef.current?.onInitMeta?.(m),
         onRateLimit: (info) => callbacksRef.current?.onRateLimit?.(info),
         onContextUsage: (snap) => callbacksRef.current?.onContextUsage?.(snap),
+        onWorkflowPlan: (e) => callbacksRef.current?.onWorkflowPlan?.(e),
+        onWorkflowStep: (e) => callbacksRef.current?.onWorkflowStep?.(e),
+        onWorkflowAttempt: (e) => callbacksRef.current?.onWorkflowAttempt?.(e),
+        onWorkflowVerify: (e) => callbacksRef.current?.onWorkflowVerify?.(e),
       };
 
       return consumeSSEStream(reader, proxied);
