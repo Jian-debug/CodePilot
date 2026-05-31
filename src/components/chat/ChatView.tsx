@@ -2,10 +2,11 @@
 
 import { useState, useCallback, useEffect, useRef, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
-import type { Message, MessagesResponse, FileAttachment, SessionStreamSnapshot, MentionRef } from '@/types';
+import type { Message, MessagesResponse, FileAttachment, SessionStreamSnapshot, MentionRef, WorkflowViewState } from '@/types';
 import { MessageList } from './MessageList';
 import { TerminalReasonChip } from './TerminalReasonChip';
 import { RateLimitBanner } from './RateLimitBanner';
+import { WorkflowView } from './WorkflowView';
 import { MessageInput } from './MessageInput';
 import { ChatComposerActionBar } from './ChatComposerActionBar';
 import { ModeIndicator } from './ModeIndicator';
@@ -193,6 +194,28 @@ export function ChatView({ sessionId, initialMessages = [], initialHasMore = fal
   const pendingPermission = streamSnapshot?.pendingPermission ?? null;
   const permissionResolved = streamSnapshot?.permissionResolved ?? null;
   const rewindPoints = getRewindPoints(sessionId);
+
+  // ── Dynamic workflow panel (P2) ──
+  // The live snapshot carries the workflow state while a turn is streaming and
+  // keeps it after completion (snapshot persists in React state). For reload /
+  // session re-open — when no live snapshot exists — fall back to the session's
+  // most recent persisted workflow fetched from the DB.
+  const [loadedWorkflow, setLoadedWorkflow] = useState<WorkflowViewState | null>(null);
+  useEffect(() => {
+    let cancelled = false;
+    setLoadedWorkflow(null);
+    // A live snapshot already has the freshest workflow — skip the DB round-trip.
+    if (getSnapshot(sessionId)?.workflow) return;
+    fetch(`/api/workflows?session_id=${encodeURIComponent(sessionId)}`)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (!cancelled && data?.workflow) setLoadedWorkflow(data.workflow);
+      })
+      .catch(() => { /* no workflow for this session — panel stays hidden */ });
+    return () => { cancelled = true; };
+  }, [sessionId]);
+  // Live snapshot wins; loaded (persisted) workflow is the reload fallback.
+  const displayWorkflow = streamSnapshot?.workflow ?? loadedWorkflow;
 
   // ── Skill nudge banner ──
   // Listens for 'skill-nudge' window events dispatched by stream-session-manager
@@ -970,6 +993,11 @@ export function ChatView({ sessionId, initialMessages = [], initialHasMore = fal
           ))}
         </div>
       )}
+
+      {/* Dynamic workflow observability panel (P2) — shows the per-step model
+          ladder, verification verdicts, and escalations. Live while streaming;
+          persisted workflow on reload. */}
+      {displayWorkflow && <WorkflowView workflow={displayWorkflow} />}
 
       {/* Phase 2 — subscription rate-limit banner (allowed_warning / rejected) */}
       {!rateLimitDismissed && streamSnapshot?.rateLimitInfo && streamSnapshot.rateLimitInfo.status !== 'allowed' && (

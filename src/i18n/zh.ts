@@ -1549,6 +1549,33 @@ const zh: Record<TranslationKey, string> = {
   'buddy.namePlaceholder': '给你的伙伴起个名字...',
   'buddy.nameHint': '这将是你的伙伴的名字',
   'buddy.reset': '重置伙伴',
+
+  // ── Dynamic Workflow (P2 — observable orchestration) ──────────
+  'workflow.title': '工作流',
+  'workflow.status.planning': '规划中',
+  'workflow.status.running': '执行中',
+  'workflow.status.completed': '已完成',
+  'workflow.status.failed': '失败',
+  'workflow.stepStatus.pending': '待执行',
+  'workflow.stepStatus.running': '执行中',
+  'workflow.stepStatus.passed': '通过',
+  'workflow.stepStatus.failed': '失败',
+  'workflow.stepStatus.skipped': '已跳过',
+  'workflow.stepsProgress': '{passed}/{total} 步骤通过',
+  'workflow.attempt': '第 {n} 次尝试',
+  'workflow.attemptRunning': '使用 {model} 执行中',
+  'workflow.attemptPassed': '使用 {model} 通过',
+  'workflow.attemptFailed': '使用 {model} 失败',
+  'workflow.escalated': '已升级到更强的模型',
+  'workflow.verifyVia': '校验方式：{via}',
+  'workflow.verify.llm': 'LLM 评审',
+  'workflow.verify.command': '命令',
+  'workflow.verify.both': 'LLM + 命令',
+  'workflow.verify.none': '不校验',
+  'workflow.score': '评分 {score}',
+  'workflow.feedback': '反馈',
+  'workflow.expand': '展开步骤',
+  'workflow.collapse': '收起步骤',
 };
 
 export default zh;
