@@ -1552,6 +1552,33 @@ const en = {
   'buddy.namePlaceholder': 'Give your buddy a name...',
   'buddy.nameHint': 'This will be your buddy\'s name',
   'buddy.reset': 'Reset buddy',
+
+  // ── Dynamic Workflow (P2 — observable orchestration) ──────────
+  'workflow.title': 'Workflow',
+  'workflow.status.planning': 'Planning',
+  'workflow.status.running': 'Running',
+  'workflow.status.completed': 'Completed',
+  'workflow.status.failed': 'Failed',
+  'workflow.stepStatus.pending': 'Pending',
+  'workflow.stepStatus.running': 'Running',
+  'workflow.stepStatus.passed': 'Passed',
+  'workflow.stepStatus.failed': 'Failed',
+  'workflow.stepStatus.skipped': 'Skipped',
+  'workflow.stepsProgress': '{passed}/{total} steps passed',
+  'workflow.attempt': 'Attempt {n}',
+  'workflow.attemptRunning': 'Running on {model}',
+  'workflow.attemptPassed': 'Passed on {model}',
+  'workflow.attemptFailed': 'Failed on {model}',
+  'workflow.escalated': 'Escalated to a stronger model',
+  'workflow.verifyVia': 'Verified via {via}',
+  'workflow.verify.llm': 'LLM judge',
+  'workflow.verify.command': 'command',
+  'workflow.verify.both': 'LLM + command',
+  'workflow.verify.none': 'no verification',
+  'workflow.score': 'Score {score}',
+  'workflow.feedback': 'Feedback',
+  'workflow.expand': 'Show steps',
+  'workflow.collapse': 'Hide steps',
 } as const;
 
 export type TranslationKey = keyof typeof en;

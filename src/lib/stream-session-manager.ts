@@ -12,6 +12,12 @@
 
 import { consumeSSEStream } from '@/hooks/useSSEStream';
 import { transferPendingToMessage } from '@/lib/image-ref-store';
+import {
+  applyWorkflowPlan,
+  applyWorkflowStep,
+  applyWorkflowAttempt,
+  applyWorkflowVerify,
+} from '@/lib/workflow-view-reducer';
 import type {
   ToolUseInfo,
   ToolResultInfo,
@@ -22,6 +28,7 @@ import type {
   PermissionRequestEvent,
   FileAttachment,
   MentionRef,
+  WorkflowViewState,
 } from '@/types';
 
 // ==========================================
@@ -51,6 +58,8 @@ interface ActiveStream {
   isIdleTimeout: boolean;
   sendMessageFn: ((content: string, files?: FileAttachment[]) => void) | null;
   rewindPoints: Array<{ userMessageId: string }>;
+  /** Dynamic workflow view-state (P2) — folded from workflow_* events. */
+  workflowState: WorkflowViewState | null;
 }
 
 export interface StartStreamParams {
@@ -129,6 +138,7 @@ function buildSnapshot(stream: ActiveStream): SessionStreamSnapshot {
     terminalReason: stream.snapshot.terminalReason,
     rateLimitInfo: stream.snapshot.rateLimitInfo,
     contextUsageSnapshot: stream.snapshot.contextUsageSnapshot,
+    workflow: stream.workflowState,
   };
 }
 
@@ -231,6 +241,7 @@ export function startStream(params: StartStreamParams): void {
     isIdleTimeout: false,
     sendMessageFn: params.sendMessageFn ?? null,
     rewindPoints: [],
+    workflowState: null,
   };
 
   map.set(params.sessionId, stream);
@@ -391,6 +402,26 @@ async function runStream(stream: ActiveStream, params: StartStreamParams): Promi
             detail: { sessionId: params.sessionId, ...data },
           }));
         }
+      },
+      onWorkflowPlan: (event) => {
+        markActive();
+        stream.workflowState = applyWorkflowPlan(stream.workflowState, event);
+        emit(stream, 'snapshot-updated');
+      },
+      onWorkflowStep: (event) => {
+        markActive();
+        stream.workflowState = applyWorkflowStep(stream.workflowState, event);
+        emit(stream, 'snapshot-updated');
+      },
+      onWorkflowAttempt: (event) => {
+        markActive();
+        stream.workflowState = applyWorkflowAttempt(stream.workflowState, event);
+        emit(stream, 'snapshot-updated');
+      },
+      onWorkflowVerify: (event) => {
+        markActive();
+        stream.workflowState = applyWorkflowVerify(stream.workflowState, event);
+        emit(stream, 'snapshot-updated');
       },
       onContextCompressed: (data) => {
         markActive();
@@ -894,6 +925,7 @@ export function seedSnapshotPatch(
     isIdleTimeout: false,
     sendMessageFn: null,
     rewindPoints: [],
+    workflowState: null,
     snapshot: {
       sessionId,
       phase: 'completed',

@@ -3131,3 +3131,34 @@ export function updateWorkflowStepAttempt(
      WHERE id = ?`
   ).run(status, verdict, feedback, output, inputTokens, outputTokens, endedAt, id);
 }
+
+
+/**
+ * Full detail of one workflow run — the workflow record, its steps (ordered by
+ * idx), and each step's attempts keyed by step id (ordered by attempt_no).
+ * Used by the P2 WorkflowView reload path (GET /api/workflows) so a session's
+ * most recent workflow can be reconstructed after the live snapshot is gone.
+ */
+export interface WorkflowDetail {
+  workflow: WorkflowRecord;
+  steps: WorkflowStepRecord[];
+  attemptsByStep: Record<string, WorkflowStepAttemptRecord[]>;
+}
+
+export function getWorkflowDetail(workflowId: string): WorkflowDetail | undefined {
+  const workflow = getWorkflow(workflowId);
+  if (!workflow) return undefined;
+  const steps = getWorkflowSteps(workflowId);
+  const attemptsByStep: Record<string, WorkflowStepAttemptRecord[]> = {};
+  for (const step of steps) {
+    attemptsByStep[step.id] = getWorkflowStepAttempts(step.id);
+  }
+  return { workflow, steps, attemptsByStep };
+}
+
+/** Latest workflow (with full detail) for a session, or undefined if none. */
+export function getLatestWorkflowDetailBySession(sessionId: string): WorkflowDetail | undefined {
+  const workflows = getWorkflowsBySession(sessionId); // already ORDER BY created_at DESC
+  if (workflows.length === 0) return undefined;
+  return getWorkflowDetail(workflows[0].id);
+}

@@ -660,6 +660,58 @@ export interface WorkflowVerifyEvent {
   score?: number;
 }
 
+// ── Dynamic Workflow client view-state (P2) ─────────────────────
+// Aggregated, render-ready shapes the WorkflowView panel consumes. The
+// reducer in workflow-view-reducer.ts folds the four workflow_* SSE events
+// (live) — or the persisted DB records (reload) — into a single
+// WorkflowViewState. These types never touch the DB or the wire.
+
+/** One attempt at a step with a specific model, as shown in the UI. */
+export interface WorkflowViewAttempt {
+  attemptId: string;
+  attemptNo: number;
+  /** Provider ID that ran this attempt ('' = env/default). */
+  providerId: string;
+  model: string;
+  /** Capability rung this attempt represents (small | default | sonnet | opus | override | session). */
+  role: string;
+  status: WorkflowAttemptStatus;
+  /** Verification outcome — undefined until the verify event lands. */
+  passed?: boolean;
+  /** Verification method that produced the verdict. */
+  via?: WorkflowVerifyStrategy;
+  /** Actionable feedback the next (stronger) attempt receives on failure. */
+  feedback?: string;
+  /** Optional 0-100 quality score from the LLM judge. */
+  score?: number;
+}
+
+/** One step of the decomposed plan, with its attempt ladder. */
+export interface WorkflowViewStep {
+  stepId: string;
+  idx: number;
+  title: string;
+  dependsOn: number[];
+  verifyStrategy: WorkflowVerifyStrategy;
+  status: WorkflowStepStatus;
+  attempts: WorkflowViewAttempt[];
+}
+
+/**
+ * Derived top-level state of a workflow run for the UI. The engine emits no
+ * structured "workflow finished" event, so `status` is derived from the steps
+ * (see deriveWorkflowStatus): a failed step halts the run, all-passed means
+ * completed, otherwise it's still running.
+ */
+export interface WorkflowViewState {
+  workflowId: string;
+  goal: string;
+  status: 'planning' | 'running' | 'completed' | 'failed';
+  steps: WorkflowViewStep[];
+  /** Epoch ms when the plan was first observed (for ordering / display). */
+  startedAt: number;
+}
+
 // ==========================================
 // Permission Types
 // ==========================================
@@ -1219,6 +1271,14 @@ export interface SessionStreamSnapshot {
     /** Epoch ms at which the snapshot was taken */
     capturedAt: number;
   };
+  /**
+   * Dynamic workflow view-state (P2). Populated by stream-session-manager as it
+   * folds workflow_plan / workflow_step / workflow_attempt / workflow_verify
+   * events. Present only when the current turn invoked the Workflow tool;
+   * absent otherwise. Preserved across stream completion so the panel stays
+   * visible after the run finishes.
+   */
+  workflow?: WorkflowViewState | null;
 }
 
 export interface StreamEvent {
