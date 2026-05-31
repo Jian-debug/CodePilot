@@ -44,7 +44,7 @@ const BUILTIN_AGENTS: AgentDefinition[] = [
     displayName: 'General',
     description: 'General-purpose sub-agent for complex multi-step tasks.',
     mode: 'subagent',
-    disallowedTools: ['Agent'], // prevent recursive sub-agents
+    disallowedTools: ['Agent', 'Workflow'], // prevent recursive sub-agents / workflows
     maxSteps: 30,
   },
 ];

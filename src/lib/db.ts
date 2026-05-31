@@ -3,7 +3,7 @@ import path from 'path';
 import crypto from 'crypto';
 import fs from 'fs';
 import os from 'os';
-import type { ChatSession, Message, SettingsMap, TaskItem, TaskStatus, ApiProvider, CreateProviderRequest, UpdateProviderRequest, MediaJob, MediaJobStatus, MediaJobItem, MediaJobItemStatus, MediaContextEvent, BatchConfig, CustomCliTool, ScheduledTask } from '@/types';
+import type { ChatSession, Message, SettingsMap, TaskItem, TaskStatus, ApiProvider, CreateProviderRequest, UpdateProviderRequest, MediaJob, MediaJobStatus, MediaJobItem, MediaJobItemStatus, MediaContextEvent, BatchConfig, CustomCliTool, ScheduledTask, WorkflowRecord, WorkflowStatus, WorkflowStepRecord, WorkflowStepStatus, WorkflowVerifyStrategy, WorkflowStepAttemptRecord, WorkflowAttemptStatus } from '@/types';
 import type { ChannelType, ChannelBinding } from './bridge/types';
 import { getLocalDateString, localDayStartAsUTC } from './utils';
 import { inferProtocolFromLegacy } from './provider-catalog';
@@ -313,6 +313,64 @@ function initDb(db: Database.Database): void {
       created_at TEXT NOT NULL DEFAULT (datetime('now'))
     );
     CREATE INDEX IF NOT EXISTS idx_perm_links_request ON channel_permission_links(permission_request_id);
+
+    -- Dynamic Workflow: top-level workflow run (P1)
+    CREATE TABLE IF NOT EXISTS workflows (
+      id TEXT PRIMARY KEY,
+      session_id TEXT NOT NULL,
+      goal TEXT NOT NULL DEFAULT '',
+      status TEXT NOT NULL DEFAULT 'pending'
+        CHECK(status IN ('pending','planning','running','completed','failed','cancelled')),
+      result TEXT,
+      created_at TEXT NOT NULL DEFAULT (datetime('now')),
+      updated_at TEXT NOT NULL DEFAULT (datetime('now')),
+      completed_at TEXT,
+      FOREIGN KEY (session_id) REFERENCES chat_sessions(id) ON DELETE CASCADE
+    );
+
+    -- Dynamic Workflow: decomposed steps
+    CREATE TABLE IF NOT EXISTS workflow_steps (
+      id TEXT PRIMARY KEY,
+      workflow_id TEXT NOT NULL,
+      idx INTEGER NOT NULL DEFAULT 0,
+      title TEXT NOT NULL DEFAULT '',
+      instructions TEXT NOT NULL DEFAULT '',
+      acceptance_criteria TEXT NOT NULL DEFAULT '',
+      depends_on TEXT NOT NULL DEFAULT '[]',
+      verify_strategy TEXT NOT NULL DEFAULT 'llm'
+        CHECK(verify_strategy IN ('llm','command','both','none')),
+      verify_command TEXT NOT NULL DEFAULT '',
+      status TEXT NOT NULL DEFAULT 'pending'
+        CHECK(status IN ('pending','running','passed','failed','skipped')),
+      result TEXT,
+      created_at TEXT NOT NULL DEFAULT (datetime('now')),
+      updated_at TEXT NOT NULL DEFAULT (datetime('now')),
+      FOREIGN KEY (workflow_id) REFERENCES workflows(id) ON DELETE CASCADE
+    );
+
+    -- Dynamic Workflow: per-step attempts (one row per model tried)
+    CREATE TABLE IF NOT EXISTS workflow_step_attempts (
+      id TEXT PRIMARY KEY,
+      step_id TEXT NOT NULL,
+      attempt_no INTEGER NOT NULL DEFAULT 1,
+      provider_id TEXT NOT NULL DEFAULT '',
+      model TEXT NOT NULL DEFAULT '',
+      role TEXT NOT NULL DEFAULT '',
+      status TEXT NOT NULL DEFAULT 'running'
+        CHECK(status IN ('running','passed','failed','error')),
+      verdict TEXT,
+      feedback TEXT,
+      output TEXT,
+      input_tokens INTEGER NOT NULL DEFAULT 0,
+      output_tokens INTEGER NOT NULL DEFAULT 0,
+      started_at TEXT NOT NULL DEFAULT (datetime('now')),
+      ended_at TEXT,
+      FOREIGN KEY (step_id) REFERENCES workflow_steps(id) ON DELETE CASCADE
+    );
+
+    CREATE INDEX IF NOT EXISTS idx_workflows_session_id ON workflows(session_id);
+    CREATE INDEX IF NOT EXISTS idx_workflow_steps_workflow_id ON workflow_steps(workflow_id);
+    CREATE INDEX IF NOT EXISTS idx_workflow_step_attempts_step_id ON workflow_step_attempts(step_id);
   `);
 
   // Run migrations for existing databases
@@ -2902,3 +2960,174 @@ function registerShutdownHandlers(): void {
 }
 
 registerShutdownHandlers();
+
+
+// ==========================================
+// Dynamic Workflow Operations (P1)
+// ==========================================
+
+function nowTimestamp(): string {
+  return new Date().toISOString().replace('T', ' ').split('.')[0];
+}
+
+// ── Workflows ───────────────────────────────────────────────────
+
+export function createWorkflow(sessionId: string, goal: string): WorkflowRecord {
+  const db = getDb();
+  const id = crypto.randomBytes(16).toString('hex');
+  const now = nowTimestamp();
+  db.prepare(
+    'INSERT INTO workflows (id, session_id, goal, status, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?)'
+  ).run(id, sessionId, goal, 'pending', now, now);
+  return getWorkflow(id)!;
+}
+
+export function getWorkflow(id: string): WorkflowRecord | undefined {
+  const db = getDb();
+  return db.prepare('SELECT * FROM workflows WHERE id = ?').get(id) as WorkflowRecord | undefined;
+}
+
+export function getWorkflowsBySession(sessionId: string): WorkflowRecord[] {
+  const db = getDb();
+  return db.prepare('SELECT * FROM workflows WHERE session_id = ? ORDER BY created_at DESC').all(sessionId) as WorkflowRecord[];
+}
+
+export function updateWorkflowStatus(
+  id: string,
+  status: WorkflowStatus,
+  opts: { result?: string } = {},
+): void {
+  const db = getDb();
+  const now = nowTimestamp();
+  const completedAt = (status === 'completed' || status === 'failed' || status === 'cancelled') ? now : null;
+  db.prepare(
+    `UPDATE workflows
+     SET status = ?,
+         result = COALESCE(?, result),
+         updated_at = ?,
+         completed_at = COALESCE(?, completed_at)
+     WHERE id = ?`
+  ).run(status, opts.result ?? null, now, completedAt, id);
+}
+
+// ── Workflow steps ──────────────────────────────────────────────
+
+export interface CreateWorkflowStepInput {
+  idx: number;
+  title: string;
+  instructions: string;
+  acceptanceCriteria?: string;
+  dependsOn?: number[];
+  verifyStrategy?: WorkflowVerifyStrategy;
+  verifyCommand?: string;
+}
+
+export function createWorkflowStep(workflowId: string, data: CreateWorkflowStepInput): WorkflowStepRecord {
+  const db = getDb();
+  const id = crypto.randomBytes(16).toString('hex');
+  const now = nowTimestamp();
+  db.prepare(
+    `INSERT INTO workflow_steps
+       (id, workflow_id, idx, title, instructions, acceptance_criteria, depends_on, verify_strategy, verify_command, status, created_at, updated_at)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+  ).run(
+    id,
+    workflowId,
+    data.idx,
+    data.title,
+    data.instructions,
+    data.acceptanceCriteria || '',
+    JSON.stringify(data.dependsOn || []),
+    data.verifyStrategy || 'llm',
+    data.verifyCommand || '',
+    'pending',
+    now,
+    now,
+  );
+  return getWorkflowStep(id)!;
+}
+
+export function getWorkflowStep(id: string): WorkflowStepRecord | undefined {
+  const db = getDb();
+  return db.prepare('SELECT * FROM workflow_steps WHERE id = ?').get(id) as WorkflowStepRecord | undefined;
+}
+
+export function getWorkflowSteps(workflowId: string): WorkflowStepRecord[] {
+  const db = getDb();
+  return db.prepare('SELECT * FROM workflow_steps WHERE workflow_id = ? ORDER BY idx ASC').all(workflowId) as WorkflowStepRecord[];
+}
+
+export function updateWorkflowStep(
+  id: string,
+  updates: { status?: WorkflowStepStatus; result?: string },
+): void {
+  const db = getDb();
+  const now = nowTimestamp();
+  const existing = getWorkflowStep(id);
+  if (!existing) return;
+  const status = updates.status ?? existing.status;
+  const result = updates.result !== undefined ? updates.result : existing.result;
+  db.prepare(
+    'UPDATE workflow_steps SET status = ?, result = ?, updated_at = ? WHERE id = ?'
+  ).run(status, result, now, id);
+}
+
+// ── Workflow step attempts ──────────────────────────────────────
+
+export interface CreateWorkflowStepAttemptInput {
+  attemptNo: number;
+  providerId: string;
+  model: string;
+  role: string;
+}
+
+export function createWorkflowStepAttempt(stepId: string, data: CreateWorkflowStepAttemptInput): WorkflowStepAttemptRecord {
+  const db = getDb();
+  const id = crypto.randomBytes(16).toString('hex');
+  const now = nowTimestamp();
+  db.prepare(
+    `INSERT INTO workflow_step_attempts
+       (id, step_id, attempt_no, provider_id, model, role, status, started_at)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
+  ).run(id, stepId, data.attemptNo, data.providerId, data.model, data.role, 'running', now);
+  return getWorkflowStepAttempt(id)!;
+}
+
+export function getWorkflowStepAttempt(id: string): WorkflowStepAttemptRecord | undefined {
+  const db = getDb();
+  return db.prepare('SELECT * FROM workflow_step_attempts WHERE id = ?').get(id) as WorkflowStepAttemptRecord | undefined;
+}
+
+export function getWorkflowStepAttempts(stepId: string): WorkflowStepAttemptRecord[] {
+  const db = getDb();
+  return db.prepare('SELECT * FROM workflow_step_attempts WHERE step_id = ? ORDER BY attempt_no ASC').all(stepId) as WorkflowStepAttemptRecord[];
+}
+
+export function updateWorkflowStepAttempt(
+  id: string,
+  updates: {
+    status?: WorkflowAttemptStatus;
+    verdict?: string;
+    feedback?: string;
+    output?: string;
+    inputTokens?: number;
+    outputTokens?: number;
+    ended?: boolean;
+  },
+): void {
+  const db = getDb();
+  const existing = getWorkflowStepAttempt(id);
+  if (!existing) return;
+  const status = updates.status ?? existing.status;
+  const verdict = updates.verdict !== undefined ? updates.verdict : existing.verdict;
+  const feedback = updates.feedback !== undefined ? updates.feedback : existing.feedback;
+  const output = updates.output !== undefined ? updates.output : existing.output;
+  const inputTokens = updates.inputTokens ?? existing.input_tokens;
+  const outputTokens = updates.outputTokens ?? existing.output_tokens;
+  const endedAt = updates.ended ? nowTimestamp() : existing.ended_at;
+  db.prepare(
+    `UPDATE workflow_step_attempts
+     SET status = ?, verdict = ?, feedback = ?, output = ?, input_tokens = ?, output_tokens = ?, ended_at = ?
+     WHERE id = ?`
+  ).run(status, verdict, feedback, output, inputTokens, outputTokens, endedAt, id);
+}

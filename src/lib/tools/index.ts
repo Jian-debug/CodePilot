@@ -14,6 +14,7 @@ import { createBashTool } from './bash';
 import { createEditTool } from './edit';
 import { createSkillTool } from './skill';
 import { createAgentTool } from './agent';
+import { createWorkflowTool } from './workflow';
 
 export interface ToolContext {
   /** Working directory for file operations */
@@ -47,6 +48,16 @@ export function createBuiltinTools(ctx: ToolContext): ToolSet {
     Grep: createGrepTool(ctx),
     Skill: createSkillTool(ctx.workingDirectory),
     Agent: createAgentTool({
+      workingDirectory: ctx.workingDirectory,
+      providerId: ctx.providerId,
+      sessionProviderId: ctx.sessionProviderId,
+      parentModel: ctx.model,
+      permissionMode: ctx.permissionMode,
+      parentSessionId: ctx.sessionId,
+      emitSSE: ctx.emitSSE,
+      abortSignal: ctx.abortSignal,
+    }),
+    Workflow: createWorkflowTool({
       workingDirectory: ctx.workingDirectory,
       providerId: ctx.providerId,
       sessionProviderId: ctx.sessionProviderId,
