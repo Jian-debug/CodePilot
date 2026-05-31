@@ -1,0 +1,60 @@
+/**
+ * tools/workflow.ts — Workflow tool: run an observable dynamic workflow.
+ *
+ * Mirrors the Agent tool pattern. The primary agent calls Workflow({ goal })
+ * for large/multi-step tasks; the engine decomposes the goal into steps, runs
+ * each on a model ladder with verification (escalating to stronger models on
+ * failure), streams workflow_* progress to the parent SSE stream, and returns
+ * the merged result text.
+ *
+ * Auto-triggering (keyword / setting) is deferred to P4 — for now the model
+ * reaches workflows by calling this tool.
+ */
+
+import { tool } from 'ai';
+import { z } from 'zod';
+import { runWorkflow } from '../workflow/engine';
+
+export function createWorkflowTool(ctx: {
+  workingDirectory: string;
+  providerId?: string;
+  sessionProviderId?: string;
+  parentModel?: string;
+  permissionMode?: string;
+  parentSessionId?: string;
+  emitSSE?: (event: { type: string; data: string }) => void;
+  abortSignal?: AbortSignal;
+}) {
+  return tool({
+    description:
+      'Run a dynamic workflow for a large, multi-step task. The workflow plans the work into ' +
+      'verifiable steps, executes each step, verifies the result, and automatically retries with a ' +
+      'stronger model if a step fails verification. Every step is streamed for observation. Use this ' +
+      'for project-scale tasks (migrations, codebase-wide changes, multi-file features), NOT simple edits.',
+    inputSchema: z.object({
+      goal: z.string().describe('The overall goal to accomplish via the workflow.'),
+    }),
+    execute: async ({ goal }) => {
+      const emitSSE = ctx.emitSSE ?? (() => {});
+      if (!ctx.parentSessionId) {
+        return 'Error: workflow requires a session context and cannot run here.';
+      }
+      try {
+        return await runWorkflow({
+          goal,
+          sessionId: ctx.parentSessionId,
+          workingDirectory: ctx.workingDirectory,
+          providerId: ctx.providerId,
+          sessionProviderId: ctx.sessionProviderId,
+          sessionModel: ctx.parentModel,
+          permissionMode: ctx.permissionMode,
+          abortSignal: ctx.abortSignal,
+          emitSSE,
+        });
+      } catch (err) {
+        const msg = err instanceof Error ? err.message : String(err);
+        return `Workflow failed to run: ${msg}`;
+      }
+    },
+  });
+}

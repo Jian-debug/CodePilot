@@ -140,6 +140,87 @@ export interface TaskItem {
   updated_at: string;
 }
 
+// ==========================================
+// Dynamic Workflow (P1 — observable orchestration with per-step model fallback)
+// ==========================================
+
+export type WorkflowStatus =
+  | 'pending'
+  | 'planning'
+  | 'running'
+  | 'completed'
+  | 'failed'
+  | 'cancelled';
+
+export type WorkflowStepStatus =
+  | 'pending'
+  | 'running'
+  | 'passed'
+  | 'failed'
+  | 'skipped';
+
+export type WorkflowAttemptStatus = 'running' | 'passed' | 'failed' | 'error';
+
+/** How a step's output is verified before it counts as "passed". */
+export type WorkflowVerifyStrategy = 'llm' | 'command' | 'both' | 'none';
+
+/** A workflow run — the top-level decomposed plan for one goal. */
+export interface WorkflowRecord {
+  id: string;
+  session_id: string;
+  goal: string;
+  status: WorkflowStatus;
+  /** Final merged result text (set on completion). */
+  result: string | null;
+  created_at: string;
+  updated_at: string;
+  completed_at: string | null;
+}
+
+/** A single unit of work inside a workflow. */
+export interface WorkflowStepRecord {
+  id: string;
+  workflow_id: string;
+  idx: number;
+  title: string;
+  instructions: string;
+  acceptance_criteria: string;
+  /** JSON array of step idx values this step depends on. */
+  depends_on: string;
+  verify_strategy: WorkflowVerifyStrategy;
+  /** Shell command for command/both verification (empty = none). */
+  verify_command: string;
+  status: WorkflowStepStatus;
+  result: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+/**
+ * One attempt at a step with a specific model. A step can have multiple
+ * attempts (different models) — this is what makes "model A failed verification
+ * → switched to model B → passed" observable and persisted.
+ */
+export interface WorkflowStepAttemptRecord {
+  id: string;
+  step_id: string;
+  attempt_no: number;
+  provider_id: string;
+  model: string;
+  /** Capability role of this rung (small | default | sonnet | opus | override). */
+  role: string;
+  status: WorkflowAttemptStatus;
+  /** Verifier verdict text (passed/failed summary). */
+  verdict: string | null;
+  /** Verifier feedback fed into the next attempt's retry prompt. */
+  feedback: string | null;
+  output: string | null;
+  input_tokens: number;
+  output_tokens: number;
+  started_at: string;
+  ended_at: string | null;
+}
+
 export interface Message {
   id: string;
   session_id: string;
@@ -514,11 +595,69 @@ export type SSEEventType =
   | 'rewind_point'       // SDK user message with rewind checkpoint
   | 'rate_limit'         // SDK 0.2.111 subscription rate-limit telemetry
   | 'context_usage'      // SDK 0.2.111 post-turn context usage snapshot
+  | 'workflow_plan'      // dynamic workflow: decomposed step plan (emitted once after planning)
+  | 'workflow_step'      // dynamic workflow: a step's status changed (pending→running→passed/failed)
+  | 'workflow_attempt'   // dynamic workflow: an attempt at a step with a specific model
+  | 'workflow_verify'    // dynamic workflow: verification verdict for an attempt
   | 'done';              // stream complete
 
 export interface SSEEvent {
   type: SSEEventType;
   data: string;
+}
+
+// ── Dynamic Workflow SSE payloads ───────────────────────────────
+// All payloads are JSON-stringified into SSEEvent.data. The current UI
+// ignores unknown event types (useSSEStream handleSSEEvent default case),
+// so P1 emits these alongside human-readable status/tool_output mirrors;
+// P2 adds dedicated handlers + a WorkflowView panel.
+
+/** `workflow_plan` — emitted once after planning. */
+export interface WorkflowPlanEvent {
+  workflowId: string;
+  goal: string;
+  steps: Array<{
+    id: string;
+    idx: number;
+    title: string;
+    dependsOn: number[];
+    verifyStrategy: WorkflowVerifyStrategy;
+  }>;
+}
+
+/** `workflow_step` — a step's lifecycle status changed. */
+export interface WorkflowStepEvent {
+  workflowId: string;
+  stepId: string;
+  idx: number;
+  title: string;
+  status: WorkflowStepStatus;
+}
+
+/** `workflow_attempt` — a new attempt at a step started (or finished). */
+export interface WorkflowAttemptEvent {
+  workflowId: string;
+  stepId: string;
+  attemptId: string;
+  attemptNo: number;
+  providerId: string;
+  model: string;
+  role: string;
+  status: WorkflowAttemptStatus;
+}
+
+/** `workflow_verify` — verification verdict for an attempt. */
+export interface WorkflowVerifyEvent {
+  workflowId: string;
+  stepId: string;
+  attemptId: string;
+  attemptNo: number;
+  passed: boolean;
+  /** Verification method that produced this verdict. */
+  via: WorkflowVerifyStrategy;
+  feedback: string;
+  /** Optional 0-100 confidence/quality score from the LLM judge. */
+  score?: number;
 }
 
 // ==========================================
