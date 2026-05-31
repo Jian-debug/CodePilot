@@ -21,6 +21,7 @@ const ALLOWED_KEYS = [
   // Dynamic workflows (P4): auto-suggest the Workflow tool + parallel fan-out cap
   'workflow_auto_suggest',
   'workflow_max_concurrency',
+  'workflow_step_retries',
   // Feature announcement dismiss flags (persist across Electron restarts)
   'codepilot:announcement:v0.48-agent-engine',
 ];

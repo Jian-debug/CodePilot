@@ -29,6 +29,7 @@ import type { WorkflowPlanEvent, WorkflowStepEvent, WorkflowStepRecord } from '@
 
 const MAX_PRIOR_CONTEXT_CHARS = 1500;
 const DEFAULT_MAX_CONCURRENCY = 3;
+const DEFAULT_TOP_RUNG_RETRIES = 1;
 
 export async function runWorkflow(opts: RunWorkflowOptions): Promise<string> {
   const { goal, sessionId, emitSSE } = opts;
@@ -200,7 +201,7 @@ async function runScheduled(args: RunScheduledArgs): Promise<ScheduledResult> {
         sessionProviderId: opts.sessionProviderId,
         emitSSE,
         abortSignal: opts.abortSignal,
-        maxAttempts: opts.maxAttemptsPerStep ?? ladder.length,
+        maxAttempts: opts.maxAttemptsPerStep ?? ladder.length + (opts.topRungRetries ?? DEFAULT_TOP_RUNG_RETRIES),
         priorContext: buildDependencyContext(graph.dependsOn[idx], steps, outputs),
       });
       outputs.set(idx, result.output);

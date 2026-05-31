@@ -92,6 +92,17 @@ export function strongestRung(ladder: LadderRung[]): LadderRung | undefined {
 }
 
 /**
+ * The rung to use for attempt `i` (0-based). Walk the ladder cheap→strong; once
+ * past the end, repeat the strongest rung. This lets a step retry on the best
+ * model (with the verifier's feedback) after exhausting its distinct models,
+ * instead of failing after a single strong attempt.
+ */
+export function rungForAttempt(ladder: LadderRung[], i: number): LadderRung {
+  if (ladder.length === 0) throw new Error('rungForAttempt: empty ladder');
+  return i < ladder.length ? ladder[i] : ladder[ladder.length - 1];
+}
+
+/**
  * Trim the lower (cheaper) rungs of a ladder based on a step's assessed
  * complexity, so a hard step starts at a capable model instead of wasting a
  * near-certain-to-fail cheap attempt + verification round. The ladder still

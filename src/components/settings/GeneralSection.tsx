@@ -132,6 +132,7 @@ export function GeneralSection() {
   const [workflowAutoSuggest, setWorkflowAutoSuggest] = useState(true);
   const [workflowAutoSuggestSaving, setWorkflowAutoSuggestSaving] = useState(false);
   const [workflowConcurrency, setWorkflowConcurrency] = useState('3');
+  const [workflowRetries, setWorkflowRetries] = useState('1');
   const { accountInfo } = useAccountInfo();
   const { t, locale, setLocale } = useTranslation();
 
@@ -150,6 +151,8 @@ export function GeneralSection() {
         setWorkflowAutoSuggest(appSettings.workflow_auto_suggest !== "false");
         // workflow_max_concurrency defaults to '3' when not set
         setWorkflowConcurrency(appSettings.workflow_max_concurrency || '3');
+        // workflow_step_retries defaults to '1' when not set
+        setWorkflowRetries(appSettings.workflow_step_retries || '1');
       }
     } catch {
       // ignore
@@ -249,6 +252,19 @@ export function GeneralSection() {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ settings: { workflow_max_concurrency: value } }),
+      });
+    } catch {
+      // ignore
+    }
+  };
+
+  const handleWorkflowRetriesChange = async (value: string) => {
+    setWorkflowRetries(value);
+    try {
+      await fetch("/api/settings/app", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ settings: { workflow_step_retries: value } }),
       });
     } catch {
       // ignore
@@ -377,6 +393,24 @@ export function GeneralSection() {
               <SelectItem value="2">2</SelectItem>
               <SelectItem value="3">3</SelectItem>
               <SelectItem value="5">5</SelectItem>
+            </SelectContent>
+          </Select>
+        </FieldRow>
+
+        <FieldRow
+          label={t('settings.workflowRetriesTitle')}
+          description={t('settings.workflowRetriesDesc')}
+          separator
+        >
+          <Select value={workflowRetries} onValueChange={handleWorkflowRetriesChange}>
+            <SelectTrigger className="w-[140px]">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="0">{t('settings.workflowRetriesNone')}</SelectItem>
+              <SelectItem value="1">1</SelectItem>
+              <SelectItem value="2">2</SelectItem>
+              <SelectItem value="3">3</SelectItem>
             </SelectContent>
           </Select>
         </FieldRow>

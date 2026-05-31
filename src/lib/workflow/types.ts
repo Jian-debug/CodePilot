@@ -79,6 +79,12 @@ export interface RunWorkflowOptions {
   emitSSE: EmitSSE;
   /** Max attempts (ladder rungs) per step. Defaults to the ladder length. */
   maxAttemptsPerStep?: number;
+  /**
+   * Extra feedback-driven retries on the strongest rung after a step exhausts
+   * its distinct-model ladder, before it's marked failed. Default 1. This is
+   * what gives a hard step (which starts at the top rung) a real second chance.
+   */
+  topRungRetries?: number;
   /** Whether a failed step halts the whole workflow (default true). */
   haltOnStepFailure?: boolean;
   /**

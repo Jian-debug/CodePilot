@@ -26,6 +26,14 @@ function resolveMaxConcurrency(): number {
   return Math.min(8, Math.max(1, n));
 }
 
+/** Parse the workflow_step_retries setting → clamped 0..3, default 1. */
+function resolveTopRungRetries(): number {
+  const raw = getSetting('workflow_step_retries');
+  const n = raw ? parseInt(raw, 10) : NaN;
+  if (!Number.isFinite(n)) return 1;
+  return Math.min(3, Math.max(0, n));
+}
+
 export function createWorkflowTool(ctx: {
   workingDirectory: string;
   providerId?: string;
@@ -62,6 +70,7 @@ export function createWorkflowTool(ctx: {
           abortSignal: ctx.abortSignal,
           emitSSE,
           maxConcurrency: resolveMaxConcurrency(),
+          topRungRetries: resolveTopRungRetries(),
         });
       } catch (err) {
         const msg = err instanceof Error ? err.message : String(err);
