@@ -79,4 +79,10 @@ export interface RunWorkflowOptions {
   maxAttemptsPerStep?: number;
   /** Whether a failed step halts the whole workflow (default true). */
   haltOnStepFailure?: boolean;
+  /**
+   * Max steps to run concurrently (P3 parallel fan-out). Defaults to 3. Set to
+   * 1 to force serial execution. Independent steps (no dependency path between
+   * them) run in parallel up to this cap; dependencies are always respected.
+   */
+  maxConcurrency?: number;
 }
