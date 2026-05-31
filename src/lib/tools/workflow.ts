@@ -7,8 +7,10 @@
  * failure), streams workflow_* progress to the parent SSE stream, and returns
  * the merged result text.
  *
- * Auto-triggering (keyword / setting) is deferred to P4 — for now the model
- * reaches workflows by calling this tool.
+ * Auto-triggering (P4): the model still reaches workflows by calling this tool,
+ * but the agent loop now appends a system-prompt suggestion to use it when a
+ * turn looks like a large, multi-step task and `workflow_auto_suggest` is on
+ * (see workflow/auto-trigger.ts). Fully automatic execution is still deferred.
  */
 
 import { tool } from 'ai';

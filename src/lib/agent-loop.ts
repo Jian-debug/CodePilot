@@ -22,7 +22,12 @@ import { createCheckpoint } from './file-checkpoint';
 import type { PermissionMode } from './permission-checker';
 import { buildCoreMessages } from './message-builder';
 import { sanitizeClaudeModelOptions } from './claude-model-options';
-import { getMessages } from './db';
+import { getMessages, getSetting } from './db';
+import {
+  shouldSuggestWorkflow,
+  isWorkflowAutoSuggestEnabled,
+  WORKFLOW_SUGGESTION_PROMPT,
+} from './workflow/auto-trigger';
 import { wrapController } from './safe-stream';
 
 // ── Types ───────────────────────────────────────────────────────
@@ -161,6 +166,21 @@ export function runAgentLoop(options: AgentLoopOptions): ReadableStream<string> 
           });
           tools = assembled.tools;
           toolSystemPrompts = assembled.systemPrompts;
+        }
+
+        // P4 — workflow auto-suggestion. When the prompt looks like a large,
+        // multi-step task and the feature is enabled, tell the model the
+        // Workflow tool exists and when to use it. Only on the primary turn
+        // (toolsOverride means a sub-agent/worker, which can't run workflows)
+        // and only when the Workflow tool is actually present.
+        if (
+          !toolsOverride &&
+          tools &&
+          'Workflow' in tools &&
+          isWorkflowAutoSuggestEnabled(getSetting) &&
+          shouldSuggestWorkflow(prompt)
+        ) {
+          toolSystemPrompts = [...toolSystemPrompts, WORKFLOW_SUGGESTION_PROMPT];
         }
 
         // Augment system prompt with tool-specific context snippets
