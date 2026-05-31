@@ -23,6 +23,14 @@ Rules:
   command and check exit code), "both", or "none". Use "command"/"both" only when there is a
   concrete test/build/lint command worth running; put it in "verifyCommand".
 
+Parallelism & safety (IMPORTANT):
+- Steps with NO dependency relationship may run AT THE SAME TIME (in parallel).
+- Therefore "dependsOn" is also a safety mechanism: if two steps would read or write the SAME
+  files (or otherwise conflict), you MUST add a dependsOn edge so they run in order — never leave
+  a write/write or write/read conflict between two steps that lack a dependency between them.
+- Keep genuinely independent steps independent (empty or disjoint dependsOn) so they can fan out.
+- Do not create dependency cycles.
+
 Respond with ONLY a JSON array, no prose, no code fences. Schema per element:
 { "title": string, "instructions": string, "acceptanceCriteria": string,
   "dependsOn": number[], "verifyStrategy": "llm"|"command"|"both"|"none", "verifyCommand": string }`;
