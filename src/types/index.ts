@@ -182,6 +182,8 @@ export interface WorkflowRecord {
   status: WorkflowStatus;
   /** Final merged result text (set on completion). */
   result: string | null;
+  /** Parent workflow id when this is a recursive sub-workflow ('' = top-level). */
+  parent_workflow_id: string;
   created_at: string;
   updated_at: string;
   completed_at: string | null;

@@ -322,6 +322,7 @@ function initDb(db: Database.Database): void {
       status TEXT NOT NULL DEFAULT 'pending'
         CHECK(status IN ('pending','planning','running','completed','failed','cancelled')),
       result TEXT,
+      parent_workflow_id TEXT NOT NULL DEFAULT '',
       created_at TEXT NOT NULL DEFAULT (datetime('now')),
       updated_at TEXT NOT NULL DEFAULT (datetime('now')),
       completed_at TEXT,
@@ -497,6 +498,13 @@ function migrateDb(db: Database.Database): void {
   const wfStepCols = db.prepare("PRAGMA table_info(workflow_steps)").all() as { name: string }[];
   if (!wfStepCols.some((c) => c.name === 'complexity')) {
     safeAddColumn(db, "ALTER TABLE workflow_steps ADD COLUMN complexity TEXT NOT NULL DEFAULT 'low'");
+  }
+
+  // Dynamic Workflow: add parent_workflow_id to workflows for recursive
+  // decomposition (sub-workflows reference their parent; '' = top-level).
+  const wfCols = db.prepare("PRAGMA table_info(workflows)").all() as { name: string }[];
+  if (!wfCols.some((c) => c.name === 'parent_workflow_id')) {
+    safeAddColumn(db, "ALTER TABLE workflows ADD COLUMN parent_workflow_id TEXT NOT NULL DEFAULT ''");
   }
 
   // Ensure tasks table exists for databases created before this migration
@@ -2982,13 +2990,13 @@ function nowTimestamp(): string {
 
 // ── Workflows ───────────────────────────────────────────────────
 
-export function createWorkflow(sessionId: string, goal: string): WorkflowRecord {
+export function createWorkflow(sessionId: string, goal: string, parentWorkflowId = ''): WorkflowRecord {
   const db = getDb();
   const id = crypto.randomBytes(16).toString('hex');
   const now = nowTimestamp();
   db.prepare(
-    'INSERT INTO workflows (id, session_id, goal, status, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?)'
-  ).run(id, sessionId, goal, 'pending', now, now);
+    'INSERT INTO workflows (id, session_id, goal, status, parent_workflow_id, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?)'
+  ).run(id, sessionId, goal, 'pending', parentWorkflowId, now, now);
   return getWorkflow(id)!;
 }
 
@@ -3168,9 +3176,12 @@ export function getWorkflowDetail(workflowId: string): WorkflowDetail | undefine
   return { workflow, steps, attemptsByStep };
 }
 
-/** Latest workflow (with full detail) for a session, or undefined if none. */
+/** Latest top-level workflow (with full detail) for a session, or undefined if
+ *  none. Sub-workflows (parent_workflow_id set) are excluded so the reload view
+ *  shows the workflow the user actually launched, not a recursive child. */
 export function getLatestWorkflowDetailBySession(sessionId: string): WorkflowDetail | undefined {
   const workflows = getWorkflowsBySession(sessionId); // already ORDER BY created_at DESC
-  if (workflows.length === 0) return undefined;
-  return getWorkflowDetail(workflows[0].id);
+  const topLevel = workflows.find((w) => !w.parent_workflow_id);
+  if (!topLevel) return undefined;
+  return getWorkflowDetail(topLevel.id);
 }

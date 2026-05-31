@@ -133,6 +133,7 @@ export function GeneralSection() {
   const [workflowAutoSuggestSaving, setWorkflowAutoSuggestSaving] = useState(false);
   const [workflowConcurrency, setWorkflowConcurrency] = useState('3');
   const [workflowRetries, setWorkflowRetries] = useState('1');
+  const [workflowMaxDepth, setWorkflowMaxDepth] = useState('1');
   const { accountInfo } = useAccountInfo();
   const { t, locale, setLocale } = useTranslation();
 
@@ -153,6 +154,8 @@ export function GeneralSection() {
         setWorkflowConcurrency(appSettings.workflow_max_concurrency || '3');
         // workflow_step_retries defaults to '1' when not set
         setWorkflowRetries(appSettings.workflow_step_retries || '1');
+        // workflow_max_depth defaults to '1' when not set
+        setWorkflowMaxDepth(appSettings.workflow_max_depth || '1');
       }
     } catch {
       // ignore
@@ -265,6 +268,19 @@ export function GeneralSection() {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ settings: { workflow_step_retries: value } }),
+      });
+    } catch {
+      // ignore
+    }
+  };
+
+  const handleWorkflowMaxDepthChange = async (value: string) => {
+    setWorkflowMaxDepth(value);
+    try {
+      await fetch("/api/settings/app", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ settings: { workflow_max_depth: value } }),
       });
     } catch {
       // ignore
@@ -411,6 +427,23 @@ export function GeneralSection() {
               <SelectItem value="1">1</SelectItem>
               <SelectItem value="2">2</SelectItem>
               <SelectItem value="3">3</SelectItem>
+            </SelectContent>
+          </Select>
+        </FieldRow>
+
+        <FieldRow
+          label={t('settings.workflowMaxDepthTitle')}
+          description={t('settings.workflowMaxDepthDesc')}
+          separator
+        >
+          <Select value={workflowMaxDepth} onValueChange={handleWorkflowMaxDepthChange}>
+            <SelectTrigger className="w-[140px]">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="0">{t('settings.workflowMaxDepthOff')}</SelectItem>
+              <SelectItem value="1">1</SelectItem>
+              <SelectItem value="2">2</SelectItem>
             </SelectContent>
           </Select>
         </FieldRow>

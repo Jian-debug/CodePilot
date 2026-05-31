@@ -93,4 +93,10 @@ export interface RunWorkflowOptions {
    * them) run in parallel up to this cap; dependencies are always respected.
    */
   maxConcurrency?: number;
+  /** Recursion depth of this workflow (top-level = 0). Internal. */
+  depth?: number;
+  /** Max recursion depth — a hard failed step may decompose while depth < maxDepth. */
+  maxDepth?: number;
+  /** Set on sub-workflows so they're excluded from the session's "latest" view. */
+  parentWorkflowId?: string;
 }

@@ -22,6 +22,7 @@ const ALLOWED_KEYS = [
   'workflow_auto_suggest',
   'workflow_max_concurrency',
   'workflow_step_retries',
+  'workflow_max_depth',
   // Feature announcement dismiss flags (persist across Electron restarts)
   'codepilot:announcement:v0.48-agent-engine',
 ];

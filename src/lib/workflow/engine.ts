@@ -11,6 +11,12 @@
  * planner adds a dependency edge between steps that touch the same files, so
  * conflicting work is serialized; only truly independent work fans out. A
  * cyclic plan falls back to safe serial execution.
+ *
+ * Recovery: a HIGH-complexity step that fails even after the strongest model
+ * retried is decomposed into a sub-workflow (bounded by `maxDepth`, default 1
+ * level) — see decomposition.ts. The sub-workflow runs under a fresh workflowId
+ * (its SSE events are ignored by the parent's UI panel) and, on success, flips
+ * the parent step to passed.
  */
 
 import {
@@ -24,6 +30,7 @@ import { buildModelLadder, strongestRung, startRungForComplexity } from './model
 import { planWorkflow } from './planner';
 import { runStep } from './step-runner';
 import { buildDependencyGraph, linearChain, runDag, type DependencyGraph } from './scheduler';
+import { shouldDecomposeStep, buildSubGoal, DEFAULT_MAX_DEPTH } from './decomposition';
 import type { EmitSSE, LadderRung, PlannedStep, RunWorkflowOptions } from './types';
 import type { WorkflowPlanEvent, WorkflowStepEvent, WorkflowStepRecord } from '@/types';
 
@@ -32,9 +39,20 @@ const DEFAULT_MAX_CONCURRENCY = 3;
 const DEFAULT_TOP_RUNG_RETRIES = 1;
 
 export async function runWorkflow(opts: RunWorkflowOptions): Promise<string> {
+  return (await runWorkflowInternal(opts)).text;
+}
+
+/**
+ * Internal entry point that also reports whether the workflow succeeded. Used
+ * by the public runWorkflow (text only) and, recursively, when a hard step is
+ * decomposed into a sub-workflow.
+ */
+async function runWorkflowInternal(
+  opts: RunWorkflowOptions,
+): Promise<{ text: string; passed: boolean }> {
   const { goal, sessionId, emitSSE } = opts;
 
-  const workflow = createWorkflow(sessionId, goal);
+  const workflow = createWorkflow(sessionId, goal, opts.parentWorkflowId);
   updateWorkflowStatus(workflow.id, 'planning');
   mirror(emitSSE, `[workflow] Planning: ${goal.length > 80 ? goal.slice(0, 77) + '...' : goal}`);
 
@@ -47,7 +65,7 @@ export async function runWorkflow(opts: RunWorkflowOptions): Promise<string> {
   if (goalLadder.length === 0) {
     updateWorkflowStatus(workflow.id, 'failed', { result: 'No usable model could be resolved.' });
     mirror(emitSSE, '[workflow] Aborted: no usable model resolved.');
-    return 'Workflow aborted: no usable model could be resolved for this session.';
+    return { text: 'Workflow aborted: no usable model could be resolved for this session.', passed: false };
   }
   const plannerRung = pickPlannerRung(goalLadder);
   const verifierRung = strongestRung(goalLadder) ?? plannerRung;
@@ -65,7 +83,7 @@ export async function runWorkflow(opts: RunWorkflowOptions): Promise<string> {
     const msg = err instanceof Error ? err.message : String(err);
     updateWorkflowStatus(workflow.id, 'failed', { result: `Planning failed: ${msg}` });
     mirror(emitSSE, `[workflow] Planning failed: ${msg}`);
-    return `Workflow planning failed: ${msg}`;
+    return { text: `Workflow planning failed: ${msg}`, passed: false };
   }
 
   // Persist steps.
@@ -111,7 +129,7 @@ export async function runWorkflow(opts: RunWorkflowOptions): Promise<string> {
     `[workflow] ${failed ? 'Finished with failures' : 'Completed'}: ${passedCount}/${steps.length} steps passed.`,
   );
 
-  return merged;
+  return { text: merged, passed: !failed };
 }
 
 // ── Scheduler (P3 parallel fan-out) ─────────────────────────────
@@ -205,7 +223,31 @@ async function runScheduled(args: RunScheduledArgs): Promise<ScheduledResult> {
         priorContext: buildDependencyContext(graph.dependsOn[idx], steps, outputs),
       });
       outputs.set(idx, result.output);
-      return result.passed;
+      if (result.passed) return true;
+
+      // ── Recovery: decompose a failed HIGH-complexity step into a sub-workflow ──
+      // Only when under the depth cap. The sub-workflow emits its own workflow_*
+      // events under a different workflowId, which the client reducer ignores —
+      // so the parent panel is never corrupted; the step simply flips to passed
+      // if the sub-workflow succeeds.
+      const depth = opts.depth ?? 0;
+      const maxDepth = opts.maxDepth ?? DEFAULT_MAX_DEPTH;
+      if (
+        shouldDecomposeStep({ passed: false, complexity: planned[idx].complexity, depth, maxDepth })
+      ) {
+        mirror(emitSSE, `[workflow] Step ${step.idx + 1} too complex — decomposing into a sub-workflow…`);
+        const sub = await runWorkflowInternal({
+          ...opts,
+          goal: buildSubGoal(step.title, step.instructions, step.acceptance_criteria),
+          depth: depth + 1,
+          parentWorkflowId: workflowId,
+        });
+        outputs.set(idx, sub.text);
+        updateWorkflowStep(step.id, { status: sub.passed ? 'passed' : 'failed', result: sub.text });
+        emitStepStatus(emitSSE, workflowId, step, sub.passed ? 'passed' : 'failed');
+        return sub.passed;
+      }
+      return false;
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);
       outputs.set(idx, `(step crashed: ${msg})`);

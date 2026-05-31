@@ -34,6 +34,14 @@ function resolveTopRungRetries(): number {
   return Math.min(3, Math.max(0, n));
 }
 
+/** Parse the workflow_max_depth setting → clamped 0..2, default 1 (0 disables recursion). */
+function resolveMaxDepth(): number {
+  const raw = getSetting('workflow_max_depth');
+  const n = raw ? parseInt(raw, 10) : NaN;
+  if (!Number.isFinite(n)) return 1;
+  return Math.min(2, Math.max(0, n));
+}
+
 export function createWorkflowTool(ctx: {
   workingDirectory: string;
   providerId?: string;
@@ -71,6 +79,7 @@ export function createWorkflowTool(ctx: {
           emitSSE,
           maxConcurrency: resolveMaxConcurrency(),
           topRungRetries: resolveTopRungRetries(),
+          maxDepth: resolveMaxDepth(),
         });
       } catch (err) {
         const msg = err instanceof Error ? err.message : String(err);
