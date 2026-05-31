@@ -129,6 +129,9 @@ export function GeneralSection() {
   const [generativeUI, setGenerativeUI] = useState(true);
   const [generativeUISaving, setGenerativeUISaving] = useState(false);
   const [defaultPanel, setDefaultPanel] = useState('file_tree');
+  const [workflowAutoSuggest, setWorkflowAutoSuggest] = useState(true);
+  const [workflowAutoSuggestSaving, setWorkflowAutoSuggestSaving] = useState(false);
+  const [workflowConcurrency, setWorkflowConcurrency] = useState('3');
   const { accountInfo } = useAccountInfo();
   const { t, locale, setLocale } = useTranslation();
 
@@ -143,6 +146,10 @@ export function GeneralSection() {
         setGenerativeUI(appSettings.generative_ui_enabled !== "false");
         // default_panel defaults to 'file_tree' when not set
         setDefaultPanel(appSettings.default_panel || 'file_tree');
+        // workflow_auto_suggest defaults to true when not set
+        setWorkflowAutoSuggest(appSettings.workflow_auto_suggest !== "false");
+        // workflow_max_concurrency defaults to '3' when not set
+        setWorkflowConcurrency(appSettings.workflow_max_concurrency || '3');
       }
     } catch {
       // ignore
@@ -212,6 +219,39 @@ export function GeneralSection() {
       // ignore
     } finally {
       setGenerativeUISaving(false);
+    }
+  };
+
+  const handleWorkflowAutoSuggestToggle = async (checked: boolean) => {
+    setWorkflowAutoSuggestSaving(true);
+    try {
+      const res = await fetch("/api/settings/app", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          settings: { workflow_auto_suggest: checked ? "" : "false" },
+        }),
+      });
+      if (res.ok) {
+        setWorkflowAutoSuggest(checked);
+      }
+    } catch {
+      // ignore
+    } finally {
+      setWorkflowAutoSuggestSaving(false);
+    }
+  };
+
+  const handleWorkflowConcurrencyChange = async (value: string) => {
+    setWorkflowConcurrency(value);
+    try {
+      await fetch("/api/settings/app", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ settings: { workflow_max_concurrency: value } }),
+      });
+    } catch {
+      // ignore
     }
   };
 
@@ -308,6 +348,38 @@ export function GeneralSection() {
         {/* Error Reporting — right after Setup Center */}
         <SentryToggle locale={locale} t={t} />
 
+      </SettingsCard>
+
+      {/* Dynamic Workflows */}
+      <SettingsCard title={t('settings.workflowTitle')}>
+        <FieldRow
+          label={t('settings.workflowAutoSuggestTitle')}
+          description={t('settings.workflowAutoSuggestDesc')}
+        >
+          <Switch
+            checked={workflowAutoSuggest}
+            onCheckedChange={handleWorkflowAutoSuggestToggle}
+            disabled={workflowAutoSuggestSaving}
+          />
+        </FieldRow>
+
+        <FieldRow
+          label={t('settings.workflowConcurrencyTitle')}
+          description={t('settings.workflowConcurrencyDesc')}
+          separator
+        >
+          <Select value={workflowConcurrency} onValueChange={handleWorkflowConcurrencyChange}>
+            <SelectTrigger className="w-[140px]">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="1">{t('settings.workflowConcurrencySerial')}</SelectItem>
+              <SelectItem value="2">2</SelectItem>
+              <SelectItem value="3">3</SelectItem>
+              <SelectItem value="5">5</SelectItem>
+            </SelectContent>
+          </Select>
+        </FieldRow>
       </SettingsCard>
 
       {/* Appearance */}

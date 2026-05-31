@@ -16,6 +16,15 @@
 import { tool } from 'ai';
 import { z } from 'zod';
 import { runWorkflow } from '../workflow/engine';
+import { getSetting } from '../db';
+
+/** Parse the workflow_max_concurrency setting → clamped 1..8, default 3. */
+function resolveMaxConcurrency(): number {
+  const raw = getSetting('workflow_max_concurrency');
+  const n = raw ? parseInt(raw, 10) : NaN;
+  if (!Number.isFinite(n)) return 3;
+  return Math.min(8, Math.max(1, n));
+}
 
 export function createWorkflowTool(ctx: {
   workingDirectory: string;
@@ -52,6 +61,7 @@ export function createWorkflowTool(ctx: {
           permissionMode: ctx.permissionMode,
           abortSignal: ctx.abortSignal,
           emitSSE,
+          maxConcurrency: resolveMaxConcurrency(),
         });
       } catch (err) {
         const msg = err instanceof Error ? err.message : String(err);

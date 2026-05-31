@@ -11,6 +11,9 @@ import { generateTextFromProvider } from '../text-generator';
 import type { PlannedStep } from './types';
 import type { WorkflowVerifyStrategy } from '@/types';
 
+/** Defensive upper bound on plan size (the prompt asks for 2-6 steps). */
+const MAX_STEPS = 24;
+
 const PLANNER_SYSTEM = `You are a planning module for an autonomous coding workflow.
 Decompose the user's goal into an ordered list of concrete, independently-verifiable steps.
 
@@ -64,6 +67,14 @@ export async function planWorkflow(opts: PlanWorkflowOptions): Promise<PlannedSt
   if (!parsed || parsed.length === 0) {
     console.warn('[workflow/planner] could not parse a step array, falling back to single step');
     return [singleStepFallback(opts.goal)];
+  }
+  // Defensive cap: a pathological plan with dozens of steps would spawn an
+  // unbounded number of (expensive) agent runs. The prompt asks for 2-6 steps;
+  // anything past MAX_STEPS is almost certainly degenerate, so truncate. Any
+  // dependsOn edges pointing beyond the cap are dropped later by the scheduler.
+  if (parsed.length > MAX_STEPS) {
+    console.warn(`[workflow/planner] plan had ${parsed.length} steps; truncating to ${MAX_STEPS}`);
+    return parsed.slice(0, MAX_STEPS);
   }
   return parsed;
 }
