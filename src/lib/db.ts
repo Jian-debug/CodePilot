@@ -3,7 +3,7 @@ import path from 'path';
 import crypto from 'crypto';
 import fs from 'fs';
 import os from 'os';
-import type { ChatSession, Message, SettingsMap, TaskItem, TaskStatus, ApiProvider, CreateProviderRequest, UpdateProviderRequest, MediaJob, MediaJobStatus, MediaJobItem, MediaJobItemStatus, MediaContextEvent, BatchConfig, CustomCliTool, ScheduledTask, WorkflowRecord, WorkflowStatus, WorkflowStepRecord, WorkflowStepStatus, WorkflowVerifyStrategy, WorkflowStepAttemptRecord, WorkflowAttemptStatus } from '@/types';
+import type { ChatSession, Message, SettingsMap, TaskItem, TaskStatus, ApiProvider, CreateProviderRequest, UpdateProviderRequest, MediaJob, MediaJobStatus, MediaJobItem, MediaJobItemStatus, MediaContextEvent, BatchConfig, CustomCliTool, ScheduledTask, WorkflowRecord, WorkflowStatus, WorkflowStepRecord, WorkflowStepStatus, WorkflowVerifyStrategy, WorkflowStepComplexity, WorkflowStepAttemptRecord, WorkflowAttemptStatus } from '@/types';
 import type { ChannelType, ChannelBinding } from './bridge/types';
 import { getLocalDateString, localDayStartAsUTC } from './utils';
 import { inferProtocolFromLegacy } from './provider-catalog';
@@ -340,6 +340,8 @@ function initDb(db: Database.Database): void {
       verify_strategy TEXT NOT NULL DEFAULT 'llm'
         CHECK(verify_strategy IN ('llm','command','both','none')),
       verify_command TEXT NOT NULL DEFAULT '',
+      complexity TEXT NOT NULL DEFAULT 'low'
+        CHECK(complexity IN ('low','medium','high')),
       status TEXT NOT NULL DEFAULT 'pending'
         CHECK(status IN ('pending','running','passed','failed','skipped')),
       result TEXT,
@@ -487,6 +489,14 @@ function migrateDb(db: Database.Database): void {
 
   if (!msgColNames.includes('is_heartbeat_ack')) {
     safeAddColumn(db, "ALTER TABLE messages ADD COLUMN is_heartbeat_ack INTEGER NOT NULL DEFAULT 0");
+  }
+
+  // Dynamic Workflow: add complexity column to workflow_steps for DBs created
+  // before per-step complexity existed. (No CHECK in the ALTER — writes always
+  // go through normalizeComplexity, and fresh DBs get the CHECK via CREATE TABLE.)
+  const wfStepCols = db.prepare("PRAGMA table_info(workflow_steps)").all() as { name: string }[];
+  if (!wfStepCols.some((c) => c.name === 'complexity')) {
+    safeAddColumn(db, "ALTER TABLE workflow_steps ADD COLUMN complexity TEXT NOT NULL DEFAULT 'low'");
   }
 
   // Ensure tasks table exists for databases created before this migration
@@ -3020,6 +3030,7 @@ export interface CreateWorkflowStepInput {
   dependsOn?: number[];
   verifyStrategy?: WorkflowVerifyStrategy;
   verifyCommand?: string;
+  complexity?: WorkflowStepComplexity;
 }
 
 export function createWorkflowStep(workflowId: string, data: CreateWorkflowStepInput): WorkflowStepRecord {
@@ -3028,8 +3039,8 @@ export function createWorkflowStep(workflowId: string, data: CreateWorkflowStepI
   const now = nowTimestamp();
   db.prepare(
     `INSERT INTO workflow_steps
-       (id, workflow_id, idx, title, instructions, acceptance_criteria, depends_on, verify_strategy, verify_command, status, created_at, updated_at)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+       (id, workflow_id, idx, title, instructions, acceptance_criteria, depends_on, verify_strategy, verify_command, complexity, status, created_at, updated_at)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
   ).run(
     id,
     workflowId,
@@ -3040,6 +3051,7 @@ export function createWorkflowStep(workflowId: string, data: CreateWorkflowStepI
     JSON.stringify(data.dependsOn || []),
     data.verifyStrategy || 'llm',
     data.verifyCommand || '',
+    data.complexity || 'low',
     'pending',
     now,
     now,

@@ -59,6 +59,7 @@ export function applyWorkflowPlan(
       title: s.title,
       dependsOn: Array.isArray(s.dependsOn) ? s.dependsOn : [],
       verifyStrategy: s.verifyStrategy,
+      complexity: s.complexity ?? 'low',
       status: 'pending' as WorkflowStepStatus,
       attempts: [],
     }));
@@ -148,6 +149,7 @@ export function buildWorkflowViewFromRecords(
       title: s.title,
       dependsOn: parseDependsOn(s.depends_on),
       verifyStrategy: s.verify_strategy,
+      complexity: s.complexity ?? 'low',
       status: s.status,
       attempts: (attemptsByStep[s.id] ?? [])
         .slice()
@@ -185,6 +187,7 @@ function upsertStep(
     title: event.title,
     dependsOn: [],
     verifyStrategy: 'llm',
+    complexity: 'low',
     status: event.status,
     attempts: [],
   };

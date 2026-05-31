@@ -164,6 +164,16 @@ export type WorkflowAttemptStatus = 'running' | 'passed' | 'failed' | 'error';
 /** How a step's output is verified before it counts as "passed". */
 export type WorkflowVerifyStrategy = 'llm' | 'command' | 'both' | 'none';
 
+/**
+ * Estimated difficulty of a step, assessed by the planner. Selects where the
+ * step *starts* on the model ladder so a hard step skips wasted cheap attempts:
+ *   low    → start at the cheapest rung (then escalate on failure)
+ *   medium → skip the cheapest rung
+ *   high   → start at the strongest rung
+ * Defaults to 'low' (the pre-existing full-ladder behaviour) when unset.
+ */
+export type WorkflowStepComplexity = 'low' | 'medium' | 'high';
+
 /** A workflow run — the top-level decomposed plan for one goal. */
 export interface WorkflowRecord {
   id: string;
@@ -190,6 +200,8 @@ export interface WorkflowStepRecord {
   verify_strategy: WorkflowVerifyStrategy;
   /** Shell command for command/both verification (empty = none). */
   verify_command: string;
+  /** Planner-assessed difficulty; selects the starting rung on the model ladder. */
+  complexity: WorkflowStepComplexity;
   status: WorkflowStepStatus;
   result: string | null;
   created_at: string;
@@ -622,6 +634,7 @@ export interface WorkflowPlanEvent {
     title: string;
     dependsOn: number[];
     verifyStrategy: WorkflowVerifyStrategy;
+    complexity: WorkflowStepComplexity;
   }>;
 }
 
@@ -693,6 +706,8 @@ export interface WorkflowViewStep {
   title: string;
   dependsOn: number[];
   verifyStrategy: WorkflowVerifyStrategy;
+  /** Planner-assessed difficulty (drives the starting model rung). */
+  complexity: WorkflowStepComplexity;
   status: WorkflowStepStatus;
   attempts: WorkflowViewAttempt[];
 }

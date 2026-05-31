@@ -20,7 +20,7 @@ import {
   updateWorkflowStep,
   type CreateWorkflowStepInput,
 } from '../db';
-import { buildModelLadder, strongestRung } from './model-ladder';
+import { buildModelLadder, strongestRung, startRungForComplexity } from './model-ladder';
 import { planWorkflow } from './planner';
 import { runStep } from './step-runner';
 import { buildDependencyGraph, linearChain, runDag, type DependencyGraph } from './scheduler';
@@ -82,6 +82,7 @@ export async function runWorkflow(opts: RunWorkflowOptions): Promise<string> {
       title: s.title,
       dependsOn: planned[idx].dependsOn,
       verifyStrategy: s.verify_strategy,
+      complexity: planned[idx].complexity,
     })),
   };
   emitSSE({ type: 'workflow_plan', data: JSON.stringify(planEvent) });
@@ -167,7 +168,7 @@ async function runScheduled(args: RunScheduledArgs): Promise<ScheduledResult> {
   const run = async (idx: number): Promise<boolean> => {
     const step = steps[idx];
     const override = planned[idx].modelOverride;
-    const ladder: LadderRung[] =
+    const baseLadder: LadderRung[] =
       override && override.length > 0
         ? buildModelLadder({
             providerId: opts.providerId,
@@ -176,6 +177,14 @@ async function runScheduled(args: RunScheduledArgs): Promise<ScheduledResult> {
             override,
           })
         : goalLadder;
+    // Per-step complexity selects the starting rung: a hard step skips the
+    // cheap rungs (and their near-certain-to-fail attempts); an easy step
+    // starts cheap and escalates only if it fails verification. An explicit
+    // model override is taken as-is (the planner chose those models on purpose).
+    const ladder =
+      override && override.length > 0
+        ? baseLadder
+        : startRungForComplexity(baseLadder, planned[idx].complexity);
 
     try {
       const result = await runStep({
@@ -240,6 +249,7 @@ function toStepInput(p: PlannedStep, idx: number): CreateWorkflowStepInput {
     dependsOn: p.dependsOn,
     verifyStrategy: p.verifyStrategy,
     verifyCommand: p.verifyCommand,
+    complexity: p.complexity,
   };
 }
 

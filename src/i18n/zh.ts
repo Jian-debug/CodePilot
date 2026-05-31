@@ -1578,6 +1578,8 @@ const zh: Record<TranslationKey, string> = {
   'workflow.verify.command': '命令',
   'workflow.verify.both': 'LLM + 命令',
   'workflow.verify.none': '不校验',
+  'workflow.complexity.medium': '中等',
+  'workflow.complexity.high': '困难',
   'workflow.score': '评分 {score}',
   'workflow.feedback': '反馈',
   'workflow.expand': '展开步骤',

@@ -33,6 +33,7 @@ import type {
   WorkflowViewAttempt,
   WorkflowStepStatus,
   WorkflowVerifyStrategy,
+  WorkflowStepComplexity,
 } from '@/types';
 
 interface Props {
@@ -121,6 +122,7 @@ function StepRow({
               <span className="text-muted-foreground tabular-nums">{step.idx + 1}.</span> {step.title}
             </span>
             <VerifyTag strategy={step.verifyStrategy} t={t} />
+            <ComplexityTag complexity={step.complexity} t={t} />
           </div>
 
           {/* Attempt ladder — the observable model-fallback narrative */}
@@ -249,6 +251,26 @@ function VerifyTag({
   return (
     <span className="shrink-0 rounded bg-muted px-1 py-0.5 text-[10px] text-muted-foreground">
       {t(verifyKey(strategy))}
+    </span>
+  );
+}
+
+/** Shows planner-assessed difficulty for medium/high steps (explains a strong starting model). */
+function ComplexityTag({
+  complexity,
+  t,
+}: {
+  complexity: WorkflowStepComplexity;
+  t: (key: TranslationKey, params?: Record<string, string | number>) => string;
+}) {
+  if (complexity === 'low') return null; // default — don't clutter
+  const cls =
+    complexity === 'high'
+      ? 'bg-status-warning-muted text-status-warning-foreground'
+      : 'bg-status-info-muted text-status-info-foreground';
+  return (
+    <span className={`shrink-0 rounded px-1 py-0.5 text-[10px] ${cls}`}>
+      {t(complexity === 'high' ? 'workflow.complexity.high' : 'workflow.complexity.medium')}
     </span>
   );
 }

@@ -7,7 +7,7 @@
  * the runWorkflow options bag.
  */
 
-import type { WorkflowVerifyStrategy } from '@/types';
+import type { WorkflowVerifyStrategy, WorkflowStepComplexity } from '@/types';
 
 /** SSE emit callback — same shape as ToolContext.emitSSE. */
 export type EmitSSE = (event: { type: string; data: string }) => void;
@@ -37,6 +37,8 @@ export interface PlannedStep {
   verifyStrategy: WorkflowVerifyStrategy;
   /** Shell command for command/both verification (empty when not applicable). */
   verifyCommand: string;
+  /** Planner-assessed difficulty; selects the starting rung on the model ladder. */
+  complexity: WorkflowStepComplexity;
   /** Optional explicit model ladder override (model IDs) for this step. */
   modelOverride?: string[];
 }

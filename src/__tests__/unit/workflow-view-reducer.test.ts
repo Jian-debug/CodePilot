@@ -23,9 +23,9 @@ function seedPlan(): WorkflowPlanEvent {
     workflowId: WF,
     goal: 'Migrate the app',
     steps: [
-      { id: 's0', idx: 0, title: 'Step A', dependsOn: [], verifyStrategy: 'llm' },
-      { id: 's1', idx: 1, title: 'Step B', dependsOn: [], verifyStrategy: 'llm' },
-      { id: 's2', idx: 2, title: 'Step C', dependsOn: [0, 1], verifyStrategy: 'both' },
+      { id: 's0', idx: 0, title: 'Step A', dependsOn: [], verifyStrategy: 'llm', complexity: 'high' },
+      { id: 's1', idx: 1, title: 'Step B', dependsOn: [], verifyStrategy: 'llm', complexity: 'low' },
+      { id: 's2', idx: 2, title: 'Step C', dependsOn: [0, 1], verifyStrategy: 'both', complexity: 'medium' },
     ],
   };
 }
@@ -56,6 +56,7 @@ describe('workflow-view-reducer — live SSE folding', () => {
     assert.deepEqual(wf.steps.map((s) => s.idx), [0, 1, 2]);
     assert.ok(wf.steps.every((s) => s.status === 'pending'));
     assert.deepEqual(wf.steps[2].dependsOn, [0, 1]);
+    assert.deepEqual(wf.steps.map((s) => s.complexity), ['high', 'low', 'medium']);
   });
 
   it('folds attempt + verify, recording escalation and verdict', () => {
@@ -98,10 +99,10 @@ describe('workflow-view-reducer — DB reload path', () => {
       created_at: '2026-05-31 10:00:00',
     } as unknown as WorkflowRecord;
     const steps = [
-      { id: 's0', idx: 0, title: 'Step A', depends_on: '[]', verify_strategy: 'llm', status: 'passed' },
-      { id: 's1', idx: 1, title: 'Step B', depends_on: '[]', verify_strategy: 'llm', status: 'passed' },
-      { id: 's2', idx: 2, title: 'Step C', depends_on: '[0,1]', verify_strategy: 'both', status: 'failed' },
-      { id: 's3', idx: 3, title: 'Step D', depends_on: '[2]', verify_strategy: 'llm', status: 'skipped' },
+      { id: 's0', idx: 0, title: 'Step A', depends_on: '[]', verify_strategy: 'llm', complexity: 'high', status: 'passed' },
+      { id: 's1', idx: 1, title: 'Step B', depends_on: '[]', verify_strategy: 'llm', complexity: 'low', status: 'passed' },
+      { id: 's2', idx: 2, title: 'Step C', depends_on: '[0,1]', verify_strategy: 'both', complexity: 'medium', status: 'failed' },
+      { id: 's3', idx: 3, title: 'Step D', depends_on: '[2]', verify_strategy: 'llm', complexity: 'low', status: 'skipped' },
     ] as unknown as WorkflowStepRecord[];
     const attemptsByStep: Record<string, WorkflowStepAttemptRecord[]> = {
       s0: [
@@ -121,6 +122,7 @@ describe('workflow-view-reducer — DB reload path', () => {
     assert.equal(wf.steps[0].attempts[1].passed, true);
     assert.deepEqual(wf.steps[2].dependsOn, [0, 1]);
     assert.equal(wf.steps[3].status, 'skipped');
+    assert.equal(wf.steps[0].complexity, 'high');
     assert.ok(Number.isFinite(wf.startedAt));
   });
 });

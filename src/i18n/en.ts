@@ -1581,6 +1581,8 @@ const en = {
   'workflow.verify.command': 'command',
   'workflow.verify.both': 'LLM + command',
   'workflow.verify.none': 'no verification',
+  'workflow.complexity.medium': 'medium',
+  'workflow.complexity.high': 'hard',
   'workflow.score': 'Score {score}',
   'workflow.feedback': 'Feedback',
   'workflow.expand': 'Show steps',
